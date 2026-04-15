@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>천명 · 天命 — 사주 분석</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #0a0806;
+      color: #c8b89a;
+      font-family: 'Noto Serif KR', serif;
+      overflow-x: hidden;
+    }
+
+    /* 별 배경 */
+    #stars {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0;
+    }
+
+    .wrap {
+      position: relative; z-index: 1;
+      max-width: 520px; margin: 0 auto; padding: 0 20px;
+    }
+
+    /* 히어로 */
+    .hero {
+      text-align: center;
+      padding: 72px 0 48px;
+    }
+    .hero-icon {
+      display: inline-flex; width: 52px; height: 52px;
+      border-radius: 50%; border: 1px solid #c9a96e33;
+      align-items: center; justify-content: center;
+      font-size: 22px; color: #c9a96e;
+      background: #15120e;
+      box-shadow: 0 0 40px #c9a96e15;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(22px, 6vw, 34px);
+      font-weight: 300; letter-spacing: 12px; color: #e8d5b0;
+      margin-bottom: 8px;
+    }
+    .hero p { font-size: 11px; color: #3a3028; letter-spacing: 6px; }
+    .hero-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(#c9a96e33, transparent);
+      margin: 22px auto 0;
+    }
+
+    /* 섹션 레이블 */
+    .field-label {
+      font-size: 10px; color: #6b5a3e;
+      letter-spacing: 5px; text-align: center;
+      margin-bottom: 14px;
+    }
+
+    /* 피커 컨테이너 */
+    .picker-box {
+      background: #11100d; border: 1px solid #222018;
+      border-radius: 16px; padding: 16px 10px;
+      display: flex; justify-content: center;
+      align-items: flex-start; gap: 4px;
+      margin-bottom: 32px;
+    }
+    .picker-sep {
+      color: #222018; font-size: 20px;
+      padding-top: 62px;
+    }
+    .picker-sep.dim { color: #1a1810; }
+
+    /* 드럼 피커 */
+    .drum-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+    }
+    .drum-label {
+      font-size: 10px; color: #6b5a3e; letter-spacing: 3px;
+    }
+    .drum-label.disabled { color: #252018; }
+    .drum {
+      overflow: hidden; position: relative;
+      border-radius: 12px; cursor: grab;
+      background: linear-gradient(180deg, #0a0806, #14110e 25%, #14110e 75%, #0a0806);
+      user-select: none;
+    }
+    .drum.disabled { opacity: 0.25; cursor: default; }
+    .drum-fade-top {
+      position: absolute; top: 0; left: 0; right: 0;
+      pointer-events: none; z-index: 2;
+      background: linear-gradient(180deg, #0a0806, transparent);
+    }
+    .drum-fade-bot {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      pointer-events: none; z-index: 2;
+      background: linear-gradient(0deg, #0a0806, transparent);
+    }
+    .drum-selector {
+      position: absolute; left: 6px; right: 6px;
+      border: 1px solid #c9a96e44; border-radius: 8px;
+      background: #c9a96e08; z-index: 1; pointer-events: none;
+    }
+    .drum-list {
+      position: absolute; left: 0; right: 0;
+      transition: transform 0.22s cubic-bezier(.25,.8,.25,1);
+    }
+    .drum-item {
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Noto Serif KR', serif;
+      transition: all 0.1s; cursor: pointer;
+    }
+    .drum-item.active { color: #e8d5b0; font-weight: 500; }
+    .drum-item.near   { color: #5a4a32; }
+    .drum-item.far    { color: #222018; }
+
+    /* 성별 */
+    .gender-wrap {
+      display: flex; gap: 10px; margin-bottom: 36px;
+    }
+    .gender-btn {
+      flex: 1; padding: 20px 12px;
+      background: #11100d; border: 1px solid #222018;
+      border-radius: 14px; cursor: pointer;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+      transition: all 0.2s;
+    }
+    .gender-btn.active {
+      background: #1c1810; border-color: #c9a96e77;
+    }
+    .gender-btn .hanja {
+      font-size: 26px; font-family: 'Noto Serif KR', serif;
+      color: #2e2820; transition: color 0.2s;
+    }
+    .gender-btn.active .hanja { color: #e8d5b0; }
+    .gender-btn .ko {
+      font-size: 10px; letter-spacing: 4px; color: #2e2820;
+      transition: color 0.2s;
+    }
+    .gender-btn.active .ko { color: #c9a96e; }
+
+    /* 분석 버튼 */
+    .analyze-btn {
+      width: 100%; padding: 16px; border: none; border-radius: 13px;
+      font-size: 13px; letter-spacing: 7px;
+      font-family: 'Noto Serif KR', serif; font-weight: 600;
+      cursor: not-allowed; transition: all 0.3s; margin-bottom: 12px;
+      background: #15120e; color: #2a2218;
+    }
+    .analyze-btn.ready {
+      background: linear-gradient(135deg, #c9a96e, #a07840);
+      color: #0a0806; cursor: pointer;
+      box-shadow: 0 6px 24px #c9a96e28;
+    }
+    .hint {
+      text-align: center; font-size: 11px;
+      color: #252018; letter-spacing: 2px; margin-bottom: 4px;
+    }
+
+    /* 에러 */
+    .error-box {
+      margin-top: 14px; padding: 12px 16px;
+      background: #90000a20; border: 1px solid #c8181855;
+      border-radius: 10px; color: #ff9090;
+      font-size: 12px; line-height: 1.7;
+      word-break: break-all; display: none;
+    }
+
+    /* 로딩 */
+    #loading {
+      display: none;
+      position: fixed; inset: 0; background: #0a0806;
+      z-index: 200; flex-direction: column;
+      align-items: center; justify-content: center; gap: 32px;
+    }
+    .spinner-wrap { position: relative; width: 88px; height: 88px; }
+    .ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid transparent;
+    }
+    .ring-1 { inset: 0;   border-top-color: #c9a96e33; animation: zspin 4s linear infinite; }
+    .ring-2 { inset: 12px; border-top-color: #c9a96e55; animation: zspin 2.4s linear infinite reverse; }
+    .ring-3 { inset: 24px; border-top-color: #c9a96e99; animation: zspin 1.4s linear infinite; }
+    .spinner-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px; color: #c9a96e;
+    }
+    .loading-text { text-align: center; }
+    .loading-msg { font-size: 14px; color: #c9a96e; letter-spacing: 3px; }
+    .loading-sub { font-size: 11px; color: #3a3028; margin-top: 8px; letter-spacing: 2px; }
+    @keyframes zspin { to { transform: rotate(360deg); } }
+
+    /* 결과 */
+    #result { display: none; }
+    .result-header {
+      text-align: center; padding: 0 0 40px;
+      border-bottom: 1px solid #181410; margin-bottom: 0;
+    }
+    .result-meta {
+      font-size: 10px; color: #3a3028;
+      letter-spacing: 4px; margin-bottom: 20px;
+    }
+    .result-headline {
+      font-size: clamp(16px, 4vw, 21px); color: #e8d5b0;
+      font-weight: 300; line-height: 1.8; margin-bottom: 20px;
+    }
+    .result-essence {
+      font-size: 13.5px; color: #7a6a4a;
+      line-height: 2.1; font-weight: 300;
+    }
+    .section {
+      padding: 34px 0; border-bottom: 1px solid #181410;
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .section.visible { opacity: 1; transform: none; }
+    .section-title-wrap {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+    }
+    .section-icon { font-size: 16px; color: #c9a96e; }
+    .section-title {
+      font-size: 11px; color: #6b5a3e; letter-spacing: 6px;
+      font-weight: 400; text-transform: uppercase;
+    }
+    .section-body {
+      font-size: 15px; line-height: 2.2; color: #baa880;
+      font-weight: 300;
+    }
+    .reset-wrap {
+      padding: 50px 0 80px; text-align: center;
+    }
+    .reset-btn {
+      background: transparent; border: 1px solid #222018;
+      border-radius: 10px; padding: 10px 28px;
+      color: #6b5a3e; font-size: 12px; letter-spacing: 5px;
+      cursor: pointer; font-family: 'Noto Serif KR', serif;
+      transition: all 0.2s;
+    }
+    .reset-btn:hover { color: #c9a96e; border-color: #c9a96e55; }
+    .disclaimer {
+      margin-top: 24px; font-size: 10px;
+      color: #1a1810; letter-spacing: 2px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .fade-in { animation: fadeIn 0.7s ease both; }
+  </style>
+</head>
+<body>
+
+<!-- 별 배경 -->
+<svg id="stars" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sg" cx="50%" cy="22%" r="55%">
+      <stop offset="0%" stop-color="#c9a96e" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#0a0806" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#sg)"/>
+</svg>
+
+<!-- 로딩 -->
+<div id="loading">
+  <div class="spinner-wrap">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+    <div class="spinner-icon">☯</div>
+  </div>
+  <div class="loading-text">
+    <div class="loading-msg" id="loading-msg">천간을 살피는 중</div>
+    <div class="loading-sub">사주 · 자미두수 · 점성술 통합 분석</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 히어로 -->
+  <div class="hero">
+    <div class="hero-icon">☯</div>
+    <h1>천 명</h1>
+    <p>CHEONMYEONG · 天命</p>
+    <div class="hero-line"></div>
+  </div>
+
+  <!-- 입력 폼 -->
+  <div id="form-section" class="fade-in">
+
+    <!-- 생년월일 -->
+    <div class="field-label">생년월일</div>
+    <div class="picker-box">
+      <div class="drum-wrap">
+        <div class="drum-label">년</div>
+        <div class="drum" id="drum-year" style="width:88px"></div>
+      </div>
+      <div class="picker-sep">·</div>
+      <div class="drum-wrap">
+        <div class="drum-label">월</div>
+        <div class="drum" id="drum-month" style="width:60px"></div>
+      </div>
+      <div class="picker-sep">·</div>
+      <div class="drum-wrap">
+        <div class="drum-label">일</div>
+        <div class="drum" id="drum-day" style="width:60px"></div>
+      </div>
+    </div>
+
+    <!-- 출생 시각 -->
+    <div class="field-label">출생 시각</div>
+    <div class="picker-box">
+      <div class="drum-wrap">
+        <div class="drum-label" id="label-hour">시</div>
+        <div class="drum" id="drum-hour" style="width:80px"></div>
+      </div>
+      <div class="picker-sep" id="sep-time">:</div>
+      <div class="drum-wrap">
+        <div class="drum-label disabled" id="label-minute">분</div>
+        <div class="drum disabled" id="drum-minute" style="width:72px"></div>
+      </div>
+    </div>
+    <p class="hint" id="time-hint" style="display:none">시각 모름 → 정오(12:00) 기준 분석</p>
+
+    <!-- 성별 -->
+    <div class="field-label" style="margin-top:32px">성별</div>
+    <div class="gender-wrap">
+      <button class="gender-btn" id="btn-male" onclick="selectGender('male')">
+        <span class="hanja">男</span><span class="ko">남</span>
+      </button>
+      <button class="gender-btn" id="btn-female" onclick="selectGender('female')">
+        <span class="hanja">女</span><span class="ko">여</span>
+      </button>
+    </div>
+
+    <!-- 분석 버튼 -->
+    <button class="analyze-btn" id="analyze-btn" onclick="analyze()">천명 분석하기</button>
+    <p class="hint" id="gender-hint">성별을 선택해주세요</p>
+    <div class="error-box" id="error-box"></div>
+    <div style="height:72px"></div>
+  </div>
+
+  <!-- 결과 -->
+  <div id="result">
+    <div class="result-header">
+      <div class="result-meta" id="result-meta"></div>
+      <div class="result-headline" id="result-headline"></div>
+      <div class="result-essence" id="result-essence"></div>
+    </div>
+    <div id="result-sections"></div>
+    <div class="reset-wrap">
+      <button class="reset-btn" onclick="resetApp()">처음으로</button>
+      <div class="disclaimer">AI 분석 결과는 참고용입니다</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ── 드럼 피커 ── */
+const ITEM_H = 44, VISIBLE = 5;
+
+function createDrum(el, items, initVal, onChange, disabled) {
+  const H = ITEM_H * VISIBLE;
+  el.style.height = H + "px";
+  if (disabled) el.classList.add("disabled");
+
+  let baseIdx = Math.max(0, items.indexOf(initVal));
+  let drag = { on: false, startY: 0, dy: 0 };
+
+  // DOM 구조
+  const fadeT = document.createElement("div");
+  fadeT.className = "drum-fade-top";
+  fadeT.style.height = ITEM_H * 2 + "px";
+
+  const fadeB = document.createElement("div");
+  fadeB.className = "drum-fade-bot";
+  fadeB.style.height = ITEM_H * 2 + "px";
+
+  const sel = document.createElement("div");
+  sel.className = "drum-selector";
+  sel.style.cssText = `top:${ITEM_H*2}px;height:${ITEM_H}px`;
+
+  const list = document.createElement("div");
+  list.className = "drum-list";
+
+  items.forEach((item, i) => {
+    const d = document.createElement("div");
+    d.className = "drum-item far";
+    d.style.height = ITEM_H + "px";
+    d.style.fontSize = "13px";
+    d.textContent = item;
+    d.onclick = () => { if (!disabled) { baseIdx = i; render(); onChange(items[i]); } };
+    list.appendChild(d);
+  });
+
+  el.appendChild(fadeT);
+  el.appendChild(fadeB);
+  el.appendChild(sel);
+  el.appendChild(list);
+
+  function clamp(v) { return Math.max(0, Math.min((items.length-1)*ITEM_H, v)); }
+  function snapI(v) { return Math.round(clamp(v) / ITEM_H); }
+  function liveRaw() { return baseIdx * ITEM_H + (drag.on ? drag.dy : 0); }
+
+  function render(animate) {
+    const ai = snapI(liveRaw());
+    const ty = -clamp(liveRaw()) + ITEM_H * 2;
+    list.style.transition = (drag.on || animate===false) ? "none" : "transform 0.22s cubic-bezier(.25,.8,.25,1)";
+    list.style.transform = `translateY(${ty}px)`;
+    list.childNodes.forEach((d, i) => {
+      const dist = Math.abs(i - ai);
+      d.className = "drum-item " + (dist===0 ? "active" : dist===1 ? "near" : "far");
+      d.style.fontSize = dist === 0 ? "19px" : "13px";
+      d.style.fontWeight = dist === 0 ? "500" : "400";
+    });
+  }
+  render(false);
+
+  if (!disabled) {
+    el.addEventListener("mousedown",  e => { drag = { on:true, startY: e.clientY, dy:0 }; });
+    el.addEventListener("touchstart", e => { drag = { on:true, startY: e.touches[0].clientY, dy:0 }; e.preventDefault(); }, {passive:false});
+    window.addEventListener("mousemove",  e => { if(!drag.on) return; drag.dy = drag.startY - e.clientY; render(); });
+    window.addEventListener("touchmove",  e => { if(!drag.on) return; drag.dy = drag.startY - e.touches[0].clientY; render(); });
+    window.addEventListener("mouseup",  () => { if(!drag.on) return; baseIdx = snapI(liveRaw()); drag={on:false,startY:0,dy:0}; onChange(items[baseIdx]); render(); });
+    window.addEventListener("touchend", () => { if(!drag.on) return; baseIdx = snapI(liveRaw()); drag={on:false,startY:0,dy:0}; onChange(items[baseIdx]); render(); });
+  }
+
+  return {
+    setValue(val) {
+      const i = items.indexOf(val);
+      if (i >= 0) { baseIdx = i; render(); }
+    },
+    enable() {
+      el.classList.remove("disabled");
+      disabled = false;
+    },
+    disable() {
+      el.classList.add("disabled");
+      disabled = true;
+    }
+  };
+}
+
+/* ── 데이터 ── */
+const CY = new Date().getFullYear();
+const years   = Array.from({length:110}, (_,i) => CY - i);
+const months  = Array.from({length:12},  (_,i) => i+1);
+const hours   = ["모름", ...Array.from({length:24}, (_,i) => String(i).padStart(2,"0"))];
+const minutes = ["—",   ...Array.from({length:60}, (_,i) => String(i).padStart(2,"0"))];
+
+let state = { year:1990, month:6, day:15, hour:"모름", minute:"—", gender:null };
+
+function getDays(y, m) { return Array.from({length: new Date(y,m,0).getDate()}, (_,i)=>i+1); }
+
+/* ── 별 생성 ── */
+(function() {
+  const svg = document.getElementById("stars");
+  for (let i = 0; i < 100; i++) {
+    const x = (Math.sin(i*137.508)*0.5+0.5)*100;
+    const y = (Math.cos(i*97.31)*0.5+0.5)*100;
+    const r = i%7===0?1.4:i%3===0?0.9:0.5;
+    const o = 0.1+(i%5)*0.07;
+    const c = document.createElementNS("http://www.w3.org/2000/svg","circle");
+    c.setAttribute("cx", x+"%"); c.setAttribute("cy", y+"%");
+    c.setAttribute("r", r); c.setAttribute("fill","#e8d5b0");
+    c.setAttribute("opacity", o);
+    svg.appendChild(c);
+  }
+})();
+
+/* ── 피커 초기화 ── */
+const drumYear  = createDrum(document.getElementById("drum-year"),  years,   state.year,  v => { state.year=v;  refreshDays(); }, false);
+const drumMonth = createDrum(document.getElementById("drum-month"), months,  state.month, v => { state.month=v; refreshDays(); }, false);
+
+let dayItems = getDays(state.year, state.month);
+let drumDay  = createDrum(document.getElementById("drum-day"), dayItems, state.day, v => { state.day=v; }, false);
+
+const drumHour   = createDrum(document.getElementById("drum-hour"),   hours,   state.hour,   v => {
+  state.hour = v;
+  const noTime = v === "모름";
+  document.getElementById("time-hint").style.display = noTime ? "block" : "none";
+  document.getElementById("sep-time").className = "picker-sep" + (noTime ? " dim" : "");
+  document.getElementById("label-minute").className = "drum-label" + (noTime ? " disabled" : "");
+  if (noTime) { drumMinute.disable(); state.minute = "—"; drumMinute.setValue("—"); }
+  else drumMinute.enable();
+}, false);
+
+const drumMinute = createDrum(document.getElementById("drum-minute"), minutes, state.minute, v => { state.minute=v; }, true);
+
+function refreshDays() {
+  const newDays = getDays(state.year, state.month);
+  const el = document.getElementById("drum-day");
+  el.innerHTML = "";
+  const newVal = state.day > newDays.length ? newDays[newDays.length-1] : state.day;
+  state.day = newVal;
+  // re-create drum
+  Object.assign(drumDay, createDrum(el, newDays, newVal, v => { state.day=v; }, false));
+}
+
+/* ── 성별 ── */
+function selectGender(g) {
+  state.gender = g;
+  document.getElementById("btn-male").className   = "gender-btn" + (g==="male"   ? " active" : "");
+  document.getElementById("btn-female").className = "gender-btn" + (g==="female" ? " active" : "");
+  document.getElementById("gender-hint").style.display = "none";
+  document.getElementById("analyze-btn").className = "analyze-btn ready";
+}
+
+/* ── 로딩 메시지 ── */
+const MSGS = ["천간을 살피는 중","지지를 헤아리는 중","별자리를 읽는 중","천명을 기록하는 중"];
+let msgTimer;
+function startLoadingMsgs() {
+  let i = 0;
+  document.getElementById("loading-msg").textContent = MSGS[0];
+  msgTimer = setInterval(() => {
+    i = (i+1) % MSGS.length;
+    document.getElementById("loading-msg").textContent = MSGS[i];
+  }, 1800);
+}
+function stopLoadingMsgs() { clearInterval(msgTimer); }
+
+/* ── 분석 ── */
+async function analyze() {
+  if (!state.gender) return;
+
+  document.getElementById("error-box").style.display = "none";
+  document.getElementById("loading").style.display = "flex";
+  document.getElementById("form-section").style.display = "none";
+  startLoadingMsgs();
+
+  const noTime = state.hour === "모름";
+  const timeStr = noTime ? "시각 미상(정오 기준)" : `${state.hour}시 ${state.minute==="—"?"00":state.minute}분`;
+
+  try {
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...state })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    stopLoadingMsgs();
+    document.getElementById("loading").style.display = "none";
+    showResult(data, noTime, timeStr);
+  } catch(e) {
+    stopLoadingMsgs();
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("form-section").style.display = "block";
+    const eb = document.getElementById("error-box");
+    eb.textContent = "오류: " + e.message;
+    eb.style.display = "block";
+  }
+}
+
+function showResult(data, noTime, timeStr) {
+  document.getElementById("result-meta").textContent =
+    `${state.year}년 ${state.month}월 ${state.day}일` +
+    (noTime ? "" : ` · ${timeStr}`) +
+    ` · ${state.gender==="male"?"남":"여"}`;
+  document.getElementById("result-headline").textContent = data.headline || "";
+  document.getElementById("result-essence").textContent  = data.essence  || "";
+
+  const container = document.getElementById("result-sections");
+  container.innerHTML = "";
+  (data.sections || []).forEach((sec, i) => {
+    const div = document.createElement("div");
+    div.className = "section";
+    div.style.transitionDelay = (i * 0.07) + "s";
+    div.innerHTML = `
+      <div class="section-title-wrap">
+        <span class="section-icon">${sec.icon}</span>
+        <span class="section-title">${sec.title}</span>
+      </div>
+      <div class="section-body">${sec.body}</div>
+    `;
+    container.appendChild(div);
+  });
+
+  document.getElementById("result").style.display = "block";
+  window.scrollTo({top: 0, behavior: "smooth"});
+
+  // intersection observer for fade-in
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add("visible"); });
+  }, {threshold: 0.05});
+  document.querySelectorAll(".section").forEach(s => obs.observe(s));
+}
+
+function resetApp() {
+  document.getElementById("result").style.display = "none";
+  document.getElementById("form-section").style.display = "block";
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+</script>
+</body>
+</html>
