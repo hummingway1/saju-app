@@ -35,26 +35,27 @@ JSON 형식:
 성별: ${genderStr}`;
 
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17
-:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.8, maxOutputTokens: 4000 },
-        }),
-      }
-    );
+    const apiKey = process.env.OPENAI_API_KEY;
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.8,
+        max_tokens: 4000,
+      }),
+    });
 
     const data = await response.json();
     if (!response.ok || data.error) {
-      throw new Error(data.error?.message || (isEn ? "Gemini API error" : "Gemini API 오류"));
+      throw new Error(data.error?.message || (isEn ? "OpenAI API error" : "OpenAI API 오류"));
     }
 
-    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const raw = data.choices?.[0]?.message?.content || "";
     const cleaned = raw.replace(/```json|```/g, "").trim();
     const start = cleaned.indexOf("{");
     const end = cleaned.lastIndexOf("}");
