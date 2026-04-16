@@ -77,11 +77,13 @@ if (!response.ok || data.error) {
 }
 
 const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-const start = raw.indexOf("{");
-const end = raw.lastIndexOf("}");
+const cleaned = raw.replace(/```json|```/g, "").trim();
+const start = cleaned.indexOf("{");
+const end = cleaned.lastIndexOf("}");
 if (start === -1 || end === -1) throw new Error(isEn ? "JSON parse failed" : "JSON 파싱 실패");
 
-const parsed = JSON.parse(raw.slice(start, end + 1));
+const parsed = JSON.parse(cleaned.slice(start, end + 1));
+
 res.status(200).json(parsed);
 ```
 
