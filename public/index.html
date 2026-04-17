@@ -9,78 +9,68 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
     :root {
-      --gold: #c9a96e; --gold-dim: #c9a96e44; --bg: #0a0806; --bg2: #11100d;
-      --bg3: #15120e; --text: #c8b89a; --text-bright: #e8d5b0;
+      --gold: #c9a96e; --gold-dim: #c9a96e44; --bg: #04030a; --bg2: #0d0b14;
+      --bg3: #13101e; --text: #c8b89a; --text-bright: #e8d5b0;
       --text-dim: #3a3028; --text-muted: #6b5a3e;
     }
     body { min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Noto Serif KR', serif; overflow-x: hidden; }
 
-    .lang-toggle {
-      position: fixed; top: 16px; right: 16px; z-index: 300;
-      display: flex; background: var(--bg2); border: 1px solid #2a2418; border-radius: 20px; overflow: hidden;
+    /* 캔버스 은하수 배경 */
+    #galaxy-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+      width: 100%; height: 100%;
     }
+
+    .lang-toggle { position: fixed; top: 16px; right: 16px; z-index: 300; display: flex; background: #0d0b1499; border: 1px solid #2a2438; border-radius: 20px; overflow: hidden; backdrop-filter: blur(8px); }
     .lang-btn { padding: 7px 14px; font-size: 11px; letter-spacing: 2px; cursor: pointer; border: none; background: transparent; color: var(--text-dim); font-family: 'Noto Serif KR', serif; transition: all 0.2s; }
     .lang-btn.active { background: var(--gold); color: var(--bg); font-weight: 600; }
 
-    .sound-toggle {
-      position: fixed; top: 16px; left: 16px; z-index: 300;
-      width: 36px; height: 36px; background: var(--bg2); border: 1px solid #2a2418;
-      border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 14px; color: var(--text-dim); transition: all 0.3s;
-    }
+    .sound-toggle { position: fixed; top: 16px; left: 16px; z-index: 300; width: 36px; height: 36px; background: #0d0b1499; border: 1px solid #2a2438; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text-dim); transition: all 0.3s; backdrop-filter: blur(8px); }
     .sound-toggle.active { border-color: var(--gold-dim); color: var(--gold); box-shadow: 0 0 20px #c9a96e20; }
-
-    #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-    .fog { position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 50% 0%, #c9a96e08 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, #1a0a0508 0%, transparent 50%); }
 
     .wrap { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; padding: 0 20px; }
 
     .hero { text-align: center; padding: 72px 0 48px; }
-    .hero-icon {
-      display: inline-flex; width: 56px; height: 56px; border-radius: 50%;
-      border: 1px solid var(--gold-dim); align-items: center; justify-content: center;
-      font-size: 24px; color: var(--gold); background: var(--bg3);
-      box-shadow: 0 0 60px #c9a96e18; margin-bottom: 24px;
-      animation: pulse-glow 4s ease-in-out infinite;
-    }
-    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 40px #c9a96e15}50%{box-shadow:0 0 80px #c9a96e30} }
-    .hero h1 { font-size: clamp(22px,6vw,34px); font-weight: 300; letter-spacing: 12px; color: var(--text-bright); margin-bottom: 8px; font-family: 'Cormorant Garamond', serif; }
-    .hero p { font-size: 11px; color: var(--text-dim); letter-spacing: 6px; }
+    .hero-icon { display: inline-flex; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--gold-dim); align-items: center; justify-content: center; font-size: 24px; color: var(--gold); background: #13101e99; box-shadow: 0 0 60px #c9a96e18; margin-bottom: 24px; animation: pulse-glow 4s ease-in-out infinite; backdrop-filter: blur(4px); }
+    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 40px #c9a96e15}50%{box-shadow:0 0 80px #c9a96e35} }
+    .hero h1 { font-size: clamp(22px,6vw,34px); font-weight: 300; letter-spacing: 12px; color: var(--text-bright); margin-bottom: 8px; font-family: 'Cormorant Garamond', serif; text-shadow: 0 0 40px #c9a96e30; }
+    .hero p { font-size: 11px; color: #4a3a58; letter-spacing: 6px; }
     .hero-line { width: 1px; height: 40px; background: linear-gradient(var(--gold-dim), transparent); margin: 22px auto 0; }
 
     .field-label { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; text-align: center; margin-bottom: 14px; }
-    .picker-box { background: var(--bg2); border: 1px solid #222018; border-radius: 16px; padding: 16px 10px; display: flex; justify-content: center; align-items: flex-start; gap: 4px; margin-bottom: 32px; }
-    .picker-sep { color: #222018; font-size: 20px; padding-top: 62px; }
-    .picker-sep.dim { color: #1a1810; }
+    .picker-box { background: #0d0b1488; border: 1px solid #2a2438; border-radius: 16px; padding: 16px 10px; display: flex; justify-content: center; align-items: flex-start; gap: 4px; margin-bottom: 32px; backdrop-filter: blur(12px); }
+    .picker-sep { color: #2a2438; font-size: 20px; padding-top: 62px; }
+    .picker-sep.dim { color: #1a1828; }
 
     .drum-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
     .drum-label { font-size: 10px; color: var(--text-muted); letter-spacing: 3px; }
-    .drum-label.disabled { color: #252018; }
-    .drum { overflow: hidden; position: relative; border-radius: 12px; cursor: grab; background: linear-gradient(180deg, var(--bg), #14110e 25%, #14110e 75%, var(--bg)); user-select: none; }
+    .drum-label.disabled { color: #252030; }
+    .drum { overflow: hidden; position: relative; border-radius: 12px; cursor: grab; background: linear-gradient(180deg, #04030a, #0d0b14 25%, #0d0b14 75%, #04030a); user-select: none; }
     .drum.disabled { opacity: 0.25; cursor: default; }
-    .drum-fade-top { position: absolute; top: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(180deg, var(--bg), transparent); }
-    .drum-fade-bot { position: absolute; bottom: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(0deg, var(--bg), transparent); }
+    .drum-fade-top { position: absolute; top: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(180deg, #04030a, transparent); }
+    .drum-fade-bot { position: absolute; bottom: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(0deg, #04030a, transparent); }
     .drum-selector { position: absolute; left: 6px; right: 6px; border: 1px solid #c9a96e44; border-radius: 8px; background: #c9a96e08; z-index: 1; pointer-events: none; }
     .drum-list { position: absolute; left: 0; right: 0; transition: transform 0.22s cubic-bezier(.25,.8,.25,1); }
     .drum-item { display: flex; align-items: center; justify-content: center; font-family: 'Noto Serif KR', serif; transition: all 0.1s; cursor: pointer; }
     .drum-item.active { color: var(--text-bright); font-weight: 500; }
-    .drum-item.near { color: #5a4a32; }
-    .drum-item.far { color: #222018; }
+    .drum-item.near { color: #5a4a62; }
+    .drum-item.far { color: #2a2038; }
 
     .gender-wrap { display: flex; gap: 10px; margin-bottom: 36px; }
-    .gender-btn { flex: 1; padding: 20px 12px; background: var(--bg2); border: 1px solid #222018; border-radius: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; }
-    .gender-btn.active { background: #1c1810; border-color: #c9a96e77; }
-    .gender-btn .hanja { font-size: 26px; color: #2e2820; transition: color 0.2s; }
+    .gender-btn { flex: 1; padding: 20px 12px; background: #0d0b1488; border: 1px solid #2a2438; border-radius: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; backdrop-filter: blur(8px); }
+    .gender-btn.active { background: #1c1828; border-color: #c9a96e77; }
+    .gender-btn .hanja { font-size: 26px; color: #3a2e48; transition: color 0.2s; }
     .gender-btn.active .hanja { color: var(--text-bright); }
-    .gender-btn .ko { font-size: 10px; letter-spacing: 4px; color: #2e2820; transition: color 0.2s; }
+    .gender-btn .ko { font-size: 10px; letter-spacing: 4px; color: #3a2e48; transition: color 0.2s; }
     .gender-btn.active .ko { color: var(--gold); }
 
-    .analyze-btn { width: 100%; padding: 16px; border: none; border-radius: 13px; font-size: 13px; letter-spacing: 7px; font-family: 'Noto Serif KR', serif; font-weight: 600; cursor: not-allowed; transition: all 0.3s; margin-bottom: 12px; background: var(--bg3); color: #2a2218; }
-    .analyze-btn.ready { background: linear-gradient(135deg, var(--gold), #a07840); color: var(--bg); cursor: pointer; box-shadow: 0 6px 24px #c9a96e28; }
-    .hint { text-align: center; font-size: 11px; color: #252018; letter-spacing: 2px; margin-bottom: 4px; }
+    .analyze-btn { width: 100%; padding: 16px; border: none; border-radius: 13px; font-size: 13px; letter-spacing: 7px; font-family: 'Noto Serif KR', serif; font-weight: 600; cursor: not-allowed; transition: all 0.3s; margin-bottom: 12px; background: #13101e; color: #2a2038; }
+    .analyze-btn.ready { background: linear-gradient(135deg, var(--gold), #a07840); color: var(--bg); cursor: pointer; box-shadow: 0 6px 32px #c9a96e35; }
+    .hint { text-align: center; font-size: 11px; color: #252030; letter-spacing: 2px; margin-bottom: 4px; }
     .error-box { margin-top: 14px; padding: 12px 16px; background: #90000a20; border: 1px solid #c8181855; border-radius: 10px; color: #ff9090; font-size: 12px; line-height: 1.7; word-break: break-all; display: none; }
 
-    #loading { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+    #loading { display: none; position: fixed; inset: 0; background: #04030aee; z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
     .spinner-wrap { position: relative; width: 88px; height: 88px; }
     .ring { position: absolute; border-radius: 50%; border: 1px solid transparent; }
     .ring-1 { inset: 0; border-top-color: #c9a96e33; animation: zspin 4s linear infinite; }
@@ -89,49 +79,49 @@
     .spinner-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 24px; color: var(--gold); }
     .loading-text { text-align: center; }
     .loading-msg { font-size: 14px; color: var(--gold); letter-spacing: 3px; }
-    .loading-sub { font-size: 11px; color: var(--text-dim); margin-top: 8px; letter-spacing: 2px; }
+    .loading-sub { font-size: 11px; color: #4a3a58; margin-top: 8px; letter-spacing: 2px; }
     @keyframes zspin { to { transform: rotate(360deg); } }
 
     #result { display: none; }
-    .result-header { text-align: center; padding: 0 0 40px; border-bottom: 1px solid #181410; }
-    .result-meta { font-size: 10px; color: var(--text-dim); letter-spacing: 4px; margin-bottom: 20px; }
-    .result-headline { font-size: clamp(16px,4vw,22px); color: var(--text-bright); font-weight: 300; line-height: 1.8; margin-bottom: 20px; font-family: 'Cormorant Garamond', serif; font-style: italic; }
-    .result-essence { font-size: 13.5px; color: #7a6a4a; line-height: 2.1; font-weight: 300; }
+    .result-header { text-align: center; padding: 0 0 40px; border-bottom: 1px solid #1a1828; }
+    .result-meta { font-size: 10px; color: #4a3a58; letter-spacing: 4px; margin-bottom: 20px; }
+    .result-headline { font-size: clamp(16px,4vw,22px); color: var(--text-bright); font-weight: 300; line-height: 1.8; margin-bottom: 20px; font-family: 'Cormorant Garamond', serif; font-style: italic; text-shadow: 0 0 30px #c9a96e20; }
+    .result-essence { font-size: 13.5px; color: #7a6a6a; line-height: 2.1; font-weight: 300; }
 
-    .section { padding: 34px 0; border-bottom: 1px solid #181410; opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .section { padding: 34px 0; border-bottom: 1px solid #1a1828; opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .section.visible { opacity: 1; transform: none; }
     .section-title-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
     .section-icon { font-size: 16px; color: var(--gold); }
     .section-title { font-size: 11px; color: var(--text-muted); letter-spacing: 6px; font-weight: 400; text-transform: uppercase; }
-    .section-body { font-size: 15px; line-height: 2.2; color: #baa880; font-weight: 300; }
+    .section-body { font-size: 15px; line-height: 2.2; color: #baa890; font-weight: 300; }
 
-    .locked-section-wrap { margin-top: 40px; border-top: 1px solid #181410; padding-top: 40px; }
+    .locked-section-wrap { margin-top: 40px; border-top: 1px solid #1a1828; padding-top: 40px; }
     .locked-header { text-align: center; margin-bottom: 32px; }
     .locked-header h3 { font-size: 11px; color: var(--text-muted); letter-spacing: 6px; font-weight: 400; margin-bottom: 8px; }
-    .locked-header p { font-size: 12px; color: #2e2820; letter-spacing: 2px; }
+    .locked-header p { font-size: 12px; color: #3a2e48; letter-spacing: 2px; }
 
-    .locked-card { position: relative; margin-bottom: 16px; border-radius: 14px; overflow: hidden; border: 1px solid #1a1810; }
-    .locked-card-inner { padding: 24px; background: var(--bg2); filter: blur(4px); user-select: none; pointer-events: none; }
+    .locked-card { position: relative; margin-bottom: 16px; border-radius: 14px; overflow: hidden; border: 1px solid #1a1828; }
+    .locked-card-inner { padding: 24px; background: #0d0b1488; filter: blur(4px); user-select: none; pointer-events: none; backdrop-filter: blur(4px); }
     .locked-card-title { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; margin-bottom: 10px; }
-    .locked-card-preview { font-size: 13px; color: #4a3a28; line-height: 2; height: 60px; overflow: hidden; }
-    .locked-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(180deg, transparent, #0a0806cc); }
+    .locked-card-preview { font-size: 13px; color: #4a3a58; line-height: 2; height: 60px; overflow: hidden; }
+    .locked-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(180deg, transparent, #04030acc); }
     .lock-icon { font-size: 20px; color: var(--gold); opacity: 0.7; }
     .locked-label { font-size: 10px; color: var(--text-muted); letter-spacing: 4px; }
 
     .unlock-section { text-align: center; padding: 40px 0 20px; }
-    .unlock-btn { display: inline-flex; flex-direction: column; align-items: center; width: 100%; padding: 20px; background: linear-gradient(135deg, #1a1510, #2a1f10); border: 1px solid var(--gold-dim); border-radius: 16px; cursor: pointer; transition: all 0.3s; gap: 4px; }
-    .unlock-btn:hover { border-color: var(--gold); box-shadow: 0 0 40px #c9a96e18; }
+    .unlock-btn { display: inline-flex; flex-direction: column; align-items: center; width: 100%; padding: 20px; background: linear-gradient(135deg, #1a1520, #2a1f18); border: 1px solid var(--gold-dim); border-radius: 16px; cursor: pointer; transition: all 0.3s; gap: 4px; }
+    .unlock-btn:hover { border-color: var(--gold); box-shadow: 0 0 50px #c9a96e20; }
     .unlock-btn-label { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; }
     .unlock-btn-price { font-size: 28px; color: var(--gold); font-family: 'Cormorant Garamond', serif; font-weight: 300; }
-    .unlock-btn-sub { font-size: 11px; color: #3a3028; letter-spacing: 2px; }
+    .unlock-btn-sub { font-size: 11px; color: #4a3a58; letter-spacing: 2px; }
     .unlock-features { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; text-align: left; }
-    .unlock-feature { font-size: 11px; color: #4a3a28; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+    .unlock-feature { font-size: 11px; color: #4a3a48; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
     .unlock-feature span { color: var(--gold); font-size: 10px; }
 
     .reset-wrap { padding: 50px 0 80px; text-align: center; }
-    .reset-btn { background: transparent; border: 1px solid #222018; border-radius: 10px; padding: 10px 28px; color: var(--text-muted); font-size: 12px; letter-spacing: 5px; cursor: pointer; font-family: 'Noto Serif KR', serif; transition: all 0.2s; }
+    .reset-btn { background: transparent; border: 1px solid #2a2438; border-radius: 10px; padding: 10px 28px; color: var(--text-muted); font-size: 12px; letter-spacing: 5px; cursor: pointer; font-family: 'Noto Serif KR', serif; transition: all 0.2s; }
     .reset-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
-    .disclaimer { margin-top: 24px; font-size: 10px; color: #1a1810; letter-spacing: 2px; }
+    .disclaimer { margin-top: 24px; font-size: 10px; color: #1a1828; letter-spacing: 2px; }
 
     @keyframes fadeIn { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none} }
     .fade-in { animation: fadeIn 0.7s ease both; }
@@ -139,22 +129,13 @@
 </head>
 <body>
 
+<canvas id="galaxy-canvas"></canvas>
+
 <button class="sound-toggle" id="sound-btn" onclick="toggleSound()">♪</button>
 <div class="lang-toggle">
   <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">한</button>
   <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
 </div>
-
-<svg id="stars" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <radialGradient id="sg" cx="50%" cy="22%" r="55%">
-      <stop offset="0%" stop-color="#c9a96e" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#0a0806" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <rect width="100%" height="100%" fill="url(#sg)"/>
-</svg>
-<div class="fog"></div>
 
 <div id="loading">
   <div class="spinner-wrap">
@@ -225,7 +206,7 @@
           <span class="unlock-btn-price">$4.99</span>
           <span class="unlock-btn-sub" id="unlock-sub">one-time · instant access</span>
         </button>
-        <div class="unlock-features" id="unlock-features">
+        <div class="unlock-features">
           <div class="unlock-feature"><span>✦</span><span id="uf1">초년 · 중년 · 말년 시기별 운세</span></div>
           <div class="unlock-feature"><span>✦</span><span id="uf2">2025 · 2026 · 2027 연도별 운세</span></div>
           <div class="unlock-feature"><span>✦</span><span id="uf3">이번 달 월운</span></div>
@@ -242,11 +223,167 @@
 </div>
 
 <script>
-/* ── 크리스탈 싱잉볼 오디오 ── */
-let audioCtx = null;
-let soundOn = false;
-let activeNodes = [];
-let ambientInterval = null;
+/* ══════════════════════════════
+   은하수 캔버스
+══════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('galaxy-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [], nebula = [];
+  let scrollY = 0;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = Math.max(window.innerHeight, document.body.scrollHeight);
+    initStars();
+  }
+
+  function initStars() {
+    stars = [];
+    nebula = [];
+    const count = Math.floor((W * H) / 1800);
+
+    for (let i = 0; i < count; i++) {
+      const r = Math.random();
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: r < 0.05 ? 1.8 + Math.random() * 1.2 :
+           r < 0.2  ? 0.9 + Math.random() * 0.8 :
+                      0.3 + Math.random() * 0.5,
+        alpha: 0.15 + Math.random() * 0.75,
+        twinkleSpeed: 0.003 + Math.random() * 0.008,
+        twinkleOffset: Math.random() * Math.PI * 2,
+        color: r < 0.08 ? `hsl(${200 + Math.random()*60},80%,90%)` :
+               r < 0.15 ? `hsl(${40 + Math.random()*20},70%,90%)` :
+                          '#e8e0d0'
+      });
+    }
+
+    // 은하수 구름 (성운 느낌)
+    for (let i = 0; i < 12; i++) {
+      nebula.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        rx: 60 + Math.random() * 180,
+        ry: 30 + Math.random() * 80,
+        angle: Math.random() * Math.PI,
+        alpha: 0.015 + Math.random() * 0.03,
+        hue: Math.random() < 0.5 ? 240 : 280
+      });
+    }
+  }
+
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // 딥 스페이스 그라디언트
+    const grad = ctx.createLinearGradient(0, 0, W * 0.3, H);
+    grad.addColorStop(0, '#04030a');
+    grad.addColorStop(0.3, '#060418');
+    grad.addColorStop(0.6, '#040308');
+    grad.addColorStop(1, '#030208');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // 은하수 밴드
+    const mwGrad = ctx.createLinearGradient(W * 0.1, 0, W * 0.9, H);
+    mwGrad.addColorStop(0, 'rgba(60,40,90,0)');
+    mwGrad.addColorStop(0.2, 'rgba(80,55,120,0.06)');
+    mwGrad.addColorStop(0.4, 'rgba(100,70,160,0.10)');
+    mwGrad.addColorStop(0.5, 'rgba(120,80,180,0.13)');
+    mwGrad.addColorStop(0.6, 'rgba(100,65,150,0.09)');
+    mwGrad.addColorStop(0.8, 'rgba(70,45,100,0.05)');
+    mwGrad.addColorStop(1, 'rgba(50,30,70,0)');
+    ctx.save();
+    ctx.translate(W/2, H/2);
+    ctx.rotate(-0.3);
+    ctx.translate(-W/2, -H/2);
+    ctx.fillStyle = mwGrad;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+
+    // 성운 구름
+    nebula.forEach(n => {
+      ctx.save();
+      ctx.translate(n.x, n.y);
+      ctx.rotate(n.angle);
+      const ng = ctx.createRadialGradient(0, 0, 0, 0, 0, n.rx);
+      ng.addColorStop(0, `hsla(${n.hue},60%,60%,${n.alpha * 1.5})`);
+      ng.addColorStop(0.5, `hsla(${n.hue},50%,50%,${n.alpha})`);
+      ng.addColorStop(1, `hsla(${n.hue},40%,40%,0)`);
+      ctx.fillStyle = ng;
+      ctx.scale(1, n.ry / n.rx);
+      ctx.beginPath();
+      ctx.arc(0, 0, n.rx, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // 별들
+    t += 0.016;
+    stars.forEach(s => {
+      const twinkle = Math.sin(t * s.twinkleSpeed * 60 + s.twinkleOffset);
+      const alpha = s.alpha * (0.7 + 0.3 * twinkle);
+      ctx.save();
+      // 큰 별은 빛 번짐
+      if (s.r > 1.4) {
+        const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 6);
+        glow.addColorStop(0, `rgba(232,224,208,${alpha * 0.4})`);
+        glow.addColorStop(1, 'rgba(232,224,208,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r * 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 십자 빛갈래
+        ctx.strokeStyle = `rgba(232,224,208,${alpha * 0.25})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(s.x - s.r * 8, s.y);
+        ctx.lineTo(s.x + s.r * 8, s.y);
+        ctx.moveTo(s.x, s.y - s.r * 8);
+        ctx.lineTo(s.x, s.y + s.r * 8);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = s.color;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // 황금 안개 (상단)
+    const topGlow = ctx.createRadialGradient(W/2, 0, 0, W/2, 0, W * 0.7);
+    topGlow.addColorStop(0, 'rgba(201,169,110,0.04)');
+    topGlow.addColorStop(1, 'rgba(201,169,110,0)');
+    ctx.fillStyle = topGlow;
+    ctx.fillRect(0, 0, W, H * 0.5);
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => {
+    clearTimeout(window._resizeTimer);
+    window._resizeTimer = setTimeout(resize, 200);
+  });
+
+  // 스크롤시 캔버스 높이 업데이트
+  window.addEventListener('scroll', () => {
+    const newH = Math.max(window.innerHeight, document.body.scrollHeight);
+    if (newH > H) { H = canvas.height = newH; }
+  });
+
+  resize();
+  draw();
+})();
+
+/* ══════════════════════════════
+   크리스탈 싱잉볼 오디오
+══════════════════════════════ */
+let audioCtx = null, soundOn = false, activeNodes = [], ambientInterval = null;
 
 function initAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -254,252 +391,111 @@ function initAudio() {
 }
 
 function createReverb(ctx) {
-  const convolver = ctx.createConvolver();
-  const rate = ctx.sampleRate;
-  const length = rate * 4;
-  const impulse = ctx.createBuffer(2, length, rate);
+  const conv = ctx.createConvolver();
+  const buf = ctx.createBuffer(2, ctx.sampleRate * 5, ctx.sampleRate);
   for (let c = 0; c < 2; c++) {
-    const ch = impulse.getChannelData(c);
-    for (let i = 0; i < length; i++) {
-      ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.5);
-    }
+    const ch = buf.getChannelData(c);
+    for (let i = 0; i < ch.length; i++) ch[i] = (Math.random()*2-1)*Math.pow(1-i/ch.length,2.2);
   }
-  convolver.buffer = impulse;
-  return convolver;
+  conv.buffer = buf; return conv;
 }
 
-let reverbNode = null;
-let masterGain = null;
-
+let reverbNode = null, masterGain = null;
 function setupChain() {
   if (!audioCtx) return;
   if (!reverbNode) reverbNode = createReverb(audioCtx);
-  if (!masterGain) {
-    masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.5;
-    reverbNode.connect(masterGain);
-    masterGain.connect(audioCtx.destination);
-  }
+  if (!masterGain) { masterGain = audioCtx.createGain(); masterGain.gain.value = 0.55; reverbNode.connect(masterGain); masterGain.connect(audioCtx.destination); }
 }
 
-function playCrystalBowl(freq, duration, delayTime = 0, volume = 0.15) {
+function playCrystalBowl(freq, duration, delay=0, vol=0.13) {
   if (!audioCtx || !soundOn) return;
   setupChain();
-
-  const now = audioCtx.currentTime + delayTime;
-
-  // 기본 사인파 (기음)
-  const osc1 = audioCtx.createOscillator();
-  const gain1 = audioCtx.createGain();
-  osc1.type = 'sine';
-  osc1.frequency.value = freq;
-  gain1.gain.setValueAtTime(0, now);
-  gain1.gain.linearRampToValueAtTime(volume, now + 0.08);
-  gain1.gain.setTargetAtTime(volume * 0.6, now + 0.3, 1.2);
-  gain1.gain.setTargetAtTime(0.0001, now + duration * 0.4, duration * 0.35);
-
-  // 2배음 (크리스탈 특유의 맑음)
-  const osc2 = audioCtx.createOscillator();
-  const gain2 = audioCtx.createGain();
-  osc2.type = 'sine';
-  osc2.frequency.value = freq * 2.756;
-  gain2.gain.setValueAtTime(0, now);
-  gain2.gain.linearRampToValueAtTime(volume * 0.3, now + 0.05);
-  gain2.gain.setTargetAtTime(0.0001, now + 0.8, 1.5);
-
-  // 3배음
-  const osc3 = audioCtx.createOscillator();
-  const gain3 = audioCtx.createGain();
-  osc3.type = 'sine';
-  osc3.frequency.value = freq * 5.4;
-  gain3.gain.setValueAtTime(0, now);
-  gain3.gain.linearRampToValueAtTime(volume * 0.1, now + 0.03);
-  gain3.gain.setTargetAtTime(0.0001, now + 0.4, 0.8);
-
-  // 미세 진동 (bowl spinning feel)
-  const lfo = audioCtx.createOscillator();
-  const lfoGain = audioCtx.createGain();
-  lfo.frequency.value = 6;
-  lfoGain.gain.value = freq * 0.003;
-  lfo.connect(lfoGain);
-  lfoGain.connect(osc1.frequency);
-
-  osc1.connect(gain1); gain1.connect(reverbNode);
-  osc2.connect(gain2); gain2.connect(reverbNode);
-  osc3.connect(gain3); gain3.connect(audioCtx.destination);
-
-  [osc1, osc2, osc3, lfo].forEach(o => { o.start(now); o.stop(now + duration + 2); });
-  activeNodes.push(osc1, osc2, osc3, lfo);
+  const now = audioCtx.currentTime + delay;
+  [[freq,vol,0.12,1.5,0.45,0.4],[freq*2.756,vol*0.25,0.06,0,1.0,1.8],[freq*5.4,vol*0.08,0.03,0,0.5,0.6]].forEach(([f,v,att,sus,rel,decay],i)=>{
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type='sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(v,now+att);
+    if(sus>0){g.gain.setTargetAtTime(v*0.55,now+0.5,1.5); g.gain.setTargetAtTime(0.0001,now+duration*rel,duration*decay);}
+    else g.gain.setTargetAtTime(0.0001,now+1.0,1.8);
+    o.connect(g); g.connect(i===2?audioCtx.destination:reverbNode);
+    o.start(now); o.stop(now+duration+2); activeNodes.push(o);
+  });
+  const lfo=audioCtx.createOscillator(), lg=audioCtx.createGain();
+  lfo.frequency.value=5; lg.gain.value=freq*0.002;
+  lfo.connect(lg); lfo.start(now); lfo.stop(now+duration+2); activeNodes.push(lfo);
 }
 
-// 드론 베이스 (낮은 웅 소리)
-let droneOsc = null;
-let droneGain = null;
-
+let droneOsc=null, droneGain=null;
 function startDrone() {
-  if (!audioCtx || !soundOn) return;
-  setupChain();
-  droneOsc = audioCtx.createOscillator();
-  droneGain = audioCtx.createGain();
-  droneOsc.type = 'sine';
-  droneOsc.frequency.value = 80;
-  droneGain.gain.setValueAtTime(0, audioCtx.currentTime);
-  droneGain.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 3);
-  droneOsc.connect(droneGain);
-  droneGain.connect(reverbNode);
-  droneOsc.start();
-  activeNodes.push(droneOsc);
+  if(!audioCtx||!soundOn) return; setupChain();
+  droneOsc=audioCtx.createOscillator(); droneGain=audioCtx.createGain();
+  droneOsc.type='sine'; droneOsc.frequency.value=54;
+  droneGain.gain.setValueAtTime(0,audioCtx.currentTime);
+  droneGain.gain.linearRampToValueAtTime(0.035,audioCtx.currentTime+4);
+  droneOsc.connect(droneGain); droneGain.connect(reverbNode); droneOsc.start(); activeNodes.push(droneOsc);
 }
-
 function stopDrone() {
-  if (droneGain && audioCtx) {
-    droneGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
-    setTimeout(() => { try { droneOsc.stop(); } catch(e){} }, 2200);
-  }
+  if(droneGain&&audioCtx){try{droneGain.gain.linearRampToValueAtTime(0,audioCtx.currentTime+2);setTimeout(()=>{try{droneOsc.stop();}catch(e){}},2200);}catch(e){}}
 }
 
-// 크리스탈볼 주파수 세트 (432Hz 계열)
-const bowlFreqs = [432, 528, 639, 396, 741, 852, 417];
-let bowlIdx = 0;
-
+const bowlFreqs=[108,136,174,198,216,144,162]; let bowlIdx=0;
 function scheduleNextBowl() {
-  if (!soundOn) return;
-  const freq = bowlFreqs[bowlIdx % bowlFreqs.length];
-  bowlIdx++;
-  playCrystalBowl(freq, 12 + Math.random() * 6, 0, 0.12);
-  const nextDelay = 8000 + Math.random() * 10000;
-  ambientInterval = setTimeout(scheduleNextBowl, nextDelay);
+  if(!soundOn) return;
+  playCrystalBowl(bowlFreqs[bowlIdx++%bowlFreqs.length],14+Math.random()*6,0,0.13);
+  ambientInterval=setTimeout(scheduleNextBowl,10000+Math.random()*12000);
 }
-
-function startAmbient() {
-  setupChain();
-  startDrone();
-  playCrystalBowl(528, 14, 0.5, 0.12);
-  playCrystalBowl(432, 12, 3, 0.08);
-  ambientInterval = setTimeout(scheduleNextBowl, 14000);
-}
-
-function stopAmbient() {
-  if (ambientInterval) clearTimeout(ambientInterval);
-  stopDrone();
-  activeNodes.forEach(n => { try { n.stop(); } catch(e){} });
-  activeNodes = [];
-}
-
+function startAmbient() { setupChain(); startDrone(); playCrystalBowl(174,16,0.8,0.13); playCrystalBowl(136,14,4,0.09); ambientInterval=setTimeout(scheduleNextBowl,16000); }
+function stopAmbient() { if(ambientInterval)clearTimeout(ambientInterval); stopDrone(); activeNodes.forEach(n=>{try{n.stop();}catch(e){}}); activeNodes=[]; reverbNode=null; masterGain=null; }
 function toggleSound() {
-  initAudio();
-  soundOn = !soundOn;
-  const btn = document.getElementById('sound-btn');
-  if (soundOn) {
-    btn.classList.add('active');
-    startAmbient();
-  } else {
-    btn.classList.remove('active');
-    stopAmbient();
-  }
+  initAudio(); soundOn=!soundOn;
+  const btn=document.getElementById('sound-btn');
+  if(soundOn){btn.classList.add('active');startAmbient();}else{btn.classList.remove('active');stopAmbient();}
 }
 
-/* ── 언어 ── */
+/* ══════════════════════════════
+   언어
+══════════════════════════════ */
 const T = {
-  ko: {
-    heroTitle:"천 명", heroSub:"CHEONMYEONG · 天命",
-    labelDate:"생년월일", labelYear:"년", labelMonth:"월", labelDay:"일",
-    labelTimeSection:"출생 시각", labelHour:"시", labelMinute:"분",
-    labelGender:"성별", textMale:"남", textFemale:"여",
-    analyzeBtn:"천명 분석하기", genderHint:"성별을 선택해주세요",
-    timeHint:"시각 모름 → 정오(12:00) 기준 분석",
-    resetBtn:"처음으로", disclaimer:"AI 분석 결과는 참고용입니다",
-    hourUnknown:"모름", minuteUnknown:"—",
-    loading:["천간을 살피는 중","지지를 헤아리는 중","별자리를 읽는 중","천명을 기록하는 중"],
-    loadingSub:"사주 · 자미두수 · 점성술 통합 분석",
-    genderMale:"남", genderFemale:"여", docTitle:"천명 · 天命 — 사주 분석",
-    lockedTitle:"DEEPER READING", lockedSub:"잠금 해제 후 전체 운세 열람",
-    unlockLabel:"전체 열람 잠금 해제", unlockSub:"일회 결제 · 즉시 접근",
-    uf1:"초년 · 중년 · 말년 시기별 운세", uf2:"2025 · 2026 · 2027 연도별 운세",
-    uf3:"이번 달 월운", uf4:"오늘의 일운",
-    periods:["초년운 (0~30세)","중년운 (30~55세)","말년운 (55세~)"],
-    yearly:"년 운세", monthly:"월운", daily:"오늘의 일운", locked:"잠금"
-  },
-  en: {
-    heroTitle:"天 命", heroSub:"CHEONMYEONG · DESTINY",
-    labelDate:"DATE OF BIRTH", labelYear:"YR", labelMonth:"MO", labelDay:"DY",
-    labelTimeSection:"BIRTH TIME", labelHour:"HR", labelMinute:"MIN",
-    labelGender:"GENDER", textMale:"male", textFemale:"female",
-    analyzeBtn:"REVEAL MY DESTINY", genderHint:"Please select your gender",
-    timeHint:"Unknown time → Analysis based on noon (12:00)",
-    resetBtn:"Start Over", disclaimer:"AI analysis is for reference only",
-    hourUnknown:"Unknown", minuteUnknown:"—",
-    loading:["Reading the Heavenly Stems","Calculating Earthly Branches","Aligning the stars","Inscribing your destiny"],
-    loadingSub:"BaZi · Zi Wei Dou Shu · Astrology",
-    genderMale:"Male", genderFemale:"Female", docTitle:"天命 · Cheonmyeong — BaZi Analysis",
-    lockedTitle:"DEEPER READING", lockedSub:"Unlock to reveal your complete destiny",
-    unlockLabel:"UNLOCK FULL READING", unlockSub:"one-time · instant access",
-    uf1:"Early · Middle · Late Life Periods", uf2:"Year-by-Year Fortune (3 years)",
-    uf3:"This Month's Energy", uf4:"Today's Daily Reading",
-    periods:["Early Life (0~30)","Middle Years (30~55)","Final Chapter (55+)"],
-    yearly:" Fortune", monthly:"This Month", daily:"Today's Reading", locked:"Locked"
-  }
+  ko:{heroTitle:"천 명",heroSub:"CHEONMYEONG · 天命",labelDate:"생년월일",labelYear:"년",labelMonth:"월",labelDay:"일",labelTimeSection:"출생 시각",labelHour:"시",labelMinute:"분",labelGender:"성별",textMale:"남",textFemale:"여",analyzeBtn:"천명 분석하기",genderHint:"성별을 선택해주세요",timeHint:"시각 모름 → 정오(12:00) 기준 분석",resetBtn:"처음으로",disclaimer:"AI 분석 결과는 참고용입니다",hourUnknown:"모름",minuteUnknown:"—",loading:["천간을 살피는 중","지지를 헤아리는 중","별자리를 읽는 중","천명을 기록하는 중"],loadingSub:"사주 · 자미두수 · 점성술 통합 분석",genderMale:"남",genderFemale:"여",docTitle:"천명 · 天命 — 사주 분석",lockedTitle:"DEEPER READING",lockedSub:"잠금 해제 후 전체 운세 열람",unlockLabel:"전체 열람 잠금 해제",unlockSub:"일회 결제 · 즉시 접근",uf1:"초년 · 중년 · 말년 시기별 운세",uf2:"2025 · 2026 · 2027 연도별 운세",uf3:"이번 달 월운",uf4:"오늘의 일운",periods:["초년운 (0~30세)","중년운 (30~55세)","말년운 (55세~)"],yearly:"년 운세",monthly:"월운",daily:"오늘의 일운",locked:"잠금"},
+  en:{heroTitle:"天 命",heroSub:"CHEONMYEONG · DESTINY",labelDate:"DATE OF BIRTH",labelYear:"YR",labelMonth:"MO",labelDay:"DY",labelTimeSection:"BIRTH TIME",labelHour:"HR",labelMinute:"MIN",labelGender:"GENDER",textMale:"male",textFemale:"female",analyzeBtn:"REVEAL MY DESTINY",genderHint:"Please select your gender",timeHint:"Unknown time → Analysis based on noon (12:00)",resetBtn:"Start Over",disclaimer:"AI analysis is for reference only",hourUnknown:"Unknown",minuteUnknown:"—",loading:["Reading the Heavenly Stems","Calculating Earthly Branches","Aligning the stars","Inscribing your destiny"],loadingSub:"BaZi · Zi Wei Dou Shu · Astrology",genderMale:"Male",genderFemale:"Female",docTitle:"天命 · Cheonmyeong — BaZi Analysis",lockedTitle:"DEEPER READING",lockedSub:"Unlock to reveal your complete destiny",unlockLabel:"UNLOCK FULL READING",unlockSub:"one-time · instant access",uf1:"Early · Middle · Late Life Periods",uf2:"Year-by-Year Fortune (3 years)",uf3:"This Month's Energy",uf4:"Today's Daily Reading",periods:["Early Life (0~30)","Middle Years (30~55)","Final Chapter (55+)"],yearly:" Fortune",monthly:"This Month",daily:"Today's Reading",locked:"Locked"}
 };
 
-let currentLang = (navigator.language||"ko").startsWith("ko") ? "ko" : "en";
-
-function setLang(lang) {
-  currentLang = lang;
-  const t = T[lang];
-  document.documentElement.lang = lang;
-  document.title = t.docTitle;
-  document.getElementById("btn-ko").className = "lang-btn"+(lang==="ko"?" active":"");
-  document.getElementById("btn-en").className = "lang-btn"+(lang==="en"?" active":"");
-  ["hero-title","hero-sub","label-date","label-year","label-month","label-day",
-   "label-time-section","label-hour","label-minute","label-gender","text-male","text-female",
-   "analyze-btn","gender-hint","time-hint","reset-btn","disclaimer","loading-sub",
-   "locked-title-text","locked-sub-text","unlock-label","unlock-sub","uf1","uf2","uf3","uf4"
-  ].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const map = {
-      "hero-title":t.heroTitle,"hero-sub":t.heroSub,"label-date":t.labelDate,
-      "label-year":t.labelYear,"label-month":t.labelMonth,"label-day":t.labelDay,
-      "label-time-section":t.labelTimeSection,"label-hour":t.labelHour,"label-minute":t.labelMinute,
-      "label-gender":t.labelGender,"text-male":t.textMale,"text-female":t.textFemale,
-      "analyze-btn":t.analyzeBtn,"gender-hint":t.genderHint,"time-hint":t.timeHint,
-      "reset-btn":t.resetBtn,"disclaimer":t.disclaimer,"loading-sub":t.loadingSub,
-      "locked-title-text":t.lockedTitle,"locked-sub-text":t.lockedSub,
-      "unlock-label":t.unlockLabel,"unlock-sub":t.unlockSub,
-      "uf1":t.uf1,"uf2":t.uf2,"uf3":t.uf3,"uf4":t.uf4
-    };
-    el.textContent = map[id] || "";
-  });
+let currentLang=(navigator.language||"ko").startsWith("ko")?"ko":"en";
+function setLang(lang){
+  currentLang=lang; const t=T[lang];
+  document.documentElement.lang=lang; document.title=t.docTitle;
+  document.getElementById("btn-ko").className="lang-btn"+(lang==="ko"?" active":"");
+  document.getElementById("btn-en").className="lang-btn"+(lang==="en"?" active":"");
+  const map={"hero-title":t.heroTitle,"hero-sub":t.heroSub,"label-date":t.labelDate,"label-year":t.labelYear,"label-month":t.labelMonth,"label-day":t.labelDay,"label-time-section":t.labelTimeSection,"label-hour":t.labelHour,"label-minute":t.labelMinute,"label-gender":t.labelGender,"text-male":t.textMale,"text-female":t.textFemale,"analyze-btn":t.analyzeBtn,"gender-hint":t.genderHint,"time-hint":t.timeHint,"reset-btn":t.resetBtn,"disclaimer":t.disclaimer,"loading-sub":t.loadingSub,"locked-title-text":t.lockedTitle,"locked-sub-text":t.lockedSub,"unlock-label":t.unlockLabel,"unlock-sub":t.unlockSub,"uf1":t.uf1,"uf2":t.uf2,"uf3":t.uf3,"uf4":t.uf4};
+  Object.entries(map).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val;});
   rebuildTimePickers();
 }
 
-/* ── 드럼 피커 ── */
-const ITEM_H = 44, VISIBLE = 5;
-function createDrum(el, items, initVal, onChange, disabled) {
-  el.style.height = (ITEM_H*VISIBLE)+"px"; el.innerHTML="";
-  if(disabled) el.classList.add("disabled"); else el.classList.remove("disabled");
+/* ══════════════════════════════
+   드럼 피커
+══════════════════════════════ */
+const ITEM_H=44,VISIBLE=5;
+function createDrum(el,items,initVal,onChange,disabled){
+  el.style.height=(ITEM_H*VISIBLE)+"px"; el.innerHTML="";
+  if(disabled)el.classList.add("disabled");else el.classList.remove("disabled");
   let baseIdx=Math.max(0,items.indexOf(initVal)); let drag={on:false,startY:0,dy:0};
-  const fadeT=document.createElement("div"); fadeT.className="drum-fade-top"; fadeT.style.height=ITEM_H*2+"px";
-  const fadeB=document.createElement("div"); fadeB.className="drum-fade-bot"; fadeB.style.height=ITEM_H*2+"px";
-  const sel=document.createElement("div"); sel.className="drum-selector"; sel.style.cssText=`top:${ITEM_H*2}px;height:${ITEM_H}px`;
-  const list=document.createElement("div"); list.className="drum-list";
+  const fadeT=document.createElement("div");fadeT.className="drum-fade-top";fadeT.style.height=ITEM_H*2+"px";
+  const fadeB=document.createElement("div");fadeB.className="drum-fade-bot";fadeB.style.height=ITEM_H*2+"px";
+  const sel=document.createElement("div");sel.className="drum-selector";sel.style.cssText=`top:${ITEM_H*2}px;height:${ITEM_H}px`;
+  const list=document.createElement("div");list.className="drum-list";
   items.forEach((item,i)=>{
-    const d=document.createElement("div"); d.className="drum-item far"; d.style.height=ITEM_H+"px"; d.style.fontSize="13px"; d.textContent=item;
-    d.onclick=()=>{if(!disabled){baseIdx=i;render();onChange(items[i]);}};
-    list.appendChild(d);
+    const d=document.createElement("div");d.className="drum-item far";d.style.height=ITEM_H+"px";d.style.fontSize="13px";d.textContent=item;
+    d.onclick=()=>{if(!disabled){baseIdx=i;render();onChange(items[i]);}};list.appendChild(d);
   });
-  el.appendChild(fadeT); el.appendChild(fadeB); el.appendChild(sel); el.appendChild(list);
+  el.appendChild(fadeT);el.appendChild(fadeB);el.appendChild(sel);el.appendChild(list);
   function clamp(v){return Math.max(0,Math.min((items.length-1)*ITEM_H,v));}
   function snapI(v){return Math.round(clamp(v)/ITEM_H);}
   function liveRaw(){return baseIdx*ITEM_H+(drag.on?drag.dy:0);}
   function render(){
-    const ai=snapI(liveRaw()); const ty=-clamp(liveRaw())+ITEM_H*2;
+    const ai=snapI(liveRaw());const ty=-clamp(liveRaw())+ITEM_H*2;
     list.style.transition=drag.on?"none":"transform 0.22s cubic-bezier(.25,.8,.25,1)";
     list.style.transform=`translateY(${ty}px)`;
-    list.childNodes.forEach((d,i)=>{
-      const dist=Math.abs(i-ai); d.className="drum-item "+(dist===0?"active":dist===1?"near":"far");
-      d.style.fontSize=dist===0?"19px":"13px"; d.style.fontWeight=dist===0?"500":"400";
-    });
+    list.childNodes.forEach((d,i)=>{const dist=Math.abs(i-ai);d.className="drum-item "+(dist===0?"active":dist===1?"near":"far");d.style.fontSize=dist===0?"19px":"13px";d.style.fontWeight=dist===0?"500":"400";});
   }
   render();
   if(!disabled){
@@ -510,11 +506,7 @@ function createDrum(el, items, initVal, onChange, disabled) {
     window.addEventListener("mouseup",()=>{if(!drag.on)return;baseIdx=snapI(liveRaw());drag={on:false,startY:0,dy:0};onChange(items[baseIdx]);render();});
     window.addEventListener("touchend",()=>{if(!drag.on)return;baseIdx=snapI(liveRaw());drag={on:false,startY:0,dy:0};onChange(items[baseIdx]);render();});
   }
-  return {
-    setValue(val){const i=items.indexOf(val);if(i>=0){baseIdx=i;render();}},
-    enable(){el.classList.remove("disabled");disabled=false;},
-    disable(){el.classList.add("disabled");disabled=true;}
-  };
+  return{setValue(val){const i=items.indexOf(val);if(i>=0){baseIdx=i;render();}},enable(){el.classList.remove("disabled");disabled=false;},disable(){el.classList.add("disabled");disabled=true;}};
 }
 
 const CY=new Date().getFullYear();
@@ -525,39 +517,26 @@ function getDays(y,m){return Array.from({length:new Date(y,m,0).getDate()},(_,i)
 function getHours(){const t=T[currentLang];return[t.hourUnknown,...Array.from({length:24},(_,i)=>String(i).padStart(2,"0"))];}
 function getMinutes(){const t=T[currentLang];return[t.minuteUnknown,...Array.from({length:60},(_,i)=>String(i).padStart(2,"0"))];}
 
-(function(){
-  const svg=document.getElementById("stars");
-  for(let i=0;i<120;i++){
-    const x=(Math.sin(i*137.508)*0.5+0.5)*100; const y=(Math.cos(i*97.31)*0.5+0.5)*100;
-    const r=i%7===0?1.4:i%3===0?0.9:0.5; const o=0.08+(i%5)*0.06;
-    const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
-    c.setAttribute("cx",x+"%"); c.setAttribute("cy",y+"%"); c.setAttribute("r",r);
-    c.setAttribute("fill","#e8d5b0"); c.setAttribute("opacity",o); svg.appendChild(c);
-  }
-})();
-
 let drumYear,drumMonth,drumDay,drumHour,drumMinute;
 function initPickers(){
   drumYear=createDrum(document.getElementById("drum-year"),years,state.year,v=>{state.year=v;refreshDays();},false);
   drumMonth=createDrum(document.getElementById("drum-month"),months,state.month,v=>{state.month=v;refreshDays();},false);
-  let dayItems=getDays(state.year,state.month);
-  drumDay=createDrum(document.getElementById("drum-day"),dayItems,state.day,v=>{state.day=v;},false);
-  const hours=getHours(); state.hour=hours[0];
+  drumDay=createDrum(document.getElementById("drum-day"),getDays(state.year,state.month),state.day,v=>{state.day=v;},false);
+  const hours=getHours();state.hour=hours[0];
   drumHour=createDrum(document.getElementById("drum-hour"),hours,state.hour,v=>{
-    state.hour=v; const t=T[currentLang]; const noTime=v===t.hourUnknown;
+    state.hour=v;const t=T[currentLang];const noTime=v===t.hourUnknown;
     document.getElementById("time-hint").style.display=noTime?"block":"none";
     document.getElementById("sep-time").className="picker-sep"+(noTime?" dim":"");
     document.getElementById("label-minute").className="drum-label"+(noTime?" disabled":"");
     if(noTime){drumMinute.disable();state.minute=t.minuteUnknown;}else drumMinute.enable();
   },false);
-  const minutes=getMinutes(); state.minute=minutes[0];
+  const minutes=getMinutes();state.minute=minutes[0];
   drumMinute=createDrum(document.getElementById("drum-minute"),minutes,state.minute,v=>{state.minute=v;},true);
 }
-
 function rebuildTimePickers(){
-  const hours=getHours(); const minutes=getMinutes();
+  const hours=getHours();const minutes=getMinutes();
   drumHour=createDrum(document.getElementById("drum-hour"),hours,hours[0],v=>{
-    state.hour=v; const t=T[currentLang]; const noTime=v===t.hourUnknown;
+    state.hour=v;const t=T[currentLang];const noTime=v===t.hourUnknown;
     document.getElementById("time-hint").style.display=noTime?"block":"none";
     document.getElementById("sep-time").className="picker-sep"+(noTime?" dim":"");
     document.getElementById("label-minute").className="drum-label"+(noTime?" disabled":"");
@@ -568,13 +547,11 @@ function rebuildTimePickers(){
   state.minute=minutes[0];
   document.getElementById("time-hint").style.display="block";
 }
-
 function refreshDays(){
-  const newDays=getDays(state.year,state.month); const el=document.getElementById("drum-day"); el.innerHTML="";
-  const newVal=state.day>newDays.length?newDays[newDays.length-1]:state.day; state.day=newVal;
+  const newDays=getDays(state.year,state.month);const el=document.getElementById("drum-day");el.innerHTML="";
+  const newVal=state.day>newDays.length?newDays[newDays.length-1]:state.day;state.day=newVal;
   drumDay=createDrum(el,newDays,newVal,v=>{state.day=v;},false);
 }
-
 function selectGender(g){
   state.gender=g;
   document.getElementById("btn-male").className="gender-btn"+(g==="male"?" active":"");
@@ -584,15 +561,11 @@ function selectGender(g){
 }
 
 let msgTimer;
-function startLoadingMsgs(){
-  const msgs=T[currentLang].loading; let i=0;
-  document.getElementById("loading-msg").textContent=msgs[0];
-  msgTimer=setInterval(()=>{i=(i+1)%msgs.length;document.getElementById("loading-msg").textContent=msgs[i];},1800);
-}
+function startLoadingMsgs(){const msgs=T[currentLang].loading;let i=0;document.getElementById("loading-msg").textContent=msgs[0];msgTimer=setInterval(()=>{i=(i+1)%msgs.length;document.getElementById("loading-msg").textContent=msgs[i];},1800);}
 function stopLoadingMsgs(){clearInterval(msgTimer);}
 
 async function analyze(){
-  if(!state.gender) return;
+  if(!state.gender)return;
   const t=T[currentLang];
   document.getElementById("error-box").style.display="none";
   document.getElementById("loading").style.display="flex";
@@ -603,17 +576,11 @@ async function analyze(){
   try{
     const res=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({year:state.year,month:state.month,day:state.day,hour:hourVal,minute:minuteVal,gender:state.gender,lang:currentLang})});
     const data=await res.json();
-    if(data.error) throw new Error(data.error);
-    stopLoadingMsgs();
-    document.getElementById("loading").style.display="none";
-    showResult(data);
+    if(data.error)throw new Error(data.error);
+    stopLoadingMsgs();document.getElementById("loading").style.display="none";showResult(data);
   }catch(e){
-    stopLoadingMsgs();
-    document.getElementById("loading").style.display="none";
-    document.getElementById("form-section").style.display="block";
-    const eb=document.getElementById("error-box");
-    eb.textContent=(currentLang==="ko"?"오류: ":"Error: ")+e.message;
-    eb.style.display="block";
+    stopLoadingMsgs();document.getElementById("loading").style.display="none";document.getElementById("form-section").style.display="block";
+    const eb=document.getElementById("error-box");eb.textContent=(currentLang==="ko"?"오류: ":"Error: ")+e.message;eb.style.display="block";
   }
 }
 
@@ -623,34 +590,22 @@ function showResult(data){
   document.getElementById("result-meta").textContent=currentLang==="ko"?`${state.year}년 ${state.month}월 ${state.day}일 · ${genderLabel}`:`${state.month}/${state.day}/${state.year} · ${genderLabel}`;
   document.getElementById("result-headline").textContent=data.headline||"";
   document.getElementById("result-essence").textContent=data.essence||"";
-
-  const container=document.getElementById("result-sections"); container.innerHTML="";
+  const container=document.getElementById("result-sections");container.innerHTML="";
   (data.sections||[]).forEach((sec,i)=>{
-    const div=document.createElement("div"); div.className="section"; div.style.transitionDelay=(i*0.07)+"s";
+    const div=document.createElement("div");div.className="section";div.style.transitionDelay=(i*0.07)+"s";
     div.innerHTML=`<div class="section-title-wrap"><span class="section-icon">${sec.icon}</span><span class="section-title">${sec.title}</span></div><div class="section-body">${sec.body}</div>`;
     container.appendChild(div);
   });
-
   if(data.locked){
-    const wrap=document.getElementById("locked-wrap"); wrap.style.display="block";
-    const cards=document.getElementById("locked-cards"); cards.innerHTML="";
-    const cy=new Date().getFullYear(); const cm=new Date().getMonth()+1;
-    const lockedItems=[
-      {title:t.periods[0],preview:data.locked.periods?.early||""},
-      {title:t.periods[1],preview:data.locked.periods?.mid||""},
-      {title:t.periods[2],preview:data.locked.periods?.late||""},
-      {title:`${cy}${t.yearly}`,preview:data.locked.yearly?.[0]?.fortune||""},
-      {title:`${cy+1}${t.yearly}`,preview:data.locked.yearly?.[1]?.fortune||""},
-      {title:currentLang==="ko"?`${cm}월 ${t.monthly}`:t.monthly,preview:data.locked.monthly||""},
-      {title:t.daily,preview:data.locked.daily||""},
-    ];
-    lockedItems.forEach(item=>{
-      const card=document.createElement("div"); card.className="locked-card";
+    const wrap=document.getElementById("locked-wrap");wrap.style.display="block";
+    const cards=document.getElementById("locked-cards");cards.innerHTML="";
+    const cy=new Date().getFullYear();const cm=new Date().getMonth()+1;
+    [{title:t.periods[0],preview:data.locked.periods?.early||""},{title:t.periods[1],preview:data.locked.periods?.mid||""},{title:t.periods[2],preview:data.locked.periods?.late||""},{title:`${cy}${t.yearly}`,preview:data.locked.yearly?.[0]?.fortune||""},{title:`${cy+1}${t.yearly}`,preview:data.locked.yearly?.[1]?.fortune||""},{title:currentLang==="ko"?`${cm}월 ${t.monthly}`:t.monthly,preview:data.locked.monthly||""},{title:t.daily,preview:data.locked.daily||""}].forEach(item=>{
+      const card=document.createElement("div");card.className="locked-card";
       card.innerHTML=`<div class="locked-card-inner"><div class="locked-card-title">${item.title}</div><div class="locked-card-preview">${item.preview.substring(0,80)}...</div></div><div class="locked-overlay"><div class="lock-icon">🔒</div><div class="locked-label">${t.locked}</div></div>`;
       cards.appendChild(card);
     });
   }
-
   document.getElementById("result").style.display="block";
   window.scrollTo({top:0,behavior:"smooth"});
   const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("visible");});},{threshold:0.05});
