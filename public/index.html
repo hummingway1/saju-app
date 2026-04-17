@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ko">
 <head>
   <meta charset="UTF-8"/>
@@ -15,116 +16,137 @@
     }
     body { min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Noto Serif KR', serif; overflow-x: hidden; }
 
-    /* 캔버스 은하수 배경 */
-    #galaxy-canvas {
-      position: fixed; inset: 0; z-index: 0;
-      pointer-events: none;
-      width: 100%; height: 100%;
-    }
+```
+#galaxy-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; width: 100%; height: 100%; }
 
-    .lang-toggle { position: fixed; top: 16px; right: 16px; z-index: 300; display: flex; background: #0d0b1499; border: 1px solid #2a2438; border-radius: 20px; overflow: hidden; backdrop-filter: blur(8px); }
-    .lang-btn { padding: 7px 14px; font-size: 11px; letter-spacing: 2px; cursor: pointer; border: none; background: transparent; color: var(--text-dim); font-family: 'Noto Serif KR', serif; transition: all 0.2s; }
-    .lang-btn.active { background: var(--gold); color: var(--bg); font-weight: 600; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; z-index: 300; display: flex; background: #0d0b14bb; border: 1px solid #2a2438; border-radius: 20px; overflow: hidden; backdrop-filter: blur(8px); }
+.lang-btn { padding: 7px 14px; font-size: 11px; letter-spacing: 2px; cursor: pointer; border: none; background: transparent; color: var(--text-dim); font-family: 'Noto Serif KR', serif; transition: all 0.2s; }
+.lang-btn.active { background: var(--gold); color: var(--bg); font-weight: 600; }
 
-    .sound-toggle { position: fixed; top: 16px; left: 16px; z-index: 300; width: 36px; height: 36px; background: #0d0b1499; border: 1px solid #2a2438; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text-dim); transition: all 0.3s; backdrop-filter: blur(8px); }
-    .sound-toggle.active { border-color: var(--gold-dim); color: var(--gold); box-shadow: 0 0 20px #c9a96e20; }
+.sound-toggle { position: fixed; top: 16px; left: 16px; z-index: 300; width: 36px; height: 36px; background: #0d0b14bb; border: 1px solid #2a2438; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text-dim); transition: all 0.3s; backdrop-filter: blur(8px); }
+.sound-toggle.active { border-color: var(--gold-dim); color: var(--gold); box-shadow: 0 0 20px #c9a96e20; }
 
-    .wrap { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; padding: 0 20px; }
+/* 컨텐츠 뒤 어두운 오버레이 */
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 520px; margin: 0 auto; padding: 0 20px;
+}
+.wrap::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, #04030a88 0%, #04030acc 100%);
+  z-index: -1; pointer-events: none;
+}
 
-    .hero { text-align: center; padding: 72px 0 48px; }
-    .hero-icon { display: inline-flex; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--gold-dim); align-items: center; justify-content: center; font-size: 24px; color: var(--gold); background: #13101e99; box-shadow: 0 0 60px #c9a96e18; margin-bottom: 24px; animation: pulse-glow 4s ease-in-out infinite; backdrop-filter: blur(4px); }
-    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 40px #c9a96e15}50%{box-shadow:0 0 80px #c9a96e35} }
-    .hero h1 { font-size: clamp(22px,6vw,34px); font-weight: 300; letter-spacing: 12px; color: var(--text-bright); margin-bottom: 8px; font-family: 'Cormorant Garamond', serif; text-shadow: 0 0 40px #c9a96e30; }
-    .hero p { font-size: 11px; color: #4a3a58; letter-spacing: 6px; }
-    .hero-line { width: 1px; height: 40px; background: linear-gradient(var(--gold-dim), transparent); margin: 22px auto 0; }
+/* 섹션들에 backdrop 추가 */
+#form-section, #result {
+  position: relative;
+}
+#form-section::before, #result::before {
+  content: '';
+  position: absolute; inset: -20px -20px;
+  background: #04030a99;
+  filter: blur(20px);
+  z-index: -1; border-radius: 20px;
+  pointer-events: none;
+}
 
-    .field-label { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; text-align: center; margin-bottom: 14px; }
-    .picker-box { background: #0d0b1488; border: 1px solid #2a2438; border-radius: 16px; padding: 16px 10px; display: flex; justify-content: center; align-items: flex-start; gap: 4px; margin-bottom: 32px; backdrop-filter: blur(12px); }
-    .picker-sep { color: #2a2438; font-size: 20px; padding-top: 62px; }
-    .picker-sep.dim { color: #1a1828; }
+.hero { text-align: center; padding: 72px 0 48px; }
+.hero-icon { display: inline-flex; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--gold-dim); align-items: center; justify-content: center; font-size: 24px; color: var(--gold); background: #13101ecc; box-shadow: 0 0 60px #c9a96e18; margin-bottom: 24px; animation: pulse-glow 4s ease-in-out infinite; }
+@keyframes pulse-glow { 0%,100%{box-shadow:0 0 40px #c9a96e15}50%{box-shadow:0 0 80px #c9a96e35} }
+.hero h1 { font-size: clamp(22px,6vw,34px); font-weight: 300; letter-spacing: 12px; color: var(--text-bright); margin-bottom: 8px; font-family: 'Cormorant Garamond', serif; text-shadow: 0 0 40px #c9a96e30; }
+.hero p { font-size: 11px; color: #4a3a58; letter-spacing: 6px; }
+.hero-line { width: 1px; height: 40px; background: linear-gradient(var(--gold-dim), transparent); margin: 22px auto 0; }
 
-    .drum-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    .drum-label { font-size: 10px; color: var(--text-muted); letter-spacing: 3px; }
-    .drum-label.disabled { color: #252030; }
-    .drum { overflow: hidden; position: relative; border-radius: 12px; cursor: grab; background: linear-gradient(180deg, #04030a, #0d0b14 25%, #0d0b14 75%, #04030a); user-select: none; }
-    .drum.disabled { opacity: 0.25; cursor: default; }
-    .drum-fade-top { position: absolute; top: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(180deg, #04030a, transparent); }
-    .drum-fade-bot { position: absolute; bottom: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(0deg, #04030a, transparent); }
-    .drum-selector { position: absolute; left: 6px; right: 6px; border: 1px solid #c9a96e44; border-radius: 8px; background: #c9a96e08; z-index: 1; pointer-events: none; }
-    .drum-list { position: absolute; left: 0; right: 0; transition: transform 0.22s cubic-bezier(.25,.8,.25,1); }
-    .drum-item { display: flex; align-items: center; justify-content: center; font-family: 'Noto Serif KR', serif; transition: all 0.1s; cursor: pointer; }
-    .drum-item.active { color: var(--text-bright); font-weight: 500; }
-    .drum-item.near { color: #5a4a62; }
-    .drum-item.far { color: #2a2038; }
+.field-label { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; text-align: center; margin-bottom: 14px; }
+.picker-box { background: #0d0b14cc; border: 1px solid #2a2438; border-radius: 16px; padding: 16px 10px; display: flex; justify-content: center; align-items: flex-start; gap: 4px; margin-bottom: 32px; backdrop-filter: blur(16px); }
+.picker-sep { color: #2a2438; font-size: 20px; padding-top: 62px; }
+.picker-sep.dim { color: #1a1828; }
 
-    .gender-wrap { display: flex; gap: 10px; margin-bottom: 36px; }
-    .gender-btn { flex: 1; padding: 20px 12px; background: #0d0b1488; border: 1px solid #2a2438; border-radius: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; backdrop-filter: blur(8px); }
-    .gender-btn.active { background: #1c1828; border-color: #c9a96e77; }
-    .gender-btn .hanja { font-size: 26px; color: #3a2e48; transition: color 0.2s; }
-    .gender-btn.active .hanja { color: var(--text-bright); }
-    .gender-btn .ko { font-size: 10px; letter-spacing: 4px; color: #3a2e48; transition: color 0.2s; }
-    .gender-btn.active .ko { color: var(--gold); }
+.drum-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.drum-label { font-size: 10px; color: var(--text-muted); letter-spacing: 3px; }
+.drum-label.disabled { color: #252030; }
+.drum { overflow: hidden; position: relative; border-radius: 12px; cursor: grab; background: linear-gradient(180deg, #04030a, #0d0b14 25%, #0d0b14 75%, #04030a); user-select: none; }
+.drum.disabled { opacity: 0.25; cursor: default; }
+.drum-fade-top { position: absolute; top: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(180deg, #04030a, transparent); }
+.drum-fade-bot { position: absolute; bottom: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(0deg, #04030a, transparent); }
+.drum-selector { position: absolute; left: 6px; right: 6px; border: 1px solid #c9a96e44; border-radius: 8px; background: #c9a96e08; z-index: 1; pointer-events: none; }
+.drum-list { position: absolute; left: 0; right: 0; transition: transform 0.22s cubic-bezier(.25,.8,.25,1); }
+.drum-item { display: flex; align-items: center; justify-content: center; font-family: 'Noto Serif KR', serif; transition: all 0.1s; cursor: pointer; }
+.drum-item.active { color: var(--text-bright); font-weight: 500; }
+.drum-item.near { color: #5a4a62; }
+.drum-item.far { color: #2a2038; }
 
-    .analyze-btn { width: 100%; padding: 16px; border: none; border-radius: 13px; font-size: 13px; letter-spacing: 7px; font-family: 'Noto Serif KR', serif; font-weight: 600; cursor: not-allowed; transition: all 0.3s; margin-bottom: 12px; background: #13101e; color: #2a2038; }
-    .analyze-btn.ready { background: linear-gradient(135deg, var(--gold), #a07840); color: var(--bg); cursor: pointer; box-shadow: 0 6px 32px #c9a96e35; }
-    .hint { text-align: center; font-size: 11px; color: #252030; letter-spacing: 2px; margin-bottom: 4px; }
-    .error-box { margin-top: 14px; padding: 12px 16px; background: #90000a20; border: 1px solid #c8181855; border-radius: 10px; color: #ff9090; font-size: 12px; line-height: 1.7; word-break: break-all; display: none; }
+.gender-wrap { display: flex; gap: 10px; margin-bottom: 36px; }
+.gender-btn { flex: 1; padding: 20px 12px; background: #0d0b14cc; border: 1px solid #2a2438; border-radius: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; backdrop-filter: blur(8px); }
+.gender-btn.active { background: #1c1828; border-color: #c9a96e77; }
+.gender-btn .hanja { font-size: 26px; color: #3a2e48; transition: color 0.2s; }
+.gender-btn.active .hanja { color: var(--text-bright); }
+.gender-btn .ko { font-size: 10px; letter-spacing: 4px; color: #3a2e48; transition: color 0.2s; }
+.gender-btn.active .ko { color: var(--gold); }
 
-    #loading { display: none; position: fixed; inset: 0; background: #04030aee; z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
-    .spinner-wrap { position: relative; width: 88px; height: 88px; }
-    .ring { position: absolute; border-radius: 50%; border: 1px solid transparent; }
-    .ring-1 { inset: 0; border-top-color: #c9a96e33; animation: zspin 4s linear infinite; }
-    .ring-2 { inset: 12px; border-top-color: #c9a96e55; animation: zspin 2.4s linear infinite reverse; }
-    .ring-3 { inset: 24px; border-top-color: #c9a96e99; animation: zspin 1.4s linear infinite; }
-    .spinner-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 24px; color: var(--gold); }
-    .loading-text { text-align: center; }
-    .loading-msg { font-size: 14px; color: var(--gold); letter-spacing: 3px; }
-    .loading-sub { font-size: 11px; color: #4a3a58; margin-top: 8px; letter-spacing: 2px; }
-    @keyframes zspin { to { transform: rotate(360deg); } }
+.analyze-btn { width: 100%; padding: 16px; border: none; border-radius: 13px; font-size: 13px; letter-spacing: 7px; font-family: 'Noto Serif KR', serif; font-weight: 600; cursor: not-allowed; transition: all 0.3s; margin-bottom: 12px; background: #13101e; color: #2a2038; }
+.analyze-btn.ready { background: linear-gradient(135deg, var(--gold), #a07840); color: var(--bg); cursor: pointer; box-shadow: 0 6px 32px #c9a96e35; }
+.hint { text-align: center; font-size: 11px; color: #252030; letter-spacing: 2px; margin-bottom: 4px; }
+.error-box { margin-top: 14px; padding: 12px 16px; background: #90000a20; border: 1px solid #c8181855; border-radius: 10px; color: #ff9090; font-size: 12px; line-height: 1.7; word-break: break-all; display: none; }
 
-    #result { display: none; }
-    .result-header { text-align: center; padding: 0 0 40px; border-bottom: 1px solid #1a1828; }
-    .result-meta { font-size: 10px; color: #4a3a58; letter-spacing: 4px; margin-bottom: 20px; }
-    .result-headline { font-size: clamp(16px,4vw,22px); color: var(--text-bright); font-weight: 300; line-height: 1.8; margin-bottom: 20px; font-family: 'Cormorant Garamond', serif; font-style: italic; text-shadow: 0 0 30px #c9a96e20; }
-    .result-essence { font-size: 13.5px; color: #7a6a6a; line-height: 2.1; font-weight: 300; }
+#loading { display: none; position: fixed; inset: 0; background: #04030aee; z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+.spinner-wrap { position: relative; width: 88px; height: 88px; }
+.ring { position: absolute; border-radius: 50%; border: 1px solid transparent; }
+.ring-1 { inset: 0; border-top-color: #c9a96e33; animation: zspin 4s linear infinite; }
+.ring-2 { inset: 12px; border-top-color: #c9a96e55; animation: zspin 2.4s linear infinite reverse; }
+.ring-3 { inset: 24px; border-top-color: #c9a96e99; animation: zspin 1.4s linear infinite; }
+.spinner-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 24px; color: var(--gold); }
+.loading-text { text-align: center; }
+.loading-msg { font-size: 14px; color: var(--gold); letter-spacing: 3px; }
+.loading-sub { font-size: 11px; color: #4a3a58; margin-top: 8px; letter-spacing: 2px; }
+@keyframes zspin { to { transform: rotate(360deg); } }
 
-    .section { padding: 34px 0; border-bottom: 1px solid #1a1828; opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .section.visible { opacity: 1; transform: none; }
-    .section-title-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .section-icon { font-size: 16px; color: var(--gold); }
-    .section-title { font-size: 11px; color: var(--text-muted); letter-spacing: 6px; font-weight: 400; text-transform: uppercase; }
-    .section-body { font-size: 15px; line-height: 2.2; color: #baa890; font-weight: 300; }
+#result { display: none; }
+.result-header { text-align: center; padding: 0 0 40px; border-bottom: 1px solid #1a1828; }
+.result-meta { font-size: 10px; color: #4a3a58; letter-spacing: 4px; margin-bottom: 20px; }
+.result-headline { font-size: clamp(16px,4vw,22px); color: var(--text-bright); font-weight: 300; line-height: 1.8; margin-bottom: 20px; font-family: 'Cormorant Garamond', serif; font-style: italic; text-shadow: 0 0 30px #c9a96e20; }
+.result-essence { font-size: 13.5px; color: #7a6a6a; line-height: 2.1; font-weight: 300; }
 
-    .locked-section-wrap { margin-top: 40px; border-top: 1px solid #1a1828; padding-top: 40px; }
-    .locked-header { text-align: center; margin-bottom: 32px; }
-    .locked-header h3 { font-size: 11px; color: var(--text-muted); letter-spacing: 6px; font-weight: 400; margin-bottom: 8px; }
-    .locked-header p { font-size: 12px; color: #3a2e48; letter-spacing: 2px; }
+.section { padding: 34px 0; border-bottom: 1px solid #1a1828; opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.section.visible { opacity: 1; transform: none; }
+.section-title-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.section-icon { font-size: 16px; color: var(--gold); }
+.section-title { font-size: 11px; color: var(--text-muted); letter-spacing: 6px; font-weight: 400; text-transform: uppercase; }
+.section-body { font-size: 15px; line-height: 2.2; color: #baa890; font-weight: 300; }
 
-    .locked-card { position: relative; margin-bottom: 16px; border-radius: 14px; overflow: hidden; border: 1px solid #1a1828; }
-    .locked-card-inner { padding: 24px; background: #0d0b1488; filter: blur(4px); user-select: none; pointer-events: none; backdrop-filter: blur(4px); }
-    .locked-card-title { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; margin-bottom: 10px; }
-    .locked-card-preview { font-size: 13px; color: #4a3a58; line-height: 2; height: 60px; overflow: hidden; }
-    .locked-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(180deg, transparent, #04030acc); }
-    .lock-icon { font-size: 20px; color: var(--gold); opacity: 0.7; }
-    .locked-label { font-size: 10px; color: var(--text-muted); letter-spacing: 4px; }
+.locked-section-wrap { margin-top: 40px; border-top: 1px solid #1a1828; padding-top: 40px; }
+.locked-header { text-align: center; margin-bottom: 32px; }
+.locked-header h3 { font-size: 11px; color: var(--text-muted); letter-spacing: 6px; font-weight: 400; margin-bottom: 8px; }
+.locked-header p { font-size: 12px; color: #3a2e48; letter-spacing: 2px; }
 
-    .unlock-section { text-align: center; padding: 40px 0 20px; }
-    .unlock-btn { display: inline-flex; flex-direction: column; align-items: center; width: 100%; padding: 20px; background: linear-gradient(135deg, #1a1520, #2a1f18); border: 1px solid var(--gold-dim); border-radius: 16px; cursor: pointer; transition: all 0.3s; gap: 4px; }
-    .unlock-btn:hover { border-color: var(--gold); box-shadow: 0 0 50px #c9a96e20; }
-    .unlock-btn-label { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; }
-    .unlock-btn-price { font-size: 28px; color: var(--gold); font-family: 'Cormorant Garamond', serif; font-weight: 300; }
-    .unlock-btn-sub { font-size: 11px; color: #4a3a58; letter-spacing: 2px; }
-    .unlock-features { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; text-align: left; }
-    .unlock-feature { font-size: 11px; color: #4a3a48; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-    .unlock-feature span { color: var(--gold); font-size: 10px; }
+.locked-card { position: relative; margin-bottom: 16px; border-radius: 14px; overflow: hidden; border: 1px solid #1a1828; }
+.locked-card-inner { padding: 24px; background: #0d0b14cc; filter: blur(4px); user-select: none; pointer-events: none; }
+.locked-card-title { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; margin-bottom: 10px; }
+.locked-card-preview { font-size: 13px; color: #4a3a58; line-height: 2; height: 60px; overflow: hidden; }
+.locked-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(180deg, transparent, #04030acc); }
+.lock-icon { font-size: 20px; color: var(--gold); opacity: 0.7; }
+.locked-label { font-size: 10px; color: var(--text-muted); letter-spacing: 4px; }
 
-    .reset-wrap { padding: 50px 0 80px; text-align: center; }
-    .reset-btn { background: transparent; border: 1px solid #2a2438; border-radius: 10px; padding: 10px 28px; color: var(--text-muted); font-size: 12px; letter-spacing: 5px; cursor: pointer; font-family: 'Noto Serif KR', serif; transition: all 0.2s; }
-    .reset-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
-    .disclaimer { margin-top: 24px; font-size: 10px; color: #1a1828; letter-spacing: 2px; }
+.unlock-section { text-align: center; padding: 40px 0 20px; }
+.unlock-btn { display: inline-flex; flex-direction: column; align-items: center; width: 100%; padding: 20px; background: linear-gradient(135deg, #1a1520, #2a1f18); border: 1px solid var(--gold-dim); border-radius: 16px; cursor: pointer; transition: all 0.3s; gap: 4px; }
+.unlock-btn:hover { border-color: var(--gold); box-shadow: 0 0 50px #c9a96e20; }
+.unlock-btn-label { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; }
+.unlock-btn-price { font-size: 28px; color: var(--gold); font-family: 'Cormorant Garamond', serif; font-weight: 300; }
+.unlock-btn-sub { font-size: 11px; color: #4a3a58; letter-spacing: 2px; }
+.unlock-features { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; text-align: left; }
+.unlock-feature { font-size: 11px; color: #4a3a48; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+.unlock-feature span { color: var(--gold); font-size: 10px; }
 
-    @keyframes fadeIn { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none} }
-    .fade-in { animation: fadeIn 0.7s ease both; }
+.reset-wrap { padding: 50px 0 80px; text-align: center; }
+.reset-btn { background: transparent; border: 1px solid #2a2438; border-radius: 10px; padding: 10px 28px; color: var(--text-muted); font-size: 12px; letter-spacing: 5px; cursor: pointer; font-family: 'Noto Serif KR', serif; transition: all 0.2s; }
+.reset-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
+.disclaimer { margin-top: 24px; font-size: 10px; color: #1a1828; letter-spacing: 2px; }
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none} }
+.fade-in { animation: fadeIn 0.7s ease both; }
+```
+
   </style>
 </head>
 <body>
@@ -132,6 +154,7 @@
 <canvas id="galaxy-canvas"></canvas>
 
 <button class="sound-toggle" id="sound-btn" onclick="toggleSound()">♪</button>
+
 <div class="lang-toggle">
   <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">한</button>
   <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
@@ -165,7 +188,6 @@
       <div class="picker-sep">·</div>
       <div class="drum-wrap"><div class="drum-label" id="label-day">일</div><div class="drum" id="drum-day" style="width:60px"></div></div>
     </div>
-
     <div class="field-label" id="label-time-section">출생 시각</div>
     <div class="picker-box">
       <div class="drum-wrap"><div class="drum-label" id="label-hour">시</div><div class="drum" id="drum-hour" style="width:110px"></div></div>
@@ -173,13 +195,11 @@
       <div class="drum-wrap"><div class="drum-label disabled" id="label-minute">분</div><div class="drum disabled" id="drum-minute" style="width:72px"></div></div>
     </div>
     <p class="hint" id="time-hint" style="display:none">시각 모름 → 정오(12:00) 기준 분석</p>
-
     <div class="field-label" style="margin-top:32px" id="label-gender">성별</div>
     <div class="gender-wrap">
       <button class="gender-btn" id="btn-male" onclick="selectGender('male')"><span class="hanja">男</span><span class="ko" id="text-male">남</span></button>
       <button class="gender-btn" id="btn-female" onclick="selectGender('female')"><span class="hanja">女</span><span class="ko" id="text-female">여</span></button>
     </div>
-
     <button class="analyze-btn" id="analyze-btn" onclick="analyze()">천명 분석하기</button>
     <p class="hint" id="gender-hint">성별을 선택해주세요</p>
     <div class="error-box" id="error-box"></div>
@@ -193,7 +213,6 @@
       <div class="result-essence" id="result-essence"></div>
     </div>
     <div id="result-sections"></div>
-
     <div class="locked-section-wrap" id="locked-wrap" style="display:none">
       <div class="locked-header">
         <h3 id="locked-title-text">DEEPER READING</h3>
@@ -214,7 +233,6 @@
         </div>
       </div>
     </div>
-
     <div class="reset-wrap">
       <button class="reset-btn" onclick="resetApp()" id="reset-btn">처음으로</button>
       <div class="disclaimer" id="disclaimer">AI 분석 결과는 참고용입니다</div>
@@ -224,52 +242,56 @@
 
 <script>
 /* ══════════════════════════════
-   은하수 캔버스
+   은하수 캔버스 — 점 반짝임
 ══════════════════════════════ */
 (function() {
   const canvas = document.getElementById('galaxy-canvas');
   const ctx = canvas.getContext('2d');
   let W, H, stars = [], nebula = [];
-  let scrollY = 0;
 
   function resize() {
     W = canvas.width = window.innerWidth;
-    H = canvas.height = Math.max(window.innerHeight, document.body.scrollHeight);
+    H = canvas.height = Math.max(window.innerHeight, document.body.scrollHeight, 3000);
     initStars();
   }
 
+  function rand(min, max) { return min + Math.random() * (max - min); }
+
   function initStars() {
-    stars = [];
-    nebula = [];
-    const count = Math.floor((W * H) / 1800);
+    stars = []; nebula = [];
+    const count = Math.floor((W * H) / 2200);
 
     for (let i = 0; i < count; i++) {
-      const r = Math.random();
+      const tier = Math.random();
       stars.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: r < 0.05 ? 1.8 + Math.random() * 1.2 :
-           r < 0.2  ? 0.9 + Math.random() * 0.8 :
-                      0.3 + Math.random() * 0.5,
-        alpha: 0.15 + Math.random() * 0.75,
-        twinkleSpeed: 0.003 + Math.random() * 0.008,
-        twinkleOffset: Math.random() * Math.PI * 2,
-        color: r < 0.08 ? `hsl(${200 + Math.random()*60},80%,90%)` :
-               r < 0.15 ? `hsl(${40 + Math.random()*20},70%,90%)` :
-                          '#e8e0d0'
+        x: rand(0, W),
+        y: rand(0, H),
+        // 작고 선명한 점으로만
+        r: tier < 0.04 ? rand(1.2, 1.8) :
+           tier < 0.18 ? rand(0.6, 1.0) :
+                         rand(0.2, 0.5),
+        baseAlpha: tier < 0.04 ? rand(0.7, 1.0) :
+                   tier < 0.18 ? rand(0.3, 0.6) :
+                                 rand(0.1, 0.3),
+        speed: rand(0.4, 1.8),
+        offset: rand(0, Math.PI * 2),
+        // 색상: 거의 흰색, 가끔 푸르스름
+        color: tier < 0.06
+          ? `hsl(${rand(200,240)},60%,92%)`
+          : tier < 0.12
+          ? `hsl(${rand(35,50)},50%,92%)`
+          : '#f0ece4'
       });
     }
 
-    // 은하수 구름 (성운 느낌)
-    for (let i = 0; i < 12; i++) {
+    // 은하수 성운 (매우 옅게)
+    for (let i = 0; i < 8; i++) {
       nebula.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        rx: 60 + Math.random() * 180,
-        ry: 30 + Math.random() * 80,
-        angle: Math.random() * Math.PI,
-        alpha: 0.015 + Math.random() * 0.03,
-        hue: Math.random() < 0.5 ? 240 : 280
+        x: rand(0, W), y: rand(0, H),
+        rx: rand(80, 220), ry: rand(30, 90),
+        angle: rand(0, Math.PI),
+        alpha: rand(0.008, 0.022),
+        hue: Math.random() < 0.5 ? 240 : 270
       });
     }
   }
@@ -278,102 +300,100 @@
   function draw() {
     ctx.clearRect(0, 0, W, H);
 
-    // 딥 스페이스 그라디언트
-    const grad = ctx.createLinearGradient(0, 0, W * 0.3, H);
-    grad.addColorStop(0, '#04030a');
-    grad.addColorStop(0.3, '#060418');
-    grad.addColorStop(0.6, '#040308');
-    grad.addColorStop(1, '#030208');
-    ctx.fillStyle = grad;
+    // 딥 스페이스 배경
+    const bg = ctx.createLinearGradient(0, 0, W * 0.4, H);
+    bg.addColorStop(0, '#04030a');
+    bg.addColorStop(0.35, '#060418');
+    bg.addColorStop(0.65, '#050310');
+    bg.addColorStop(1, '#030208');
+    ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
-    // 은하수 밴드
-    const mwGrad = ctx.createLinearGradient(W * 0.1, 0, W * 0.9, H);
-    mwGrad.addColorStop(0, 'rgba(60,40,90,0)');
-    mwGrad.addColorStop(0.2, 'rgba(80,55,120,0.06)');
-    mwGrad.addColorStop(0.4, 'rgba(100,70,160,0.10)');
-    mwGrad.addColorStop(0.5, 'rgba(120,80,180,0.13)');
-    mwGrad.addColorStop(0.6, 'rgba(100,65,150,0.09)');
-    mwGrad.addColorStop(0.8, 'rgba(70,45,100,0.05)');
-    mwGrad.addColorStop(1, 'rgba(50,30,70,0)');
+    // 은하수 밴드 (매우 옅게)
     ctx.save();
-    ctx.translate(W/2, H/2);
-    ctx.rotate(-0.3);
-    ctx.translate(-W/2, -H/2);
-    ctx.fillStyle = mwGrad;
+    ctx.translate(W/2, H/2); ctx.rotate(-0.28); ctx.translate(-W/2, -H/2);
+    const mw = ctx.createLinearGradient(W*0.05, 0, W*0.95, H);
+    mw.addColorStop(0,   'rgba(50,30,80,0)');
+    mw.addColorStop(0.3, 'rgba(70,45,110,0.05)');
+    mw.addColorStop(0.5, 'rgba(90,55,140,0.09)');
+    mw.addColorStop(0.7, 'rgba(65,40,100,0.05)');
+    mw.addColorStop(1,   'rgba(40,25,60,0)');
+    ctx.fillStyle = mw;
     ctx.fillRect(0, 0, W, H);
     ctx.restore();
 
-    // 성운 구름
+    // 성운 (옅게)
     nebula.forEach(n => {
       ctx.save();
-      ctx.translate(n.x, n.y);
-      ctx.rotate(n.angle);
-      const ng = ctx.createRadialGradient(0, 0, 0, 0, 0, n.rx);
-      ng.addColorStop(0, `hsla(${n.hue},60%,60%,${n.alpha * 1.5})`);
-      ng.addColorStop(0.5, `hsla(${n.hue},50%,50%,${n.alpha})`);
-      ng.addColorStop(1, `hsla(${n.hue},40%,40%,0)`);
+      ctx.translate(n.x, n.y); ctx.rotate(n.angle);
+      const ng = ctx.createRadialGradient(0,0,0, 0,0,n.rx);
+      ng.addColorStop(0, `hsla(${n.hue},55%,55%,${n.alpha*1.4})`);
+      ng.addColorStop(0.5, `hsla(${n.hue},45%,45%,${n.alpha})`);
+      ng.addColorStop(1, `hsla(${n.hue},35%,35%,0)`);
       ctx.fillStyle = ng;
-      ctx.scale(1, n.ry / n.rx);
-      ctx.beginPath();
-      ctx.arc(0, 0, n.rx, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.scale(1, n.ry/n.rx);
+      ctx.beginPath(); ctx.arc(0,0,n.rx,0,Math.PI*2); ctx.fill();
       ctx.restore();
     });
 
-    // 별들
-    t += 0.016;
+    // 별 — 순수한 점 + 반짝임
+    t += 0.012;
     stars.forEach(s => {
-      const twinkle = Math.sin(t * s.twinkleSpeed * 60 + s.twinkleOffset);
-      const alpha = s.alpha * (0.7 + 0.3 * twinkle);
-      ctx.save();
-      // 큰 별은 빛 번짐
-      if (s.r > 1.4) {
-        const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 6);
-        glow.addColorStop(0, `rgba(232,224,208,${alpha * 0.4})`);
-        glow.addColorStop(1, 'rgba(232,224,208,0)');
+      const twinkle = Math.sin(t * s.speed + s.offset);
+      const alpha = s.baseAlpha * (0.5 + 0.5 * ((twinkle + 1) / 2));
+
+      // 큰 별만 아주 작은 글로우
+      if (s.r > 1.0) {
+        const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 3);
+        glow.addColorStop(0, `rgba(240,235,225,${alpha * 0.35})`);
+        glow.addColorStop(1, 'rgba(240,235,225,0)');
         ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r * 6, 0, Math.PI * 2);
+        ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2);
         ctx.fill();
 
-        // 십자 빛갈래
-        ctx.strokeStyle = `rgba(232,224,208,${alpha * 0.25})`;
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.moveTo(s.x - s.r * 8, s.y);
-        ctx.lineTo(s.x + s.r * 8, s.y);
-        ctx.moveTo(s.x, s.y - s.r * 8);
-        ctx.lineTo(s.x, s.y + s.r * 8);
-        ctx.stroke();
+        // 십자 빛줄기 (아주 가늘게)
+        if (s.r > 1.3) {
+          ctx.save();
+          ctx.globalAlpha = alpha * 0.18;
+          ctx.strokeStyle = '#f0ece4';
+          ctx.lineWidth = 0.4;
+          const len = s.r * 7;
+          ctx.beginPath();
+          ctx.moveTo(s.x - len, s.y); ctx.lineTo(s.x + len, s.y);
+          ctx.moveTo(s.x, s.y - len); ctx.lineTo(s.x, s.y + len);
+          ctx.stroke();
+          ctx.restore();
+        }
       }
+
+      // 별 본체 — 선명한 점
       ctx.globalAlpha = alpha;
       ctx.fillStyle = s.color;
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
       ctx.fill();
-      ctx.restore();
+      ctx.globalAlpha = 1;
     });
 
-    // 황금 안개 (상단)
-    const topGlow = ctx.createRadialGradient(W/2, 0, 0, W/2, 0, W * 0.7);
-    topGlow.addColorStop(0, 'rgba(201,169,110,0.04)');
-    topGlow.addColorStop(1, 'rgba(201,169,110,0)');
-    ctx.fillStyle = topGlow;
-    ctx.fillRect(0, 0, W, H * 0.5);
+    // 상단 황금 안개
+    const topFog = ctx.createRadialGradient(W/2, -50, 0, W/2, -50, W * 0.65);
+    topFog.addColorStop(0, 'rgba(201,169,110,0.035)');
+    topFog.addColorStop(1, 'rgba(201,169,110,0)');
+    ctx.fillStyle = topFog;
+    ctx.fillRect(0, 0, W, H * 0.55);
 
     requestAnimationFrame(draw);
   }
 
   window.addEventListener('resize', () => {
-    clearTimeout(window._resizeTimer);
-    window._resizeTimer = setTimeout(resize, 200);
+    clearTimeout(window._rt);
+    window._rt = setTimeout(resize, 200);
   });
 
-  // 스크롤시 캔버스 높이 업데이트
   window.addEventListener('scroll', () => {
     const newH = Math.max(window.innerHeight, document.body.scrollHeight);
-    if (newH > H) { H = canvas.height = newH; }
+    if (newH > H + 200) { H = canvas.height = newH + 500; }
   });
 
   resize();
@@ -381,89 +401,43 @@
 })();
 
 /* ══════════════════════════════
-   크리스탈 싱잉볼 오디오
+   크리스탈 싱잉볼
 ══════════════════════════════ */
-let audioCtx = null, soundOn = false, activeNodes = [], ambientInterval = null;
-
-function initAudio() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-}
-
-function createReverb(ctx) {
-  const conv = ctx.createConvolver();
-  const buf = ctx.createBuffer(2, ctx.sampleRate * 5, ctx.sampleRate);
-  for (let c = 0; c < 2; c++) {
-    const ch = buf.getChannelData(c);
-    for (let i = 0; i < ch.length; i++) ch[i] = (Math.random()*2-1)*Math.pow(1-i/ch.length,2.2);
-  }
-  conv.buffer = buf; return conv;
-}
-
-let reverbNode = null, masterGain = null;
-function setupChain() {
-  if (!audioCtx) return;
-  if (!reverbNode) reverbNode = createReverb(audioCtx);
-  if (!masterGain) { masterGain = audioCtx.createGain(); masterGain.gain.value = 0.55; reverbNode.connect(masterGain); masterGain.connect(audioCtx.destination); }
-}
-
-function playCrystalBowl(freq, duration, delay=0, vol=0.13) {
-  if (!audioCtx || !soundOn) return;
-  setupChain();
-  const now = audioCtx.currentTime + delay;
-  [[freq,vol,0.12,1.5,0.45,0.4],[freq*2.756,vol*0.25,0.06,0,1.0,1.8],[freq*5.4,vol*0.08,0.03,0,0.5,0.6]].forEach(([f,v,att,sus,rel,decay],i)=>{
-    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-    o.type='sine'; o.frequency.value=f;
-    g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(v,now+att);
-    if(sus>0){g.gain.setTargetAtTime(v*0.55,now+0.5,1.5); g.gain.setTargetAtTime(0.0001,now+duration*rel,duration*decay);}
-    else g.gain.setTargetAtTime(0.0001,now+1.0,1.8);
-    o.connect(g); g.connect(i===2?audioCtx.destination:reverbNode);
-    o.start(now); o.stop(now+duration+2); activeNodes.push(o);
+let audioCtx=null, soundOn=false, activeNodes=[], ambientInterval=null;
+function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();}
+function createReverb(ctx){const c=ctx.createConvolver(),b=ctx.createBuffer(2,ctx.sampleRate*5,ctx.sampleRate);for(let i=0;i<2;i++){const ch=b.getChannelData(i);for(let j=0;j<ch.length;j++)ch[j]=(Math.random()*2-1)*Math.pow(1-j/ch.length,2.2);}c.buffer=b;return c;}
+let reverbNode=null,masterGain=null;
+function setupChain(){if(!audioCtx)return;if(!reverbNode)reverbNode=createReverb(audioCtx);if(!masterGain){masterGain=audioCtx.createGain();masterGain.gain.value=0.55;reverbNode.connect(masterGain);masterGain.connect(audioCtx.destination);}}
+function playCrystalBowl(freq,duration,delay=0,vol=0.13){
+  if(!audioCtx||!soundOn)return;setupChain();const now=audioCtx.currentTime+delay;
+  [[freq,vol,0.12,true],[freq*2.756,vol*0.25,0.06,true],[freq*5.4,vol*0.08,0.03,false]].forEach(([f,v,att,rev],i)=>{
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(v,now+att);
+    if(i===0){g.gain.setTargetAtTime(v*0.55,now+0.5,1.5);g.gain.setTargetAtTime(0.0001,now+duration*0.45,duration*0.4);}
+    else if(i===1){g.gain.setTargetAtTime(0.0001,now+1.0,1.8);}
+    else{g.gain.setTargetAtTime(0.0001,now+0.5,0.6);}
+    o.connect(g);g.connect(rev?reverbNode:audioCtx.destination);o.start(now);o.stop(now+duration+2);activeNodes.push(o);
   });
-  const lfo=audioCtx.createOscillator(), lg=audioCtx.createGain();
-  lfo.frequency.value=5; lg.gain.value=freq*0.002;
-  lfo.connect(lg); lfo.start(now); lfo.stop(now+duration+2); activeNodes.push(lfo);
 }
-
-let droneOsc=null, droneGain=null;
-function startDrone() {
-  if(!audioCtx||!soundOn) return; setupChain();
-  droneOsc=audioCtx.createOscillator(); droneGain=audioCtx.createGain();
-  droneOsc.type='sine'; droneOsc.frequency.value=54;
-  droneGain.gain.setValueAtTime(0,audioCtx.currentTime);
-  droneGain.gain.linearRampToValueAtTime(0.035,audioCtx.currentTime+4);
-  droneOsc.connect(droneGain); droneGain.connect(reverbNode); droneOsc.start(); activeNodes.push(droneOsc);
-}
-function stopDrone() {
-  if(droneGain&&audioCtx){try{droneGain.gain.linearRampToValueAtTime(0,audioCtx.currentTime+2);setTimeout(()=>{try{droneOsc.stop();}catch(e){}},2200);}catch(e){}}
-}
-
-const bowlFreqs=[108,136,174,198,216,144,162]; let bowlIdx=0;
-function scheduleNextBowl() {
-  if(!soundOn) return;
-  playCrystalBowl(bowlFreqs[bowlIdx++%bowlFreqs.length],14+Math.random()*6,0,0.13);
-  ambientInterval=setTimeout(scheduleNextBowl,10000+Math.random()*12000);
-}
-function startAmbient() { setupChain(); startDrone(); playCrystalBowl(174,16,0.8,0.13); playCrystalBowl(136,14,4,0.09); ambientInterval=setTimeout(scheduleNextBowl,16000); }
-function stopAmbient() { if(ambientInterval)clearTimeout(ambientInterval); stopDrone(); activeNodes.forEach(n=>{try{n.stop();}catch(e){}}); activeNodes=[]; reverbNode=null; masterGain=null; }
-function toggleSound() {
-  initAudio(); soundOn=!soundOn;
-  const btn=document.getElementById('sound-btn');
-  if(soundOn){btn.classList.add('active');startAmbient();}else{btn.classList.remove('active');stopAmbient();}
-}
+let droneOsc=null,droneGain=null;
+function startDrone(){if(!audioCtx||!soundOn)return;setupChain();droneOsc=audioCtx.createOscillator();droneGain=audioCtx.createGain();droneOsc.type='sine';droneOsc.frequency.value=54;droneGain.gain.setValueAtTime(0,audioCtx.currentTime);droneGain.gain.linearRampToValueAtTime(0.035,audioCtx.currentTime+4);droneOsc.connect(droneGain);droneGain.connect(reverbNode);droneOsc.start();activeNodes.push(droneOsc);}
+function stopDrone(){if(droneGain&&audioCtx){try{droneGain.gain.linearRampToValueAtTime(0,audioCtx.currentTime+2);setTimeout(()=>{try{droneOsc.stop();}catch(e){}},2200);}catch(e){}}}
+const bowlFreqs=[108,136,174,198,216,144,162];let bowlIdx=0;
+function scheduleNextBowl(){if(!soundOn)return;playCrystalBowl(bowlFreqs[bowlIdx++%bowlFreqs.length],14+Math.random()*6,0,0.13);ambientInterval=setTimeout(scheduleNextBowl,10000+Math.random()*12000);}
+function startAmbient(){setupChain();startDrone();playCrystalBowl(174,16,0.8,0.13);playCrystalBowl(136,14,4,0.09);ambientInterval=setTimeout(scheduleNextBowl,16000);}
+function stopAmbient(){if(ambientInterval)clearTimeout(ambientInterval);stopDrone();activeNodes.forEach(n=>{try{n.stop();}catch(e){}});activeNodes=[];reverbNode=null;masterGain=null;}
+function toggleSound(){initAudio();soundOn=!soundOn;const btn=document.getElementById('sound-btn');if(soundOn){btn.classList.add('active');startAmbient();}else{btn.classList.remove('active');stopAmbient();}}
 
 /* ══════════════════════════════
    언어
 ══════════════════════════════ */
-const T = {
+const T={
   ko:{heroTitle:"천 명",heroSub:"CHEONMYEONG · 天命",labelDate:"생년월일",labelYear:"년",labelMonth:"월",labelDay:"일",labelTimeSection:"출생 시각",labelHour:"시",labelMinute:"분",labelGender:"성별",textMale:"남",textFemale:"여",analyzeBtn:"천명 분석하기",genderHint:"성별을 선택해주세요",timeHint:"시각 모름 → 정오(12:00) 기준 분석",resetBtn:"처음으로",disclaimer:"AI 분석 결과는 참고용입니다",hourUnknown:"모름",minuteUnknown:"—",loading:["천간을 살피는 중","지지를 헤아리는 중","별자리를 읽는 중","천명을 기록하는 중"],loadingSub:"사주 · 자미두수 · 점성술 통합 분석",genderMale:"남",genderFemale:"여",docTitle:"천명 · 天命 — 사주 분석",lockedTitle:"DEEPER READING",lockedSub:"잠금 해제 후 전체 운세 열람",unlockLabel:"전체 열람 잠금 해제",unlockSub:"일회 결제 · 즉시 접근",uf1:"초년 · 중년 · 말년 시기별 운세",uf2:"2025 · 2026 · 2027 연도별 운세",uf3:"이번 달 월운",uf4:"오늘의 일운",periods:["초년운 (0~30세)","중년운 (30~55세)","말년운 (55세~)"],yearly:"년 운세",monthly:"월운",daily:"오늘의 일운",locked:"잠금"},
   en:{heroTitle:"天 命",heroSub:"CHEONMYEONG · DESTINY",labelDate:"DATE OF BIRTH",labelYear:"YR",labelMonth:"MO",labelDay:"DY",labelTimeSection:"BIRTH TIME",labelHour:"HR",labelMinute:"MIN",labelGender:"GENDER",textMale:"male",textFemale:"female",analyzeBtn:"REVEAL MY DESTINY",genderHint:"Please select your gender",timeHint:"Unknown time → Analysis based on noon (12:00)",resetBtn:"Start Over",disclaimer:"AI analysis is for reference only",hourUnknown:"Unknown",minuteUnknown:"—",loading:["Reading the Heavenly Stems","Calculating Earthly Branches","Aligning the stars","Inscribing your destiny"],loadingSub:"BaZi · Zi Wei Dou Shu · Astrology",genderMale:"Male",genderFemale:"Female",docTitle:"天命 · Cheonmyeong — BaZi Analysis",lockedTitle:"DEEPER READING",lockedSub:"Unlock to reveal your complete destiny",unlockLabel:"UNLOCK FULL READING",unlockSub:"one-time · instant access",uf1:"Early · Middle · Late Life Periods",uf2:"Year-by-Year Fortune (3 years)",uf3:"This Month's Energy",uf4:"Today's Daily Reading",periods:["Early Life (0~30)","Middle Years (30~55)","Final Chapter (55+)"],yearly:" Fortune",monthly:"This Month",daily:"Today's Reading",locked:"Locked"}
 };
-
 let currentLang=(navigator.language||"ko").startsWith("ko")?"ko":"en";
 function setLang(lang){
-  currentLang=lang; const t=T[lang];
-  document.documentElement.lang=lang; document.title=t.docTitle;
+  currentLang=lang;const t=T[lang];document.documentElement.lang=lang;document.title=t.docTitle;
   document.getElementById("btn-ko").className="lang-btn"+(lang==="ko"?" active":"");
   document.getElementById("btn-en").className="lang-btn"+(lang==="en"?" active":"");
   const map={"hero-title":t.heroTitle,"hero-sub":t.heroSub,"label-date":t.labelDate,"label-year":t.labelYear,"label-month":t.labelMonth,"label-day":t.labelDay,"label-time-section":t.labelTimeSection,"label-hour":t.labelHour,"label-minute":t.labelMinute,"label-gender":t.labelGender,"text-male":t.textMale,"text-female":t.textFemale,"analyze-btn":t.analyzeBtn,"gender-hint":t.genderHint,"time-hint":t.timeHint,"reset-btn":t.resetBtn,"disclaimer":t.disclaimer,"loading-sub":t.loadingSub,"locked-title-text":t.lockedTitle,"locked-sub-text":t.lockedSub,"unlock-label":t.unlockLabel,"unlock-sub":t.unlockSub,"uf1":t.uf1,"uf2":t.uf2,"uf3":t.uf3,"uf4":t.uf4};
@@ -476,9 +450,9 @@ function setLang(lang){
 ══════════════════════════════ */
 const ITEM_H=44,VISIBLE=5;
 function createDrum(el,items,initVal,onChange,disabled){
-  el.style.height=(ITEM_H*VISIBLE)+"px"; el.innerHTML="";
+  el.style.height=(ITEM_H*VISIBLE)+"px";el.innerHTML="";
   if(disabled)el.classList.add("disabled");else el.classList.remove("disabled");
-  let baseIdx=Math.max(0,items.indexOf(initVal)); let drag={on:false,startY:0,dy:0};
+  let baseIdx=Math.max(0,items.indexOf(initVal));let drag={on:false,startY:0,dy:0};
   const fadeT=document.createElement("div");fadeT.className="drum-fade-top";fadeT.style.height=ITEM_H*2+"px";
   const fadeB=document.createElement("div");fadeB.className="drum-fade-bot";fadeB.style.height=ITEM_H*2+"px";
   const sel=document.createElement("div");sel.className="drum-selector";sel.style.cssText=`top:${ITEM_H*2}px;height:${ITEM_H}px`;
@@ -544,8 +518,7 @@ function rebuildTimePickers(){
   },false);
   state.hour=hours[0];
   drumMinute=createDrum(document.getElementById("drum-minute"),minutes,minutes[0],v=>{state.minute=v;},true);
-  state.minute=minutes[0];
-  document.getElementById("time-hint").style.display="block";
+  state.minute=minutes[0];document.getElementById("time-hint").style.display="block";
 }
 function refreshDays(){
   const newDays=getDays(state.year,state.month);const el=document.getElementById("drum-day");el.innerHTML="";
@@ -559,7 +532,6 @@ function selectGender(g){
   document.getElementById("gender-hint").style.display="none";
   document.getElementById("analyze-btn").className="analyze-btn ready";
 }
-
 let msgTimer;
 function startLoadingMsgs(){const msgs=T[currentLang].loading;let i=0;document.getElementById("loading-msg").textContent=msgs[0];msgTimer=setInterval(()=>{i=(i+1)%msgs.length;document.getElementById("loading-msg").textContent=msgs[i];},1800);}
 function stopLoadingMsgs(){clearInterval(msgTimer);}
@@ -583,11 +555,10 @@ async function analyze(){
     const eb=document.getElementById("error-box");eb.textContent=(currentLang==="ko"?"오류: ":"Error: ")+e.message;eb.style.display="block";
   }
 }
-
 function showResult(data){
   const t=T[currentLang];
-  const genderLabel=state.gender==="male"?t.genderMale:t.genderFemale;
-  document.getElementById("result-meta").textContent=currentLang==="ko"?`${state.year}년 ${state.month}월 ${state.day}일 · ${genderLabel}`:`${state.month}/${state.day}/${state.year} · ${genderLabel}`;
+  const gl=state.gender==="male"?t.genderMale:t.genderFemale;
+  document.getElementById("result-meta").textContent=currentLang==="ko"?`${state.year}년 ${state.month}월 ${state.day}일 · ${gl}`:`${state.month}/${state.day}/${state.year} · ${gl}`;
   document.getElementById("result-headline").textContent=data.headline||"";
   document.getElementById("result-essence").textContent=data.essence||"";
   const container=document.getElementById("result-sections");container.innerHTML="";
@@ -611,7 +582,6 @@ function showResult(data){
   const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("visible");});},{threshold:0.05});
   document.querySelectorAll(".section").forEach(s=>obs.observe(s));
 }
-
 function resetApp(){
   document.getElementById("result").style.display="none";
   document.getElementById("locked-wrap").style.display="none";
@@ -622,5 +592,6 @@ function resetApp(){
 initPickers();
 setLang(currentLang);
 </script>
+
 </body>
 </html>
