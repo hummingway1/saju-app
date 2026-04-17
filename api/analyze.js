@@ -1,4 +1,4 @@
-// v5
+// v6
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -21,44 +21,79 @@ export default async function handler(req, res) {
   const currentMonth = new Date().getMonth() + 1;
   const age = currentYear - year;
 
-  const prompt = isEn
-    ? `You are a master of BaZi (Four Pillars), Zi Wei Dou Shu, and Western Astrology with 40 years of experience. You give deeply personal, specific, and psychologically compelling readings that feel uncannily accurate.
+  const systemPrompt = isEn
+    ? `You are a BaZi and astrology master. Return ONLY valid JSON. No markdown, no explanation. Keep each field under 3 sentences to avoid truncation.`
+    : `당신은 사주명리학 대가입니다. 오직 유효한 JSON만 반환하세요. 마크다운 없음. 각 항목은 3문장 이내로 간결하게.`;
 
-Return ONLY a JSON object. No markdown. Start with { end with }.
+  const userPrompt = isEn
+    ? `Analyze this person's destiny using BaZi, Zi Wei Dou Shu, and Western Astrology.
+Age: ${age}, Born: ${month}/${day}/${year}, Time: ${timeStr}, Gender: ${genderStr}
+Current year: ${currentYear}, month: ${currentMonth}
 
-WRITING RULES (critical):
-- Use the Barnum/Forer effect: write truths that feel deeply personal but resonate universally
-- Be SPECIFIC: mention body parts, organs, exact ages, exact years
-- Include shadow traits: "you appear X but secretly Y"
-- Add warnings and tension: "be cautious of...", "a danger in your chart..."
-- Mention physical/health weaknesses tied to their chart (respiratory, digestive, joints, heart, etc.)
-- Reference exact ages and years for life turning points
-- Current age of this person is ${age} years old. Current year is ${currentYear}, current month is ${currentMonth}.
+Rules: Be specific (name body organs, exact ages, exact years). Use shadow traits ("appears X but secretly Y"). Add warnings. Use Barnum effect for resonance.
 
-JSON format:
-{"headline":"One haunting poetic line that feels written just for them","essence":"2~3 sentences: their core energy, hidden contradictions, and what drives them beneath the surface","sections":[{"id":"personality","title":"Personality & Shadow Self","icon":"✦","body":"4~5 sentences. Include: outer persona vs inner reality, a secret fear they rarely admit, their greatest hidden strength"},{"id":"body","title":"Body & Vital Energy","icon":"◎","body":"3~4 sentences. Name specific organs or systems that are weak. Give concrete health warnings and what strengthens them."},{"id":"career","title":"Destiny & Career Path","icon":"◈","body":"4~5 sentences. Include specific age ranges when career peaks or struggles occur."},{"id":"love","title":"Love, Desire & Wounds","icon":"◇","body":"4~5 sentences. Include their attachment pattern, what they crave vs fear in love, a specific warning."},{"id":"wealth","title":"Wealth & Financial Fate","icon":"◉","body":"3~4 sentences. Mention specific ages or years when money flows or drains."},{"id":"now","title":"This Season — ${currentYear}","icon":"◐","body":"4~5 sentences about ${currentYear}~${currentYear+1}. Be specific: opportunity arriving, danger lurking, month to watch."},{"id":"lifepath","title":"The Arc of Fate","icon":"∞","body":"5~6 sentences covering full life arc with specific decade turning points"}],"locked":{"periods":{"early":"Early Life (0~30): 4~5 sentences about childhood destiny, family karma, formative wounds and gifts","mid":"Middle Years (30~55): 4~5 sentences about the peak struggle and achievement period, key ages","late":"Final Chapter (55+): 4~5 sentences about legacy, late-life fortune, what awaits them"},"yearly":[{"year":${currentYear},"fortune":"3~4 sentences: overarching theme of this year, biggest opportunity, biggest danger"},{"year":${currentYear+1},"fortune":"3~4 sentences for ${currentYear+1}"},{"year":${currentYear+2},"fortune":"2~3 sentences for ${currentYear+2}"}],"monthly":"3~4 sentences about the energy of month ${currentMonth} of ${currentYear} for this chart","daily":"2~3 sentences about today's energy for this chart — a specific action or warning"}}
+Return this exact JSON structure:
+{
+  "headline": "one haunting poetic line",
+  "essence": "2 sentences on core energy and hidden contradictions",
+  "sections": [
+    {"id":"personality","title":"Personality & Shadow Self","icon":"✦","body":"Outer vs inner self. A secret fear. Hidden strength. 3 sentences."},
+    {"id":"body","title":"Body & Vital Energy","icon":"◎","body":"Name 1-2 weak organs. Specific health warning. What strengthens them. 3 sentences."},
+    {"id":"career","title":"Destiny & Career","icon":"◈","body":"Career path. Specific peak age range. What to avoid. 3 sentences."},
+    {"id":"love","title":"Love & Wounds","icon":"◇","body":"Attachment pattern. Craving vs fear. One specific warning. 3 sentences."},
+    {"id":"wealth","title":"Wealth & Money","icon":"◉","body":"Financial fate. Specific age or year money flows. What blocks wealth. 3 sentences."},
+    {"id":"now","title":"${currentYear} — This Season","icon":"◐","body":"${currentYear} theme. One opportunity. One danger. One month to watch. 3 sentences."},
+    {"id":"lifepath","title":"Arc of Fate","icon":"∞","body":"Full life arc with 2-3 decade turning points. 3 sentences."}
+  ],
+  "locked": {
+    "periods": {
+      "early": "Ages 0-30: childhood destiny, family karma, formative gifts. 2 sentences.",
+      "mid": "Ages 30-55: peak struggle and achievement, key turning age. 2 sentences.",
+      "late": "Ages 55+: legacy and late-life fortune. 2 sentences."
+    },
+    "yearly": [
+      {"year": ${currentYear}, "fortune": "Overall theme and biggest opportunity this year. 2 sentences."},
+      {"year": ${currentYear + 1}, "fortune": "Key energy and warning for ${currentYear + 1}. 2 sentences."},
+      {"year": ${currentYear + 2}, "fortune": "Brief outlook for ${currentYear + 2}. 1 sentence."}
+    ],
+    "monthly": "Month ${currentMonth} energy for this chart. What to pursue and avoid. 2 sentences.",
+    "daily": "Today's energy. One specific action or warning. 1 sentence."
+  }
+}`
+    : `이 사람의 사주를 분석하세요. BaZi, 자미두수, 서양점성술 통합.
+나이: ${age}세, 생년월일: ${year}년 ${month}월 ${day}일, 시각: ${timeStr}, 성별: ${genderStr}
+현재: ${currentYear}년 ${currentMonth}월
 
-Date of Birth: ${month}/${day}/${year}
-Birth Time: ${timeStr}
-Gender: ${genderStr}`
+규칙: 구체적으로 (장기명, 정확한 나이, 연도). 그림자 성격 ("겉으로는 X지만 속으로는 Y"). 경고 포함. 바넘 효과.
 
-    : `당신은 사주명리학·자미두수·서양점성술을 40년간 연구한 대가입니다. 사람들이 "소름 돋는다"고 느낄 만큼 정확하고 개인화된 분석을 제공합니다.
-
-JSON만 반환하세요. 마크다운 없이 { 로 시작해서 } 로 끝내세요.
-
-작성 규칙 (필수):
-- 바넘 효과 활용: 누구에게나 해당되지만 자신만의 이야기처럼 느껴지게
-- 구체적으로: 신체 부위, 장기, 정확한 나이, 연도 언급
-- 그림자 성격 포함: "겉으로는 X처럼 보이지만 속으로는 Y"
-- 경고와 긴장감 포함: "이 시기에 특히 조심해야 할 것은..."
-- 현재 나이: ${age}세, 현재 연도: ${currentYear}년, 현재 월: ${currentMonth}월
-
-JSON 형식:
-{"headline":"이 사람만을 위해 쓰인 것 같은 소름 돋는 한 줄","essence":"2~3문장: 핵심 기질, 숨겨진 모순, 표면 아래 무엇이 이 사람을 움직이는지","sections":[{"id":"personality","title":"성격과 그림자 자아","icon":"✦","body":"4~5문장. 겉모습과 내면의 간극, 비밀스러운 두려움, 숨겨진 강점 포함"},{"id":"body","title":"신체와 건강의 기운","icon":"◎","body":"3~4문장. 취약한 특정 장기 명시. 구체적인 건강 경고와 보완법 포함"},{"id":"career","title":"운명과 직업의 길","icon":"◈","body":"4~5문장. 직업 전성기/위기가 오는 구체적 나이대 포함"},{"id":"love","title":"사랑, 욕망과 상처","icon":"◇","body":"4~5문장. 애착 패턴, 사랑에서 갈망 vs 두려움, 구체적 경고 포함"},{"id":"wealth","title":"재물과 금전의 흐름","icon":"◉","body":"3~4문장. 돈이 흐르거나 빠지는 구체적 나이대나 연도 언급"},{"id":"now","title":"지금 이 시기 — ${currentYear}년","icon":"◐","body":"${currentYear}~${currentYear+1}년 4~5문장. 구체적으로: 오는 기회, 도사리는 위험, 특히 주목할 달"},{"id":"lifepath","title":"운명의 궤적","icon":"∞","body":"구체적 10년 단위 전환점을 포함한 전체 인생 흐름 5~6문장"}],"locked":{"periods":{"early":"초년운 (0~30세): 유년기 운명, 가족 업보, 형성기의 상처와 재능 4~5문장","mid":"중년운 (30~55세): 최대 도전과 성취의 시기, 핵심 나이 4~5문장","late":"말년운 (55세~): 유산, 말년의 복, 무엇이 기다리는지 4~5문장"},"yearly":[{"year":${currentYear},"fortune":"${currentYear}년 전체 주제, 최대 기회, 최대 위험 3~4문장"},{"year":${currentYear+1},"fortune":"${currentYear+1}년 운세 3~4문장"},{"year":${currentYear+2},"fortune":"${currentYear+2}년 운세 2~3문장"}],"monthly":"${currentYear}년 ${currentMonth}월의 에너지 3~4문장","daily":"오늘의 기운 2~3문장 — 구체적인 행동이나 경고"}}
-
-생년월일: ${year}년 ${month}월 ${day}일
-출생시각: ${timeStr}
-성별: ${genderStr}`;
+정확히 이 JSON 구조로 반환:
+{
+  "headline": "소름 돋는 시적인 한 줄",
+  "essence": "핵심 기질과 숨겨진 모순 2문장",
+  "sections": [
+    {"id":"personality","title":"성격과 그림자 자아","icon":"✦","body":"겉모습 vs 내면. 비밀스러운 두려움. 숨겨진 강점. 3문장."},
+    {"id":"body","title":"신체와 건강","icon":"◎","body":"취약한 장기 1-2개 명시. 구체적 건강 경고. 보완법. 3문장."},
+    {"id":"career","title":"운명과 직업","icon":"◈","body":"직업 경로. 전성기 나이대. 피해야 할 것. 3문장."},
+    {"id":"love","title":"사랑과 상처","icon":"◇","body":"애착 패턴. 갈망 vs 두려움. 구체적 경고. 3문장."},
+    {"id":"wealth","title":"재물과 금전","icon":"◉","body":"재물 운명. 돈 흐르는 나이/연도. 재물을 막는 것. 3문장."},
+    {"id":"now","title":"${currentYear}년 — 지금 이 시기","icon":"◐","body":"${currentYear}년 주제. 기회. 위험. 주목할 달. 3문장."},
+    {"id":"lifepath","title":"운명의 궤적","icon":"∞","body":"전체 인생 흐름과 전환점 2-3개. 3문장."}
+  ],
+  "locked": {
+    "periods": {
+      "early": "초년 (0~30세): 유년기 운명, 가족 업보, 재능. 2문장.",
+      "mid": "중년 (30~55세): 최대 도전과 성취, 핵심 나이. 2문장.",
+      "late": "말년 (55세~): 유산과 말년 복. 2문장."
+    },
+    "yearly": [
+      {"year": ${currentYear}, "fortune": "${currentYear}년 주제와 최대 기회. 2문장."},
+      {"year": ${currentYear + 1}, "fortune": "${currentYear + 1}년 핵심 에너지와 경고. 2문장."},
+      {"year": ${currentYear + 2}, "fortune": "${currentYear + 2}년 간략 전망. 1문장."}
+    ],
+    "monthly": "${currentMonth}월 에너지. 추구할 것과 피할 것. 2문장.",
+    "daily": "오늘의 기운. 구체적 행동이나 경고. 1문장."
+  }
+}`;
 
   try {
     const apiKey = process.env.OPENAI_API_KEY;
@@ -70,9 +105,13 @@ JSON 형식:
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
         temperature: 0.85,
-        max_tokens: 6000,
+        max_tokens: 4000,
+        response_format: { type: "json_object" }
       }),
     });
 
@@ -83,11 +122,7 @@ JSON 형식:
 
     const raw = data.choices?.[0]?.message?.content || "";
     const cleaned = raw.replace(/```json|```/g, "").trim();
-    const start = cleaned.indexOf("{");
-    const end = cleaned.lastIndexOf("}");
-    if (start === -1 || end === -1) throw new Error(isEn ? "JSON parse failed" : "JSON 파싱 실패");
-
-    const parsed = JSON.parse(cleaned.slice(start, end + 1));
+    const parsed = JSON.parse(cleaned);
     res.status(200).json(parsed);
   } catch (e) {
     res.status(500).json({ error: e.message });
