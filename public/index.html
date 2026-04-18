@@ -7,17 +7,111 @@
 <style>
   :root{
     --gold:#c9a96e; --gold-dim:#c9a96e44; --bg:#04030a; --bg2:#0d0b14; --line:#2a2438;
-    --text:#c8b89a; --muted:#6b5a3e; --soft:#1a1828;
+    --text:#c8b89a; --muted:#6b5a3e; --soft:#1a1828; --bright:#eed9b4;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-  .wrap{max-width:520px;margin:0 auto;padding:24px 18px 80px}
-  .hero{text-align:center;padding:24px 0 18px}
-  .hero .icon{width:56px;height:56px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gold-dim);color:var(--gold);background:#13101e}
-  .hero h1{margin:0;font-size:30px;letter-spacing:8px;font-weight:300}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at top, rgba(201,169,110,.08), transparent 30%),
+      linear-gradient(180deg, #04030a, #07050f 35%, #04030a);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:22px 18px 84px}
+  .hero{text-align:center;padding:18px 0 16px}
+  .hero .icon{
+    width:58px;height:58px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--gold-dim);color:var(--gold);background:#13101e;
+    box-shadow:0 0 32px rgba(201,169,110,.12)
+  }
+  .hero h1{margin:0;font-size:30px;letter-spacing:8px;font-weight:300;color:var(--bright)}
   .hero p{margin:10px 0 0;color:#4a3a58;font-size:11px;letter-spacing:4px}
-  .panel{background:#0d0b14cc;border:1px solid var(--line);border-radius:16px;padding:16px 14px;margin-top:14px}
+
+  .panel{
+    background:rgba(13,11,20,.9);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px 14px;
+    margin-top:14px;
+    backdrop-filter: blur(10px);
+  }
   .panel-title{font-size:11px;letter-spacing:4px;color:var(--muted);margin-bottom:12px}
+  .subtle{font-size:12px;color:#8e7a59;line-height:1.7}
+
+  .tarot-intro{
+    margin-bottom:14px;
+    color:#bfa988;
+    font-size:13px;
+    line-height:1.8;
+  }
+  .tarot-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:10px;
+    perspective:1000px;
+  }
+  .tarot-card{
+    position:relative;
+    height:108px;
+    border-radius:14px;
+    cursor:pointer;
+    transform-style:preserve-3d;
+    transition:transform .7s cubic-bezier(.2,.7,.1,1), box-shadow .3s ease, translate .3s ease;
+    border:1px solid rgba(201,169,110,.2);
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+  }
+  .tarot-card:hover{translate:0 -3px; box-shadow:0 12px 26px rgba(201,169,110,.12)}
+  .tarot-card.flipped{transform:rotateY(180deg)}
+  .tarot-card.disabled{pointer-events:none; opacity:.6}
+  .card-face{
+    position:absolute; inset:0; border-radius:14px;
+    backface-visibility:hidden;
+    display:flex; align-items:center; justify-content:center;
+    padding:8px; text-align:center;
+  }
+  .card-back{
+    background:
+      radial-gradient(circle at 30% 20%, rgba(201,169,110,.16), transparent 25%),
+      linear-gradient(180deg, #1a1520, #0f0c14);
+    color:var(--gold);
+    font-size:15px;
+    letter-spacing:1px;
+  }
+  .card-back::after{
+    content:"✧";
+    position:absolute;
+    bottom:8px;
+    right:10px;
+    font-size:12px;
+    opacity:.55;
+  }
+  .card-front{
+    background:
+      radial-gradient(circle at top, rgba(238,217,180,.12), transparent 35%),
+      linear-gradient(180deg, #241a1f, #151018);
+    color:var(--bright);
+    transform:rotateY(180deg);
+    flex-direction:column;
+    gap:6px;
+  }
+  .card-front .title{font-size:14px;font-weight:700}
+  .card-front .mini{font-size:11px;color:#ceb58d;line-height:1.5}
+  .tarot-result{
+    margin-top:14px;
+    padding:12px 12px;
+    border-radius:14px;
+    background:#13101e;
+    border:1px solid #211a29;
+    font-size:13px;
+    color:#d4be97;
+    line-height:1.8;
+    opacity:0;
+    transform:translateY(8px);
+    transition:.4s ease;
+  }
+  .tarot-result.show{opacity:1; transform:none}
+
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .field{margin-bottom:12px}
   .field.full{grid-column:1/-1}
@@ -29,8 +123,12 @@
   textarea{min-height:88px;resize:vertical}
   .box{cursor:pointer}
   .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:#13101e;color:var(--text);font-size:12px;cursor:pointer}
+  .chip{
+    padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:#13101e;color:var(--text);
+    font-size:12px;cursor:pointer
+  }
   .chip.active{border-color:var(--gold-dim);background:#1b1720;color:#f1dfb8}
+
   .cta{
     width:100%;padding:16px;border:none;border-radius:14px;cursor:pointer;margin-top:10px;
     background:linear-gradient(135deg,var(--gold),#a07840);color:#111;font-weight:700;letter-spacing:2px
@@ -46,21 +144,13 @@
   .free-badge,.paid-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:11px;letter-spacing:2px;margin-bottom:12px}
   .free-badge{background:#182014;color:#bfd8a7;border:1px solid #314026}
   .paid-badge{background:#201914;color:#f0d29d;border:1px solid #5b4526}
-  .decision{font-size:18px;line-height:1.7;color:#f4e4c4}
+  .decision{font-size:17px;line-height:1.85;color:#f4e4c4}
   .hooks{margin-top:14px;padding:12px;border-radius:12px;background:#13101e;border:1px solid var(--soft)}
   .hooks h3{margin:0 0 8px;font-size:13px;color:#e8d5b0}
-  .hooks p{margin:6px 0;font-size:13px;line-height:1.7;color:#b8a483}
-  .detail{white-space:pre-wrap;font-size:14px;line-height:1.9;color:#d9c6a1}
+  .hooks p{margin:6px 0;font-size:13px;line-height:1.8;color:#b8a483}
+  .detail{white-space:pre-wrap;font-size:14px;line-height:1.95;color:#d9c6a1}
   .meta{font-size:12px;color:#8f7d5b;line-height:1.7;margin-top:12px}
-  .tarot-zone{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
-  .tarot-card{
-    height:188px;border-radius:16px;border:1px solid var(--gold-dim);background:linear-gradient(180deg,#16111d,#0f0c14);
-    display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px;cursor:pointer;
-    box-shadow:0 0 0 rgba(0,0,0,0);transform-style:preserve-3d;transition:transform .7s ease, box-shadow .4s ease;
-  }
-  .tarot-card.flipping{transform:rotateY(180deg);box-shadow:0 10px 40px rgba(201,169,110,.18)}
-  .tarot-card.revealed{background:linear-gradient(180deg,#221919,#151018);color:#f0dfbf}
-  .tarot-copy{font-size:13px;line-height:1.8;color:#bca983}
+
   .sheet-backdrop{
     position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:.25s;z-index:1000
   }
@@ -74,8 +164,6 @@
   .sheet-grab{width:52px;height:5px;border-radius:999px;background:#2a2438;margin:0 auto 10px}
   .sheet-list .item{padding:16px;text-align:center;border-bottom:1px solid var(--soft);cursor:pointer}
   .sheet-list .item:hover{background:#13101e}
-  .row{display:flex;gap:8px}
-  .row > *{flex:1}
   .error{margin-top:12px;padding:12px 14px;border-radius:12px;background:#311314;color:#ffc9c9;border:1px solid #5f1d1f;font-size:13px;display:none}
   .loading{display:none;margin-top:14px;font-size:13px;color:#bda978}
 </style>
@@ -89,11 +177,13 @@
   </div>
 
   <div class="panel">
-    <div class="panel-title">오늘의 타로 · 무료 후킹</div>
-    <div class="tarot-zone">
-      <div id="tarotCard" class="tarot-card" onclick="drawTarot()">카드를 뽑아봐</div>
-      <div class="tarot-copy" id="tarotCopy">가볍게 한 장 뽑아서 지금 흐름을 먼저 확인해봐. 맞는 느낌이 들면 아래에서 정밀 분석으로 넘어가면 된다.</div>
+    <div class="panel-title">오늘의 타로 · 직접 선택</div>
+    <div class="tarot-intro">
+      눈앞에 놓인 열 장의 카드 중, 지금 가장 끌리는 한 장을 골라보세요.
+      당신이 고른 손끝의 방향도 하나의 흐름이 됩니다.
     </div>
+    <div id="tarotGrid" class="tarot-grid"></div>
+    <div id="tarotResult" class="tarot-result"></div>
   </div>
 
   <div class="panel">
@@ -102,7 +192,7 @@
       <div class="field"><div class="label">생년</div><div id="yearText" class="box" onclick="openSheet('year')">선택</div></div>
       <div class="field"><div class="label">월</div><div id="monthText" class="box" onclick="openSheet('month')">선택</div></div>
       <div class="field"><div class="label">일</div><div id="dayText" class="box" onclick="openSheet('day')">선택</div></div>
-      <div class="field"><div class="label">출생 시각</div><div id="hourText" class="box" onclick="openSheet('hour')">선택</div></div>
+      <div class="field"><div class="label">출생 시각</div><div id="hourText" class="box" onclick="openSheet('hour')">모름</div></div>
       <div class="field full"><div class="label">출생지</div><input id="locationInput" placeholder="예: 서울, 부산, 대구"/></div>
       <div class="field full"><div class="label">성별</div>
         <div class="chips">
@@ -110,25 +200,25 @@
           <button type="button" class="chip" id="femaleChip" onclick="setGender('female')">여성</button>
         </div>
       </div>
-      <div class="field full"><div class="label">질문(선택)</div><textarea id="questionInput" placeholder="예: 올해 이직하는 게 맞을까? 지금 만나는 사람과 계속 가도 될까?"></textarea></div>
+      <div class="field full"><div class="label">질문(선택)</div><textarea id="questionInput" placeholder="예: 올해 이직하는 게 맞을까요? 지금 만나는 사람과 계속 가도 괜찮을까요?"></textarea></div>
     </div>
 
     <button class="cta" onclick="runFreeAnalysis()">무료 결과 먼저 보기</button>
-    <div class="note">무료는 결론과 핵심 경고만 보여준다. 상세 설명은 유료에서만 생성된다.</div>
-    <div id="loading" class="loading">분석 중…</div>
+    <div class="note">무료는 핵심 흐름과 경고만 열립니다. 더 깊은 뜻과 행동 조언은 유료에서만 열립니다.</div>
+    <div id="loading" class="loading">기운을 정리하는 중…</div>
     <div id="errorBox" class="error"></div>
   </div>
 
   <div id="resultBox" class="result-card hidden">
     <div id="badge" class="free-badge">FREE RESULT</div>
-    <h2 class="headline" id="resultTitle">결과</h2>
+    <h2 class="headline" id="resultTitle">당신의 흐름</h2>
     <div class="decision" id="decisionText"></div>
     <div class="hooks">
-      <h3>여기서 끊는다</h3>
+      <h3>조금 더 안쪽의 뜻</h3>
       <p id="hookRisk"></p>
       <p id="hookTiming"></p>
     </div>
-    <button id="unlockBtn" class="subcta" onclick="runPaidAnalysis()">상세 분석 열기 · 유료</button>
+    <button id="unlockBtn" class="subcta" onclick="runPaidAnalysis()">상세 해석 열기 · 유료</button>
     <div class="meta" id="metaText"></div>
     <div id="detailBox" class="detail hidden"></div>
   </div>
@@ -145,31 +235,72 @@
 
 <script>
 let state = { year:null, month:null, day:null, hour:"모름", gender:null };
-let currentSheetType = null;
 let lastLocation = null;
-let lastTarot = null;
+let selectedTarot = null;
 
 const tarotDeck = [
-  { title:"기회", message:"지금은 미는 쪽이 유리하다. 다만 타이밍을 잘못 잡으면 좋은 흐름이 짧게 끝난다." },
-  { title:"경고", message:"지금 결정을 서두르면 후회가 남는다. 특히 사람 문제를 가볍게 보면 손해가 커진다." },
-  { title:"변화", message:"환경을 바꾸는 선택이 생각보다 크게 먹힌다. 다만 바꾸기 전에 계산은 끝내야 한다." },
-  { title:"정리", message:"새 출발보다 먼저 정리할 게 있다. 미련 남긴 채 움직이면 결과가 탁해진다." },
-  { title:"확장", message:"올해는 움츠리기보다 범위를 넓히는 쪽이다. 다만 감보다 기준이 먼저다." }
+  { title:"별의 문", message:"조용했던 흐름이 서서히 열리기 시작합니다. 서두르지 않되, 들어오는 신호는 놓치지 않는 편이 좋습니다." },
+  { title:"숨은 파도", message:"겉은 고요해 보여도 안쪽에는 움직임이 있습니다. 말보다 분위기를 먼저 읽는 것이 중요합니다." },
+  { title:"금빛 실", message:"지금 이어지는 인연이나 기회는 가볍지 않습니다. 다만 손에 쥐려 하기보다 흐름을 살피는 쪽이 좋습니다." },
+  { title:"달의 잔", message:"감정이 예민해지는 때입니다. 마음이 먼저 반응하는 순간일수록 선택은 조금 늦추는 편이 안전합니다." },
+  { title:"잠든 불씨", message:"아직 꺼진 것이 아닙니다. 멈춘 듯 보여도 안쪽에서는 다시 타오를 준비가 진행되고 있습니다." },
+  { title:"갈림의 바람", message:"두 방향 중 하나를 고르게 되는 기운이 가까워지고 있습니다. 지금은 기준을 세우는 시간이 필요합니다." },
+  { title:"푸른 거울", message:"당신의 마음이 상대와 상황을 비추는 시기입니다. 바깥보다 안쪽을 먼저 살피는 것이 답을 빠르게 보여줍니다." },
+  { title:"쇠의 문장", message:"분명한 결정과 정리가 필요한 흐름입니다. 미뤄둔 문제를 그대로 두면 다시 같은 자리에 닿게 됩니다." },
+  { title:"새벽의 씨앗", message:"아직 작게 보이는 변화가 뒤에서 크게 자랄 수 있습니다. 작다고 가볍게 넘기지 않는 것이 좋습니다." },
+  { title:"은빛 항로", message:"이동과 변화의 기운이 살아 있습니다. 다만 방향이 맞지 않으면 피로만 남을 수 있으니 목적을 또렷하게 해야 합니다." }
 ];
+
+function buildTarotGrid(){
+  const grid = document.getElementById("tarotGrid");
+  grid.innerHTML = "";
+  tarotDeck.forEach((card, idx) => {
+    const el = document.createElement("div");
+    el.className = "tarot-card";
+    el.dataset.index = idx;
+    el.innerHTML = `
+      <div class="card-face card-back">✧</div>
+      <div class="card-face card-front">
+        <div class="title">${card.title}</div>
+        <div class="mini">지금 끌린다면, 이유가 있습니다</div>
+      </div>
+    `;
+    el.onclick = () => selectTarot(idx);
+    grid.appendChild(el);
+  });
+}
+
+function selectTarot(idx){
+  const cards = Array.from(document.querySelectorAll(".tarot-card"));
+  const picked = tarotDeck[idx];
+  selectedTarot = picked;
+
+  cards.forEach((cardEl, i) => {
+    if (i === idx) {
+      cardEl.classList.add("flipped");
+    } else {
+      cardEl.classList.add("disabled");
+    }
+  });
+
+  const result = document.getElementById("tarotResult");
+  setTimeout(() => {
+    result.innerHTML = `<strong>${picked.title}</strong><br>${picked.message}<br><br>이제 아래에서 정밀 분석으로 넘어가면, 이 카드가 왜 지금의 사주와 출생 차트 흐름과 맞닿아 있는지 더 깊게 볼 수 있습니다.`;
+    result.classList.add("show");
+  }, 520);
+}
 
 const saved = localStorage.getItem("cheonmyeong_state_v2");
 if (saved) {
   try {
     const parsed = JSON.parse(saved);
     state = { ...state, ...parsed };
-    renderState();
   } catch (e) {}
 }
 
 function persistState(){
   localStorage.setItem("cheonmyeong_state_v2", JSON.stringify(state));
 }
-
 function renderState(){
   document.getElementById("yearText").textContent = state.year ?? "선택";
   document.getElementById("monthText").textContent = state.month ?? "선택";
@@ -178,7 +309,6 @@ function renderState(){
   document.getElementById("maleChip").classList.toggle("active", state.gender === "male");
   document.getElementById("femaleChip").classList.toggle("active", state.gender === "female");
 }
-
 function setGender(g){
   state.gender = g;
   persistState();
@@ -186,7 +316,6 @@ function setGender(g){
 }
 
 function openSheet(type){
-  currentSheetType = type;
   const titleMap = { year:"생년 선택", month:"월 선택", day:"일 선택", hour:"출생 시각 선택" };
   document.getElementById("sheetTitle").textContent = titleMap[type] || "선택";
   const list = [];
@@ -201,7 +330,6 @@ function openSheet(type){
     list.push("모름");
     for (let h = 0; h < 24; h++) list.push(String(h).padStart(2, "0"));
   }
-
   const box = document.getElementById("sheetList");
   box.innerHTML = "";
   list.forEach(v => {
@@ -210,57 +338,33 @@ function openSheet(type){
     div.textContent = v;
     div.onclick = () => {
       state[type] = v;
+      if ((type === "year" || type === "month") && state.day) {
+        const days = new Date(state.year || 2000, state.month || 1, 0).getDate();
+        if (state.day > days) state.day = days;
+      }
       persistState();
       renderState();
       closeSheet();
-      if (type === "month" || type === "year") {
-        const days = new Date(state.year || 2000, state.month || 1, 0).getDate();
-        if (state.day && state.day > days) state.day = days;
-        persistState();
-        renderState();
-      }
     };
     box.appendChild(div);
   });
   document.getElementById("sheetBackdrop").classList.add("active");
   document.getElementById("sheet").classList.add("active");
 }
-
 function closeSheet(){
   document.getElementById("sheetBackdrop").classList.remove("active");
   document.getElementById("sheet").classList.remove("active");
 }
 
-function drawTarot(){
-  const cardEl = document.getElementById("tarotCard");
-  const copyEl = document.getElementById("tarotCopy");
-  const picked = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
-  lastTarot = picked;
-  cardEl.classList.remove("revealed");
-  cardEl.classList.add("flipping");
-  cardEl.textContent = "…";
-  setTimeout(() => {
-    cardEl.classList.remove("flipping");
-    cardEl.classList.add("revealed");
-    cardEl.textContent = picked.title;
-    copyEl.innerHTML = "<strong>" + picked.title + "</strong><br>" + picked.message + "<br><br>정밀 분석으로 가면 이 흐름이 네 사주와 실제 출생 차트에서 왜 나오는지 이어서 본다.";
-  }, 550);
-}
-
 async function geocodeLocation(){
   const q = document.getElementById("locationInput").value.trim();
-  if (!q) throw new Error("출생지를 입력해라");
+  if (!q) throw new Error("출생지를 입력해 주세요.");
   const res = await fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=" + encodeURIComponent(q), {
     headers: { "Accept": "application/json" }
   });
   const data = await res.json();
-  if (!Array.isArray(data) || !data.length) throw new Error("출생지를 찾지 못했다");
-  // timezone is not returned here; send Korea default for now and let server use explicit default/fallback if needed
-  return {
-    query: q,
-    lat: Number(data[0].lat),
-    lon: Number(data[0].lon)
-  };
+  if (!Array.isArray(data) || !data.length) throw new Error("입력한 출생지를 찾지 못했습니다.");
+  return { query:q, lat:Number(data[0].lat), lon:Number(data[0].lon) };
 }
 
 function showError(msg){
@@ -276,10 +380,9 @@ function clearError(){
 function setLoading(on){
   document.getElementById("loading").style.display = on ? "block" : "none";
 }
-
 function validateCore(){
-  if (!state.year || !state.month || !state.day) throw new Error("생년월일을 먼저 선택해라");
-  if (!state.gender) throw new Error("성별을 선택해라");
+  if (!state.year || !state.month || !state.day) throw new Error("생년월일을 먼저 선택해 주세요.");
+  if (!state.gender) throw new Error("성별을 선택해 주세요.");
 }
 
 async function runFreeAnalysis(){
@@ -295,7 +398,7 @@ async function runFreeAnalysis(){
       question: document.getElementById("questionInput").value.trim(),
       location: lastLocation,
       paid: false,
-      tarot: lastTarot
+      tarot: selectedTarot
     };
     const res = await fetch("/api/analyze", {
       method: "POST",
@@ -303,7 +406,7 @@ async function runFreeAnalysis(){
       body: JSON.stringify(payload)
     });
     const data = await res.json();
-    if (!res.ok || data.error) throw new Error(data.error || "분석 실패");
+    if (!res.ok || data.error) throw new Error(data.error || "분석에 실패했습니다.");
     renderFreeResult(data);
   } catch (e){
     showError(e.message);
@@ -311,7 +414,6 @@ async function runFreeAnalysis(){
     setLoading(false);
   }
 }
-
 async function runPaidAnalysis(){
   try{
     clearError();
@@ -325,7 +427,7 @@ async function runPaidAnalysis(){
       question: document.getElementById("questionInput").value.trim(),
       location: lastLocation,
       paid: true,
-      tarot: lastTarot
+      tarot: selectedTarot
     };
     const res = await fetch("/api/analyze", {
       method: "POST",
@@ -333,7 +435,7 @@ async function runPaidAnalysis(){
       body: JSON.stringify(payload)
     });
     const data = await res.json();
-    if (!res.ok || data.error) throw new Error(data.error || "상세 분석 실패");
+    if (!res.ok || data.error) throw new Error(data.error || "상세 해석을 열지 못했습니다.");
     renderPaidResult(data);
   } catch (e){
     showError(e.message);
@@ -346,30 +448,30 @@ function renderFreeResult(data){
   document.getElementById("resultBox").classList.remove("hidden");
   document.getElementById("badge").className = "free-badge";
   document.getElementById("badge").textContent = "FREE RESULT";
-  document.getElementById("resultTitle").textContent = data.free.title || "핵심 결론";
+  document.getElementById("resultTitle").textContent = data.free.title || "당신의 흐름";
   document.getElementById("decisionText").textContent = data.free.decision || "";
-  document.getElementById("hookRisk").textContent = "⚠ " + (data.free.riskHook || "지금 놓치면 뒤에서 비용이 커질 수 있다.");
-  document.getElementById("hookTiming").textContent = "⏱ " + (data.free.timingHook || "이번 해 안에 한 번 크게 갈리는 시점이 온다.");
-  document.getElementById("metaText").textContent = "사주 원국과 실제 출생 차트에서 계산한 핵심 데이터 기반 무료 요약이다. 상세 해석은 유료에서만 열린다.";
+  document.getElementById("hookRisk").textContent = "⚠ " + (data.free.riskHook || "");
+  document.getElementById("hookTiming").textContent = "⏱ " + (data.free.timingHook || "");
+  document.getElementById("metaText").textContent = "사주 원국과 실제 출생 차트에서 계산된 흐름을 바탕으로, 무료 구간에서 먼저 드러난 핵심만 보여드립니다.";
   document.getElementById("detailBox").classList.add("hidden");
   document.getElementById("detailBox").textContent = "";
   window.scrollTo({ top: document.getElementById("resultBox").offsetTop - 16, behavior: "smooth" });
 }
-
 function renderPaidResult(data){
   document.getElementById("resultBox").classList.remove("hidden");
   document.getElementById("badge").className = "paid-badge";
   document.getElementById("badge").textContent = "PAID DETAIL";
-  document.getElementById("resultTitle").textContent = data.free.title || "상세 분석";
+  document.getElementById("resultTitle").textContent = data.free.title || "당신의 흐름";
   document.getElementById("decisionText").textContent = data.free.decision || "";
   document.getElementById("hookRisk").textContent = "⚠ " + (data.free.riskHook || "");
   document.getElementById("hookTiming").textContent = "⏱ " + (data.free.timingHook || "");
-  document.getElementById("metaText").textContent = "상세 분석은 유료 요청에서만 생성된다. 같은 입력값은 서버 캐시를 우선 사용한다.";
+  document.getElementById("metaText").textContent = "이제 무료 결과 뒤에 숨어 있던 뜻과, 지금의 선택이 어디로 이어지는지 더 깊게 열립니다.";
   document.getElementById("detailBox").classList.remove("hidden");
-  document.getElementById("detailBox").textContent = data.detail || "상세 해석이 비어 있다.";
+  document.getElementById("detailBox").textContent = data.detail || "";
   window.scrollTo({ top: document.getElementById("resultBox").offsetTop - 16, behavior: "smooth" });
 }
 
+buildTarotGrid();
 renderState();
 </script>
 </body>

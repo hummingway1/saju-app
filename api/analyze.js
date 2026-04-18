@@ -1,12 +1,4 @@
-// Cost-optimized analyzer
-// Free: real Saju + real AstrologyAPI data -> deterministic hooks only
-// Paid: same real data + GPT interpretation
-//
-// Required env vars on Vercel:
-// OPENAI_API_KEY=...
-// ASTROLOGY_API_USER_ID=...
-// ASTROLOGY_API_KEY=...
-
+// Cost-optimized analyzer with gentler fortune-teller tone
 export const config = {
   runtime: "nodejs"
 };
@@ -14,9 +6,6 @@ export const config = {
 const STEMS = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
 const BRANCHES = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
 const ELEMENTS_EN = ['Wood','Fire','Earth','Metal','Water'];
-
-// Simple in-memory cache for serverless warm instances.
-// Replace with KV/DB if you want persistent cache across cold starts.
 const CACHE = new Map();
 
 function cacheKey(payload){
@@ -30,7 +19,6 @@ function cacheKey(payload){
 }
 function round(n, d=3){ return Number(Number(n).toFixed(d)); }
 
-// GanZhi approximations carried from original app logic
 function yearPillar(y) {
   const si = ((y - 4) % 10 + 10) % 10;
   const bi = ((y - 4) % 12 + 12) % 12;
@@ -60,8 +48,7 @@ function hourPillar(dp, h) {
   const si = (base + bi) % 10;
   return { stem: STEMS[si], branch: BRANCHES[bi], si, bi };
 }
-
-const STEM_ELEM = [0,0,1,1,2,2,3,3,4,4]; // Wood Fire Earth Metal Water
+const STEM_ELEM = [0,0,1,1,2,2,3,3,4,4];
 const BRANCH_ELEM = [4,2,0,0,2,1,1,2,3,3,2,4];
 
 function countElements(pillars){
@@ -73,7 +60,6 @@ function countElements(pillars){
   }
   return c;
 }
-
 function buildSaju(payload){
   const yp = yearPillar(payload.year);
   const mp = monthPillar(payload.year, payload.month);
@@ -99,14 +85,11 @@ function buildSaju(payload){
 async function fetchAstrologyData(payload){
   const userId = process.env.ASTROLOGY_API_USER_ID;
   const apiKey = process.env.ASTROLOGY_API_KEY;
-  if (!userId || !apiKey) {
-    throw new Error("ASTROLOGY_API_USER_ID 또는 ASTROLOGY_API_KEY 환경변수가 없다");
-  }
+  if (!userId || !apiKey) throw new Error("ASTROLOGY_API_USER_ID 또는 ASTROLOGY_API_KEY 환경변수가 없다");
 
   const auth = Buffer.from(`${userId}:${apiKey}`).toString("base64");
   const hour = payload.hour === "모름" ? 12 : Number(payload.hour);
   const minute = Number(payload.minute || 0);
-  // Minimal timezone fallback; for Korea this is 9.
   const tzone = Number(payload.location?.tzone ?? 9);
 
   const body = {
@@ -121,7 +104,6 @@ async function fetchAstrologyData(payload){
     house_type: "placidus"
   };
 
-  // Real AstrologyAPI endpoint
   const resp = await fetch("https://json.astrologyapi.com/v1/planets/tropical", {
     method: "POST",
     headers: {
@@ -134,18 +116,11 @@ async function fetchAstrologyData(payload){
 
   const text = await resp.text();
   let data;
-  try {
-    data = JSON.parse(text);
-  } catch {
+  try { data = JSON.parse(text); } catch {
     throw new Error(`AstrologyAPI 응답 파싱 실패: ${text.slice(0, 200)}`);
   }
-
-  if (!resp.ok) {
-    throw new Error(data?.message || `AstrologyAPI 호출 실패 (${resp.status})`);
-  }
-  if (!Array.isArray(data)) {
-    throw new Error("AstrologyAPI 응답 형식이 예상과 다르다");
-  }
+  if (!resp.ok) throw new Error(data?.message || `AstrologyAPI 호출 실패 (${resp.status})`);
+  if (!Array.isArray(data)) throw new Error("AstrologyAPI 응답 형식이 예상과 다르다");
   return data;
 }
 
@@ -173,39 +148,39 @@ function makeFreeHooks({ saju, astrologySummary, question, tarot }) {
   const strong = saju.strong.join(", ");
   const weak = saju.weak.join(", ");
 
-  let decision = "지금은 크게 서두르기보다 기준을 먼저 세우는 쪽이 유리하다.";
-  let riskHook = `강한 오행(${strong})이 앞서고 약한 오행(${weak})이 뒤로 밀리면, 판단이 한쪽으로 쏠릴 수 있다.`;
-  let timingHook = "올해 안에 한 번 흐름이 갈리는 구간이 온다. 그때 움직이면 결과 차이가 크게 난다.";
+  let decision = "지금의 흐름은 서두르기보다, 마음과 현실의 기준을 먼저 맞추라고 말하고 있습니다.";
+  let riskHook = `강하게 드러난 기운(${strong})이 앞서고 약한 기운(${weak})이 뒤로 밀리면, 생각보다 한쪽으로 치우친 판단이 나오기 쉽습니다.`;
+  let timingHook = "올해 안에는 한 번 방향이 갈리는 시점이 있습니다. 그 무렵의 선택이 이후의 무게를 바꾸게 됩니다.";
 
   if (q.includes("이직") || q.includes("직장") || q.includes("career")) {
     if (dm === "Wood" || dm === "Fire") {
-      decision = "이직은 가능성이 있다. 다만 감정으로 퇴사부터 찍는 건 위험하다.";
-      timingHook = `태양 ${astrologySummary.sun || "정보없음"}, 화성 ${astrologySummary.mars || "정보없음"} 흐름상 먼저 준비하고 움직이는 쪽이 낫다.`;
+      decision = "일의 흐름은 열릴 수 있습니다. 다만 마음이 먼저 지쳐 손을 놓기보다는, 자리를 옮길 이유와 조건을 먼저 또렷하게 세우는 편이 좋습니다.";
+      timingHook = `태양 ${astrologySummary.sun || "정보없음"}, 화성 ${astrologySummary.mars || "정보없음"}의 결을 보면, 준비된 이동은 힘이 되지만 충동적인 결정은 오래 남지 않을 수 있습니다.`;
     } else {
-      decision = "당장 옮기기보다 조건을 더 확보한 뒤 움직이는 게 안전하다.";
-      riskHook = "눈앞의 답답함만 보고 옮기면 다음 자리에서 같은 문제가 반복될 수 있다.";
+      decision = "지금은 무작정 벗어나기보다, 다음 자리를 단단히 만든 뒤 움직이는 편이 더 안정적인 흐름입니다.";
+      riskHook = "답답함을 끝내고 싶은 마음만 앞서면, 장소만 바뀐 채 같은 문제를 다시 만나게 될 가능성이 있습니다.";
     }
   } else if (q.includes("연애") || q.includes("사람") || q.includes("결혼") || q.includes("love")) {
-    decision = "관계는 가능성이 있지만, 지금은 감정의 온도차를 과소평가하면 깨지기 쉽다.";
-    timingHook = `달 ${astrologySummary.moon || "정보없음"}, 금성 ${astrologySummary.venus || "정보없음"} 흐름상 확인해야 할 시점이 곧 온다.`;
+    decision = "관계의 문은 열려 있지만, 지금은 감정의 온도차를 가볍게 보면 상처가 남기 쉬운 시기입니다.";
+    timingHook = `달 ${astrologySummary.moon || "정보없음"}, 금성 ${astrologySummary.venus || "정보없음"}의 흐름상 마음을 확인해야 할 시점이 머지않아 다가옵니다.`;
   } else if (q.includes("돈") || q.includes("사업") || q.includes("투자") || q.includes("money")) {
-    decision = "확장보다 보수적으로 계산하는 쪽이 유리하다. 한 번에 크게 베팅하는 그림은 아니다.";
-    riskHook = "이번엔 수익보다 손실 방어가 더 중요하다. 특히 과신이 손해를 키울 수 있다.";
+    decision = "재물의 흐름은 들어오기보다, 먼저 지키는 쪽에 뜻이 실려 있습니다. 크게 넓히기보다 손실을 줄이는 선택이 더 빛을 냅니다.";
+    riskHook = "이번에는 자신감보다 계산이 중요합니다. 마음이 들뜬 순간일수록 숫자를 다시 확인하는 편이 좋습니다.";
   } else {
     if (dm === "Metal" || dm === "Water") {
-      decision = "지금은 버티기보다 방향을 조정하는 쪽이 낫다. 단, 조용히 준비하고 움직여라.";
+      decision = "멈춰 있던 것처럼 보여도 안쪽의 물결은 이미 움직이고 있습니다. 다만 너무 빨리 답을 정하려 하기보다, 방향을 먼저 바로잡는 편이 좋습니다.";
     }
   }
 
   if (tarot?.title) {
-    riskHook += ` 타로의 "${tarot.title}" 흐름도 같은 방향을 밀고 있다.`;
+    riskHook += ` 지금 손에 닿은 타로의 "${tarot.title}" 역시 같은 결을 조용히 비추고 있습니다.`;
   }
 
   return {
-    title: "핵심 결론",
-    decision,
-    riskHook,
-    timingHook
+    title: "당신의 흐름",
+    decision: decision + " 지금의 선택은 단순한 우연이 아니라, 오래 쌓인 결이 모습을 드러내는 과정일 수 있습니다.",
+    riskHook: riskHook + " 작은 판단 하나가 생각보다 멀리 이어질 수 있으니, 가벼이 넘기지 않는 편이 좋습니다.",
+    timingHook: timingHook + " 이 시기를 어떻게 건너가느냐에 따라 다음 장면의 표정이 달라질 수 있습니다."
   };
 }
 
@@ -214,7 +189,8 @@ async function buildPaidDetail({ saju, astrologySummary, question, tarot }){
   if (!apiKey) throw new Error("OPENAI_API_KEY 환경변수가 없다");
 
   const prompt = `
-너는 사주명리와 서양 점성술을 함께 해석하는 분석가다.
+너는 사주명리와 서양 점성술을 함께 읽어주는 차분한 해석자다.
+점쟁이처럼 과장하거나 명령하지 말고, 신뢰감 있는 포츈텔러처럼 말해라.
 중요: 계산은 이미 끝났으니 절대 새 계산을 지어내지 마라. 아래 데이터만 사용해라.
 
 [사주 데이터]
@@ -242,16 +218,17 @@ async function buildPaidDetail({ saju, astrologySummary, question, tarot }){
 ${question || "일반 인생 흐름"}
 
 출력 규칙:
-- 한국어로 쓴다
-- 쓸데없는 인사 없이 바로 시작
-- 아래 4개 섹션으로만 쓴다
-1. 결론
-2. 왜 이렇게 보이는지
-3. 지금 조심할 점
-4. 가장 유리한 행동
-- 각 섹션은 2~4문장
-- 말투는 단정하고 현실적으로
-- 무료 결과와 겹치지 않게 더 구체적으로
+- 한국어
+- 아래 4개 섹션만 출력
+1. 지금의 결
+2. 왜 이런 흐름이 보이는지
+3. 조심해야 할 그림자
+4. 지금 가장 어울리는 움직임
+- 각 섹션은 제목 한 줄 + 2~4문장
+- 말투는 상냥하고 신비롭되 과하지 않게
+- "~해라" 같은 거친 명령 금지
+- "~일 수 있습니다", "~흐름입니다", "~보입니다" 같은 표현 사용
+- 무료 결과보다 한층 더 구체적으로
 `.trim();
 
   const resp = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -262,27 +239,22 @@ ${question || "일반 인생 흐름"}
     },
     body: JSON.stringify({
       model: "gpt-4o-mini",
-      temperature: 0.4,
-      max_tokens: 500,
+      temperature: 0.65,
+      max_tokens: 650,
       messages: [
-        { role: "system", content: "계산된 데이터를 해석만 하는 전문가다." },
+        { role: "system", content: "너는 계산된 운세 데이터를 차분하고 상냥하게 해석하는 사람이다." },
         { role: "user", content: prompt }
       ]
     })
   });
 
   const data = await resp.json();
-  if (!resp.ok) {
-    throw new Error(data?.error?.message || "OpenAI 호출 실패");
-  }
-  return data.choices?.[0]?.message?.content || "상세 분석 생성 실패";
+  if (!resp.ok) throw new Error(data?.error?.message || "OpenAI 호출 실패");
+  return data.choices?.[0]?.message?.content || "상세 해석 생성 실패";
 }
 
 export default async function handler(req, res){
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
     const payload = req.body || {};
     const required = ["year","month","day","gender","location"];
@@ -291,9 +263,7 @@ export default async function handler(req, res){
     }
 
     const key = cacheKey(payload);
-    if (CACHE.has(key)) {
-      return res.status(200).json(CACHE.get(key));
-    }
+    if (CACHE.has(key)) return res.status(200).json(CACHE.get(key));
 
     const saju = buildSaju(payload);
     const astrologyRaw = await fetchAstrologyData(payload);
