@@ -3,104 +3,374 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>천명</title>
+<title>천명 · 天命</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#04030a;color:#c8b89a;}
-.wrap{max-width:500px;margin:0 auto;padding:20px;}
-.label{font-size:12px;margin:20px 0 6px;color:#6b5a3e;}
-.box{padding:16px;border:1px solid #2a2438;border-radius:10px;background:#0d0b14;cursor:pointer;}
-input{width:100%;padding:14px;border:1px solid #2a2438;border-radius:10px;background:#0d0b14;color:#c8b89a;}
-button{width:100%;margin-top:30px;padding:16px;border:none;border-radius:10px;background:#c9a96e;color:#000;font-weight:bold;}
-.sheet{position:fixed;bottom:-100%;left:0;right:0;height:60%;background:#0d0b14;border-top:1px solid #2a2438;overflow-y:auto;transition:0.3s;z-index:9999;}
-.sheet.active{bottom:0;}
-.item{padding:16px;text-align:center;border-bottom:1px solid #1a1828;}
+  :root{
+    --gold:#c9a96e; --gold-dim:#c9a96e44; --bg:#04030a; --bg2:#0d0b14; --line:#2a2438;
+    --text:#c8b89a; --muted:#6b5a3e; --soft:#1a1828;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  .wrap{max-width:520px;margin:0 auto;padding:24px 18px 80px}
+  .hero{text-align:center;padding:24px 0 18px}
+  .hero .icon{width:56px;height:56px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gold-dim);color:var(--gold);background:#13101e}
+  .hero h1{margin:0;font-size:30px;letter-spacing:8px;font-weight:300}
+  .hero p{margin:10px 0 0;color:#4a3a58;font-size:11px;letter-spacing:4px}
+  .panel{background:#0d0b14cc;border:1px solid var(--line);border-radius:16px;padding:16px 14px;margin-top:14px}
+  .panel-title{font-size:11px;letter-spacing:4px;color:var(--muted);margin-bottom:12px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .field{margin-bottom:12px}
+  .field.full{grid-column:1/-1}
+  .label{font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:2px}
+  .box, input, textarea{
+    width:100%;padding:14px 14px;border:1px solid var(--line);border-radius:12px;background:#13101e;color:var(--text);
+    font-size:14px;outline:none;
+  }
+  textarea{min-height:88px;resize:vertical}
+  .box{cursor:pointer}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:#13101e;color:var(--text);font-size:12px;cursor:pointer}
+  .chip.active{border-color:var(--gold-dim);background:#1b1720;color:#f1dfb8}
+  .cta{
+    width:100%;padding:16px;border:none;border-radius:14px;cursor:pointer;margin-top:10px;
+    background:linear-gradient(135deg,var(--gold),#a07840);color:#111;font-weight:700;letter-spacing:2px
+  }
+  .subcta{
+    width:100%;padding:15px;border:1px solid var(--gold-dim);border-radius:14px;cursor:pointer;margin-top:10px;
+    background:#15121b;color:var(--gold);font-weight:700;letter-spacing:1px
+  }
+  .note{font-size:12px;color:#7f6d4d;line-height:1.6;margin-top:10px}
+  .hidden{display:none!important}
+  .result-card{background:#0d0b14cc;border:1px solid var(--line);border-radius:18px;padding:18px 16px;margin-top:18px}
+  .headline{font-size:22px;color:#f1dfb8;margin:0 0 10px}
+  .free-badge,.paid-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:11px;letter-spacing:2px;margin-bottom:12px}
+  .free-badge{background:#182014;color:#bfd8a7;border:1px solid #314026}
+  .paid-badge{background:#201914;color:#f0d29d;border:1px solid #5b4526}
+  .decision{font-size:18px;line-height:1.7;color:#f4e4c4}
+  .hooks{margin-top:14px;padding:12px;border-radius:12px;background:#13101e;border:1px solid var(--soft)}
+  .hooks h3{margin:0 0 8px;font-size:13px;color:#e8d5b0}
+  .hooks p{margin:6px 0;font-size:13px;line-height:1.7;color:#b8a483}
+  .detail{white-space:pre-wrap;font-size:14px;line-height:1.9;color:#d9c6a1}
+  .meta{font-size:12px;color:#8f7d5b;line-height:1.7;margin-top:12px}
+  .tarot-zone{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
+  .tarot-card{
+    height:188px;border-radius:16px;border:1px solid var(--gold-dim);background:linear-gradient(180deg,#16111d,#0f0c14);
+    display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px;cursor:pointer;
+    box-shadow:0 0 0 rgba(0,0,0,0);transform-style:preserve-3d;transition:transform .7s ease, box-shadow .4s ease;
+  }
+  .tarot-card.flipping{transform:rotateY(180deg);box-shadow:0 10px 40px rgba(201,169,110,.18)}
+  .tarot-card.revealed{background:linear-gradient(180deg,#221919,#151018);color:#f0dfbf}
+  .tarot-copy{font-size:13px;line-height:1.8;color:#bca983}
+  .sheet-backdrop{
+    position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:.25s;z-index:1000
+  }
+  .sheet-backdrop.active{opacity:1;pointer-events:auto}
+  .sheet{
+    position:fixed;left:0;right:0;bottom:-85vh;height:72vh;background:#0d0b14;border-top:1px solid var(--line);
+    border-radius:18px 18px 0 0;transition:.28s ease;z-index:1001;overflow:auto
+  }
+  .sheet.active{bottom:0}
+  .sheet-head{position:sticky;top:0;background:#0d0b14;padding:14px;border-bottom:1px solid var(--soft);text-align:center}
+  .sheet-grab{width:52px;height:5px;border-radius:999px;background:#2a2438;margin:0 auto 10px}
+  .sheet-list .item{padding:16px;text-align:center;border-bottom:1px solid var(--soft);cursor:pointer}
+  .sheet-list .item:hover{background:#13101e}
+  .row{display:flex;gap:8px}
+  .row > *{flex:1}
+  .error{margin-top:12px;padding:12px 14px;border-radius:12px;background:#311314;color:#ffc9c9;border:1px solid #5f1d1f;font-size:13px;display:none}
+  .loading{display:none;margin-top:14px;font-size:13px;color:#bda978}
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="label">생년</div>
-<div class="box" onclick="openSheet('year')" id="yearText">선택</div>
+  <div class="hero">
+    <div class="icon">☯</div>
+    <h1>천 명</h1>
+    <p>CHEONMYEONG · 天命</p>
+  </div>
 
-<div class="label">월</div>
-<div class="box" onclick="openSheet('month')" id="monthText">선택</div>
+  <div class="panel">
+    <div class="panel-title">오늘의 타로 · 무료 후킹</div>
+    <div class="tarot-zone">
+      <div id="tarotCard" class="tarot-card" onclick="drawTarot()">카드를 뽑아봐</div>
+      <div class="tarot-copy" id="tarotCopy">가볍게 한 장 뽑아서 지금 흐름을 먼저 확인해봐. 맞는 느낌이 들면 아래에서 정밀 분석으로 넘어가면 된다.</div>
+    </div>
+  </div>
 
-<div class="label">일</div>
-<div class="box" onclick="openSheet('day')" id="dayText">선택</div>
+  <div class="panel">
+    <div class="panel-title">정밀 분석 입력</div>
+    <div class="grid">
+      <div class="field"><div class="label">생년</div><div id="yearText" class="box" onclick="openSheet('year')">선택</div></div>
+      <div class="field"><div class="label">월</div><div id="monthText" class="box" onclick="openSheet('month')">선택</div></div>
+      <div class="field"><div class="label">일</div><div id="dayText" class="box" onclick="openSheet('day')">선택</div></div>
+      <div class="field"><div class="label">출생 시각</div><div id="hourText" class="box" onclick="openSheet('hour')">선택</div></div>
+      <div class="field full"><div class="label">출생지</div><input id="locationInput" placeholder="예: 서울, 부산, 대구"/></div>
+      <div class="field full"><div class="label">성별</div>
+        <div class="chips">
+          <button type="button" class="chip" id="maleChip" onclick="setGender('male')">남성</button>
+          <button type="button" class="chip" id="femaleChip" onclick="setGender('female')">여성</button>
+        </div>
+      </div>
+      <div class="field full"><div class="label">질문(선택)</div><textarea id="questionInput" placeholder="예: 올해 이직하는 게 맞을까? 지금 만나는 사람과 계속 가도 될까?"></textarea></div>
+    </div>
 
-<div class="label">출생 시각</div>
-<div class="box" onclick="openSheet('hour')" id="hourText">선택</div>
+    <button class="cta" onclick="runFreeAnalysis()">무료 결과 먼저 보기</button>
+    <div class="note">무료는 결론과 핵심 경고만 보여준다. 상세 설명은 유료에서만 생성된다.</div>
+    <div id="loading" class="loading">분석 중…</div>
+    <div id="errorBox" class="error"></div>
+  </div>
 
-<div class="label">출생지</div>
-<input id="locationInput" placeholder="서울, 부산 등"/>
-
-<button onclick="submit()">분석하기</button>
+  <div id="resultBox" class="result-card hidden">
+    <div id="badge" class="free-badge">FREE RESULT</div>
+    <h2 class="headline" id="resultTitle">결과</h2>
+    <div class="decision" id="decisionText"></div>
+    <div class="hooks">
+      <h3>여기서 끊는다</h3>
+      <p id="hookRisk"></p>
+      <p id="hookTiming"></p>
+    </div>
+    <button id="unlockBtn" class="subcta" onclick="runPaidAnalysis()">상세 분석 열기 · 유료</button>
+    <div class="meta" id="metaText"></div>
+    <div id="detailBox" class="detail hidden"></div>
+  </div>
 </div>
 
-<div id="sheet" class="sheet"></div>
+<div id="sheetBackdrop" class="sheet-backdrop" onclick="closeSheet()"></div>
+<div id="sheet" class="sheet">
+  <div class="sheet-head">
+    <div class="sheet-grab"></div>
+    <div id="sheetTitle">선택</div>
+  </div>
+  <div id="sheetList" class="sheet-list"></div>
+</div>
 
 <script>
-let state = {year:null,month:null,day:null,hour:null};
-const sheet = document.getElementById("sheet");
+let state = { year:null, month:null, day:null, hour:"모름", gender:null };
+let currentSheetType = null;
+let lastLocation = null;
+let lastTarot = null;
 
-const saved = localStorage.getItem("sajuData");
-if(saved){
-  state = JSON.parse(saved);
-  if(state.year) yearText.innerText = state.year;
-  if(state.month) monthText.innerText = state.month;
-  if(state.day) dayText.innerText = state.day;
-  if(state.hour!==null) hourText.innerText = state.hour;
+const tarotDeck = [
+  { title:"기회", message:"지금은 미는 쪽이 유리하다. 다만 타이밍을 잘못 잡으면 좋은 흐름이 짧게 끝난다." },
+  { title:"경고", message:"지금 결정을 서두르면 후회가 남는다. 특히 사람 문제를 가볍게 보면 손해가 커진다." },
+  { title:"변화", message:"환경을 바꾸는 선택이 생각보다 크게 먹힌다. 다만 바꾸기 전에 계산은 끝내야 한다." },
+  { title:"정리", message:"새 출발보다 먼저 정리할 게 있다. 미련 남긴 채 움직이면 결과가 탁해진다." },
+  { title:"확장", message:"올해는 움츠리기보다 범위를 넓히는 쪽이다. 다만 감보다 기준이 먼저다." }
+];
+
+const saved = localStorage.getItem("cheonmyeong_state_v2");
+if (saved) {
+  try {
+    const parsed = JSON.parse(saved);
+    state = { ...state, ...parsed };
+    renderState();
+  } catch (e) {}
+}
+
+function persistState(){
+  localStorage.setItem("cheonmyeong_state_v2", JSON.stringify(state));
+}
+
+function renderState(){
+  document.getElementById("yearText").textContent = state.year ?? "선택";
+  document.getElementById("monthText").textContent = state.month ?? "선택";
+  document.getElementById("dayText").textContent = state.day ?? "선택";
+  document.getElementById("hourText").textContent = state.hour ?? "모름";
+  document.getElementById("maleChip").classList.toggle("active", state.gender === "male");
+  document.getElementById("femaleChip").classList.toggle("active", state.gender === "female");
+}
+
+function setGender(g){
+  state.gender = g;
+  persistState();
+  renderState();
 }
 
 function openSheet(type){
-  sheet.innerHTML = "";
-  let list=[];
-  if(type==="year"){for(let i=new Date().getFullYear();i>=1920;i--) list.push(i);}
-  if(type==="month"){for(let i=1;i<=12;i++) list.push(i);}
-  if(type==="day"){
-    const days = new Date(state.year||2000,state.month||1,0).getDate();
-    for(let i=1;i<=days;i++) list.push(i);
+  currentSheetType = type;
+  const titleMap = { year:"생년 선택", month:"월 선택", day:"일 선택", hour:"출생 시각 선택" };
+  document.getElementById("sheetTitle").textContent = titleMap[type] || "선택";
+  const list = [];
+  if (type === "year") {
+    for (let y = new Date().getFullYear(); y >= 1920; y--) list.push(y);
+  } else if (type === "month") {
+    for (let m = 1; m <= 12; m++) list.push(m);
+  } else if (type === "day") {
+    const days = new Date(state.year || 2000, state.month || 1, 0).getDate();
+    for (let d = 1; d <= days; d++) list.push(d);
+  } else if (type === "hour") {
+    list.push("모름");
+    for (let h = 0; h < 24; h++) list.push(String(h).padStart(2, "0"));
   }
-  if(type==="hour"){list=["모름"];for(let i=0;i<24;i++) list.push(i);}
 
-  list.forEach(v=>{
-    const div=document.createElement("div");
-    div.className="item";
-    div.innerText=v;
-    div.onclick=()=>{
-      state[type]=v;
-      document.getElementById(type+"Text").innerText=v;
-      sheet.classList.remove("active");
-      localStorage.setItem("sajuData", JSON.stringify(state));
+  const box = document.getElementById("sheetList");
+  box.innerHTML = "";
+  list.forEach(v => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.textContent = v;
+    div.onclick = () => {
+      state[type] = v;
+      persistState();
+      renderState();
+      closeSheet();
+      if (type === "month" || type === "year") {
+        const days = new Date(state.year || 2000, state.month || 1, 0).getDate();
+        if (state.day && state.day > days) state.day = days;
+        persistState();
+        renderState();
+      }
     };
-    sheet.appendChild(div);
+    box.appendChild(div);
   });
-
-  sheet.classList.add("active");
+  document.getElementById("sheetBackdrop").classList.add("active");
+  document.getElementById("sheet").classList.add("active");
 }
 
-async function getLocation(){
-  const city=document.getElementById("locationInput").value;
-  const res=await fetch(`https://nominatim.openstreetmap.org/search?q=${city}&format=json`);
-  const data=await res.json();
-  return {lat:data[0].lat, lon:data[0].lon};
+function closeSheet(){
+  document.getElementById("sheetBackdrop").classList.remove("active");
+  document.getElementById("sheet").classList.remove("active");
 }
 
-async function submit(){
-  if(!state.year||!state.month||!state.day){
-    alert("생년월일 선택해라");
-    return;
-  }
-  const location=await getLocation();
+function drawTarot(){
+  const cardEl = document.getElementById("tarotCard");
+  const copyEl = document.getElementById("tarotCopy");
+  const picked = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
+  lastTarot = picked;
+  cardEl.classList.remove("revealed");
+  cardEl.classList.add("flipping");
+  cardEl.textContent = "…";
+  setTimeout(() => {
+    cardEl.classList.remove("flipping");
+    cardEl.classList.add("revealed");
+    cardEl.textContent = picked.title;
+    copyEl.innerHTML = "<strong>" + picked.title + "</strong><br>" + picked.message + "<br><br>정밀 분석으로 가면 이 흐름이 네 사주와 실제 출생 차트에서 왜 나오는지 이어서 본다.";
+  }, 550);
+}
 
-  const res = await fetch("/api/analyze",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({...state, location})
+async function geocodeLocation(){
+  const q = document.getElementById("locationInput").value.trim();
+  if (!q) throw new Error("출생지를 입력해라");
+  const res = await fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=" + encodeURIComponent(q), {
+    headers: { "Accept": "application/json" }
   });
-
   const data = await res.json();
-  alert(data.result);
+  if (!Array.isArray(data) || !data.length) throw new Error("출생지를 찾지 못했다");
+  // timezone is not returned here; send Korea default for now and let server use explicit default/fallback if needed
+  return {
+    query: q,
+    lat: Number(data[0].lat),
+    lon: Number(data[0].lon)
+  };
 }
+
+function showError(msg){
+  const el = document.getElementById("errorBox");
+  el.textContent = msg;
+  el.style.display = "block";
+}
+function clearError(){
+  const el = document.getElementById("errorBox");
+  el.textContent = "";
+  el.style.display = "none";
+}
+function setLoading(on){
+  document.getElementById("loading").style.display = on ? "block" : "none";
+}
+
+function validateCore(){
+  if (!state.year || !state.month || !state.day) throw new Error("생년월일을 먼저 선택해라");
+  if (!state.gender) throw new Error("성별을 선택해라");
+}
+
+async function runFreeAnalysis(){
+  try{
+    clearError();
+    validateCore();
+    setLoading(true);
+    lastLocation = await geocodeLocation();
+    const payload = {
+      ...state,
+      gender: state.gender,
+      minute: 0,
+      question: document.getElementById("questionInput").value.trim(),
+      location: lastLocation,
+      paid: false,
+      tarot: lastTarot
+    };
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || "분석 실패");
+    renderFreeResult(data);
+  } catch (e){
+    showError(e.message);
+  } finally {
+    setLoading(false);
+  }
+}
+
+async function runPaidAnalysis(){
+  try{
+    clearError();
+    validateCore();
+    setLoading(true);
+    if (!lastLocation) lastLocation = await geocodeLocation();
+    const payload = {
+      ...state,
+      gender: state.gender,
+      minute: 0,
+      question: document.getElementById("questionInput").value.trim(),
+      location: lastLocation,
+      paid: true,
+      tarot: lastTarot
+    };
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || "상세 분석 실패");
+    renderPaidResult(data);
+  } catch (e){
+    showError(e.message);
+  } finally {
+    setLoading(false);
+  }
+}
+
+function renderFreeResult(data){
+  document.getElementById("resultBox").classList.remove("hidden");
+  document.getElementById("badge").className = "free-badge";
+  document.getElementById("badge").textContent = "FREE RESULT";
+  document.getElementById("resultTitle").textContent = data.free.title || "핵심 결론";
+  document.getElementById("decisionText").textContent = data.free.decision || "";
+  document.getElementById("hookRisk").textContent = "⚠ " + (data.free.riskHook || "지금 놓치면 뒤에서 비용이 커질 수 있다.");
+  document.getElementById("hookTiming").textContent = "⏱ " + (data.free.timingHook || "이번 해 안에 한 번 크게 갈리는 시점이 온다.");
+  document.getElementById("metaText").textContent = "사주 원국과 실제 출생 차트에서 계산한 핵심 데이터 기반 무료 요약이다. 상세 해석은 유료에서만 열린다.";
+  document.getElementById("detailBox").classList.add("hidden");
+  document.getElementById("detailBox").textContent = "";
+  window.scrollTo({ top: document.getElementById("resultBox").offsetTop - 16, behavior: "smooth" });
+}
+
+function renderPaidResult(data){
+  document.getElementById("resultBox").classList.remove("hidden");
+  document.getElementById("badge").className = "paid-badge";
+  document.getElementById("badge").textContent = "PAID DETAIL";
+  document.getElementById("resultTitle").textContent = data.free.title || "상세 분석";
+  document.getElementById("decisionText").textContent = data.free.decision || "";
+  document.getElementById("hookRisk").textContent = "⚠ " + (data.free.riskHook || "");
+  document.getElementById("hookTiming").textContent = "⏱ " + (data.free.timingHook || "");
+  document.getElementById("metaText").textContent = "상세 분석은 유료 요청에서만 생성된다. 같은 입력값은 서버 캐시를 우선 사용한다.";
+  document.getElementById("detailBox").classList.remove("hidden");
+  document.getElementById("detailBox").textContent = data.detail || "상세 해석이 비어 있다.";
+  window.scrollTo({ top: document.getElementById("resultBox").offsetTop - 16, behavior: "smooth" });
+}
+
+renderState();
 </script>
 </body>
 </html>
