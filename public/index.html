@@ -1,109 +1,5 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>천명</title>
-
-<style>
-body {
-  margin:0;
-  font-family:sans-serif;
-  background:#0b0b0f;
-  color:#eee;
-}
-
-.field {
-  margin:20px;
-}
-
-.label {
-  font-size:12px;
-  margin-bottom:8px;
-  color:#aaa;
-}
-
-.select-box {
-  padding:14px;
-  border:1px solid #333;
-  border-radius:10px;
-  background:#111;
-  cursor:pointer;
-}
-
-/* 바텀시트 */
-.sheet {
-  position:fixed;
-  bottom:-100%;
-  left:0;
-  right:0;
-  height:60%;
-  background:#111;
-  border-top:1px solid #333;
-  overflow-y:auto;
-  transition:0.3s;
-  z-index:1000;
-}
-
-.sheet.active {
-  bottom:0;
-}
-
-.item {
-  padding:16px;
-  border-bottom:1px solid #222;
-  text-align:center;
-}
-
-.item:hover {
-  background:#222;
-}
-
-button {
-  width:90%;
-  margin:20px;
-  padding:16px;
-  border:none;
-  border-radius:10px;
-  background:#c9a96e;
-  color:#000;
-  font-weight:bold;
-}
-</style>
-</head>
-
-<body>
-
-<div class="field">
-  <div class="label">생년</div>
-  <div class="select-box" onclick="openSheet('year')">
-    <span id="yearText">선택</span>
-  </div>
-</div>
-
-<div class="field">
-  <div class="label">월</div>
-  <div class="select-box" onclick="openSheet('month')">
-    <span id="monthText">선택</span>
-  </div>
-</div>
-
-<div class="field">
-  <div class="label">일</div>
-  <div class="select-box" onclick="openSheet('day')">
-    <span id="dayText">선택</span>
-  </div>
-</div>
-
-<div class="field">
-  <div class="label">출생 시각</div>
-  <div class="select-box" onclick="openSheet('hour')">
-    <span id="hourText">선택</span>
-  </div>
-</div>
-
-<button onclick="submit()">분석하기</button>
-
-<div id="sheet" class="sheet"></div>
+<!-- ⭐ 기존 스타일 유지 + 선택 UI만 교체 -->
+<!-- 기존 CSS/디자인은 그대로 두고 이 JS만 추가하면 됨 -->
 
 <script>
 let state = {
@@ -113,7 +9,78 @@ let state = {
   hour:null
 };
 
-/* 🔥 저장 불러오기 */
+/* 🔥 바텀시트 생성 */
+const sheet = document.createElement("div");
+sheet.style.cssText = `
+position:fixed;
+bottom:-100%;
+left:0;
+right:0;
+height:60%;
+background:#0d0b14;
+border-top:1px solid #2a2438;
+overflow-y:auto;
+transition:0.3s;
+z-index:9999;
+`;
+document.body.appendChild(sheet);
+
+function openSheet(type){
+  sheet.innerHTML = "";
+
+  let list = [];
+
+  if(type==="year"){
+    for(let i=new Date().getFullYear(); i>=1920; i--) list.push(i);
+  }
+  if(type==="month"){
+    for(let i=1;i<=12;i++) list.push(i);
+  }
+  if(type==="day"){
+    const days = new Date(state.year || 2000, state.month || 1, 0).getDate();
+    for(let i=1;i<=days;i++) list.push(i);
+  }
+  if(type==="hour"){
+    list = ["모름"];
+    for(let i=0;i<24;i++) list.push(i);
+  }
+
+  list.forEach(v=>{
+    const item = document.createElement("div");
+    item.style.cssText = `
+      padding:16px;
+      text-align:center;
+      border-bottom:1px solid #1a1828;
+      color:#c8b89a;
+      cursor:pointer;
+    `;
+    item.innerText = v;
+
+    item.onclick = ()=>{
+      state[type] = v;
+
+      // 텍스트 반영
+      document.getElementById(type+"Text").innerText = v;
+
+      sheet.style.bottom = "-100%";
+
+      // 저장
+      localStorage.setItem("sajuData", JSON.stringify(state));
+    };
+
+    sheet.appendChild(item);
+  });
+
+  sheet.style.bottom = "0";
+}
+
+/* 🔥 기존 클릭 이벤트 연결 */
+document.getElementById("yearText").onclick = ()=>openSheet("year");
+document.getElementById("monthText").onclick = ()=>openSheet("month");
+document.getElementById("dayText").onclick = ()=>openSheet("day");
+document.getElementById("hourText").onclick = ()=>openSheet("hour");
+
+/* 🔥 자동 불러오기 */
 const saved = localStorage.getItem("sajuData");
 if(saved){
   state = JSON.parse(saved);
@@ -121,61 +88,6 @@ if(saved){
   if(state.year) document.getElementById("yearText").innerText = state.year;
   if(state.month) document.getElementById("monthText").innerText = state.month;
   if(state.day) document.getElementById("dayText").innerText = state.day;
-  if(state.hour !== null) document.getElementById("hourText").innerText = state.hour;
-}
-
-function openSheet(type){
-  const sheet = document.getElementById("sheet");
-  sheet.innerHTML = "";
-
-  let list = [];
-
-  if(type === "year"){
-    for(let i=new Date().getFullYear();i>=1920;i--) list.push(i);
-  }
-  if(type === "month"){
-    for(let i=1;i<=12;i++) list.push(i);
-  }
-  if(type === "day"){
-    const days = new Date(state.year || 2000, state.month || 1, 0).getDate();
-    for(let i=1;i<=days;i++) list.push(i);
-  }
-  if(type === "hour"){
-    list = ["모름"];
-    for(let i=0;i<24;i++) list.push(i);
-  }
-
-  list.forEach(v=>{
-    const div = document.createElement("div");
-    div.className = "item";
-    div.innerText = v;
-
-    div.onclick = ()=>{
-      state[type] = v;
-      document.getElementById(type+"Text").innerText = v;
-      sheet.classList.remove("active");
-
-      /* 🔥 자동 저장 */
-      localStorage.setItem("sajuData", JSON.stringify(state));
-    };
-
-    sheet.appendChild(div);
-  });
-
-  sheet.classList.add("active");
-}
-
-function submit(){
-  if(!state.year || !state.month || !state.day){
-    alert("생년월일을 모두 선택해라");
-    return;
-  }
-
-  localStorage.setItem("sajuData", JSON.stringify(state));
-
-  alert("완료: " + JSON.stringify(state));
+  if(state.hour!==null) document.getElementById("hourText").innerText = state.hour;
 }
 </script>
-
-</body>
-</html>
