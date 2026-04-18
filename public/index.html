@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>천명</title>
+<style>
+body{margin:0;font-family:sans-serif;background:#04030a;color:#c8b89a;}
+.wrap{max-width:500px;margin:0 auto;padding:20px;}
+.label{font-size:12px;margin:20px 0 6px;color:#6b5a3e;}
+.box{padding:16px;border:1px solid #2a2438;border-radius:10px;background:#0d0b14;cursor:pointer;}
+input{width:100%;padding:14px;border:1px solid #2a2438;border-radius:10px;background:#0d0b14;color:#c8b89a;}
+button{width:100%;margin-top:30px;padding:16px;border:none;border-radius:10px;background:#c9a96e;color:#000;font-weight:bold;}
+.sheet{position:fixed;bottom:-100%;left:0;right:0;height:60%;background:#0d0b14;border-top:1px solid #2a2438;overflow-y:auto;transition:0.3s;z-index:9999;}
+.sheet.active{bottom:0;}
+.item{padding:16px;text-align:center;border-bottom:1px solid #1a1828;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="label">생년</div>
+<div class="box" onclick="openSheet('year')" id="yearText">선택</div>
+
+<div class="label">월</div>
+<div class="box" onclick="openSheet('month')" id="monthText">선택</div>
+
+<div class="label">일</div>
+<div class="box" onclick="openSheet('day')" id="dayText">선택</div>
+
+<div class="label">출생 시각</div>
+<div class="box" onclick="openSheet('hour')" id="hourText">선택</div>
+
+<div class="label">출생지</div>
+<input id="locationInput" placeholder="서울, 부산 등"/>
+
+<button onclick="submit()">분석하기</button>
+</div>
+
+<div id="sheet" class="sheet"></div>
+
+<script>
+let state = {year:null,month:null,day:null,hour:null};
+const sheet = document.getElementById("sheet");
+
+const saved = localStorage.getItem("sajuData");
+if(saved){
+  state = JSON.parse(saved);
+  if(state.year) yearText.innerText = state.year;
+  if(state.month) monthText.innerText = state.month;
+  if(state.day) dayText.innerText = state.day;
+  if(state.hour!==null) hourText.innerText = state.hour;
+}
+
+function openSheet(type){
+  sheet.innerHTML = "";
+  let list=[];
+  if(type==="year"){for(let i=new Date().getFullYear();i>=1920;i--) list.push(i);}
+  if(type==="month"){for(let i=1;i<=12;i++) list.push(i);}
+  if(type==="day"){
+    const days = new Date(state.year||2000,state.month||1,0).getDate();
+    for(let i=1;i<=days;i++) list.push(i);
+  }
+  if(type==="hour"){list=["모름"];for(let i=0;i<24;i++) list.push(i);}
+
+  list.forEach(v=>{
+    const div=document.createElement("div");
+    div.className="item";
+    div.innerText=v;
+    div.onclick=()=>{
+      state[type]=v;
+      document.getElementById(type+"Text").innerText=v;
+      sheet.classList.remove("active");
+      localStorage.setItem("sajuData", JSON.stringify(state));
+    };
+    sheet.appendChild(div);
+  });
+
+  sheet.classList.add("active");
+}
+
+async function getLocation(){
+  const city=document.getElementById("locationInput").value;
+  const res=await fetch(`https://nominatim.openstreetmap.org/search?q=${city}&format=json`);
+  const data=await res.json();
+  return {lat:data[0].lat, lon:data[0].lon};
+}
+
+async function submit(){
+  if(!state.year||!state.month||!state.day){
+    alert("생년월일 선택해라");
+    return;
+  }
+  const location=await getLocation();
+
+  const res = await fetch("/api/analyze",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({...state, location})
+  });
+
+  const data = await res.json();
+  alert(data.result);
+}
+</script>
+</body>
+</html>
