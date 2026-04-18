@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>천명 · 天命 — BaZi & Destiny Analysis</title>
+  <meta name="description" content="사주 기반으로 성향, 흐름, 건강, 일, 사랑, 재물, 지금의 선택 포인트를 분석하는 AI 운명 리포트"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-dim: #c9a96e44; --bg: #04030a;
+      --bg2: #0d0b14; --bg3: #13101e;
+      --text: #c8b89a; --text-bright: #e8d5b0;
+      --text-dim: #3a3028; --text-muted: #6b5a3e;
+      --danger: #ff9090;
+    }
+
+    html, body { min-height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Serif KR', serif;
+      overflow-x: hidden;
+    }
+    body.picker-lock {
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    #galaxy-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .fixed-ui { position: fixed; z-index: 100; }
+    .lang-toggle {
+      top: 16px; right: 16px; display: flex; background: #0d0b14dd;
+      border: 1px solid #2a2438; border-radius: 20px; overflow: hidden; backdrop-filter: blur(8px);
+    }
+    .sound-toggle {
+      top: 16px; left: 16px; width: 36px; height: 36px;
+      background: #0d0b14dd; border: 1px solid #2a2438; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text-dim);
+      transition: all 0.3s; backdrop-filter: blur(8px);
+    }
+    .sound-toggle.active { border-color: var(--gold-dim); color: var(--gold); }
+    .lang-btn {
+      padding: 7px 14px; font-size: 11px; letter-spacing: 2px; cursor: pointer; border: none;
+      background: transparent; color: var(--text-dim); font-family: 'Noto Serif KR', serif; transition: all 0.2s;
+    }
+    .lang-btn.active { background: var(--gold); color: var(--bg); font-weight: 600; }
+
+    .wrap {
+      position: relative; z-index: 10; max-width: 560px; margin: 0 auto; padding: 0 20px;
+    }
+
+    .hero { text-align: center; padding: 72px 0 40px; }
+    .hero-icon {
+      display: inline-flex; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--gold-dim);
+      align-items: center; justify-content: center; font-size: 24px; color: var(--gold); background: #13101ecc;
+      box-shadow: 0 0 60px #c9a96e18; margin-bottom: 24px; animation: pulse-glow 4s ease-in-out infinite;
+    }
+    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 40px #c9a96e15}50%{box-shadow:0 0 80px #c9a96e35} }
+    .hero h1 {
+      font-size: clamp(22px,6vw,34px); font-weight: 300; letter-spacing: 12px; color: var(--text-bright);
+      margin-bottom: 8px; font-family: 'Cormorant Garamond', serif; text-shadow: 0 0 40px #c9a96e30;
+    }
+    .hero p { font-size: 11px; color: #4a3a58; letter-spacing: 6px; }
+    .hero-line { width: 1px; height: 36px; background: linear-gradient(var(--gold-dim), transparent); margin: 22px auto 0; }
+
+    .intro-card, .question-card, .result-proof, .why-pay-card {
+      background: #0d0b14cc; border: 1px solid #2a2438; border-radius: 18px; backdrop-filter: blur(16px);
+    }
+    .intro-card {
+      padding: 18px 18px 16px; margin-bottom: 26px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    }
+    .intro-title { font-size: 12px; letter-spacing: 4px; color: var(--gold); margin-bottom: 10px; text-align: center; }
+    .intro-copy { font-size: 13px; line-height: 1.9; color: #a89678; text-align: center; }
+    .pill-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+    .pill {
+      padding: 7px 10px; border: 1px solid #2a2438; border-radius: 999px; font-size: 11px; color: #8c7856;
+      background: rgba(201,169,110,0.03);
+    }
+
+    .field-label { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; text-align: center; margin-bottom: 14px; }
+
+    .picker-box {
+      background: #0d0b14cc; border: 1px solid #2a2438; border-radius: 16px; padding: 16px 10px;
+      display: flex; justify-content: center; align-items: flex-start; gap: 4px; margin-bottom: 28px; backdrop-filter: blur(16px);
+    }
+    .picker-sep { color: #2a2438; font-size: 20px; padding-top: 62px; }
+    .picker-sep.dim { color: #1a1828; }
+
+    .drum-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .drum-label { font-size: 10px; color: var(--text-muted); letter-spacing: 3px; }
+    .drum-label.disabled { color: #252030; }
+    .drum {
+      overflow: hidden; position: relative; border-radius: 12px; cursor: grab; user-select: none;
+      background: linear-gradient(180deg, #04030a, #0d0b14 25%, #0d0b14 75%, #04030a);
+    }
+    .drum.disabled { opacity: 0.25; cursor: default; }
+    .drum-fade-top { position: absolute; top: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(180deg, #04030a, transparent); }
+    .drum-fade-bot { position: absolute; bottom: 0; left: 0; right: 0; pointer-events: none; z-index: 2; background: linear-gradient(0deg, #04030a, transparent); }
+    .drum-selector { position: absolute; left: 6px; right: 6px; border: 1px solid #c9a96e44; border-radius: 8px; background: #c9a96e08; z-index: 1; pointer-events: none; }
+    .drum-list { position: absolute; left: 0; right: 0; transition: transform 0.22s cubic-bezier(.25,.8,.25,1); }
+    .drum-item { display: flex; align-items: center; justify-content: center; font-family: 'Noto Serif KR', serif; transition: all 0.1s; cursor: pointer; }
+    .picker-help {
+      margin: -16px 0 28px;
+      text-align: center;
+      font-size: 10px;
+      color: #3a2e48;
+      letter-spacing: 2px;
+    }
+    .drum-item.active { color: var(--text-bright); font-weight: 500; }
+    .drum-item.near { color: #5a4a62; }
+    .drum-item.far { color: #2a2038; }
+
+    .question-card { padding: 16px; margin: 6px 0 28px; }
+    .question-copy { font-size: 12px; line-height: 1.8; color: #8f7f64; margin-bottom: 12px; text-align: center; }
+    .question-input {
+      width: 100%; min-height: 88px; resize: vertical; background: #090710; color: #d5c3a1; border: 1px solid #2a2438;
+      border-radius: 12px; padding: 14px 15px; font: inherit; line-height: 1.7;
+    }
+    .question-input:focus { outline: none; border-color: #6d5631; box-shadow: 0 0 0 3px rgba(201,169,110,0.08); }
+    .question-help { font-size: 11px; line-height: 1.7; color: #5f4d35; margin-top: 10px; }
+
+    .gender-wrap { display: flex; gap: 10px; margin-bottom: 26px; }
+    .gender-btn {
+      flex: 1; padding: 20px 12px; background: #0d0b14cc; border: 1px solid #2a2438; border-radius: 14px; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; backdrop-filter: blur(8px);
+    }
+    .gender-btn.active { background: #1c1828; border-color: #c9a96e77; }
+    .gender-btn .hanja { font-size: 26px; color: #3a2e48; transition: color 0.2s; }
+    .gender-btn.active .hanja { color: var(--text-bright); }
+    .gender-btn .ko { font-size: 10px; letter-spacing: 4px; color: #3a2e48; transition: color 0.2s; }
+    .gender-btn.active .ko { color: var(--gold); }
+
+    .analyze-btn {
+      width: 100%; padding: 16px; border: none; border-radius: 13px; font-size: 13px; letter-spacing: 4px;
+      font-family: 'Noto Serif KR', serif; font-weight: 600; cursor: not-allowed; transition: all 0.3s; margin-bottom: 12px;
+      background: #13101e; color: #2a2038;
+    }
+    .analyze-btn.ready {
+      background: linear-gradient(135deg, var(--gold), #a07840); color: var(--bg); cursor: pointer; box-shadow: 0 6px 32px #c9a96e35;
+    }
+    .hint { text-align: center; font-size: 11px; color: #252030; letter-spacing: 1px; margin-bottom: 4px; }
+    .error-box {
+      margin-top: 14px; padding: 12px 16px; background: #90000a20; border: 1px solid #c8181855; border-radius: 10px;
+      color: var(--danger); font-size: 12px; line-height: 1.7; word-break: break-all; display: none;
+    }
+
+    #loading {
+      display: none; position: fixed; inset: 0; background: #04030aee; z-index: 500;
+      flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+    }
+    .spinner-wrap { position: relative; width: 88px; height: 88px; }
+    .ring { position: absolute; border-radius: 50%; border: 1px solid transparent; }
+    .ring-1 { inset: 0; border-top-color: #c9a96e33; animation: zspin 4s linear infinite; }
+    .ring-2 { inset: 12px; border-top-color: #c9a96e55; animation: zspin 2.4s linear infinite reverse; }
+    .ring-3 { inset: 24px; border-top-color: #c9a96e99; animation: zspin 1.4s linear infinite; }
+    .spinner-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 24px; color: var(--gold); }
+    .loading-msg { font-size: 14px; color: var(--gold); letter-spacing: 3px; }
+    .loading-sub { font-size: 11px; color: #4a3a58; margin-top: 8px; letter-spacing: 2px; }
+    @keyframes zspin { to { transform: rotate(360deg); } }
+
+    #result { display: none; }
+    .result-header { text-align: center; padding: 0 0 28px; border-bottom: 1px solid #1a1828; }
+    .result-meta { font-size: 10px; color: #4a3a58; letter-spacing: 4px; margin-bottom: 12px; }
+    .result-headline {
+      font-size: clamp(16px,4vw,22px); color: var(--text-bright); font-weight: 300; line-height: 1.8; margin-bottom: 16px;
+      font-family: 'Cormorant Garamond', serif; font-style: italic; text-shadow: 0 0 30px #c9a96e20;
+    }
+    .result-essence { font-size: 13.5px; color: #7a6a6a; line-height: 2.1; font-weight: 300; }
+    .focus-banner {
+      margin-top: 18px; padding: 14px 16px; border: 1px solid #2a2438; border-radius: 14px; background: #090710;
+      text-align: left;
+    }
+    .focus-banner-label { font-size: 10px; color: var(--text-muted); letter-spacing: 4px; margin-bottom: 8px; }
+    .focus-banner-copy { font-size: 13px; line-height: 1.8; color: #c0ab87; }
+
+    .result-proof {
+      padding: 16px; margin: 26px 0 0;
+    }
+    .proof-title { font-size: 10px; letter-spacing: 5px; color: var(--text-muted); text-align: center; margin-bottom: 12px; }
+    .proof-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .proof-item {
+      border: 1px solid #1f1a2d; border-radius: 12px; padding: 12px 14px; background: rgba(255,255,255,0.01);
+    }
+    .proof-item-label { font-size: 10px; letter-spacing: 3px; color: #6b5a3e; margin-bottom: 6px; }
+    .proof-item-value { font-size: 13px; line-height: 1.8; color: #cbb694; }
+
+    .section {
+      padding: 34px 0; border-bottom: 1px solid #1a1828; opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .section.visible { opacity: 1; transform: none; }
+    .section-title-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .section-icon { font-size: 16px; color: var(--gold); }
+    .section-title { font-size: 11px; color: var(--text-muted); letter-spacing: 6px; font-weight: 400; text-transform: uppercase; }
+    .section-body { font-size: 15px; line-height: 2.2; color: #baa890; font-weight: 300; }
+
+    .why-pay-card {
+      margin-top: 34px; padding: 18px 16px; text-align: center;
+    }
+    .why-pay-title { font-size: 10px; letter-spacing: 5px; color: var(--text-muted); margin-bottom: 10px; }
+    .why-pay-copy { font-size: 13px; line-height: 1.9; color: #b49f7a; }
+
+    .locked-section-wrap { margin-top: 40px; border-top: 1px solid #1a1828; padding-top: 40px; }
+    .locked-header { text-align: center; margin-bottom: 22px; }
+    .locked-header h3 { font-size: 11px; color: var(--text-muted); letter-spacing: 6px; font-weight: 400; margin-bottom: 8px; }
+    .locked-header p { font-size: 12px; color: #3a2e48; letter-spacing: 1px; }
+
+    .locked-card { position: relative; margin-bottom: 16px; border-radius: 14px; overflow: hidden; border: 1px solid #1a1828; }
+    .locked-card-inner { padding: 24px; background: #0d0b14cc; filter: blur(4px); user-select: none; pointer-events: none; }
+    .locked-card-title { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; margin-bottom: 10px; }
+    .locked-card-preview { font-size: 13px; color: #4a3a58; line-height: 2; min-height: 60px; overflow: hidden; }
+    .locked-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(180deg, transparent, #04030acc); }
+    .lock-icon { font-size: 20px; color: var(--gold); opacity: 0.7; }
+    .locked-label { font-size: 10px; color: var(--text-muted); letter-spacing: 4px; }
+
+    .unlock-section { text-align: center; padding: 34px 0 20px; }
+    .unlock-btn {
+      display: inline-flex; flex-direction: column; align-items: center; width: 100%; padding: 20px;
+      background: linear-gradient(135deg, #1a1520, #2a1f18); border: 1px solid var(--gold-dim); border-radius: 16px;
+      cursor: pointer; transition: all 0.3s; gap: 4px;
+    }
+    .unlock-btn:hover { border-color: var(--gold); box-shadow: 0 0 50px #c9a96e20; }
+    .unlock-btn-label { font-size: 10px; color: var(--text-muted); letter-spacing: 5px; }
+    .unlock-btn-price { font-size: 28px; color: var(--gold); font-family: 'Cormorant Garamond', serif; font-weight: 300; }
+    .unlock-btn-sub { font-size: 11px; color: #4a3a58; letter-spacing: 1px; }
+    .unlock-features { margin-top: 16px; display: flex; flex-direction: column; gap: 6px; text-align: left; }
+    .unlock-feature { font-size: 11px; color: #7d6750; letter-spacing: 0.4px; display: flex; align-items: center; gap: 8px; }
+    .unlock-feature span { color: var(--gold); font-size: 10px; }
+
+    .reset-wrap { padding: 50px 0 80px; text-align: center; }
+    .reset-btn {
+      background: transparent; border: 1px solid #2a2438; border-radius: 10px; padding: 10px 28px; color: var(--text-muted);
+      font-size: 12px; letter-spacing: 5px; cursor: pointer; font-family: 'Noto Serif KR', serif; transition: all 0.2s;
+    }
+    .reset-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
+    .disclaimer { margin-top: 24px; font-size: 10px; color: #1a1828; letter-spacing: 1px; line-height: 1.7; }
+
+    @media (max-width: 480px) {
+      .wrap { padding: 0 16px; }
+      .hero { padding-top: 78px; }
+      .picker-box { gap: 2px; }
+    }
+
+    @keyframes fadeIn { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none} }
+    .fade-in { animation: fadeIn 0.7s ease both; }
+  </style>
+</head>
+<body>
+<canvas id="galaxy-canvas"></canvas>
+
+<button class="fixed-ui sound-toggle" id="sound-btn" onclick="toggleSound()">♪</button>
+<div class="fixed-ui lang-toggle">
+  <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">한</button>
+  <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+</div>
+
+<div id="loading">
+  <div class="spinner-wrap">
+    <div class="ring ring-1"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+    <div class="spinner-icon">☯</div>
+  </div>
+  <div style="text-align:center">
+    <div class="loading-msg" id="loading-msg">천간을 살피는 중</div>
+    <div class="loading-sub" id="loading-sub">사주 기반으로 흐름을 엮는 중</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-icon">☯</div>
+    <h1 id="hero-title">천 명</h1>
+    <p id="hero-sub">CHEONMYEONG · 天命</p>
+    <div class="hero-line"></div>
+  </div>
+
+  <div id="form-section" class="fade-in">
+    <div class="intro-card">
+      <div class="intro-title" id="intro-title">ONE CHART, ONE DECISION</div>
+      <div class="intro-copy" id="intro-copy">사주를 그럴듯하게 풀어내는 데서 끝내지 않습니다. 당신의 타고난 기질과 현재 흐름을 바탕으로, 지금 무엇을 밀고 무엇을 늦춰야 하는지 읽어냅니다.</div>
+      <div class="pill-row">
+        <div class="pill" id="pill-1">사주 원국 기반</div>
+        <div class="pill" id="pill-2">현재 대운 반영</div>
+        <div class="pill" id="pill-3">선택 질문 반영</div>
+      </div>
+    </div>
+
+    <div class="field-label" id="label-date">생년월일</div>
+    <div class="picker-box">
+      <div class="drum-wrap"><div class="drum-label" id="label-year">년</div><div class="drum" id="drum-year" style="width:88px"></div></div>
+      <div class="picker-sep">·</div>
+      <div class="drum-wrap"><div class="drum-label" id="label-month">월</div><div class="drum" id="drum-month" style="width:60px"></div></div>
+      <div class="picker-sep">·</div>
+      <div class="drum-wrap"><div class="drum-label" id="label-day">일</div><div class="drum" id="drum-day" style="width:60px"></div></div>
+    </div>
+
+    <div class="field-label" id="label-time-section">출생 시각</div>
+    <div class="picker-box">
+      <div class="drum-wrap"><div class="drum-label" id="label-hour">시</div><div class="drum" id="drum-hour" style="width:110px"></div></div>
+      <div class="picker-sep" id="sep-time">:</div>
+      <div class="drum-wrap"><div class="drum-label disabled" id="label-minute">분</div><div class="drum disabled" id="drum-minute" style="width:72px"></div></div>
+    </div>
+    <div class="picker-help" id="time-help">위아래로 넘기거나 탭해서 선택</div>
+    <p class="hint" id="time-hint" style="display:none">시각 모름 → 정오(12:00) 기준 분석</p>
+
+    <div class="question-card">
+      <div class="field-label" id="label-question" style="margin-bottom:10px">지금 가장 궁금한 것</div>
+      <div class="question-copy" id="question-copy">선택의 갈림길이 있다면 적어주세요. 적을수록 결과가 더 실전적으로 바뀝니다.</div>
+      <textarea id="focus-question" class="question-input" maxlength="220" placeholder="예: 올해 이직하는 게 맞을까? 연애를 이어가야 할까? 지금 사업을 확장해도 될까?"></textarea>
+      <div class="question-help" id="question-help">비워두면 기본 종합 리딩으로 분석합니다.</div>
+    </div>
+
+    <div class="field-label" style="margin-top:6px" id="label-gender">성별</div>
+    <div class="gender-wrap">
+      <button class="gender-btn" id="btn-male" onclick="selectGender('male')"><span class="hanja">男</span><span class="ko" id="text-male">남</span></button>
+      <button class="gender-btn" id="btn-female" onclick="selectGender('female')"><span class="hanja">女</span><span class="ko" id="text-female">여</span></button>
+    </div>
+
+    <button class="analyze-btn" id="analyze-btn" onclick="analyze()">천명 분석하기</button>
+    <p class="hint" id="gender-hint">성별을 선택해주세요</p>
+    <div class="error-box" id="error-box"></div>
+    <div style="height:72px"></div>
+  </div>
+
+  <div id="result">
+    <div class="result-header">
+      <div class="result-meta" id="result-meta"></div>
+      <div class="result-headline" id="result-headline"></div>
+      <div class="result-essence" id="result-essence"></div>
+      <div class="focus-banner" id="focus-banner" style="display:none">
+        <div class="focus-banner-label" id="focus-banner-label">FOCUS OF THIS READING</div>
+        <div class="focus-banner-copy" id="focus-banner-copy"></div>
+      </div>
+    </div>
+
+    <div class="result-proof" id="result-proof" style="display:none">
+      <div class="proof-title" id="proof-title">WHAT THIS READING USED</div>
+      <div class="proof-grid">
+        <div class="proof-item">
+          <div class="proof-item-label" id="proof-pillars-label">사주 원국</div>
+          <div class="proof-item-value" id="proof-pillars"></div>
+        </div>
+        <div class="proof-item">
+          <div class="proof-item-label" id="proof-daymaster-label">일간 · 오행 포인트</div>
+          <div class="proof-item-value" id="proof-daymaster"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-sections"></div>
+
+    <div class="why-pay-card" id="why-pay-card" style="display:none">
+      <div class="why-pay-title" id="why-pay-title">WHY UNLOCK</div>
+      <div class="why-pay-copy" id="why-pay-copy">지금 보이는 내용은 핵심 요약입니다. 잠금 해제하면 인생 단계별 흐름, 올해와 내년의 변화, 이번 달 기회와 주의 포인트까지 이어서 볼 수 있습니다.</div>
+    </div>
+
+    <div class="locked-section-wrap" id="locked-wrap" style="display:none">
+      <div class="locked-header">
+        <h3 id="locked-title-text">DEEPER READING</h3>
+        <p id="locked-sub-text">잠금 해제 후 전체 운세 열람</p>
+      </div>
+      <div id="locked-cards"></div>
+      <div class="unlock-section">
+        <button class="unlock-btn" onclick="alert('Connect your payment flow here.')">
+          <span class="unlock-btn-label" id="unlock-label">UNLOCK FULL READING</span>
+          <span class="unlock-btn-price">$4.99</span>
+          <span class="unlock-btn-sub" id="unlock-sub">one-time · instant access</span>
+        </button>
+        <div class="unlock-features">
+          <div class="unlock-feature"><span>✦</span><span id="uf1">초년 · 중년 · 말년 시기별 운세</span></div>
+          <div class="unlock-feature"><span>✦</span><span id="uf2">2026 · 2027 · 2028 연도별 운세</span></div>
+          <div class="unlock-feature"><span>✦</span><span id="uf3">이번 달 월운</span></div>
+          <div class="unlock-feature"><span>✦</span><span id="uf4">오늘의 일운</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reset-wrap">
+      <button class="reset-btn" onclick="resetApp()" id="reset-btn">처음으로</button>
+      <div class="disclaimer" id="disclaimer">AI 분석 결과는 참고용입니다. 건강, 법률, 투자 판단은 전문가 상담이 우선입니다.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const cv = document.getElementById('galaxy-canvas');
+  const cx = cv.getContext('2d');
+  let W, H, stars=[], nebula=[];
+  function resize(){ W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; init(); }
+  function init(){
+    stars=[]; nebula=[];
+    const n = Math.floor(W*H/2000);
+    for(let i=0;i<n;i++){
+      const t=Math.random();
+      stars.push({ x:Math.random()*W, y:Math.random()*H, r:t<0.04?Math.random()*0.8+1.0:t<0.2?Math.random()*0.5+0.5:Math.random()*0.3+0.15, a:t<0.04?Math.random()*0.4+0.5:t<0.2?Math.random()*0.3+0.2:Math.random()*0.15+0.05, sp:Math.random()*1.5+0.3, off:Math.random()*Math.PI*2, col:t<0.07?`hsl(${210+Math.random()*40},70%,90%)`:'#ede8de' });
+    }
+    for(let i=0;i<6;i++) nebula.push({ x:Math.random()*W, y:Math.random()*H, rx:Math.random()*150+60, ry:Math.random()*60+25, ang:Math.random()*Math.PI, a:Math.random()*0.018+0.006, h:Math.random()<0.5?245:275 });
+  }
+  let t=0;
+  function draw(){
+    cx.clearRect(0,0,W,H);
+    const bg=cx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#04030a'); bg.addColorStop(0.5,'#060418'); bg.addColorStop(1,'#030208'); cx.fillStyle=bg; cx.fillRect(0,0,W,H);
+    cx.save(); cx.translate(W/2,H/2); cx.rotate(-0.25); cx.translate(-W/2,-H/2);
+    const mw=cx.createLinearGradient(W*0.1,0,W*0.9,H); mw.addColorStop(0,'rgba(40,25,70,0)'); mw.addColorStop(0.4,'rgba(75,50,120,0.07)'); mw.addColorStop(0.5,'rgba(90,60,145,0.10)'); mw.addColorStop(0.6,'rgba(65,40,100,0.06)'); mw.addColorStop(1,'rgba(30,18,50,0)'); cx.fillStyle=mw; cx.fillRect(0,0,W,H); cx.restore();
+    nebula.forEach(n=>{ cx.save(); cx.translate(n.x,n.y); cx.rotate(n.ang); const g=cx.createRadialGradient(0,0,0,0,0,n.rx); g.addColorStop(0,`hsla(${n.h},55%,55%,${n.a*1.3})`); g.addColorStop(0.5,`hsla(${n.h},45%,45%,${n.a})`); g.addColorStop(1,`hsla(${n.h},35%,35%,0)`); cx.fillStyle=g; cx.scale(1,n.ry/n.rx); cx.beginPath(); cx.arc(0,0,n.rx,0,Math.PI*2); cx.fill(); cx.restore(); });
+    t+=0.01;
+    stars.forEach(s=>{ const tw=Math.sin(t*s.sp+s.off); const alpha=s.a*(0.55+0.45*((tw+1)/2)); if(s.r>0.9){ const g=cx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*3.5); g.addColorStop(0,`rgba(235,228,210,${alpha*0.3})`); g.addColorStop(1,'rgba(235,228,210,0)'); cx.fillStyle=g; cx.beginPath(); cx.arc(s.x,s.y,s.r*3.5,0,Math.PI*2); cx.fill(); } cx.globalAlpha=alpha; cx.fillStyle=s.col; cx.beginPath(); cx.arc(s.x,s.y,s.r,0,Math.PI*2); cx.fill(); cx.globalAlpha=1; });
+    const tf=cx.createRadialGradient(W/2,0,0,W/2,0,W*0.6); tf.addColorStop(0,'rgba(201,169,110,0.03)'); tf.addColorStop(1,'rgba(201,169,110,0)'); cx.fillStyle=tf; cx.fillRect(0,0,W,H*0.4);
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>{ clearTimeout(window._rt); window._rt=setTimeout(resize,200); }); resize(); draw();
+})();
+
+let audioCtx=null,soundOn=false,activeNodes=[],ambientInterval=null;
+function initAudio(){ if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); }
+function createReverb(ctx){ const c=ctx.createConvolver(),b=ctx.createBuffer(2,ctx.sampleRate*5,ctx.sampleRate); for(let i=0;i<2;i++){ const ch=b.getChannelData(i); for(let j=0;j<ch.length;j++) ch[j]=(Math.random()*2-1)*Math.pow(1-j/ch.length,2.2);} c.buffer=b; return c; }
+let rvb=null,mGain=null;
+function setupChain(){ if(!audioCtx) return; if(!rvb) rvb=createReverb(audioCtx); if(!mGain){ mGain=audioCtx.createGain(); mGain.gain.value=0.5; rvb.connect(mGain); mGain.connect(audioCtx.destination); } }
+function playCrystalBowl(freq,dur,delay=0,vol=0.12){ if(!audioCtx||!soundOn) return; setupChain(); const now=audioCtx.currentTime+delay; [[freq,vol,0.12,true],[freq*2.756,vol*0.22,0.06,true],[freq*5.4,vol*0.07,0.03,false]].forEach(([f,v,att,rev],i)=>{ const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(v,now+att); if(i===0){g.gain.setTargetAtTime(v*0.5,now+0.5,1.5);g.gain.setTargetAtTime(0.0001,now+dur*0.45,dur*0.4);} else if(i===1) g.gain.setTargetAtTime(0.0001,now+1.0,1.8); else g.gain.setTargetAtTime(0.0001,now+0.4,0.5); o.connect(g); g.connect(rev?rvb:audioCtx.destination); o.start(now); o.stop(now+dur+2); activeNodes.push(o); }); }
+let droneO=null,droneG=null;
+function startDrone(){ if(!audioCtx||!soundOn) return; setupChain(); droneO=audioCtx.createOscillator(); droneG=audioCtx.createGain(); droneO.type='sine'; droneO.frequency.value=54; droneG.gain.setValueAtTime(0,audioCtx.currentTime); droneG.gain.linearRampToValueAtTime(0.032,audioCtx.currentTime+4); droneO.connect(droneG); droneG.connect(rvb); droneO.start(); activeNodes.push(droneO); }
+function stopDrone(){ if(droneG&&audioCtx){ try{ droneG.gain.linearRampToValueAtTime(0,audioCtx.currentTime+2); setTimeout(()=>{ try{droneO.stop();}catch(e){} },2200);}catch(e){} } }
+const bFreqs=[108,136,174,198,216,144,162]; let bIdx=0;
+function nextBowl(){ if(!soundOn) return; playCrystalBowl(bFreqs[bIdx++%bFreqs.length],14+Math.random()*6,0,0.12); ambientInterval=setTimeout(nextBowl,10000+Math.random()*12000); }
+function startAmbient(){ setupChain(); startDrone(); playCrystalBowl(174,16,1,0.12); playCrystalBowl(136,14,4.5,0.08); ambientInterval=setTimeout(nextBowl,16000); }
+function stopAmbient(){ if(ambientInterval) clearTimeout(ambientInterval); stopDrone(); activeNodes.forEach(n=>{ try{n.stop();}catch(e){} }); activeNodes=[]; rvb=null; mGain=null; }
+function toggleSound(){ initAudio(); soundOn=!soundOn; const b=document.getElementById('sound-btn'); if(soundOn){ b.classList.add('active'); startAmbient(); } else { b.classList.remove('active'); stopAmbient(); } }
+
+const T={
+  ko:{
+    heroTitle:"천 명",heroSub:"CHEONMYEONG · 天命",introTitle:"ONE CHART, ONE DECISION",introCopy:"사주를 그럴듯하게 풀어내는 데서 끝내지 않습니다. 당신의 타고난 기질과 현재 흐름을 바탕으로, 지금 무엇을 밀고 무엇을 늦춰야 하는지 읽어냅니다.",pill1:"사주 원국 기반",pill2:"현재 대운 반영",pill3:"선택 질문 반영",labelDate:"생년월일",labelYear:"년",labelMonth:"월",labelDay:"일",labelTimeSection:"출생 시각",labelHour:"시",labelMinute:"분",labelQuestion:"지금 가장 궁금한 것",questionCopy:"선택의 갈림길이 있다면 적어주세요. 적을수록 결과가 더 실전적으로 바뀝니다.",questionHelp:"비워두면 기본 종합 리딩으로 분석합니다.",questionPlaceholder:"예: 올해 이직하는 게 맞을까? 연애를 이어가야 할까? 지금 사업을 확장해도 될까?",labelGender:"성별",textMale:"남",textFemale:"여",analyzeBtn:"천명 분석하기",genderHint:"성별을 선택해주세요",timeHint:"시각 모름 → 정오(12:00) 기준 분석",resetBtn:"처음으로",disclaimer:"AI 분석 결과는 참고용입니다. 건강, 법률, 투자 판단은 전문가 상담이 우선입니다.",hourUnknown:"모름",minuteUnknown:"—",loading:["천간을 살피는 중","지지를 헤아리는 중","흐름의 결을 읽는 중","당신의 질문을 겹쳐보는 중"],loadingSub:"사주 기반으로 흐름을 엮는 중",genderMale:"남",genderFemale:"여",docTitle:"천명 · 天命 — 사주 분석",lockedTitle:"DEEPER READING",lockedSub:"잠금 해제 후 전체 운세 열람",unlockLabel:"전체 열람 잠금 해제",unlockSub:"일회 결제 · 즉시 접근",uf1:"초년 · 중년 · 말년 시기별 운세",uf2:"올해 · 내년 · 그다음 해의 흐름",uf3:"이번 달 월운",uf4:"오늘의 일운",periods:["초년운 (0~30세)","중년운 (30~55세)","말년운 (55세~)"],yearly:"년 운세",monthly:"월운",daily:"오늘의 일운",locked:"잠금",proofTitle:"이 분석에 실제 반영된 정보",proofPillarsLabel:"사주 원국",proofDaymasterLabel:"일간 · 오행 포인트",focusBannerLabel:"이번 분석의 질문",whyPayTitle:"왜 잠금 해제하나요",whyPayCopy:"지금 보이는 내용은 핵심 요약입니다. 잠금 해제하면 인생 단계별 흐름, 올해와 내년의 변화, 이번 달 기회와 주의 포인트까지 이어서 볼 수 있습니다."},
+  en:{
+    heroTitle:"天 命",heroSub:"CHEONMYEONG · DESTINY",introTitle:"ONE CHART, ONE DECISION",introCopy:"This is not just poetic fortune-telling. It reads your natal chart and current cycle to show what to push, what to delay, and where your timing is sharpest right now.",pill1:"actual BaZi chart",pill2:"current fortune cycle",pill3:"your question included",labelDate:"DATE OF BIRTH",labelYear:"YR",labelMonth:"MO",labelDay:"DY",labelTimeSection:"BIRTH TIME",labelHour:"HR",labelMinute:"MIN",labelQuestion:"YOUR BIGGEST QUESTION RIGHT NOW",questionCopy:"If you are standing at a crossroads, write it down. The more specific it is, the more useful the reading becomes.",questionHelp:"Leave it blank for a full general reading.",questionPlaceholder:"Example: Should I change jobs this year? Should I stay in this relationship? Is it the right time to expand my business?",labelGender:"GENDER",textMale:"male",textFemale:"female",analyzeBtn:"REVEAL MY DESTINY",genderHint:"Please select your gender",timeHint:"Unknown time → Analysis based on noon (12:00)",resetBtn:"Start Over",disclaimer:"AI analysis is for reference only. For health, legal, or financial decisions, consult a qualified professional.",hourUnknown:"Unknown",minuteUnknown:"—",loading:["Reading the Heavenly Stems","Calculating Earthly Branches","Tracing the current cycle","Weaving in your question"],loadingSub:"Building a grounded reading from your chart",genderMale:"Male",genderFemale:"Female",docTitle:"天命 · Cheonmyeong — BaZi Analysis",lockedTitle:"DEEPER READING",lockedSub:"Unlock to reveal your complete destiny",unlockLabel:"UNLOCK FULL READING",unlockSub:"one-time · instant access",uf1:"Early · Middle · Late Life Periods",uf2:"This year · next year · the year after",uf3:"This Month's Energy",uf4:"Today's Daily Reading",periods:["Early Life (0~30)","Middle Years (30~55)","Final Chapter (55+)"],yearly:" Fortune",monthly:"This Month",daily:"Today's Reading",locked:"Locked",proofTitle:"WHAT THIS READING USED",proofPillarsLabel:"Four Pillars",proofDaymasterLabel:"Day Master · Element Focus",focusBannerLabel:"FOCUS OF THIS READING",whyPayTitle:"WHY UNLOCK",whyPayCopy:"What you see first is the sharp summary. Unlock the deeper layer to view stage-by-stage life flow, this year and next year, plus your monthly and daily timing."}
+};
+let currentLang=(navigator.language||"ko").startsWith("ko")?"ko":"en";
+function setLang(lang){
+  currentLang=lang; const t=T[lang]; document.documentElement.lang=lang; document.title=t.docTitle;
+  document.getElementById("btn-ko").className="lang-btn"+(lang==="ko"?" active":"");
+  document.getElementById("btn-en").className="lang-btn"+(lang==="en"?" active":"");
+  const m={"hero-title":t.heroTitle,"hero-sub":t.heroSub,"intro-title":t.introTitle,"intro-copy":t.introCopy,"pill-1":t.pill1,"pill-2":t.pill2,"pill-3":t.pill3,"label-date":t.labelDate,"label-year":t.labelYear,"label-month":t.labelMonth,"label-day":t.labelDay,"label-time-section":t.labelTimeSection,"label-hour":t.labelHour,"label-minute":t.labelMinute,"label-question":t.labelQuestion,"question-copy":t.questionCopy,"question-help":t.questionHelp,"label-gender":t.labelGender,"text-male":t.textMale,"text-female":t.textFemale,"analyze-btn":t.analyzeBtn,"gender-hint":t.genderHint,"time-hint":t.timeHint,"reset-btn":t.resetBtn,"disclaimer":t.disclaimer,"loading-sub":t.loadingSub,"locked-title-text":t.lockedTitle,"locked-sub-text":t.lockedSub,"unlock-label":t.unlockLabel,"unlock-sub":t.unlockSub,"uf1":t.uf1,"uf2":t.uf2,"uf3":t.uf3,"uf4":t.uf4,"proof-title":t.proofTitle,"proof-pillars-label":t.proofPillarsLabel,"proof-daymaster-label":t.proofDaymasterLabel,"focus-banner-label":t.focusBannerLabel,"why-pay-title":t.whyPayTitle,"why-pay-copy":t.whyPayCopy};
+  Object.entries(m).forEach(([id,v])=>{ const el=document.getElementById(id); if(el) el.textContent=v; });
+  document.getElementById('focus-question').placeholder=t.questionPlaceholder;
+  rebuildTimePickers();
+}
+
+const IH=44,VIS=5;
+function createDrum(el,items,initVal,onChange,disabled){
+  el.style.height=(IH*VIS)+"px"; el.innerHTML="";
+  if(disabled) el.classList.add("disabled"); else el.classList.remove("disabled");
+  let bi=Math.max(0,items.indexOf(initVal));
+  let drag={on:false,pointerId:null,sY:0,dy:0,moved:false};
+  const fT=document.createElement("div"); fT.className="drum-fade-top"; fT.style.height=IH*2+"px";
+  const fB=document.createElement("div"); fB.className="drum-fade-bot"; fB.style.height=IH*2+"px";
+  const sel=document.createElement("div"); sel.className="drum-selector"; sel.style.cssText=`top:${IH*2}px;height:${IH}px`;
+  const list=document.createElement("div"); list.className="drum-list";
+  items.forEach((item,i)=>{
+    const d=document.createElement("div");
+    d.className="drum-item far";
+    d.style.height=IH+"px";
+    d.style.fontSize="13px";
+    d.textContent=item;
+    d.onclick=()=>{
+      if(disabled || drag.moved) return;
+      bi=i; render(); onChange(items[i]);
+    };
+    list.appendChild(d);
+  });
+  el.appendChild(fT); el.appendChild(fB); el.appendChild(sel); el.appendChild(list);
+  function clamp(v){ return Math.max(0,Math.min((items.length-1)*IH,v)); }
+  function snap(v){ return Math.round(clamp(v)/IH); }
+  function raw(){ return bi*IH+(drag.on?drag.dy:0); }
+  function render(){
+    const ai=snap(raw());
+    const ty=-clamp(raw())+IH*2;
+    list.style.transition=drag.on?"none":"transform 0.22s cubic-bezier(.25,.8,.25,1)";
+    list.style.transform=`translateY(${ty}px)`;
+    list.childNodes.forEach((d,i)=>{
+      const dist=Math.abs(i-ai);
+      d.className="drum-item "+(dist===0?"active":dist===1?"near":"far");
+      d.style.fontSize=dist===0?"19px":"13px";
+      d.style.fontWeight=dist===0?"500":"400";
+    });
+  }
+  function lockPageScroll(lock){ document.body.classList.toggle('picker-lock', !!lock); }
+  function begin(clientY,pointerId){
+    if(disabled) return;
+    drag={on:true,pointerId:pointerId??null,sY:clientY,dy:0,moved:false};
+    lockPageScroll(true);
+    render();
+  }
+  function move(clientY){
+    if(!drag.on) return;
+    drag.dy=drag.sY-clientY;
+    if(Math.abs(drag.dy)>6) drag.moved=true;
+    render();
+  }
+  function end(){
+    if(!drag.on) return;
+    bi=snap(raw());
+    const changed=items[bi];
+    drag={on:false,pointerId:null,sY:0,dy:0,moved:drag.moved};
+    lockPageScroll(false);
+    render();
+    onChange(changed);
+    setTimeout(()=>{ drag.moved=false; }, 0);
+  }
+  render();
+  if(!disabled){
+    el.addEventListener('pointerdown',e=>{
+      begin(e.clientY,e.pointerId);
+      el.setPointerCapture?.(e.pointerId);
+      e.preventDefault();
+    }, {passive:false});
+    el.addEventListener('pointermove',e=>{
+      if(!drag.on) return;
+      move(e.clientY);
+      e.preventDefault();
+    }, {passive:false});
+    el.addEventListener('pointerup',e=>{ end(); e.preventDefault(); }, {passive:false});
+    el.addEventListener('pointercancel',()=>{ end(); }, {passive:false});
+    el.addEventListener('wheel',e=>{
+      e.preventDefault();
+      const dir=e.deltaY>0?1:-1;
+      bi=Math.max(0,Math.min(items.length-1,bi+dir));
+      render();
+      onChange(items[bi]);
+    }, {passive:false});
+  }
+  return{
+    setValue(v){ const i=items.indexOf(v); if(i>=0){ bi=i; render(); } },
+    enable(){ el.classList.remove("disabled"); disabled=false; },
+    disable(){ el.classList.add("disabled"); disabled=true; }
+  };
+}
+
+const CY=new Date().getFullYear();
+const years=Array.from({length:110},(_,i)=>CY-i);
+const months=Array.from({length:12},(_,i)=>i+1);
+let state={year:1990,month:6,day:15,hour:null,minute:null,gender:null,focusQuestion:""};
+function getDays(y,m){ return Array.from({length:new Date(y,m,0).getDate()},(_,i)=>i+1); }
+function getHours(){ const t=T[currentLang]; return [t.hourUnknown,...Array.from({length:24},(_,i)=>String(i).padStart(2,"0"))]; }
+function getMinutes(){ const t=T[currentLang]; return [t.minuteUnknown,...Array.from({length:60},(_,i)=>String(i).padStart(2,"0"))]; }
+
+let dY,dM,dD,dH,dMin;
+function initPickers(){
+  dY=createDrum(document.getElementById("drum-year"),years,state.year,v=>{ state.year=v; refreshDays(); },false);
+  dM=createDrum(document.getElementById("drum-month"),months,state.month,v=>{ state.month=v; refreshDays(); },false);
+  dD=createDrum(document.getElementById("drum-day"),getDays(state.year,state.month),state.day,v=>{ state.day=v; },false);
+  const hrs=getHours(); state.hour=hrs[0];
+  dH=createDrum(document.getElementById("drum-hour"),hrs,state.hour,v=>{ state.hour=v; const t=T[currentLang]; const noT=v===t.hourUnknown; document.getElementById("time-hint").style.display=noT?"block":"none"; document.getElementById("sep-time").className="picker-sep"+(noT?" dim":""); document.getElementById("label-minute").className="drum-label"+(noT?" disabled":""); if(noT){ dMin.disable(); state.minute=t.minuteUnknown; } else dMin.enable(); },false);
+  const mins=getMinutes(); state.minute=mins[0];
+  dMin=createDrum(document.getElementById("drum-minute"),mins,state.minute,v=>{ state.minute=v; },true);
+}
+function rebuildTimePickers(){
+  const hrs=getHours(); const mins=getMinutes();
+  dH=createDrum(document.getElementById("drum-hour"),hrs,hrs[0],v=>{ state.hour=v; const t=T[currentLang]; const noT=v===t.hourUnknown; document.getElementById("time-hint").style.display=noT?"block":"none"; document.getElementById("sep-time").className="picker-sep"+(noT?" dim":""); document.getElementById("label-minute").className="drum-label"+(noT?" disabled":""); if(noT){ dMin.disable(); state.minute=t.minuteUnknown; } else dMin.enable(); },false);
+  state.hour=hrs[0]; dMin=createDrum(document.getElementById("drum-minute"),mins,mins[0],v=>{ state.minute=v; },true); state.minute=mins[0]; document.getElementById("time-hint").style.display="block";
+}
+function refreshDays(){ const nd=getDays(state.year,state.month); const el=document.getElementById("drum-day"); el.innerHTML=""; const nv=state.day>nd.length?nd[nd.length-1]:state.day; state.day=nv; dD=createDrum(el,nd,nv,v=>{ state.day=v; },false); }
+function selectGender(g){ state.gender=g; document.getElementById("btn-male").className="gender-btn"+(g==="male"?" active":""); document.getElementById("btn-female").className="gender-btn"+(g==="female"?" active":""); document.getElementById("gender-hint").style.display="none"; document.getElementById("analyze-btn").className="analyze-btn ready"; }
+
+let msgT;
+function startLoadingMsgs(){ const msgs=T[currentLang].loading; let i=0; document.getElementById("loading-msg").textContent=msgs[0]; msgT=setInterval(()=>{ i=(i+1)%msgs.length; document.getElementById("loading-msg").textContent=msgs[i]; },1800); }
+function stopLoadingMsgs(){ clearInterval(msgT); }
+
+function formatElements(bazi){
+  if(!bazi) return '';
+  const labels=currentLang==='ko'?{Wood:'목',Fire:'화',Earth:'토',Metal:'금',Water:'수'}:{Wood:'Wood',Fire:'Fire',Earth:'Earth',Metal:'Metal',Water:'Water'};
+  const order=['Wood','Fire','Earth','Metal','Water'];
+  return order.map((k,idx)=>`${labels[k]} ${bazi.elements?.[idx] ?? 0}`).join(' · ');
+}
+
+async function analyze(){
+  if(!state.gender) return;
+  const t=T[currentLang];
+  state.focusQuestion=document.getElementById('focus-question').value.trim();
+  document.getElementById("error-box").style.display="none";
+  document.getElementById("loading").style.display="flex";
+  document.getElementById("form-section").style.display="none";
+  startLoadingMsgs();
+  const hv=(state.hour===t.hourUnknown)?"모름":state.hour;
+  const mv=(state.minute===t.minuteUnknown||state.minute==="—")?"모름":state.minute;
+  try{
+    const res=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({year:state.year,month:state.month,day:state.day,hour:hv,minute:mv,gender:state.gender,lang:currentLang,focusQuestion:state.focusQuestion})});
+    const data=await res.json();
+    if(data.error) throw new Error(data.error);
+    stopLoadingMsgs(); document.getElementById("loading").style.display="none"; showResult(data);
+  }catch(e){
+    stopLoadingMsgs(); document.getElementById("loading").style.display="none"; document.getElementById("form-section").style.display="block";
+    const eb=document.getElementById("error-box"); eb.textContent=(currentLang==="ko"?"오류: ":"Error: ")+e.message; eb.style.display="block";
+  }
+}
+
+function showResult(data){
+  const t=T[currentLang];
+  const gl=state.gender==="male"?t.genderMale:t.genderFemale;
+  const resultMeta=currentLang==="ko"?`${state.year}년 ${state.month}월 ${state.day}일 · ${gl}`:`${state.month}/${state.day}/${state.year} · ${gl}`;
+  document.getElementById("result-meta").textContent=resultMeta;
+  document.getElementById("result-headline").textContent=data.headline||"";
+  document.getElementById("result-essence").textContent=data.essence||"";
+
+  const focusBanner=document.getElementById('focus-banner');
+  if(state.focusQuestion){
+    focusBanner.style.display='block';
+    document.getElementById('focus-banner-copy').textContent=state.focusQuestion;
+  } else {
+    focusBanner.style.display='none';
+  }
+
+  if(data._bazi){
+    document.getElementById('result-proof').style.display='block';
+    const hourLabel=data._bazi.pillars?.hour && data._bazi.pillars.hour !== '?' ? ` / ${data._bazi.pillars.hour}` : '';
+    document.getElementById('proof-pillars').textContent=currentLang==='ko'
+      ? `${data._bazi.pillars.year} · ${data._bazi.pillars.month} · ${data._bazi.pillars.day}${hourLabel}`
+      : `${data._bazi.pillars.year} · ${data._bazi.pillars.month} · ${data._bazi.pillars.day}${hourLabel}`;
+    const weak = (data._bazi.weak||[]).join(', ') || '-';
+    const strong = (data._bazi.strong||[]).join(', ') || '-';
+    document.getElementById('proof-daymaster').textContent=currentLang==='ko'
+      ? `일간 ${data._bazi.dayMaster} / ${formatElements(data._bazi)} / 결핍 ${weak} / 과다 ${strong}`
+      : `Day Master ${data._bazi.dayMaster} / ${formatElements(data._bazi)} / Deficient ${weak} / Excess ${strong}`;
+  }
+
+  const cont=document.getElementById("result-sections"); cont.innerHTML="";
+  (data.sections||[]).forEach((sec,i)=>{
+    const div=document.createElement("div"); div.className="section"; div.style.transitionDelay=(i*0.07)+"s";
+    div.innerHTML=`<div class="section-title-wrap"><span class="section-icon">${sec.icon}</span><span class="section-title">${sec.title}</span></div><div class="section-body">${sec.body}</div>`;
+    cont.appendChild(div);
+  });
+
+  const cy=new Date().getFullYear(); const cm=new Date().getMonth()+1;
+  if(data.locked){
+    document.getElementById('why-pay-card').style.display='block';
+    const wrap=document.getElementById("locked-wrap"); wrap.style.display="block";
+    const cards=document.getElementById("locked-cards"); cards.innerHTML="";
+    [
+      {title:t.periods[0],preview:data.locked.periods?.early||""},
+      {title:t.periods[1],preview:data.locked.periods?.mid||""},
+      {title:t.periods[2],preview:data.locked.periods?.late||""},
+      {title:`${cy}${t.yearly}`,preview:data.locked.yearly?.[0]?.fortune||""},
+      {title:`${cy+1}${t.yearly}`,preview:data.locked.yearly?.[1]?.fortune||""},
+      {title:`${cy+2}${t.yearly}`,preview:data.locked.yearly?.[2]?.fortune||""},
+      {title:currentLang==="ko"?`${cm}월 ${t.monthly}`:t.monthly,preview:data.locked.monthly||""},
+      {title:t.daily,preview:data.locked.daily||""}
+    ].forEach(item=>{
+      const preview=(item.preview||'').trim() || (currentLang==='ko'?'분석 준비 중':'Prepared in the locked reading');
+      const card=document.createElement("div"); card.className="locked-card";
+      card.innerHTML=`<div class="locked-card-inner"><div class="locked-card-title">${item.title}</div><div class="locked-card-preview">${preview.substring(0,110)}...</div></div><div class="locked-overlay"><div class="lock-icon">🔒</div><div class="locked-label">${t.locked}</div></div>`;
+      cards.appendChild(card);
+    });
+  }
+
+  document.getElementById("result").style.display="block";
+  window.scrollTo({top:0,behavior:"smooth"});
+  const obs=new IntersectionObserver(e=>{ e.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add("visible"); }); },{threshold:0.05});
+  document.querySelectorAll(".section").forEach(s=>obs.observe(s));
+}
+
+function resetApp(){
+  document.getElementById("result").style.display="none";
+  document.getElementById("locked-wrap").style.display="none";
+  document.getElementById("why-pay-card").style.display="none";
+  document.getElementById("result-proof").style.display="none";
+  document.getElementById("focus-banner").style.display="none";
+  document.getElementById("form-section").style.display="block";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+initPickers();
+setLang(currentLang);
+</script>
+</body>
+</html>
