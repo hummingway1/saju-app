@@ -16,7 +16,7 @@ export default async function handler(req,res){
   const astro=await fetch("https://api.astroapi.com/v1/horoscope",{
     method:"POST",
     headers:{
-      "Authorization":"Bearer YOUR_API_KEY",
+      "Authorization":"Bearer ak-9a478ac3c43ffa71a7467cbd53bd5ba64b97050c",
       "Content-Type":"application/json"
     },
     body:JSON.stringify({
