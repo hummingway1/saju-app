@@ -27,7 +27,6 @@
   }
   .hero h1{margin:0;font-size:30px;letter-spacing:8px;font-weight:300;color:var(--bright)}
   .hero p{margin:10px 0 0;color:#4a3a58;font-size:11px;letter-spacing:4px}
-
   .panel{
     background:rgba(13,11,20,.9);
     border:1px solid var(--line);
@@ -37,81 +36,35 @@
     backdrop-filter: blur(10px);
   }
   .panel-title{font-size:11px;letter-spacing:4px;color:var(--muted);margin-bottom:12px}
-  .subtle{font-size:12px;color:#8e7a59;line-height:1.7}
-
-  .tarot-intro{
-    margin-bottom:14px;
-    color:#bfa988;
-    font-size:13px;
-    line-height:1.8;
-  }
-  .tarot-grid{
-    display:grid;
-    grid-template-columns:repeat(5, 1fr);
-    gap:10px;
-    perspective:1000px;
-  }
+  .tarot-intro{margin-bottom:14px;color:#bfa988;font-size:13px;line-height:1.8}
+  .tarot-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;perspective:1000px}
   .tarot-card{
-    position:relative;
-    height:108px;
-    border-radius:14px;
-    cursor:pointer;
-    transform-style:preserve-3d;
+    position:relative;height:108px;border-radius:14px;cursor:pointer;transform-style:preserve-3d;
     transition:transform .7s cubic-bezier(.2,.7,.1,1), box-shadow .3s ease, translate .3s ease;
-    border:1px solid rgba(201,169,110,.2);
-    box-shadow:0 8px 24px rgba(0,0,0,.18);
+    border:1px solid rgba(201,169,110,.2);box-shadow:0 8px 24px rgba(0,0,0,.18)
   }
   .tarot-card:hover{translate:0 -3px; box-shadow:0 12px 26px rgba(201,169,110,.12)}
   .tarot-card.flipped{transform:rotateY(180deg)}
   .tarot-card.disabled{pointer-events:none; opacity:.6}
   .card-face{
-    position:absolute; inset:0; border-radius:14px;
-    backface-visibility:hidden;
-    display:flex; align-items:center; justify-content:center;
-    padding:8px; text-align:center;
+    position:absolute; inset:0; border-radius:14px; backface-visibility:hidden;
+    display:flex; align-items:center; justify-content:center; padding:8px; text-align:center;
   }
   .card-back{
-    background:
-      radial-gradient(circle at 30% 20%, rgba(201,169,110,.16), transparent 25%),
-      linear-gradient(180deg, #1a1520, #0f0c14);
-    color:var(--gold);
-    font-size:15px;
-    letter-spacing:1px;
-  }
-  .card-back::after{
-    content:"✧";
-    position:absolute;
-    bottom:8px;
-    right:10px;
-    font-size:12px;
-    opacity:.55;
+    background: radial-gradient(circle at 30% 20%, rgba(201,169,110,.16), transparent 25%), linear-gradient(180deg, #1a1520, #0f0c14);
+    color:var(--gold); font-size:15px; letter-spacing:1px;
   }
   .card-front{
-    background:
-      radial-gradient(circle at top, rgba(238,217,180,.12), transparent 35%),
-      linear-gradient(180deg, #241a1f, #151018);
-    color:var(--bright);
-    transform:rotateY(180deg);
-    flex-direction:column;
-    gap:6px;
+    background: radial-gradient(circle at top, rgba(238,217,180,.12), transparent 35%), linear-gradient(180deg, #241a1f, #151018);
+    color:var(--bright); transform:rotateY(180deg); flex-direction:column; gap:6px;
   }
   .card-front .title{font-size:14px;font-weight:700}
   .card-front .mini{font-size:11px;color:#ceb58d;line-height:1.5}
   .tarot-result{
-    margin-top:14px;
-    padding:12px 12px;
-    border-radius:14px;
-    background:#13101e;
-    border:1px solid #211a29;
-    font-size:13px;
-    color:#d4be97;
-    line-height:1.8;
-    opacity:0;
-    transform:translateY(8px);
-    transition:.4s ease;
+    margin-top:14px; padding:12px 12px; border-radius:14px; background:#13101e; border:1px solid #211a29;
+    font-size:13px; color:#d4be97; line-height:1.8; opacity:0; transform:translateY(8px); transition:.4s ease;
   }
   .tarot-result.show{opacity:1; transform:none}
-
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .field{margin-bottom:12px}
   .field.full{grid-column:1/-1}
@@ -123,12 +76,8 @@
   textarea{min-height:88px;resize:vertical}
   .box{cursor:pointer}
   .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{
-    padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:#13101e;color:var(--text);
-    font-size:12px;cursor:pointer
-  }
+  .chip{padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:#13101e;color:var(--text);font-size:12px;cursor:pointer}
   .chip.active{border-color:var(--gold-dim);background:#1b1720;color:#f1dfb8}
-
   .cta{
     width:100%;padding:16px;border:none;border-radius:14px;cursor:pointer;margin-top:10px;
     background:linear-gradient(135deg,var(--gold),#a07840);color:#111;font-weight:700;letter-spacing:2px
@@ -150,10 +99,7 @@
   .hooks p{margin:6px 0;font-size:13px;line-height:1.8;color:#b8a483}
   .detail{white-space:pre-wrap;font-size:14px;line-height:1.95;color:#d9c6a1}
   .meta{font-size:12px;color:#8f7d5b;line-height:1.7;margin-top:12px}
-
-  .sheet-backdrop{
-    position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:.25s;z-index:1000
-  }
+  .sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:.25s;z-index:1000}
   .sheet-backdrop.active{opacity:1;pointer-events:auto}
   .sheet{
     position:fixed;left:0;right:0;bottom:-85vh;height:72vh;background:#0d0b14;border-top:1px solid var(--line);
@@ -204,7 +150,7 @@
     </div>
 
     <button class="cta" onclick="runFreeAnalysis()">무료 결과 먼저 보기</button>
-    <div class="note">무료는 핵심 흐름과 경고만 열립니다. 더 깊은 뜻과 행동 조언은 유료에서만 열립니다.</div>
+    <div class="note">무료는 타로와 사주 원국만으로 핵심 흐름을 먼저 보여드립니다. 출생 차트와 깊은 해석은 유료에서만 열립니다.</div>
     <div id="loading" class="loading">기운을 정리하는 중…</div>
     <div id="errorBox" class="error"></div>
   </div>
@@ -218,7 +164,7 @@
       <p id="hookRisk"></p>
       <p id="hookTiming"></p>
     </div>
-    <button id="unlockBtn" class="subcta" onclick="runPaidAnalysis()">상세 해석 열기 · 유료</button>
+    <button id="unlockBtn" class="subcta" onclick="runPaidAnalysis()">출생 차트까지 열기 · 유료</button>
     <div class="meta" id="metaText"></div>
     <div id="detailBox" class="detail hidden"></div>
   </div>
@@ -269,69 +215,50 @@ function buildTarotGrid(){
     grid.appendChild(el);
   });
 }
-
 function selectTarot(idx){
   const cards = Array.from(document.querySelectorAll(".tarot-card"));
   const picked = tarotDeck[idx];
   selectedTarot = picked;
-
   cards.forEach((cardEl, i) => {
-    if (i === idx) {
-      cardEl.classList.add("flipped");
-    } else {
-      cardEl.classList.add("disabled");
-    }
+    if (i === idx) cardEl.classList.add("flipped");
+    else cardEl.classList.add("disabled");
   });
-
   const result = document.getElementById("tarotResult");
   setTimeout(() => {
-    result.innerHTML = `<strong>${picked.title}</strong><br>${picked.message}<br><br>이제 아래에서 정밀 분석으로 넘어가면, 이 카드가 왜 지금의 사주와 출생 차트 흐름과 맞닿아 있는지 더 깊게 볼 수 있습니다.`;
+    result.innerHTML = `<strong>${picked.title}</strong><br>${picked.message}<br><br>이제 아래에서 무료 결과를 열어보면, 이 카드가 당신의 사주 원국과 어떤 방향으로 겹쳐지는지 먼저 드러납니다.`;
     result.classList.add("show");
   }, 520);
 }
 
-const saved = localStorage.getItem("cheonmyeong_state_v2");
+const saved = localStorage.getItem("cheonmyeong_state_v5");
 if (saved) {
-  try {
-    const parsed = JSON.parse(saved);
-    state = { ...state, ...parsed };
-  } catch (e) {}
+  try { state = { ...state, ...JSON.parse(saved) }; } catch (e) {}
 }
-
-function persistState(){
-  localStorage.setItem("cheonmyeong_state_v2", JSON.stringify(state));
-}
+function persistState(){ localStorage.setItem("cheonmyeong_state_v5", JSON.stringify(state)); }
 function renderState(){
-  document.getElementById("yearText").textContent = state.year ?? "선택";
-  document.getElementById("monthText").textContent = state.month ?? "선택";
-  document.getElementById("dayText").textContent = state.day ?? "선택";
-  document.getElementById("hourText").textContent = state.hour ?? "모름";
-  document.getElementById("maleChip").classList.toggle("active", state.gender === "male");
-  document.getElementById("femaleChip").classList.toggle("active", state.gender === "female");
+  yearText.textContent = state.year ?? "선택";
+  monthText.textContent = state.month ?? "선택";
+  dayText.textContent = state.day ?? "선택";
+  hourText.textContent = state.hour ?? "모름";
+  maleChip.classList.toggle("active", state.gender === "male");
+  femaleChip.classList.toggle("active", state.gender === "female");
 }
-function setGender(g){
-  state.gender = g;
-  persistState();
-  renderState();
-}
+function setGender(g){ state.gender = g; persistState(); renderState(); }
 
 function openSheet(type){
   const titleMap = { year:"생년 선택", month:"월 선택", day:"일 선택", hour:"출생 시각 선택" };
-  document.getElementById("sheetTitle").textContent = titleMap[type] || "선택";
+  sheetTitle.textContent = titleMap[type] || "선택";
   const list = [];
-  if (type === "year") {
-    for (let y = new Date().getFullYear(); y >= 1920; y--) list.push(y);
-  } else if (type === "month") {
-    for (let m = 1; m <= 12; m++) list.push(m);
-  } else if (type === "day") {
+  if (type === "year") for (let y = new Date().getFullYear(); y >= 1920; y--) list.push(y);
+  else if (type === "month") for (let m = 1; m <= 12; m++) list.push(m);
+  else if (type === "day") {
     const days = new Date(state.year || 2000, state.month || 1, 0).getDate();
     for (let d = 1; d <= days; d++) list.push(d);
   } else if (type === "hour") {
     list.push("모름");
     for (let h = 0; h < 24; h++) list.push(String(h).padStart(2, "0"));
   }
-  const box = document.getElementById("sheetList");
-  box.innerHTML = "";
+  sheetList.innerHTML = "";
   list.forEach(v => {
     const div = document.createElement("div");
     div.className = "item";
@@ -342,22 +269,17 @@ function openSheet(type){
         const days = new Date(state.year || 2000, state.month || 1, 0).getDate();
         if (state.day > days) state.day = days;
       }
-      persistState();
-      renderState();
-      closeSheet();
+      persistState(); renderState(); closeSheet();
     };
-    box.appendChild(div);
+    sheetList.appendChild(div);
   });
-  document.getElementById("sheetBackdrop").classList.add("active");
-  document.getElementById("sheet").classList.add("active");
+  sheetBackdrop.classList.add("active");
+  sheet.classList.add("active");
 }
-function closeSheet(){
-  document.getElementById("sheetBackdrop").classList.remove("active");
-  document.getElementById("sheet").classList.remove("active");
-}
+function closeSheet(){ sheetBackdrop.classList.remove("active"); sheet.classList.remove("active"); }
 
 async function geocodeLocation(){
-  const q = document.getElementById("locationInput").value.trim();
+  const q = locationInput.value.trim();
   if (!q) throw new Error("출생지를 입력해 주세요.");
   const res = await fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=" + encodeURIComponent(q), {
     headers: { "Accept": "application/json" }
@@ -366,20 +288,9 @@ async function geocodeLocation(){
   if (!Array.isArray(data) || !data.length) throw new Error("입력한 출생지를 찾지 못했습니다.");
   return { query:q, lat:Number(data[0].lat), lon:Number(data[0].lon) };
 }
-
-function showError(msg){
-  const el = document.getElementById("errorBox");
-  el.textContent = msg;
-  el.style.display = "block";
-}
-function clearError(){
-  const el = document.getElementById("errorBox");
-  el.textContent = "";
-  el.style.display = "none";
-}
-function setLoading(on){
-  document.getElementById("loading").style.display = on ? "block" : "none";
-}
+function showError(msg){ errorBox.textContent = msg; errorBox.style.display = "block"; }
+function clearError(){ errorBox.textContent = ""; errorBox.style.display = "none"; }
+function setLoading(on){ loading.style.display = on ? "block" : "none"; }
 function validateCore(){
   if (!state.year || !state.month || !state.day) throw new Error("생년월일을 먼저 선택해 주세요.");
   if (!state.gender) throw new Error("성별을 선택해 주세요.");
@@ -387,16 +298,11 @@ function validateCore(){
 
 async function runFreeAnalysis(){
   try{
-    clearError();
-    validateCore();
-    setLoading(true);
-    lastLocation = await geocodeLocation();
+    clearError(); validateCore(); setLoading(true);
     const payload = {
       ...state,
       gender: state.gender,
-      minute: 0,
-      question: document.getElementById("questionInput").value.trim(),
-      location: lastLocation,
+      question: questionInput.value.trim(),
       paid: false,
       tarot: selectedTarot
     };
@@ -410,21 +316,17 @@ async function runFreeAnalysis(){
     renderFreeResult(data);
   } catch (e){
     showError(e.message);
-  } finally {
-    setLoading(false);
-  }
+  } finally { setLoading(false); }
 }
 async function runPaidAnalysis(){
   try{
-    clearError();
-    validateCore();
-    setLoading(true);
+    clearError(); validateCore(); setLoading(true);
     if (!lastLocation) lastLocation = await geocodeLocation();
     const payload = {
       ...state,
       gender: state.gender,
       minute: 0,
-      question: document.getElementById("questionInput").value.trim(),
+      question: questionInput.value.trim(),
       location: lastLocation,
       paid: true,
       tarot: selectedTarot
@@ -439,36 +341,34 @@ async function runPaidAnalysis(){
     renderPaidResult(data);
   } catch (e){
     showError(e.message);
-  } finally {
-    setLoading(false);
-  }
+  } finally { setLoading(false); }
 }
 
 function renderFreeResult(data){
-  document.getElementById("resultBox").classList.remove("hidden");
-  document.getElementById("badge").className = "free-badge";
-  document.getElementById("badge").textContent = "FREE RESULT";
-  document.getElementById("resultTitle").textContent = data.free.title || "당신의 흐름";
-  document.getElementById("decisionText").textContent = data.free.decision || "";
-  document.getElementById("hookRisk").textContent = "⚠ " + (data.free.riskHook || "");
-  document.getElementById("hookTiming").textContent = "⏱ " + (data.free.timingHook || "");
-  document.getElementById("metaText").textContent = "사주 원국과 실제 출생 차트에서 계산된 흐름을 바탕으로, 무료 구간에서 먼저 드러난 핵심만 보여드립니다.";
-  document.getElementById("detailBox").classList.add("hidden");
-  document.getElementById("detailBox").textContent = "";
-  window.scrollTo({ top: document.getElementById("resultBox").offsetTop - 16, behavior: "smooth" });
+  resultBox.classList.remove("hidden");
+  badge.className = "free-badge";
+  badge.textContent = "FREE RESULT";
+  resultTitle.textContent = data.free.title || "당신의 흐름";
+  decisionText.textContent = data.free.decision || "";
+  hookRisk.textContent = "⚠ " + (data.free.riskHook || "");
+  hookTiming.textContent = "⏱ " + (data.free.timingHook || "");
+  metaText.textContent = "무료 결과는 타로와 사주 원국만으로 먼저 열립니다. 출생 차트와 더 깊은 뜻은 유료에서 이어집니다.";
+  detailBox.classList.add("hidden");
+  detailBox.textContent = "";
+  window.scrollTo({ top: resultBox.offsetTop - 16, behavior: "smooth" });
 }
 function renderPaidResult(data){
-  document.getElementById("resultBox").classList.remove("hidden");
-  document.getElementById("badge").className = "paid-badge";
-  document.getElementById("badge").textContent = "PAID DETAIL";
-  document.getElementById("resultTitle").textContent = data.free.title || "당신의 흐름";
-  document.getElementById("decisionText").textContent = data.free.decision || "";
-  document.getElementById("hookRisk").textContent = "⚠ " + (data.free.riskHook || "");
-  document.getElementById("hookTiming").textContent = "⏱ " + (data.free.timingHook || "");
-  document.getElementById("metaText").textContent = "이제 무료 결과 뒤에 숨어 있던 뜻과, 지금의 선택이 어디로 이어지는지 더 깊게 열립니다.";
-  document.getElementById("detailBox").classList.remove("hidden");
-  document.getElementById("detailBox").textContent = data.detail || "";
-  window.scrollTo({ top: document.getElementById("resultBox").offsetTop - 16, behavior: "smooth" });
+  resultBox.classList.remove("hidden");
+  badge.className = "paid-badge";
+  badge.textContent = "PAID DETAIL";
+  resultTitle.textContent = data.free.title || "당신의 흐름";
+  decisionText.textContent = data.free.decision || "";
+  hookRisk.textContent = "⚠ " + (data.free.riskHook || "");
+  hookTiming.textContent = "⏱ " + (data.free.timingHook || "");
+  metaText.textContent = "이제 실제 출생 차트까지 더해져, 왜 이런 흐름이 나타나는지 안쪽의 뜻이 더 분명하게 열립니다.";
+  detailBox.classList.remove("hidden");
+  detailBox.textContent = data.detail || "";
+  window.scrollTo({ top: resultBox.offsetTop - 16, behavior: "smooth" });
 }
 
 buildTarotGrid();

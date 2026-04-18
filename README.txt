@@ -1,4 +1,4 @@
-Cheonmyeong Tarot v4
+Cheonmyeong Free Zero v5
 
 Files:
 - index.html
@@ -10,8 +10,7 @@ Environment variables on Vercel:
 - ASTROLOGY_API_USER_ID
 - ASTROLOGY_API_KEY
 
-This version adds:
-- 10 selectable tarot cards with flip animation
-- gentler fortune-teller style copy
-- free result uses real Saju + real AstrologyAPI data only
-- paid result uses OpenAI once
+Important:
+- FREE result uses Tarot + Saju only
+- FREE result uses NO AstrologyAPI and NO OpenAI
+- PAID result uses AstrologyAPI + OpenAI

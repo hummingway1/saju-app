@@ -1,4 +1,3 @@
-// Cost-optimized analyzer with gentler fortune-teller tone
 export const config = {
   runtime: "nodejs"
 };
@@ -86,7 +85,6 @@ async function fetchAstrologyData(payload){
   const userId = process.env.ASTROLOGY_API_USER_ID;
   const apiKey = process.env.ASTROLOGY_API_KEY;
   if (!userId || !apiKey) throw new Error("ASTROLOGY_API_USER_ID 또는 ASTROLOGY_API_KEY 환경변수가 없다");
-
   const auth = Buffer.from(`${userId}:${apiKey}`).toString("base64");
   const hour = payload.hour === "모름" ? 12 : Number(payload.hour);
   const minute = Number(payload.minute || 0);
@@ -142,7 +140,7 @@ function summarizeAstrology(planets){
   };
 }
 
-function makeFreeHooks({ saju, astrologySummary, question, tarot }) {
+function makeFreeHooks({ saju, question, tarot }) {
   const q = (question || "").toLowerCase();
   const dm = saju.dayMaster;
   const strong = saju.strong.join(", ");
@@ -150,19 +148,19 @@ function makeFreeHooks({ saju, astrologySummary, question, tarot }) {
 
   let decision = "지금의 흐름은 서두르기보다, 마음과 현실의 기준을 먼저 맞추라고 말하고 있습니다.";
   let riskHook = `강하게 드러난 기운(${strong})이 앞서고 약한 기운(${weak})이 뒤로 밀리면, 생각보다 한쪽으로 치우친 판단이 나오기 쉽습니다.`;
-  let timingHook = "올해 안에는 한 번 방향이 갈리는 시점이 있습니다. 그 무렵의 선택이 이후의 무게를 바꾸게 됩니다.";
+  let timingHook = "지금부터 가까운 시기 안에 한 번 방향이 갈리는 장면이 보입니다. 그때의 선택이 이후의 표정을 바꾸게 됩니다.";
 
   if (q.includes("이직") || q.includes("직장") || q.includes("career")) {
     if (dm === "Wood" || dm === "Fire") {
-      decision = "일의 흐름은 열릴 수 있습니다. 다만 마음이 먼저 지쳐 손을 놓기보다는, 자리를 옮길 이유와 조건을 먼저 또렷하게 세우는 편이 좋습니다.";
-      timingHook = `태양 ${astrologySummary.sun || "정보없음"}, 화성 ${astrologySummary.mars || "정보없음"}의 결을 보면, 준비된 이동은 힘이 되지만 충동적인 결정은 오래 남지 않을 수 있습니다.`;
+      decision = "일의 문은 열릴 수 있습니다. 다만 마음이 먼저 지쳐 손을 놓기보다, 옮길 이유와 조건을 먼저 또렷하게 세우는 편이 좋습니다.";
+      timingHook = "변화를 향한 마음은 이미 움직이고 있습니다. 다만 준비가 갖춰진 뒤 내딛는 발걸음이 더 오래 갑니다.";
     } else {
       decision = "지금은 무작정 벗어나기보다, 다음 자리를 단단히 만든 뒤 움직이는 편이 더 안정적인 흐름입니다.";
       riskHook = "답답함을 끝내고 싶은 마음만 앞서면, 장소만 바뀐 채 같은 문제를 다시 만나게 될 가능성이 있습니다.";
     }
   } else if (q.includes("연애") || q.includes("사람") || q.includes("결혼") || q.includes("love")) {
-    decision = "관계의 문은 열려 있지만, 지금은 감정의 온도차를 가볍게 보면 상처가 남기 쉬운 시기입니다.";
-    timingHook = `달 ${astrologySummary.moon || "정보없음"}, 금성 ${astrologySummary.venus || "정보없음"}의 흐름상 마음을 확인해야 할 시점이 머지않아 다가옵니다.`;
+    decision = "관계의 문은 열려 있지만, 지금은 감정의 온도차를 가볍게 보면 마음에 잔상이 남기 쉬운 시기입니다.";
+    timingHook = "가까운 흐름 안에서 마음을 확인해야 할 장면이 한 번 또렷하게 다가올 수 있습니다.";
   } else if (q.includes("돈") || q.includes("사업") || q.includes("투자") || q.includes("money")) {
     decision = "재물의 흐름은 들어오기보다, 먼저 지키는 쪽에 뜻이 실려 있습니다. 크게 넓히기보다 손실을 줄이는 선택이 더 빛을 냅니다.";
     riskHook = "이번에는 자신감보다 계산이 중요합니다. 마음이 들뜬 순간일수록 숫자를 다시 확인하는 편이 좋습니다.";
@@ -173,7 +171,7 @@ function makeFreeHooks({ saju, astrologySummary, question, tarot }) {
   }
 
   if (tarot?.title) {
-    riskHook += ` 지금 손에 닿은 타로의 "${tarot.title}" 역시 같은 결을 조용히 비추고 있습니다.`;
+    riskHook += ` 지금 손에 닿은 타로의 "${tarot.title}" 또한 같은 결을 조용히 비추고 있습니다.`;
   }
 
   return {
@@ -257,10 +255,26 @@ export default async function handler(req, res){
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
     const payload = req.body || {};
-    const required = ["year","month","day","gender","location"];
-    for (const key of required) {
+    const requiredFree = ["year","month","day","gender"];
+    for (const key of requiredFree) {
       if (payload[key] == null) throw new Error(`${key} 값이 없다`);
     }
+
+    if (!payload.paid) {
+      const saju = buildSaju(payload);
+      const free = makeFreeHooks({
+        saju,
+        question: payload.question,
+        tarot: payload.tarot
+      });
+      return res.status(200).json({
+        free,
+        paid: false,
+        meta: { saju }
+      });
+    }
+
+    if (!payload.location) throw new Error("유료 분석에는 출생지가 필요하다");
 
     const key = cacheKey(payload);
     if (CACHE.has(key)) return res.status(200).json(CACHE.get(key));
@@ -270,28 +284,18 @@ export default async function handler(req, res){
     const astrologySummary = summarizeAstrology(astrologyRaw);
     const free = makeFreeHooks({
       saju,
-      astrologySummary,
       question: payload.question,
       tarot: payload.tarot
     });
 
-    let response = {
+    const response = {
       free,
-      paid: !!payload.paid,
-      meta: {
-        saju,
-        astrologySummary
-      }
+      paid: true,
+      meta: { saju, astrologySummary },
+      detail: await buildPaidDetail({
+        saju, astrologySummary, question: payload.question, tarot: payload.tarot
+      })
     };
-
-    if (payload.paid) {
-      response.detail = await buildPaidDetail({
-        saju,
-        astrologySummary,
-        question: payload.question,
-        tarot: payload.tarot
-      });
-    }
 
     CACHE.set(key, response);
     return res.status(200).json(response);
