@@ -1,145 +1,223 @@
-// v7
+// v8 — 실제 사주 계산 후 GPT에 전달
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   const { year, month, day, hour, minute, gender, lang } = req.body;
-
   const isEn = lang === "en";
-  const noTime = hour === "모름" || hour === "Unknown" || hour === null;
 
-  const timeStr = noTime
-    ? (isEn ? "Unknown (noon used)" : "시각 미상(정오 기준)")
-    : (isEn ? `${hour}:${minute === "—" || minute === "모름" ? "00" : minute}` : `${hour}시 ${minute === "—" ? "00" : minute}분`);
+  /* ══════════════════════════════════════════
+     1. 실제 사주 계산
+  ══════════════════════════════════════════ */
+  const STEMS    = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+  const BRANCHES = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+  const ELEMENTS    = ['木','火','金','水','土'];
+  const ELEMENTS_EN = ['Wood','Fire','Metal','Water','Earth'];
+  const ELEMENTS_KO = ['목(木)','화(火)','금(金)','수(水)','토(土)'];
 
-  const genderStr = isEn
-    ? (gender === "male" ? "Male" : "Female")
-    : (gender === "male" ? "남성" : "여성");
+  // 오행 인덱스: 木0 火1 金2 水3 土4
+  const STEM_ELEM   = [0,0,1,1,4,4,2,2,3,3];
+  const BRANCH_ELEM = [3,4,0,0,4,1,1,4,2,2,4,3];
 
+  // 년주
+  function yearPillar(y) {
+    const si = ((y - 4) % 10 + 10) % 10;
+    const bi = ((y - 4) % 12 + 12) % 12;
+    return { stem: STEMS[si], branch: BRANCHES[bi], si, bi };
+  }
+
+  // 월주
+  function monthPillar(y, m) {
+    const bi = (m + 1) % 12; // 1월→寅(2idx)
+    const ySi = ((y - 4) % 10 + 10) % 10;
+    const bases = [2, 4, 6, 8, 0];
+    const base = bases[Math.floor(ySi / 2)];
+    const si = (base + m - 1) % 10;
+    return { stem: STEMS[si], branch: BRANCHES[bi], si, bi };
+  }
+
+  // 일주 (율리우스일)
+  function dayPillar(y, m, d) {
+    const a = Math.floor((14 - m) / 12);
+    const yr = y + 4800 - a;
+    const mo = m + 12 * a - 3;
+    const jd = d + Math.floor((153 * mo + 2) / 5) + 365 * yr + Math.floor(yr / 4) - Math.floor(yr / 100) + Math.floor(yr / 400) - 32045;
+    const si = ((jd + 9) % 10 + 10) % 10;
+    const bi = ((jd + 1) % 12 + 12) % 12;
+    return { stem: STEMS[si], branch: BRANCHES[bi], si, bi };
+  }
+
+  // 시주
+  function hourPillar(dp, h) {
+    const bi = Math.floor((parseInt(h) + 1) / 2) % 12;
+    const bases = [0, 2, 4, 6, 8];
+    const base = bases[Math.floor(dp.si / 2)];
+    const si = (base + bi) % 10;
+    return { stem: STEMS[si], branch: BRANCHES[bi], si, bi };
+  }
+
+  // 오행 카운트
+  function countElems(pillars) {
+    const c = [0, 0, 0, 0, 0];
+    pillars.forEach(p => { if (!p) return; c[STEM_ELEM[p.si]]++; c[BRANCH_ELEM[p.bi]]++; });
+    return c;
+  }
+
+  // 대운
+  function majorFortune(yp, gender, y) {
+    const yangYear = yp.si % 2 === 0;
+    const forward = (yangYear && gender === 'male') || (!yangYear && gender === 'female');
+    return Array.from({length: 8}, (_, i) => {
+      const n = i + 1;
+      const si = forward ? (yp.si + n) % 10 : ((yp.si - n) % 10 + 10) % 10;
+      const bi = forward ? (yp.bi + n) % 12 : ((yp.bi - n) % 12 + 12) % 12;
+      return { startAge: n * 10 - 10 || 1, endAge: n * 10, stem: STEMS[si], branch: BRANCHES[bi], elemIdx: STEM_ELEM[si] };
+    });
+  }
+
+  /* ── 계산 실행 ── */
+  const noTime = !hour || hour === "모름" || hour === "Unknown";
+  const hourNum = noTime ? null : parseInt(hour);
+
+  const yp = yearPillar(year);
+  const mp = monthPillar(year, month);
+  const dp = dayPillar(year, month, day);
+  const hp = noTime ? null : hourPillar(dp, hourNum);
+
+  const elems = countElems([yp, mp, dp, hp]);
+  const minE = Math.min(...elems);
+  const maxE = Math.max(...elems);
+  const weakIdx  = elems.map((c,i)=>({c,i})).filter(e=>e.c===minE).map(e=>e.i);
+  const strongIdx = elems.map((c,i)=>({c,i})).filter(e=>e.c===maxE).map(e=>e.i);
+  const dayElemIdx = STEM_ELEM[dp.si];
+
+  const fortune = majorFortune(yp, gender, year);
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
   const age = currentYear - year;
+  const curF = fortune.find(f => age >= f.startAge && age <= f.endAge) || fortune[0];
+  const nxtF = fortune[fortune.indexOf(curF) + 1];
 
-  // 현재 행성 정보 (대략적 실시간 느낌)
-  const planetaryContext = isEn
-    ? `Current astrological context: We are in ${currentYear}, month ${currentMonth}. Consider relevant planetary transits such as Mercury retrograde periods, Jupiter and Saturn transits, lunar nodes, and current season's dominant elemental energy. Weave these naturally into the reading.`
-    : `현재 점성술 맥락: ${currentYear}년 ${currentMonth}월. 수성역행 시기, 목성·토성 트랜짓, 달의 노드, 현재 절기의 오행 기운 등을 자연스럽게 분석에 녹여주세요.`;
+  /* ── 텍스트 구성 ── */
+  const pillarsKO = `년주: ${yp.stem}${yp.branch} / 월주: ${mp.stem}${mp.branch} / 일주: ${dp.stem}${dp.branch}${hp ? ` / 시주: ${hp.stem}${hp.branch}` : ' / 시주: 미상'}`;
+  const pillarsEN = `Year: ${yp.stem}${yp.branch} / Month: ${mp.stem}${mp.branch} / Day: ${dp.stem}${dp.branch}${hp ? ` / Hour: ${hp.stem}${hp.branch}` : ' / Hour: Unknown'}`;
+  const elemKO = ELEMENTS.map((e,i) => `${ELEMENTS_KO[i]}: ${elems[i]}개${weakIdx.includes(i)?' ★결핍':strongIdx.includes(i)?' ▲과다':''}`).join(', ');
+  const elemEN = ELEMENTS.map((e,i) => `${ELEMENTS_EN[i]}: ${elems[i]}${weakIdx.includes(i)?' ★deficient':strongIdx.includes(i)?' ▲excess':''}`).join(', ');
+  const weakKO = weakIdx.map(i=>ELEMENTS_KO[i]).join(', ');
+  const weakEN = weakIdx.map(i=>ELEMENTS_EN[i]).join(', ');
+  const strongKO = strongIdx.map(i=>ELEMENTS_KO[i]).join(', ');
+  const strongEN = strongIdx.map(i=>ELEMENTS_EN[i]).join(', ');
+  const dayElemKO = ELEMENTS_KO[dayElemIdx];
+  const dayElemEN = ELEMENTS_EN[dayElemIdx];
+  const fortuneListKO = fortune.slice(0,6).map(f=>`${f.startAge}~${f.endAge}세: ${f.stem}${f.branch}`).join(' | ');
+  const fortuneListEN = fortune.slice(0,6).map(f=>`Age ${f.startAge}-${f.endAge}: ${f.stem}${f.branch}`).join(' | ');
+  const curFKO = `현재 대운(${curF?.startAge}~${curF?.endAge}세): ${curF?.stem}${curF?.branch}`;
+  const curFEN = `Current fortune (age ${curF?.startAge}-${curF?.endAge}): ${curF?.stem}${curF?.branch}`;
+  const nxtFKO = nxtF ? `다음 대운(${nxtF.startAge}~${nxtF.endAge}세): ${nxtF.stem}${nxtF.branch}` : '';
+  const nxtFEN = nxtF ? `Next fortune (age ${nxtF.startAge}-${nxtF.endAge}): ${nxtF.stem}${nxtF.branch}` : '';
 
+  /* ══════════════════════════════════════════
+     2. GPT 호출
+  ══════════════════════════════════════════ */
   const systemPrompt = isEn
-    ? `You are an ancient fortune teller — part astrologer, part BaZi master, part Zi Wei Dou Shu reader. You speak in a hushed, intimate whisper directly to the person sitting across from you by candlelight. You address them as "you" always. Your tone is: knowing, slightly mysterious, deeply personal, like you are revealing secrets only the stars have shown you. Return ONLY valid JSON. No markdown.`
-    : `당신은 수십 년 경력의 점성술사이자 사주 대가입니다. 촛불 앞에서 상대방에게 직접 속삭이듯 말합니다. 항상 "당신"으로 호칭하세요. 말투는: 알고 있다는 듯, 약간 신비롭게, 깊이 개인적으로 — 마치 별들이 당신에게만 보여준 비밀을 전해주는 것처럼. 오직 유효한 JSON만 반환하세요. 마크다운 없음.`;
+    ? `You are a master BaZi reader. You receive EXACT calculated Four Pillars data. Interpret it accurately — never invent chart data. Speak to the person directly as "you", whispering by candlelight. Weave in Western astrology naturally. Return ONLY valid JSON.`
+    : `당신은 사주명리학 대가입니다. 정확히 계산된 사주 데이터를 받습니다. 반드시 이 데이터 기반으로 해석하세요. 절대 임의로 만들지 마세요. 촛불 앞에서 "당신"에게 속삭이듯 말하세요. 유효한 JSON만 반환하세요.`;
 
-  const userPrompt = isEn
-    ? `Read this person's destiny. Age: ${age}, Born: ${month}/${day}/${year}, Time: ${timeStr}, Gender: ${genderStr}. Current: ${currentYear}, month ${currentMonth}.
+  const userPrompt = isEn ? `
+=== EXACT CALCULATED FOUR PILLARS ===
+${pillarsEN}
+Day Master: ${dayElemEN}
 
-${planetaryContext}
+=== FIVE ELEMENTS ===
+${elemEN}
+Deficient (need): ${weakEN}
+Excess (control needed): ${strongEN}
 
-TONE RULES (critical):
-- Always address as "you" — intimate, direct, like whispering across a candlelit table
-- Weave in specific astrological/BaZi elements naturally: "With Mercury retrograde approaching...", "Saturn's transit through your career house...", "The Wood energy dominant in your chart...", "Your Fire element is weakened by...", "Jupiter crossing your wealth palace..."
-- Be specific: name body organs, exact ages, exact years, specific months
-- Use shadow psychology: "You appear strong to others, but privately..."
-- Add tension and warnings: "There is something I must warn you about..."
-- End sentences with weight — let silence hang: "...and that is when everything changes."
+=== MAJOR FORTUNE PERIODS ===
+${fortuneListEN}
+${curFEN}
+${nxtFEN}
 
-Return this exact JSON (keep each body field to 3 sentences max):
-{
-  "headline": "one haunting poetic line that feels written only for them",
-  "essence": "2 sentences — their core soul energy and the contradiction that defines them",
-  "sections": [
-    {"id":"personality","title":"Your Inner Self","icon":"✦","body":"3 sentences. Outer vs inner. A private fear. Hidden strength. Weave in dominant element or planetary influence."},
-    {"id":"body","title":"Body & Vital Energy","icon":"◎","body":"3 sentences. Name specific weak organs. Link to their elemental imbalance (e.g. weak Water element strains kidneys). Specific warning."},
-    {"id":"career","title":"Your Destiny Path","icon":"◈","body":"3 sentences. Career fate with specific age range for peak. Saturn or Jupiter transit influence. What they must avoid."},
-    {"id":"love","title":"Love & Hidden Wounds","icon":"◇","body":"3 sentences. Attachment pattern. What Venus or their relationship palace reveals. A specific love warning."},
-    {"id":"wealth","title":"Wealth & Fortune","icon":"◉","body":"3 sentences. Financial fate. Specific year or age money flows. What planetary or elemental force blocks or opens their wealth."},
-    {"id":"now","title":"${currentYear} — What I See Now","icon":"◐","body":"3 sentences. This year's theme. One opportunity and one danger. Reference a specific transit or elemental shift happening now."},
-    {"id":"lifepath","title":"The Arc of Your Fate","icon":"∞","body":"3 sentences. Full life arc. Two specific decade turning points. End with something they are moving toward."}
-  ],
-  "locked": {
-    "periods": {
-      "early": "Ages 0-30: 2 sentences. Childhood karmic gifts and wounds. Elemental or planetary influence on early life.",
-      "mid": "Ages 30-55: 2 sentences. The great trial and breakthrough. Specific turning age.",
-      "late": "Ages 55+: 2 sentences. What awaits in the final chapter. Legacy energy."
-    },
-    "yearly": [
-      {"year": ${currentYear}, "fortune": "2 sentences. ${currentYear} theme. Key planetary influence this year."},
-      {"year": ${currentYear + 1}, "fortune": "2 sentences. ${currentYear + 1} energy shift and warning."},
-      {"year": ${currentYear + 2}, "fortune": "1 sentence. Brief ${currentYear + 2} outlook."}
-    ],
-    "monthly": "2 sentences. Month ${currentMonth} energy for this chart. What to do and what to avoid.",
-    "daily": "1 sentence. Today's specific energy or warning for this person."
-  }
-}`
-    : `이 사람의 운명을 읽어주세요. 나이: ${age}세, 생년월일: ${year}년 ${month}월 ${day}일, 시각: ${timeStr}, 성별: ${genderStr}. 현재: ${currentYear}년 ${currentMonth}월.
+Person: Age ${age}, ${gender==='male'?'Male':'Female'}, Born ${month}/${day}/${year}${noTime?'':`, ${hour}:${minute||'00'}`}
+Current: ${currentYear}, month ${currentMonth}
 
-${planetaryContext}
+RULES:
+- Base ALL readings on actual Day Master (${dayElemEN}) and element counts above
+- Deficient ${weakEN} → name specific organs affected (Wood=liver/eyes, Fire=heart, Metal=lungs/skin, Water=kidneys/bones, Earth=stomach/spleen)
+- Excess ${strongEN} → explain impact on personality and health
+- Use ACTUAL Daiyun ages for turning points
+- Speak as "you" — intimate whisper, knowing tone
+- Weave in planetary transits (Mercury retrograde, Saturn, Jupiter) naturally
 
-말투 규칙 (필수):
-- 항상 "당신"으로 호칭 — 촛불 앞에서 속삭이듯 친밀하고 직접적으로
-- 사주/점성술 요소를 자연스럽게 녹이기: "수성이 역행하는 이 시기에...", "토성이 당신의 직업궁을 지나면서...", "사주에서 목(木)의 기운이 강한 당신은...", "화(火) 기운이 약해지는 지금...", "목성이 재물궁을 통과하는 올해..."
-- 구체적으로: 장기 이름, 정확한 나이, 연도, 특정 달
-- 그림자 심리: "당신은 강해 보이지만, 혼자 있을 때는..."
-- 긴장감과 경고: "한 가지 꼭 말씀드려야 할 것이 있어요..."
-- 문장 끝에 여운: "...그리고 그때 모든 것이 바뀔 거예요."
+Return JSON (max 3 sentences per body field):
+{"headline":"one haunting poetic line","essence":"2 sentences on Day Master nature","sections":[{"id":"personality","title":"Your Inner Self","icon":"✦","body":"3 sentences based on ${dayElemEN} Day Master"},{"id":"body","title":"Body & Vital Energy","icon":"◎","body":"3 sentences — deficient ${weakEN} organ effects and warning"},{"id":"career","title":"Destiny Path","icon":"◈","body":"3 sentences — career with actual Daiyun ages"},{"id":"love","title":"Love & Wounds","icon":"◇","body":"3 sentences — attachment from element balance"},{"id":"wealth","title":"Wealth & Fortune","icon":"◉","body":"3 sentences — financial fate with specific ages"},{"id":"now","title":"${currentYear} — Right Now","icon":"◐","body":"3 sentences based on current Daiyun ${curF?.stem}${curF?.branch}"},{"id":"lifepath","title":"Arc of Fate","icon":"∞","body":"3 sentences with actual Daiyun turning points"}],"locked":{"periods":{"early":"Ages 0-30: 2 sentences from early Daiyun","mid":"Ages 30-55: 2 sentences from mid Daiyun","late":"Ages 55+: 2 sentences from late Daiyun"},"yearly":[{"year":${currentYear},"fortune":"2 sentences for ${currentYear}"},{"year":${currentYear+1},"fortune":"2 sentences for ${currentYear+1}"},{"year":${currentYear+2},"fortune":"1 sentence for ${currentYear+2}"}],"monthly":"2 sentences for month ${currentMonth}","daily":"1 sentence today"}}`
 
-정확히 이 JSON 구조로 반환 (각 body는 최대 3문장):
-{
-  "headline": "이 사람만을 위해 쓰인 것 같은 소름 돋는 한 줄",
-  "essence": "2문장 — 핵심 영혼 에너지와 이 사람을 정의하는 모순",
-  "sections": [
-    {"id":"personality","title":"당신의 내면","icon":"✦","body":"3문장. 겉모습 vs 내면. 비밀스러운 두려움. 숨겨진 강점. 지배적 오행이나 행성 영향 녹이기."},
-    {"id":"body","title":"신체와 건강의 기운","icon":"◎","body":"3문장. 취약한 장기 명시. 오행 불균형과 연결 (예: 수(水) 기운 약해 신장 주의). 구체적 경고."},
-    {"id":"career","title":"당신의 운명적 길","icon":"◈","body":"3문장. 직업 운명과 전성기 나이대. 토성이나 목성 트랜짓 영향. 반드시 피해야 할 것."},
-    {"id":"love","title":"사랑과 숨겨진 상처","icon":"◇","body":"3문장. 애착 패턴. 금성이나 인연궁이 드러내는 것. 구체적 사랑 경고."},
-    {"id":"wealth","title":"재물과 금전의 흐름","icon":"◉","body":"3문장. 재물 운명. 돈이 흐르는 구체적 연도나 나이. 재물을 막거나 여는 행성/오행 기운."},
-    {"id":"now","title":"${currentYear}년 — 지금 제가 보이는 것","icon":"◐","body":"3문장. 올해의 주제. 기회 하나, 위험 하나. 지금 일어나는 트랜짓이나 오행 변화 언급."},
-    {"id":"lifepath","title":"당신 운명의 궤적","icon":"∞","body":"3문장. 전체 인생 흐름. 두 개의 구체적 10년 전환점. 당신이 향하고 있는 것으로 마무리."}
-  ],
-  "locked": {
-    "periods": {
-      "early": "초년 (0~30세): 2문장. 유년기 업보적 재능과 상처. 초년에 영향을 준 오행/행성.",
-      "mid": "중년 (30~55세): 2문장. 대시련과 돌파구. 구체적 전환 나이.",
-      "late": "말년 (55세~): 2문장. 마지막 장에서 기다리는 것. 유산의 기운."
-    },
-    "yearly": [
-      {"year": ${currentYear}, "fortune": "2문장. ${currentYear}년 주제. 올해 핵심 행성 영향."},
-      {"year": ${currentYear + 1}, "fortune": "2문장. ${currentYear + 1}년 에너지 전환과 경고."},
-      {"year": ${currentYear + 2}, "fortune": "1문장. ${currentYear + 2}년 간략 전망."}
-    ],
-    "monthly": "2문장. ${currentMonth}월의 기운. 해야 할 것과 피해야 할 것.",
-    "daily": "1문장. 오늘 이 사람을 위한 구체적 에너지나 경고."
-  }
-}`;
+  : `
+=== 정확히 계산된 사주팔자 ===
+${pillarsKO}
+일간: ${dayElemKO}
+
+=== 오행 분석 ===
+${elemKO}
+결핍 오행: ${weakKO}
+과다 오행: ${strongKO}
+
+=== 대운 흐름 ===
+${fortuneListKO}
+${curFKO}
+${nxtFKO}
+
+기본 정보: ${age}세, ${gender==='male'?'남성':'여성'}, ${year}년 ${month}월 ${day}일생${noTime?'':`, ${hour}시 ${minute||'00'}분`}
+현재: ${currentYear}년 ${currentMonth}월
+
+해석 규칙:
+- 모든 해석은 실제 일간(${dayElemKO})과 오행 수치 기반
+- 결핍 오행 ${weakKO} → 구체적 장기 영향 명시 (목=간/눈, 화=심장, 금=폐/피부, 수=신장/뼈, 토=위장/비장)
+- 과다 오행 ${strongKO} → 성격과 건강에 미치는 영향
+- 실제 대운 나이를 전환점으로 언급
+- "당신"에게 촛불 앞에서 속삭이듯
+- 수성역행, 목성/토성 트랜짓 등 서양 점성술 자연스럽게 녹이기
+
+JSON 반환 (각 body 최대 3문장):
+{"headline":"소름 돋는 한 줄","essence":"일간 에너지 핵심 2문장","sections":[{"id":"personality","title":"당신의 내면","icon":"✦","body":"${dayElemKO} 일간 기반 3문장"},{"id":"body","title":"신체와 건강","icon":"◎","body":"결핍 ${weakKO} 장기 영향과 경고 3문장"},{"id":"career","title":"운명적 길","icon":"◈","body":"실제 대운 나이 포함 직업운 3문장"},{"id":"love","title":"사랑과 상처","icon":"◇","body":"오행 균형 기반 애착 패턴 3문장"},{"id":"wealth","title":"재물의 흐름","icon":"◉","body":"구체적 나이/연도 포함 재물운 3문장"},{"id":"now","title":"${currentYear}년 — 지금","icon":"◐","body":"현재 대운 ${curF?.stem}${curF?.branch} 기반 3문장"},{"id":"lifepath","title":"운명의 궤적","icon":"∞","body":"실제 대운 전환점 포함 3문장"}],"locked":{"periods":{"early":"초년(0~30세): 초기 대운 기반 2문장","mid":"중년(30~55세): 중기 대운 기반 2문장","late":"말년(55세~): 후기 대운 기반 2문장"},"yearly":[{"year":${currentYear},"fortune":"${currentYear}년 2문장"},{"year":${currentYear+1},"fortune":"${currentYear+1}년 2문장"},{"year":${currentYear+2},"fortune":"${currentYear+2}년 1문장"}],"monthly":"${currentMonth}월 에너지 2문장","daily":"오늘 에너지 1문장"}}`;
+
+  const seed = parseInt(`${year}${String(month).padStart(2,'0')}${String(day).padStart(2,'0')}${String(hourNum||12).padStart(2,'0')}`) % 2147483647;
 
   try {
     const apiKey = process.env.OPENAI_API_KEY;
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`
-      },
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ],
-        temperature: 0.9,
+        messages: [{ role: "system", content: systemPrompt }, { role: "user", content: userPrompt }],
+        temperature: 0.7,
         max_tokens: 4000,
+        seed,
         response_format: { type: "json_object" }
       }),
     });
 
     const data = await response.json();
-    if (!response.ok || data.error) {
-      throw new Error(data.error?.message || (isEn ? "OpenAI API error" : "OpenAI API 오류"));
-    }
+    if (!response.ok || data.error) throw new Error(data.error?.message || "API error");
 
-    const raw = data.choices?.[0]?.message?.content || "";
-    const cleaned = raw.replace(/```json|```/g, "").trim();
-    const parsed = JSON.parse(cleaned);
+    const parsed = JSON.parse(data.choices?.[0]?.message?.content || "{}");
+
+    // 계산된 사주 정보 함께 반환
+    parsed._bazi = {
+      pillars: {
+        year: `${yp.stem}${yp.branch}`,
+        month: `${mp.stem}${mp.branch}`,
+        day: `${dp.stem}${dp.branch}`,
+        hour: hp ? `${hp.stem}${hp.branch}` : '?'
+      },
+      elements: elems,
+      weak: weakIdx.map(i => ELEMENTS[i]),
+      strong: strongIdx.map(i => ELEMENTS[i]),
+      dayMaster: ELEMENTS[dayElemIdx]
+    };
+
     res.status(200).json(parsed);
   } catch (e) {
     res.status(500).json({ error: e.message });
