@@ -607,142 +607,83 @@ async function buildPaidDetail({ saju, astrologySummary, question, tarot, lang, 
   const apiKey=process.env.OPENAI_API_KEY;
   if(!apiKey) throw new Error("Missing OPENAI_API_KEY");
   const lk = LANG_HOOKS[lang] || LANG_HOOKS["English"];
-  const sections = lk.paidSections;
 
-  const prompt = `
-You are a master-level Korean Saju (四柱命理) and Western astrology interpreter with deep knowledge of traditional Four Pillars theory.
+  // 카테고리별 섹션 + 포커스
+  const CAT_KO = {
+    "연애운": {
+      sections:["✦ LOVE ENERGY NOW","✦ 이번 달 연애 흐름","✦ YOUR LOVE PATTERN","✦ 끌리는 사람 유형","✦ 조심할 감정 패턴","✦ 다음 분기 연애 흐름","✦ 이상적인 관계 에너지"],
+      focus:"연애, 감정, 인간관계에만 집중. 금성(Venus) 위치와 정재/편재/식신 중심으로 해석. 재물/사업 내용 최소화."
+    },
+    "재물운": {
+      sections:["✦ MONEY ENERGY NOW","✦ 이번 달 재물 흐름","✦ 돈이 들어오는 타이밍","✦ 조심할 지출 패턴","✦ 투자/기회 타이밍","✦ 하반기 재물 흐름","✦ 내년 재물 방향"],
+      focus:"재물, 수입, 투자, 지출에만 집중. 정재/편재 십성과 용신 오행 중심으로 해석. 연애 내용 최소화."
+    },
+    "사업운": {
+      sections:["✦ CAREER ENERGY NOW","✦ 이번 달 커리어 흐름","✦ 기회가 오는 타이밍","✦ 조심할 직장 패턴","✦ 협업/인맥 에너지","✦ 하반기 사업 흐름","✦ 내년 커리어 방향"],
+      focus:"커리어, 직장, 사업, 인맥에만 집중. 정관/편관과 식신/상관 중심으로 해석."
+    },
+    "건강운": {
+      sections:["✦ HEALTH ENERGY NOW","✦ 이번 달 컨디션","✦ 조심할 신체 부위","✦ 에너지 소진 패턴","✦ 회복 타이밍","✦ 하반기 건강 흐름","✦ 내년 건강 방향"],
+      focus:"건강, 체력, 스트레스, 회복력에만 집중. 오행 과부족과 대운으로 건강 해석."
+    },
+    "종합": {
+      sections:["✦ CURRENT ENERGY","✦ MAY → JUNE","✦ YOUR PATTERN","✦ YOUR RED FLAG","✦ JULY → SEPTEMBER","✦ WHAT YOU ATTRACT","✦ NEXT YEAR PREVIEW"],
+      focus:"전반적인 삶의 흐름. 연애/재물/커리어 균형있게."
+    }
+  };
 
-=== TRADITIONAL SAJU KNOWLEDGE BASE ===
-십성(十星) 해석 원칙:
-- 비견(比肩): 자아, 독립심, 경쟁. 많으면 고집스럽고 독립적. 재성 분산.
-- 겁재(劫財): 경쟁, 탈재. 많으면 투기적 성향. 재물 손실 위험.
-- 식신(食神): 창의력, 표현, 복록. 많으면 예술적이고 낙천적. 관성 제어.
-- 상관(傷官): 반항, 재능, 총명. 관성 극. 직장 불안정. 창의적 직업 유리.
-- 편재(偏財): 유동재산, 투기, 부친. 많으면 변동 많은 재물.
-- 정재(正財): 고정재산, 근면, 현실적. 안정적 재물운. 배우자 인연.
-- 편관(偏官): 권력, 투쟁, 스트레스. 많으면 직장 갈등. 강인한 의지.
-- 정관(正官): 명예, 책임감, 조직. 직장운 좋음. 도덕적 성향.
-- 편인(偏印): 직관, 예술, 종교. 편식적 지식. 다재다능.
-- 정인(正印): 학문, 모성, 인자함. 학업운 좋음. 귀인 도움.
+  const catKey = fortuneCat || "종합";
+  const catCfg = lang==="Korean" ? (CAT_KO[catKey]||CAT_KO["종합"]) : null;
+  const sections = catCfg ? catCfg.sections : lk.paidSections;
+  const catFocus = catCfg ? catCfg.focus : "";
+  const sectionList = sections.map((s,i)=>`${i+1}. ${s}`).join("\n");
 
-신강신약 판단:
-- 신강(身强): 일간이 강함 → 식상/재성/관성으로 기운을 설기해야 함
-- 신약(身弱): 일간이 약함 → 비겁/인성으로 일간을 부조해야 함
+  const prompt = `You are a master-level Korean Saju and Western astrology reader.
 
-용신(用神) 원칙:
-- 용신: 사주의 균형을 잡아주는 핵심 오행. 이 기운이 강한 시기/방향이 길함.
-- 기신(忌神): 용신과 반대. 이 기운이 강한 시기는 흉함.
-
-대운(大運) 해석:
-- 10년 주기로 운의 흐름이 바뀜
-- 현재 대운의 천간/지지가 용신과 합이면 길운, 기신이면 흉운
-- 대운 천간이 일간을 생하면 재물/건강 상승
-- 대운 지지의 충은 변화와 이동을 의미
-
-형충회합(刑冲會合):
-- 충(冲): 강한 변화, 이동, 충돌 — 부정적이지만 정체된 기운을 움직임
-- 합(合): 기운이 합쳐져 새로운 오행 생성 — 대체로 안정적
-
-오행별 직업/성격:
-- 木: 교육, 언론, 법, 성장 지향
-- 火: 예술, 패션, IT, 열정적
-- 土: 부동산, 농업, 중개, 안정 지향
-- 金: 금융, 법조, 의료, 정밀업
-- 水: 무역, 여행, 철학, 유연함
-
-=== 분석 대상 사주 데이터 ===
-[사주 원국]
+=== SAJU DATA ===
 년주: ${saju.pillars.year} | 월주: ${saju.pillars.month} | 일주: ${saju.pillars.day} | 시주: ${saju.pillars.hour}
-일간: ${saju.dayMaster}
-오행 분포 [木火土金水]: ${JSON.stringify(saju.elements)}
-강한 오행: ${saju.strong?.join(", ")||"없음"} | 약한 오행: ${saju.weak?.join(", ")||"없음"}
+일간: ${saju.dayMaster} | ${saju.strength?.label||""} (${saju.strength?.score||0}점)
+오행[木火土金水]: ${JSON.stringify(saju.elements)}
+강한: ${saju.strong?.join(", ")||"없음"} | 약한: ${saju.weak?.join(", ")||"없음"}
+용신: ${saju.yongsin?.yongsin||"미상"} | 기신: ${saju.yongsin?.gishin||"미상"}
+십성: ${(saju.tenGods||[]).map(t=>t.pillar+"="+t.tenGod).join(", ")||"미상"}
+형충: ${(saju.interactions||[]).map(i=>i.desc).join(", ")||"없음"}
+현재 대운: ${saju.daeun?.current?.pillar||"미상"} (${saju.daeun?.current?.age||""})
+성향: ${(saju.personalityHints||[]).join(", ")||"미상"}
 
-[신강신약]
-${saju.strength?.label||"미상"} (점수: ${saju.strength?.score||0})
+=== 서양 점성술 ===
+태양: ${astrologySummary?.sun||"미상"} | 달: ${astrologySummary?.moon||"미상"}
+금성: ${astrologySummary?.venus||"미상"} | 화성: ${astrologySummary?.mars||"미상"}
+상승궁: ${astrologySummary?.ascendant||"미상"}
 
-[용신/기신]
-용신(用神): ${saju.yongsin?.yongsin||"미상"}
-기신(忌神): ${saju.yongsin?.gishin||"미상"}
-근거: ${saju.yongsin?.reason||""}
-
-[십성 구성]
-${(saju.tenGods||[]).map(t=>`${t.pillar}: ${t.tenGod}`).join(" | ")||"미상"}
-
-[형충회합]
-${(saju.interactions||[]).map(i=>`${i.type}: ${i.desc}`).join(", ")||"없음"}
-
-[현재 대운]
-${saju.daeun?.current?.pillar||"미상"} (${saju.daeun?.current?.age||""}, ${saju.daeun?.current?.period||""})
-대운 방향: ${saju.daeun?.direction||"미상"}
-
-[성격 성향 분석]
-${(saju.personalityHints||[]).join(", ")||"미상"}
-
-[서양 점성술]
-태양: ${astrologySummary.sun} | 달: ${astrologySummary.moon}
-수성: ${astrologySummary.mercury} | 금성: ${astrologySummary.venus}
-화성: ${astrologySummary.mars} | 상승궁: ${astrologySummary.ascendant}
-
-[타로]
+=== 타로 ===
 ${tarot?.title||"없음"}: ${tarot?.message||"없음"}
 
-[질문/운세 카테고리]
-${fortuneCat ? `카테고리: ${fortuneCat}` : ""}
-${question || "전반적인 인생 흐름"}
+=== 카테고리: ${catKey} ===
+${catFocus}
+${question ? "질문: "+question : ""}
 
 === 출력 규칙 ===
 ${lk.paidStyle}
-아래 4개 섹션만 출력 (추가 텍스트 없이):
-1. ${sections[0]}
-2. ${sections[1]}
-3. ${sections[2]}
-4. ${sections[3]}
-각 섹션: 제목 한 줄 + 2~4문장. 불릿 포인트 없이 산문으로.
-용신/십성/대운 데이터를 실제 해석에 반영할 것. 추상적 위로 문구보다 구체적 근거 기반 해석 우선.
-\`.trim();
-${lk.paidStyle}
-Do NOT invent new calculations. Use ONLY the data provided below.
 
-[SAJU]
-Year pillar: ${saju.pillars.year}
-Month pillar: ${saju.pillars.month}
-Day pillar: ${saju.pillars.day}
-Hour pillar: ${saju.pillars.hour}
-Day master element: ${saju.dayMaster}
-Element distribution: ${JSON.stringify(saju.elements)} (Wood/Fire/Earth/Metal/Water)
-Strong: ${saju.strong.join(", ")} | Weak: ${saju.weak.join(", ")}
+반드시 아래 순서대로만 출력:
+${sectionList}
 
-[WESTERN ASTROLOGY]
-Sun: ${astrologySummary.sun} | Moon: ${astrologySummary.moon}
-Mercury: ${astrologySummary.mercury} | Venus: ${astrologySummary.venus}
-Mars: ${astrologySummary.mars} | Ascendant: ${astrologySummary.ascendant}
-
-[TAROT]
-${tarot?.title||"None"}: ${tarot?.message||"None"}
-
-[QUESTION]
-${question||"General life path"}
-
-Output format — exactly these sections in order, no extra text:
-${sections.map((s,i) => (i+1)+'. '+s).join('\n')}
-
-Rules:
-- Each section starts with the section title on its own line
-- Short paragraphs only (2~4 lines max per paragraph)
-- Empty line between paragraphs
-- Important sentences stand alone on their own line
-- Ground every insight in the actual saju/astrology data
-- Do NOT give generic advice — be specific to this person's chart
-- Prioritize emotional and relationship insights
-- Make it saveable and shareable
-`.trim();
+규칙:
+- 섹션 제목(✦ 포함) 그대로 사용
+- 제목 아래 빈 줄
+- 짧은 문단 (3~5줄), 문단 사이 빈 줄
+- 중요 문장은 단독 줄
+- 실제 사주 데이터 근거로 구체적으로
+- 카테고리 포커스에만 집중할 것`.trim();
 
   const resp=await fetch("https://api.openai.com/v1/chat/completions",{
     method:"POST",
     headers:{"Authorization":`Bearer ${apiKey}`,"Content-Type":"application/json"},
-    body:JSON.stringify({ model:"gpt-4o-mini", temperature:0.65, max_tokens:700,
+    body:JSON.stringify({
+      model:"gpt-4o-mini", temperature:0.72, max_tokens:2500,
       messages:[
-        {role:"system", content:"You are a calm, trustworthy fortune reader who interprets pre-calculated astrological data."},
+        {role:"system", content:"You are a sharp, aesthetic saju+astrology reader. Emotionally resonant, mobile-first, never generic. Each category must feel completely different."},
         {role:"user", content:prompt}
       ]
     })
@@ -768,8 +709,8 @@ async function buildCompatDetail({ sajuA, sajuB, lang }) {
   const li = langInstructions[lang] || langInstructions.English;
 
   const compatSections = {
-    Korean:  ["두 사람의 기운","잘 맞는 부분","조심해야 할 부분","이 인연을 빛나게 하는 방법"],
-    English: ["The Energy Between You","Where You Align","Where to Take Care","How to Make This Bond Shine"],
+    Korean:  ["✦ 두 사람의 에너지","✦ 잘 맞는 부분","✦ 조심할 감정 패턴","✦ 끌리는 이유","✦ 갈등이 생기는 지점","✦ 이 관계가 줄 수 있는 것","✦ 함께하면 강해지는 흐름"],
+    English: ["✦ YOUR ENERGY TOGETHER","✦ WHERE YOU CLICK","✦ WATCH OUT FOR","✦ WHY YOU'RE DRAWN","✦ WHERE TENSION BUILDS","✦ WHAT THIS BOND OFFERS","✦ STRONGER TOGETHER"],
     Japanese:["二人の気","合う部分","注意すべき部分","この縁を輝かせる方法"],
     Chinese: ["两人的气场","契合之处","需要注意的部分","让这段缘分发光的方法"],
     Spanish: ["La Energía Entre Ustedes","Donde Están Alineados","Donde Tener Cuidado","Cómo Hacer Brillar Este Vínculo"]
@@ -834,6 +775,64 @@ export default async function handler(req, res){
   try{
     const payload=req.body||{};
     const lang = SUPPORTED_LANGS.includes(payload.lang) ? payload.lang : "Korean";
+    // ── Idol Match mode ──
+    if (payload.mode === 'idol') {
+      if (!payload.year||!payload.month||!payload.day) throw new Error("Missing birth date");
+      const saju = buildSajuFull({ year:payload.year, month:payload.month, day:payload.day, hour:payload.hour, gender:payload.gender });
+      const apiKey = process.env.OPENAI_API_KEY;
+      if (!apiKey) throw new Error("Missing OPENAI_API_KEY");
+
+      const langStyles = {
+        Korean: { lang:"한국어", style:`TikTok/인스타 세대가 저장하고 싶어하는 스타일로 작성. 짧고 리듬감 있는 문장. 공감 포인트 중심.` },
+        English: { lang:"English", style:`Write in aesthetic TikTok/astrology style. Short punchy sentences. Shareable vibes.` },
+        Japanese: { lang:"日本語", style:`TikTokやインスタ世代が保存したくなるスタイルで書く。短くリズム感のある文章。` },
+        Chinese: { lang:"中文", style:`以TikTok/Instagram风格写作，简洁有节奏感，引发共鸣。` },
+        Spanish: { lang:"Español", style:`Escribe en estilo TikTok/astrología estético. Frases cortas y con ritmo.` }
+      };
+      const ls = langStyles[lang] || langStyles.English;
+
+      const idolPrompt = `You are a Saju + astrology expert who reads idol compatibility types.
+${ls.style}
+
+SAJU DATA:
+년주: ${saju.pillars.year} | 월주: ${saju.pillars.month} | 일주: ${saju.pillars.day} | 시주: ${saju.pillars.hour}
+일간: ${saju.dayMaster} | ${saju.strength?.label||""}
+오행[木火土金水]: ${JSON.stringify(saju.elements)}
+강한: ${saju.strong?.join(", ")||"없음"} | 약한: ${saju.weak?.join(", ")||"없음"}
+용신: ${saju.yongsin?.yongsin||"미상"}
+십성: ${(saju.tenGods||[]).map(t=>t.pillar+"="+t.tenGod).join(", ")||"미상"}
+성향: ${(saju.personalityHints||[]).join(", ")||"미상"}
+성별: ${payload.gender}
+
+OUTPUT in ${ls.lang}:
+Respond with JSON only, no markdown:
+{
+  "title": "한 줄로 이 사람의 아이돌 소울 타입 (예: '차가운 카리스마형에 끌리는 감성파')",
+  "scoreLabel": "궁합 에너지 레벨 (예: '🔥 HIGH ATTRACTION ENERGY')",
+  "highlight": "이 사람의 핵심 매력 포인트 한 문장",
+  "detail": "아래 섹션 형식으로 작성:\n\n✦ YOUR IDOL TYPE\n(어떤 타입의 아이돌과 에너지가 맞는지)\n\n✦ WHY YOU ATTRACT THEM\n(사주 에너지로 보는 끌림의 이유)\n\n✦ YOUR FAN ENERGY\n(팬으로서의 성향과 덕질 스타일)\n\n✦ RED FLAG IN FANDOM\n(조심할 감정 패턴)\n\n✦ YOUR DESTINY TYPE\n(운명적으로 끌릴 아이돌 에너지 유형)"
+}`.trim();
+
+      const resp = await fetch("https://api.openai.com/v1/chat/completions",{
+        method:"POST",
+        headers:{"Authorization":`Bearer ${apiKey}`,"Content-Type":"application/json"},
+        body:JSON.stringify({
+          model:"gpt-4o-mini", temperature:0.8, max_tokens:1200,
+          messages:[
+            {role:"system", content:"You are a sharp saju+astrology idol compatibility reader. Output valid JSON only."},
+            {role:"user", content:idolPrompt}
+          ]
+        })
+      });
+      const gptData = await resp.json();
+      if (!resp.ok) throw new Error(gptData?.error?.message||"OpenAI error");
+      let raw = gptData.choices?.[0]?.message?.content||"{}";
+      raw = raw.replace(/```json|```/g,"").trim();
+      let result;
+      try { result = JSON.parse(raw); } catch { result = { title:"분석 완료", detail:raw }; }
+      return res.status(200).json(result);
+    }
+
     // ── Compat mode ──
     if (payload.mode === 'compat') {
       if (!payload.year||!payload.month||!payload.day) throw new Error("Missing person A birth date");
