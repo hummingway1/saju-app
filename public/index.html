@@ -259,11 +259,11 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
         <button class="btn-sec" id="heroBtn2" onclick="goMode('compat')">Check Compatibility</button>
       </div>
       <div class="social-proof">
-        <div><div class="proof-num">2.1M+</div><div class="proof-lbl" id="proof1">Idol Match Reads</div></div>
+        <div><div class="proof-num" id="proofNum1">2.1M+</div><div class="proof-lbl" id="proof1">Idol Match Reads</div></div>
         <div class="proof-div"></div>
-        <div><div class="proof-num">89%</div><div class="proof-lbl" id="proof2">Shared to TikTok</div></div>
+        <div><div class="proof-num" id="proofNum2">89%</div><div class="proof-lbl" id="proof2">Shared to TikTok</div></div>
         <div class="proof-div"></div>
-        <div><div class="proof-num">140+</div><div class="proof-lbl" id="proof3">Countries</div></div>
+        <div><div class="proof-num" id="proofNum3">140+</div><div class="proof-lbl" id="proof3">Countries</div></div>
       </div>
     </div>
     <div class="phone-wrap">
@@ -1043,6 +1043,7 @@ async function runSaju(){
 
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const data=await res.json();
+    if(res.status===429)throw new Error(data.error||'하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
 
     const box=document.getElementById('sajuResult');
@@ -1076,6 +1077,7 @@ async function runSajuFull(){
       body:JSON.stringify({...ST.s,minute:0,question:document.getElementById('qInput').value.trim(),
         location:lastLoc,paid:true,tarot:selTarot,lang:t.aiLang,fortuneCat:t.fcatKeys[fcatIdx]})});
     const data=await res.json();
+    if(res.status===429)throw new Error(data.error||'하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     setText('sajuMeta',t.fullMeta);
     document.getElementById('unlockBtn').style.display='none';
@@ -1099,6 +1101,7 @@ async function runCompat(){
         partnerYear:ST.b.year,partnerMonth:ST.b.month,partnerDay:ST.b.day,partnerHour:ST.b.hour,
         partnerGender:ST.b.gender||'unknown',mode:'compat',lang:t.aiLang,paid:false})});
     const data=await res.json();
+    if(res.status===429)throw new Error(data.error||'하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     const box=document.getElementById('compatResult');
     box.style.display='';
@@ -1120,6 +1123,7 @@ async function runIdol(){
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({...ST.i,paid:false,mode:'idol',lang:t.aiLang,question:'idol match type analysis'})});
     const data=await res.json();
+    if(res.status===429)throw new Error(data.error||'하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     const box=document.getElementById('idolResult');
     box.style.display='';
@@ -1204,7 +1208,36 @@ function downloadCard(){
 // ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
+
+// 날짜 기반 시드로 매일 다른 숫자 생성
+function seededRandom(seed) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+function updateProofNumbers() {
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+
+  // 아이돌 궁합 조회: 1.8M ~ 2.8M 사이에서 매일 변동
+  const reads = (1.8 + seededRandom(seed * 1) * 1.0).toFixed(1) + 'M+';
+
+  // 틱톡 공유율: 84% ~ 93% 사이에서 매일 변동
+  const tiktok = Math.floor(84 + seededRandom(seed * 2) * 9) + '%';
+
+  // 국가: 138 ~ 147 사이에서 매일 변동
+  const countries = Math.floor(138 + seededRandom(seed * 3) * 9) + '+';
+
+  const el1 = document.getElementById('proofNum1');
+  const el2 = document.getElementById('proofNum2');
+  const el3 = document.getElementById('proofNum3');
+  if(el1) el1.textContent = reads;
+  if(el2) el2.textContent = tiktok;
+  if(el3) el3.textContent = countries;
+}
+
 setLang(curLang);
+updateProofNumbers();
 </script>
 </body>
 </html>
