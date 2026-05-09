@@ -843,6 +843,192 @@ export default async function handler(req, res){
       };
       const ls = langStyles[lang] || langStyles.English;
 
+      // 실제 K-pop 아이돌 목록 (사주 분석에 활용)
+      const IDOL_POOL = [
+        // BTS
+        {name:"RM (BTS)", vibe:"지적·철학적 카리스마형"},
+        {name:"Jin (BTS)", vibe:"밝고 유쾌한 안정형"},
+        {name:"Suga (BTS)", vibe:"차갑고 예술적인 천재형"},
+        {name:"J-Hope (BTS)", vibe:"밝고 에너지 넘치는 긍정형"},
+        {name:"Jimin (BTS)", vibe:"감성적이고 섬세한 퍼포머형"},
+        {name:"V (BTS)", vibe:"독특하고 몽환적인 예술가형"},
+        {name:"Jungkook (BTS)", vibe:"다재다능하고 성실한 완벽주의형"},
+        // BLACKPINK
+        {name:"Jisoo (BLACKPINK)", vibe:"우아하고 따뜻한 클래식 뷰티형"},
+        {name:"Jennie (BLACKPINK)", vibe:"카리스마 넘치는 독립적 퀸형"},
+        {name:"Rosé (BLACKPINK)", vibe:"감성적이고 자유로운 아티스트형"},
+        {name:"Lisa (BLACKPINK)", vibe:"에너제틱한 글로벌 퍼포머형"},
+        // aespa
+        {name:"Karina (aespa)", vibe:"완벽주의적 카리스마 리더형"},
+        {name:"Winter (aespa)", vibe:"차갑고 세련된 미스터리형"},
+        {name:"Ningning (aespa)", vibe:"밝고 재능있는 보컬형"},
+        {name:"Giselle (aespa)", vibe:"쿨하고 개성 강한 힙한 형"},
+        // NewJeans
+        {name:"Minji (NewJeans)", vibe:"자연스럽고 청순한 리더형"},
+        {name:"Hanni (NewJeans)", vibe:"귀엽고 적극적인 에너지형"},
+        {name:"Danielle (NewJeans)", vibe:"청순하고 감성적인 비주얼형"},
+        {name:"Haerin (NewJeans)", vibe:"차갑고 고양이 같은 미스터리형"},
+        {name:"Hyein (NewJeans)", vibe:"신비롭고 쿨한 막내형"},
+        // IVE
+        {name:"Yujin (IVE)", vibe:"밝고 리더십 강한 에너지형"},
+        {name:"Gaeul (IVE)", vibe:"차분하고 세련된 도시적 감성형"},
+        {name:"Rei (IVE)", vibe:"귀엽고 개성있는 큐트형"},
+        {name:"Wonyoung (IVE)", vibe:"완벽한 비주얼의 공주형"},
+        {name:"Liz (IVE)", vibe:"밝고 친근한 보컬형"},
+        {name:"Leeseo (IVE)", vibe:"신선하고 당찬 막내형"},
+        // LE SSERAFIM
+        {name:"Sakura (LE SSERAFIM)", vibe:"베테랑 경험의 우아한 형"},
+        {name:"Chaewon (LE SSERAFIM)", vibe:"강단있는 리더형"},
+        {name:"Yunjin (LE SSERAFIM)", vibe:"감성적이고 음악적인 아티스트형"},
+        {name:"Kazuha (LE SSERAFIM)", vibe:"고귀하고 예술적인 발레리나형"},
+        {name:"Eunchae (LE SSERAFIM)", vibe:"밝고 에너지 넘치는 막내형"},
+        // TWICE
+        {name:"Nayeon (TWICE)", vibe:"밝고 사랑스러운 토끼형"},
+        {name:"Jeongyeon (TWICE)", vibe:"쿨하고 시원한 보이시형"},
+        {name:"Momo (TWICE)", vibe:"춤의 신 에너지 퍼포머형"},
+        {name:"Sana (TWICE)", vibe:"사랑스럽고 매력적인 뿅뿅형"},
+        {name:"Jihyo (TWICE)", vibe:"강인하고 믿음직한 리더형"},
+        {name:"Mina (TWICE)", vibe:"우아하고 조용한 백조형"},
+        {name:"Dahyun (TWICE)", vibe:"개성있고 유머러스한 밝은 형"},
+        {name:"Chaeyoung (TWICE)", vibe:"독립적이고 예술적인 아티스트형"},
+        {name:"Tzuyu (TWICE)", vibe:"완벽한 비주얼의 청순한 형"},
+        // ITZY
+        {name:"Yeji (ITZY)", vibe:"카리스마 있는 고양이 눈매 형"},
+        {name:"Lia (ITZY)", vibe:"우아하고 지적인 형"},
+        {name:"Ryujin (ITZY)", vibe:"쿨하고 반항적인 스트리트형"},
+        {name:"Chaeryeong (ITZY)", vibe:"섬세하고 재능있는 댄서형"},
+        {name:"Yuna (ITZY)", vibe:"당당하고 비주얼 강렬한 형"},
+        // Red Velvet
+        {name:"Irene (Red Velvet)", vibe:"완벽한 비주얼의 차가운 여왕형"},
+        {name:"Seulgi (Red Velvet)", vibe:"다재다능한 따뜻한 퍼포머형"},
+        {name:"Wendy (Red Velvet)", vibe:"따뜻하고 보컬 강한 감성형"},
+        {name:"Joy (Red Velvet)", vibe:"밝고 활발한 긍정 에너지형"},
+        {name:"Yeri (Red Velvet)", vibe:"개성있고 당찬 막내형"},
+        // MAMAMOO
+        {name:"Solar (MAMAMOO)", vibe:"밝고 재능넘치는 엔터테이너형"},
+        {name:"Moonbyul (MAMAMOO)", vibe:"쿨한 보이시 카리스마형"},
+        {name:"Wheein (MAMAMOO)", vibe:"예술적이고 감성적인 아티스트형"},
+        {name:"Hwasa (MAMAMOO)", vibe:"강렬하고 자유로운 섹시 카리스마형"},
+        // EXO
+        {name:"Baekhyun (EXO)", vibe:"밝고 재능넘치는 만능 엔터테이너형"},
+        {name:"Chanyeol (EXO)", vibe:"활발하고 창의적인 다재다능형"},
+        {name:"D.O. (EXO)", vibe:"조용하고 깊은 감성의 진지한 형"},
+        {name:"Kai (EXO)", vibe:"섹시하고 강렬한 퍼포먼스형"},
+        {name:"Sehun (EXO)", vibe:"차갑고 세련된 도시적 형"},
+        {name:"Suho (EXO)", vibe:"리더십 있고 신뢰감 주는 형"},
+        {name:"Chen (EXO)", vibe:"감성적이고 보컬 깊은 형"},
+        {name:"Xiumin (EXO)", vibe:"귀엽고 차분한 반전 매력형"},
+        // NCT
+        {name:"Taeyong (NCT)", vibe:"카리스마 넘치는 퍼포먼스 리더형"},
+        {name:"Taeil (NCT)", vibe:"조용하고 깊은 보컬형"},
+        {name:"Johnny (NCT)", vibe:"유쾌하고 국제적인 형"},
+        {name:"Yuta (NCT)", vibe:"섬세하고 강렬한 일본 감성형"},
+        {name:"Doyoung (NCT)", vibe:"지적이고 감성적인 보컬형"},
+        {name:"Jaehyun (NCT)", vibe:"우아하고 카리스마 있는 비주얼형"},
+        {name:"Mark (NCT)", vibe:"성실하고 다재다능한 올라운더형"},
+        {name:"Haechan (NCT)", vibe:"밝고 에너지 넘치는 선샤인형"},
+        {name:"Jaemin (NCT)", vibe:"사랑스럽고 카리스마 있는 반전형"},
+        {name:"Renjun (NCT)", vibe:"섬세하고 예술적인 감성형"},
+        {name:"Jeno (NCT)", vibe:"조용하고 강렬한 눈매형"},
+        {name:"Chenle (NCT)", vibe:"밝고 자유로운 글로벌형"},
+        // Stray Kids
+        {name:"Bang Chan (Stray Kids)", vibe:"강인하고 따뜻한 프로듀서 리더형"},
+        {name:"Lee Know (Stray Kids)", vibe:"차갑고 고양이 같은 댄서형"},
+        {name:"Changbin (Stray Kids)", vibe:"강렬하고 에너지 폭발하는 형"},
+        {name:"Hyunjin (Stray Kids)", vibe:"예술적이고 몽환적인 비주얼형"},
+        {name:"Han (Stray Kids)", vibe:"감성적이고 창의적인 작곡가형"},
+        {name:"Felix (Stray Kids)", vibe:"밝고 글로벌한 선샤인형"},
+        {name:"Seungmin (Stray Kids)", vibe:"성실하고 진지한 보컬형"},
+        {name:"I.N (Stray Kids)", vibe:"귀엽고 당찬 막내형"},
+        // ATEEZ
+        {name:"Hongjoong (ATEEZ)", vibe:"카리스마 있는 창의적 리더형"},
+        {name:"Seonghwa (ATEEZ)", vibe:"우아하고 완벽한 비주얼형"},
+        {name:"Yunho (ATEEZ)", vibe:"밝고 큰 에너지의 긍정형"},
+        {name:"Yeosang (ATEEZ)", vibe:"독특하고 신비로운 예술가형"},
+        {name:"San (ATEEZ)", vibe:"강렬하고 감성적인 퍼포머형"},
+        {name:"Mingi (ATEEZ)", vibe:"에너지 넘치고 유쾌한 형"},
+        {name:"Wooyoung (ATEEZ)", vibe:"사랑스럽고 끼 넘치는 형"},
+        {name:"Jongho (ATEEZ)", vibe:"강한 보컬과 진지한 형"},
+        // TXT
+        {name:"Yeonjun (TXT)", vibe:"다재다능한 퍼포먼스 에이스형"},
+        {name:"Soobin (TXT)", vibe:"조용하고 감성적인 리더형"},
+        {name:"Beomgyu (TXT)", vibe:"밝고 유머러스한 에너지형"},
+        {name:"Taehyun (TXT)", vibe:"강인하고 보컬 강렬한 형"},
+        {name:"Huening Kai (TXT)", vibe:"독특하고 창의적인 몽상가형"},
+        // ENHYPEN
+        {name:"Jungwon (ENHYPEN)", vibe:"차분하고 신뢰감 주는 리더형"},
+        {name:"Heeseung (ENHYPEN)", vibe:"다재다능한 만능 에이스형"},
+        {name:"Jay (ENHYPEN)", vibe:"글로벌하고 유쾌한 형"},
+        {name:"Jake (ENHYPEN)", vibe:"밝고 따뜻한 글로벌 형"},
+        {name:"Sunghoon (ENHYPEN)", vibe:"차갑고 완벽한 피겨 왕자형"},
+        {name:"Sunoo (ENHYPEN)", vibe:"밝고 사랑스러운 햇살형"},
+        {name:"Ni-ki (ENHYPEN)", vibe:"차갑고 강렬한 댄서형"},
+        // SEVENTEEN
+        {name:"S.Coups (SEVENTEEN)", vibe:"강한 리더십과 책임감형"},
+        {name:"Jeonghan (SEVENTEEN)", vibe:"섬세하고 전략적인 천사형"},
+        {name:"Joshua (SEVENTEEN)", vibe:"젠틀하고 따뜻한 신사형"},
+        {name:"Jun (SEVENTEEN)", vibe:"우아하고 섹시한 비주얼형"},
+        {name:"Hoshi (SEVENTEEN)", vibe:"에너지 넘치는 퍼포먼스 장인형"},
+        {name:"Wonwoo (SEVENTEEN)", vibe:"조용하고 깊이 있는 지적형"},
+        {name:"Woozi (SEVENTEEN)", vibe:"작지만 강한 천재 작곡가형"},
+        {name:"DK (SEVENTEEN)", vibe:"밝고 시원한 보컬형"},
+        {name:"Mingyu (SEVENTEEN)", vibe:"키 크고 털털한 비주얼형"},
+        {name:"The8 (SEVENTEEN)", vibe:"독창적이고 예술적인 형"},
+        {name:"Seungkwan (SEVENTEEN)", vibe:"유머러스하고 재능있는 엔터테이너형"},
+        {name:"Vernon (SEVENTEEN)", vibe:"쿨하고 개성있는 힙한 형"},
+        {name:"Dino (SEVENTEEN)", vibe:"성실하고 에너지 넘치는 막내형"},
+        // SHINee
+        {name:"Onew (SHINee)", vibe:"따뜻하고 신뢰감 주는 리더형"},
+        {name:"Key (SHINee)", vibe:"강렬하고 패셔너블한 개성형"},
+        {name:"Minho (SHINee)", vibe:"스포티하고 경쟁적인 형"},
+        {name:"Taemin (SHINee)", vibe:"섬세하고 몽환적인 퍼포먼스 레전드형"},
+        // INFINITE
+        {name:"Sunggyu (INFINITE)", vibe:"진지하고 노력하는 리더형"},
+        {name:"Woohyun (INFINITE)", vibe:"감성적이고 보컬 강한 형"},
+        {name:"Sungjong (INFINITE)", vibe:"섬세하고 아름다운 형"},
+        // 2PM
+        {name:"Junho (2PM)", vibe:"완벽하고 강렬한 만능 엔터테이너형"},
+        {name:"Taecyeon (2PM)", vibe:"강인하고 유머러스한 형"},
+        {name:"Wooyoung (2PM)", vibe:"귀엽고 끼 넘치는 형"},
+        // 솔로이스트
+        {name:"IU (솔로)", vibe:"지적이고 감성 깊은 국민 가수형"},
+        {name:"태연 (솔로/SNSD)", vibe:"강인하고 보컬 완벽한 형"},
+        {name:"청하 (솔로)", vibe:"강렬하고 독립적인 퍼포머형"},
+        {name:"선미 (솔로)", vibe:"섹시하고 신비로운 퀸형"},
+        {name:"효연 (솔로/SNSD)", vibe:"강렬하고 독보적인 댄서형"},
+        {name:"강다니엘 (솔로)", vibe:"친근하고 에너지 넘치는 형"},
+        {name:"옹성우 (솔로)", vibe:"노력하는 감성 보컬형"},
+        // SNSD
+        {name:"태연 (SNSD)", vibe:"완벽한 보컬의 강인한 형"},
+        {name:"써니 (SNSD)", vibe:"밝고 긍정적인 에너지형"},
+        {name:"효연 (SNSD)", vibe:"독보적인 댄서 카리스마형"},
+        {name:"유리 (SNSD)", vibe:"우아하고 차가운 비주얼형"},
+        {name:"수영 (SNSD)", vibe:"활발하고 다재다능한 형"},
+        {name:"티파니 (SNSD)", vibe:"밝고 따뜻한 글로벌 형"},
+        {name:"서현 (SNSD)", vibe:"지적이고 세련된 형"},
+        {name:"윤아 (SNSD)", vibe:"청순하고 친근한 국민 미녀형"},
+        {name:"수영 (SNSD)", vibe:"스포티하고 당찬 형"},
+        // KARA, 2NE1 etc
+        {name:"CL (2NE1)", vibe:"강렬하고 독보적인 힙합 퀸형"},
+        {name:"박봄 (2NE1)", vibe:"독특하고 강한 보컬형"},
+        {name:"산다라박 (2NE1)", vibe:"사랑스럽고 개성있는 형"},
+        {name:"공민지 (2NE1)", vibe:"쿨하고 강한 퍼포머형"},
+        // ZEROBASEONE
+        {name:"김지웅 (ZEROBASEONE)", vibe:"섬세하고 감성적인 비주얼형"},
+        {name:"장하오 (ZEROBASEONE)", vibe:"카리스마 있는 글로벌 형"},
+        {name:"성한빈 (ZEROBASEONE)", vibe:"밝고 에너지 넘치는 형"},
+        {name:"최석Matthew (ZEROBASEONE)", vibe:"글로벌하고 따뜻한 형"},
+        {name:"김태래 (ZEROBASEONE)", vibe:"차갑고 강렬한 댄서형"},
+        // RIIZE
+        {name:"원빈 (RIIZE)", vibe:"차갑고 완벽한 비주얼형"},
+        {name:"승한 (RIIZE)", vibe:"따뜻하고 감성적인 형"},
+        {name:"은석 (RIIZE)", vibe:"밝고 에너지 넘치는 형"},
+        {name:"소희 (RIIZE)", vibe:"귀엽고 당찬 형"},
+        {name:"원재 (RIIZE)", vibe:"조용하고 깊은 형"},
+        {name:"샷건 (RIIZE)", vibe:"글로벌하고 자유로운 형"},
+        {name:"앤톤 (RIIZE)", vibe:"독특하고 개성있는 형"},
+      ];
+
       const idolPrompt = `You are a Saju + astrology expert who reads idol compatibility types.
 ${ls.style}
 
@@ -856,13 +1042,20 @@ SAJU DATA:
 성향: ${(saju.personalityHints||[]).join(", ")||"미상"}
 성별: ${payload.gender}
 
+IDOL POOL (아래 아이돌 중에서 사주 에너지와 가장 잘 맞는 3명 선택):
+${IDOL_POOL.map(i=>i.name+' ('+i.vibe+')').join(', ')}
+
 OUTPUT in ${ls.lang}:
 Respond with JSON only, no markdown:
 {
   "title": "한 줄로 이 사람의 아이돌 소울 타입 (예: '차가운 카리스마형에 끌리는 감성파')",
-  "scoreLabel": "궁합 에너지 레벨 (예: '🔥 HIGH ATTRACTION ENERGY')",
   "highlight": "이 사람의 핵심 매력 포인트 한 문장",
-  "detail": "아래 섹션 형식으로 작성:\n\n✦ YOUR IDOL TYPE\n(어떤 타입의 아이돌과 에너지가 맞는지)\n\n✦ WHY YOU ATTRACT THEM\n(사주 에너지로 보는 끌림의 이유)\n\n✦ YOUR FAN ENERGY\n(팬으로서의 성향과 덕질 스타일)\n\n✦ RED FLAG IN FANDOM\n(조심할 감정 패턴)\n\n✦ YOUR DESTINY TYPE\n(운명적으로 끌릴 아이돌 에너지 유형)"
+  "idolMatches": [
+    {"name": "아이돌 이름 (그룹명)", "reason": "이 아이돌과 에너지가 맞는 이유 한 문장", "score": 92},
+    {"name": "아이돌 이름 (그룹명)", "reason": "이유 한 문장", "score": 87},
+    {"name": "아이돌 이름 (그룹명)", "reason": "이유 한 문장", "score": 81}
+  ],
+  "detail": "아래 섹션 형식으로 작성:\n\n✦ YOUR IDOL TYPE\n(어떤 타입의 아이돌과 에너지가 맞는지, 위에서 선택한 아이돌 언급)\n\n✦ WHY YOU ATTRACT THEM\n(사주 에너지로 보는 끌림의 이유)\n\n✦ YOUR FAN ENERGY\n(팬으로서의 성향과 덕질 스타일)\n\n✦ RED FLAG IN FANDOM\n(조심할 감정 패턴)\n\n✦ YOUR DESTINY TYPE\n(운명적으로 끌릴 아이돌 에너지 유형)"
 }`.trim();
 
       const resp = await fetch("https://api.openai.com/v1/chat/completions",{
