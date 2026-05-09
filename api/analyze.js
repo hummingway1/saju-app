@@ -478,10 +478,10 @@ function buildSajuFull(payload) {
 
 // ── Astrology API ────────────────────────────────────
 async function fetchAstrologyData(payload){
-  const accessToken=process.env.ASTROLOGY_API_ACCESS_TOKEN;
-  if(!accessToken) throw new Error("Missing ASTROLOGY_API_ACCESS_TOKEN");
-  // Access Token을 Basic Auth username으로 사용 (AstrologyAPI 방식)
-  const auth = Buffer.from(`${accessToken}:`).toString("base64");
+  const userId=process.env.ASTROLOGY_API_USER_ID;
+  const apiKey=process.env.ASTROLOGY_API_KEY;
+  if(!userId||!apiKey) throw new Error("Missing ASTROLOGY_API_USER_ID or ASTROLOGY_API_KEY");
+  const auth = Buffer.from(`${userId}:${apiKey}`).toString("base64");
   const hour=(!payload.hour||payload.hour==="모름")?12:Number(payload.hour);
   const body={ day:Number(payload.day), month:Number(payload.month), year:Number(payload.year),
     hour, min:Number(payload.minute||0), lat:Number(payload.location.lat),
