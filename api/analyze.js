@@ -678,7 +678,9 @@ Output format (exactly 4 sections, no extra text):
 2. ${sections[1]}
 3. ${sections[2]}
 4. ${sections[3]}
-Each section: one title line + 2~4 sentences. No bullet points.
+Each section: one title line + 3~5 sentences with specific insights from the data. No bullet points.
+Be concrete and specific — reference the actual pillars, ten gods, yongsin, and current daeun in your interpretation.
+Do NOT give generic fortune-cookie advice. Ground every sentence in the actual saju and astrology data provided.
 `.trim();
 
   const resp=await fetch("https://api.openai.com/v1/chat/completions",{
@@ -759,7 +761,7 @@ Each section: title line + 2~3 sentences. No bullet points.
     method: "POST",
     headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "gpt-4o-mini", temperature: 0.65, max_tokens: 600,
+      model: "gpt-4o-mini", temperature: 0.65, max_tokens: 1000,
       messages: [
         { role: "system", content: "You are a calm compatibility reader who interprets pre-calculated saju data." },
         { role: "user", content: prompt }
