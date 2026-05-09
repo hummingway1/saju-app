@@ -332,7 +332,28 @@ input::placeholder,textarea::placeholder{color:rgba(255,255,255,.25)}
 }
 .hooks h3{margin:0 0 8px;font-size:10px;color:#c084fc;letter-spacing:3px;text-transform:uppercase;font-weight:700}
 .hooks p{margin:5px 0;font-size:13px;line-height:1.8;color:rgba(255,255,255,.55)}
-.detail{white-space:pre-wrap;font-size:14px;line-height:2;color:rgba(255,255,255,.8);margin-top:10px}
+.detail{font-size:14px;line-height:1.85;color:rgba(255,255,255,.8);margin-top:10px}
+.detail-section{margin-bottom:28px}
+.detail-section-title{
+  font-size:11px;font-weight:700;letter-spacing:3px;
+  color:#a855f7;margin-bottom:14px;display:block;
+}
+.detail-section-body{
+  padding-left:16px;
+  border-left:2px solid rgba(168,85,247,.25);
+}
+.detail-para{
+  margin-bottom:12px;color:rgba(255,255,255,.78);
+  line-height:1.9;font-size:14px;
+}
+.detail-hook{
+  display:block;margin:14px 0;
+  color:#f0e8ff;font-size:15px;font-weight:600;
+  padding:10px 14px;
+  background:rgba(168,85,247,.08);
+  border-radius:10px;
+  border-left:3px solid rgba(168,85,247,.5);
+}
 .meta{font-size:12px;color:var(--muted);line-height:1.7;margin-top:10px}
 
 /* ── Score ── */
@@ -513,6 +534,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:rgba(255,255,255,.2);
     <div class="mode-tabs">
       <button class="mtab active" id="mtab0" onclick="setMode('saju')">🔮 <span id="tabSajuLabel">사주 운세</span></button>
       <button class="mtab" id="mtab1" onclick="setMode('compat')">💫 <span id="tabCompatLabel">궁합 보기</span></button>
+      <button class="mtab" id="mtab2" onclick="setMode('idol')">⭐ <span id="tabIdolLabel">아이돌 매치</span></button>
     </div>
 
     <!-- ═══ SAJU MODE ═══ -->
@@ -617,6 +639,47 @@ footer{text-align:center;padding:20px;font-size:11px;color:rgba(255,255,255,.2);
         <div class="detail" id="compatDetail"></div>
       </div>
     </div><!-- /modeCompat -->
+
+    <!-- ═══ IDOL MATCH MODE ═══ -->
+    <div id="modeIdol" style="display:none">
+      <div class="panel">
+        <div class="panel-title" id="lblIdolTitle">나의 사주로 보는 아이돌 매치 타입</div>
+        <p style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:16px;line-height:1.8" id="lblIdolDesc">
+          생년월일을 입력하면 사주 에너지를 기반으로 어떤 아이돌 타입과 궁합이 맞는지 분석해드립니다.
+        </p>
+        <div class="grid">
+          <div class="field"><div class="label" id="lblIdolYear">생년</div><div id="iyearText" class="box" onclick="openSheet('iyear')">-</div></div>
+          <div class="field"><div class="label" id="lblIdolMonth">월</div><div id="imonthText" class="box" onclick="openSheet('imonth')">-</div></div>
+          <div class="field"><div class="label" id="lblIdolDay">일</div><div id="idayText" class="box" onclick="openSheet('iday')">-</div></div>
+          <div class="field"><div class="label" id="lblIdolHour">시각</div><div id="ihourText" class="box" onclick="openSheet('ihour')">-</div></div>
+          <div class="field full">
+            <div class="label" id="lblIdolGender">성별</div>
+            <div class="chips">
+              <button type="button" class="chip" id="iMaleChip" onclick="setIdolGender('male')">남성</button>
+              <button type="button" class="chip" id="iFemaleChip" onclick="setIdolGender('female')">여성</button>
+            </div>
+          </div>
+        </div>
+        <button class="cta" id="btnIdol" onclick="runIdolMatch()">내 아이돌 타입 분석</button>
+        <div id="idolLoading" class="loading">✦ 별자리와 사주를 읽는 중…</div>
+        <div id="idolError" class="error"></div>
+      </div>
+
+      <!-- Idol Result -->
+      <div id="idolResult" class="result-card" style="display:none;margin-top:14px">
+        <div class="badge compat-badge2" id="idolBadge">IDOL MATCH</div>
+        <!-- Share Card (canvas renders here) -->
+        <div id="shareCardWrap" style="margin:16px 0;border-radius:16px;overflow:hidden;display:none">
+          <canvas id="shareCanvas" style="width:100%;border-radius:16px"></canvas>
+        </div>
+        <h2 class="headline" id="idolTitle"></h2>
+        <div id="idolDetail" class="detail"></div>
+        <!-- Share Button -->
+        <button class="cta" id="shareBtn" onclick="downloadShareCard()" style="display:none;margin-top:16px;background:linear-gradient(135deg,#ec4899,#a855f7)">
+          📸 공유 카드 저장
+        </button>
+      </div>
+    </div><!-- /modeIdol -->
   </div>
 </div>
 
@@ -1060,8 +1123,10 @@ function setMode(mode) {
   currentMode = mode;
   document.getElementById('modeSaju').style.display   = mode==='saju'  ?'':'none';
   document.getElementById('modeCompat').style.display = mode==='compat'?'':'none';
+  document.getElementById('modeIdol').style.display   = mode==='idol'  ?'':'none';
   document.getElementById('mtab0').classList.toggle('active', mode==='saju');
   document.getElementById('mtab1').classList.toggle('active', mode==='compat');
+  document.getElementById('mtab2').classList.toggle('active', mode==='idol');
 }
 
 // ══════════════════════════════════════════════════════
@@ -1280,10 +1345,75 @@ function renderFreeResult(data) {
   document.getElementById('hookTiming').textContent='⏱ '+(data.free.timingHook||'');
   document.getElementById('metaText').textContent=t.freeMeta;
   document.getElementById('detailBox').classList.add('hidden');
-  document.getElementById('detailBox').textContent='';
+  document.getElementById('detailBox').innerHTML='';
   document.getElementById('unlockBtn').style.display='none';
   window.scrollTo({top:box.offsetTop-16,behavior:'smooth'});
 }
+function renderDetail(text, containerId) {
+  const el = document.getElementById(containerId);
+  if (!text) { el.innerHTML = ''; return; }
+
+  // Split by section headers (✦ ...)
+  const lines = text.split('\n');
+  let html = '';
+  let currentSection = null;
+  let currentBody = '';
+
+  const flushSection = () => {
+    if (!currentSection) return;
+    const bodyLines = currentBody.trim().split('\n').filter(l => l.trim());
+    let bodyHtml = '';
+    let paraBuffer = [];
+
+    bodyLines.forEach(line => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        if (paraBuffer.length) {
+          // Short single-line = hook, longer = paragraph
+          const joined = paraBuffer.join(' ');
+          if (paraBuffer.length === 1 && joined.length < 40) {
+            bodyHtml += `<span class="detail-hook">${joined}</span>`;
+          } else {
+            bodyHtml += `<p class="detail-para">${joined}</p>`;
+          }
+          paraBuffer = [];
+        }
+      } else {
+        paraBuffer.push(trimmed);
+      }
+    });
+    if (paraBuffer.length) {
+      const joined = paraBuffer.join(' ');
+      if (paraBuffer.length === 1 && joined.length < 40) {
+        bodyHtml += `<span class="detail-hook">${joined}</span>`;
+      } else {
+        bodyHtml += `<p class="detail-para">${joined}</p>`;
+      }
+    }
+
+    html += `<div class="detail-section">
+      <span class="detail-section-title">${currentSection}</span>
+      <div class="detail-section-body">${bodyHtml}</div>
+    </div>`;
+    currentBody = '';
+  };
+
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('✦') || /^\d+\.\s*✦/.test(trimmed)) {
+      flushSection();
+      // Remove leading number if present
+      currentSection = trimmed.replace(/^\d+\.\s*/, '');
+    } else {
+      currentBody += line + '\n';
+    }
+  });
+  flushSection();
+
+  el.innerHTML = html;
+  el.classList.remove('hidden');
+}
+
 function renderPaidResult(data) {
   const t=I18N[currentLang];
   const box=document.getElementById('resultBox');
@@ -1295,8 +1425,7 @@ function renderPaidResult(data) {
   document.getElementById('hookRisk').textContent='⚠ '+(data.free.riskHook||'');
   document.getElementById('hookTiming').textContent='⏱ '+(data.free.timingHook||'');
   document.getElementById('metaText').textContent=t.paidMeta;
-  document.getElementById('detailBox').classList.remove('hidden');
-  document.getElementById('detailBox').textContent=data.detail||'';
+  renderDetail(data.detail||'', 'detailBox');
   document.getElementById('unlockBtn').style.display='none';
   window.scrollTo({top:box.offsetTop-16,behavior:'smooth'});
 }
@@ -1305,8 +1434,245 @@ function renderCompatResult(data) {
   box.style.display='';
   document.getElementById('compatScoreNum').textContent=data.score??'-';
   document.getElementById('compatTitle').textContent=data.title??'';
-  document.getElementById('compatDetail').textContent=data.detail??'';
+  renderDetail(data.detail??'', 'compatDetail');
   window.scrollTo({top:box.offsetTop-16,behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════════════
+//  IDOL MATCH STATE
+// ══════════════════════════════════════════════════════
+let idolState = { year:null, month:null, day:null, hour:null, gender:null };
+
+function setIdolGender(g) {
+  idolState.gender = g;
+  document.getElementById('iMaleChip').classList.toggle('active', g==='male');
+  document.getElementById('iFemaleChip').classList.toggle('active', g==='female');
+}
+
+function renderIdolState() {
+  const t = I18N[currentLang];
+  document.getElementById('iyearText').textContent  = idolState.year  ?? t.select;
+  document.getElementById('imonthText').textContent = idolState.month ?? t.select;
+  document.getElementById('idayText').textContent   = idolState.day   ?? t.select;
+  document.getElementById('ihourText').textContent  = idolState.hour  ?? t.hourUnknown;
+  document.getElementById('iMaleChip').classList.toggle('active', idolState.gender==='male');
+  document.getElementById('iFemaleChip').classList.toggle('active', idolState.gender==='female');
+}
+
+// ══════════════════════════════════════════════════════
+//  IDOL MATCH ANALYSIS
+// ══════════════════════════════════════════════════════
+async function runIdolMatch() {
+  const t = I18N[currentLang];
+  try {
+    clearErr('idolError');
+    if (!idolState.year||!idolState.month||!idolState.day) throw new Error(t.errDate);
+    if (!idolState.gender) throw new Error(t.errGender);
+    setLoad('idolLoading', true);
+
+    const res = await fetch('/api/analyze', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        ...idolState, paid:false,
+        mode:'idol', lang:t.aiLang,
+        question:'idol match type analysis'
+      })
+    });
+    const data = await res.json();
+    if (!res.ok||data.error) throw new Error(data.error||t.errAnalysis);
+    renderIdolResult(data);
+  } catch(e) { showErr('idolError', e.message); }
+  finally { setLoad('idolLoading', false); }
+}
+
+function renderIdolResult(data) {
+  const box = document.getElementById('idolResult');
+  box.style.display = '';
+  document.getElementById('idolTitle').textContent = data.title || '';
+  renderDetail(data.detail||'', 'idolDetail');
+
+  // Draw share card
+  drawShareCard(data.title||'', data.scoreLabel||'', data.highlight||'');
+  document.getElementById('shareBtn').style.display = 'block';
+  window.scrollTo({top:box.offsetTop-16, behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════════════
+//  SHARE CARD (Canvas)
+// ══════════════════════════════════════════════════════
+function drawShareCard(title, score, highlight) {
+  const wrap = document.getElementById('shareCardWrap');
+  const canvas = document.getElementById('shareCanvas');
+  const dpr = window.devicePixelRatio || 1;
+  const W = 360, H = 480;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0, '#0a0014');
+  grad.addColorStop(0.5, '#160028');
+  grad.addColorStop(1, '#0a0014');
+  ctx.fillStyle = grad;
+  ctx.roundRect(0,0,W,H,24);
+  ctx.fill();
+
+  // Glow
+  const glow = ctx.createRadialGradient(W/2,H*0.35,0,W/2,H*0.35,180);
+  glow.addColorStop(0, 'rgba(168,85,247,0.3)');
+  glow.addColorStop(1, 'rgba(168,85,247,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0,0,W,H);
+
+  // Stars (random dots)
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  for(let i=0;i<40;i++){
+    const x=Math.random()*W, y=Math.random()*H, r=Math.random()*1.2;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+
+  // Brand
+  ctx.font = 'bold 11px Inter, sans-serif';
+  ctx.fillStyle = 'rgba(168,85,247,0.8)';
+  ctx.letterSpacing = '3px';
+  ctx.textAlign = 'center';
+  ctx.fillText('SAJUSTRO', W/2, 36);
+
+  // ✦ symbol
+  ctx.font = '28px serif';
+  ctx.fillStyle = '#a855f7';
+  ctx.fillText('✦', W/2, 88);
+
+  // Title
+  ctx.font = 'bold 22px Inter, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  const lines = wrapText(ctx, title, W-60);
+  lines.forEach((line, i) => ctx.fillText(line, W/2, 130 + i*32));
+
+  // Divider
+  const divY = 130 + lines.length*32 + 20;
+  ctx.strokeStyle = 'rgba(168,85,247,0.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(W/2-60, divY); ctx.lineTo(W/2+60, divY);
+  ctx.stroke();
+
+  // Highlight text
+  if (highlight) {
+    ctx.font = '13px Inter, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.65)';
+    const hLines = wrapText(ctx, highlight, W-80);
+    hLines.slice(0,4).forEach((line,i) => ctx.fillText(line, W/2, divY+30+i*22));
+  }
+
+  // Bottom tag
+  ctx.font = '11px Inter, sans-serif';
+  ctx.fillStyle = 'rgba(168,85,247,0.5)';
+  ctx.fillText('sajustro.vercel.app', W/2, H-24);
+
+  wrap.style.display = 'block';
+}
+
+function wrapText(ctx, text, maxWidth) {
+  if (!text) return [];
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    const test = current ? current+' '+word : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+    } else { current = test; }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+function downloadShareCard() {
+  const canvas = document.getElementById('shareCanvas');
+  const link = document.createElement('a');
+  link.download = 'sajustro-idol-match.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// ══════════════════════════════════════════════════════
+//  EXTEND openSheet for idol fields
+// ══════════════════════════════════════════════════════
+const _origOpenSheet = openSheet;
+function openSheet(type) {
+  const idolMatch = type.match(/^i(year|month|day|hour)$/);
+  if (!idolMatch) { _origOpenSheet(type); return; }
+
+  const field = idolMatch[1];
+  const t = I18N[currentLang];
+  const titleMap = {year:'sheetYear',month:'sheetMonth',day:'sheetDay',hour:'sheetHour'};
+  document.getElementById('sheetTitle').textContent = t[titleMap[field]]||t.select;
+  _fillSheet(field, idolState, v => {
+    idolState[field] = (v===t.hourUnknown)?null:v;
+    if((field==='year'||field==='month')&&idolState.day){
+      const d=new Date(idolState.year||2000,idolState.month||1,0).getDate();
+      if(idolState.day>d) idolState.day=d;
+    }
+    renderIdolState();
+  });
+  document.getElementById('sheetBackdrop').classList.add('active');
+  document.getElementById('sheet').classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════
+//  UPDATE setLang for idol tab labels
+// ══════════════════════════════════════════════════════
+const _setLangBase = setLang;
+function setLang(lang) {
+  _setLangBase(lang);
+  const tabIdolLabels = {
+    ko:'아이돌 매치', en:'Idol Match', ja:'アイドル相性', zh:'偶像匹配', es:'Match Idol'
+  };
+  const el = document.getElementById('tabIdolLabel');
+  if (el) el.textContent = tabIdolLabels[lang]||'Idol Match';
+
+  const idolTitles = {
+    ko:'나의 사주로 보는 아이돌 매치 타입',
+    en:'Your Idol Match Type by Saju',
+    ja:'四柱推命で見るアイドルマッチタイプ',
+    zh:'根据四柱命理的偶像匹配类型',
+    es:'Tu Tipo de Match Idol por Saju'
+  };
+  const idolDescs = {
+    ko:'생년월일을 입력하면 사주 에너지를 기반으로 어떤 아이돌 타입과 궁합이 맞는지 분석해드립니다.',
+    en:'Enter your birth date to discover which idol type aligns with your Saju energy.',
+    ja:'生年月日を入力すると、四柱推命エネルギーに基づいてどのアイドルタイプと相性が良いか分析します。',
+    zh:'输入生日，根据四柱命理能量分析与哪种偶像类型最为契合。',
+    es:'Ingresa tu fecha de nacimiento para descubrir qué tipo de idol se alinea con tu energía Saju.'
+  };
+  const btnIdolLabels = {
+    ko:'내 아이돌 타입 분석', en:'Analyze My Idol Type',
+    ja:'アイドルタイプを分析', zh:'分析我的偶像类型', es:'Analizar Mi Tipo Idol'
+  };
+  const t2 = document.getElementById('lblIdolTitle');
+  const d2 = document.getElementById('lblIdolDesc');
+  const b2 = document.getElementById('btnIdol');
+  if(t2) t2.textContent = idolTitles[lang]||idolTitles.en;
+  if(d2) d2.textContent = idolDescs[lang]||idolDescs.en;
+  if(b2) b2.textContent = btnIdolLabels[lang]||btnIdolLabels.en;
+
+  // Idol form labels
+  ['lblIdolYear','lblIdolMonth','lblIdolDay','lblIdolHour','lblIdolGender'].forEach((id,i)=>{
+    const vals = [I18N[lang].lblYear,I18N[lang].lblMonth,I18N[lang].lblDay,I18N[lang].lblHour,I18N[lang].lblGender];
+    const el2=document.getElementById(id); if(el2) el2.textContent=vals[i];
+  });
+  ['iMaleChip','iFemaleChip'].forEach((id,i)=>{
+    const el3=document.getElementById(id);
+    if(el3) el3.textContent=[I18N[lang].male,I18N[lang].female][i];
+  });
+  renderIdolState();
 }
 
 // Init
