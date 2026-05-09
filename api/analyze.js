@@ -329,7 +329,7 @@ const HWA_SETS = [
 ];
 const HWE_PAIRS = [
   {a:0,b:11,result:'水',name:'자해합'},
-  {a:1,b:10,result:'土',name:'축술합'},... 
+  {a:1,b:10,result:'土',name:'축술합'},
   {a:2,b:9, result:'火',name:'인유합'}, // 실제는 복잡하지만 간략화
   {a:3,b:8, result:'木',name:'묘신합'},
   {a:4,b:7, result:'土',name:'진미합'},
