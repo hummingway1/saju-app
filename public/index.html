@@ -566,7 +566,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:rgba(255,255,255,.2);
           <p id="hookRisk"></p>
           <p id="hookTiming"></p>
         </div>
-        <button id="unlockBtn" class="subcta" onclick="runPaidAnalysis()">출생 차트 상세 보기</button>
+        <button id="unlockBtn" class="subcta" onclick="runPaidAnalysis()">✦ 출생지 입력하고 점성술 차트까지 보기</button>
         <div class="meta" id="metaText"></div>
         <div id="detailBox" class="detail hidden"></div>
       </div>
@@ -1206,12 +1206,29 @@ async function runFreeAnalysis() {
   const t=I18N[currentLang];
   try {
     clearErr('errorBox'); validateCore(t); setLoad('loading',true);
-    const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({...state,question:document.getElementById('questionInput').value.trim(),
-        paid:false,tarot:selectedTarot,lang:t.aiLang,fortuneCat:t.fcatKeys[fortuneCatIdx]})});
-    const data=await res.json();
-    if(!res.ok||data.error) throw new Error(data.error||t.errAnalysis);
-    renderFreeResult(data);
+    const locationVal = document.getElementById('locationInput').value.trim();
+    const question = document.getElementById('questionInput').value.trim();
+
+    // 출생지 입력됐으면 점성술 포함 풀 분석
+    if (locationVal) {
+      if (!lastLocation || lastLocation.query !== locationVal) {
+        lastLocation = await geocodeLocation();
+      }
+      const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({...state,minute:0,question,
+          location:lastLocation,paid:true,tarot:selectedTarot,lang:t.aiLang,fortuneCat:t.fcatKeys[fortuneCatIdx]})});
+      const data=await res.json();
+      if(!res.ok||data.error) throw new Error(data.error||t.errAnalysis);
+      renderPaidResult(data);
+    } else {
+      // 출생지 없으면 사주+타로만
+      const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({...state,question,
+          paid:false,tarot:selectedTarot,lang:t.aiLang,fortuneCat:t.fcatKeys[fortuneCatIdx]})});
+      const data=await res.json();
+      if(!res.ok||data.error) throw new Error(data.error||t.errAnalysis);
+      renderFreeResult(data);
+    }
   } catch(e){ showErr('errorBox',e.message); }
   finally{ setLoad('loading',false); }
 }
@@ -1280,6 +1297,7 @@ function renderPaidResult(data) {
   document.getElementById('metaText').textContent=t.paidMeta;
   document.getElementById('detailBox').classList.remove('hidden');
   document.getElementById('detailBox').textContent=data.detail||'';
+  document.getElementById('unlockBtn').style.display='none';
   window.scrollTo({top:box.offsetTop-16,behavior:'smooth'});
 }
 function renderCompatResult(data) {
