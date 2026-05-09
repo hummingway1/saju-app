@@ -5,6 +5,49 @@ const BRANCHES = ['子','丑','寅','卯','辰','巳','午','未','申','酉','�
 const ELEMENTS_EN = ['Wood','Fire','Earth','Metal','Water'];
 const CACHE = new Map();
 
+// ── Rate Limiter ─────────────────────────────────────
+// 같은 IP에서 하루 10회 초과 시 차단
+const RATE_LIMIT = new Map();
+const RATE_MAX = 10;
+const RATE_WINDOW = 24 * 60 * 60 * 1000; // 24시간
+
+function getClientIP(req) {
+  return (
+    req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+    req.headers['x-real-ip'] ||
+    req.socket?.remoteAddress ||
+    'unknown'
+  );
+}
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const key = ip + ':' + new Date().toDateString(); // 날짜별 키
+
+  if (!RATE_LIMIT.has(key)) {
+    RATE_LIMIT.set(key, { count: 1, first: now });
+    // 오래된 키 정리 (메모리 관리)
+    if (RATE_LIMIT.size > 10000) {
+      for (const [k, v] of RATE_LIMIT.entries()) {
+        if (now - v.first > RATE_WINDOW * 2) RATE_LIMIT.delete(k);
+      }
+    }
+    return true;
+  }
+
+  const entry = RATE_LIMIT.get(key);
+  if (now - entry.first > RATE_WINDOW) {
+    // 24시간 지났으면 리셋
+    RATE_LIMIT.set(key, { count: 1, first: now });
+    return true;
+  }
+
+  if (entry.count >= RATE_MAX) return false;
+
+  entry.count++;
+  return true;
+}
+
 // ── Supported languages ──────────────────────────────
 const SUPPORTED_LANGS = ["Korean","English","Japanese","Chinese","Spanish"];
 
@@ -772,6 +815,15 @@ Each section: title line + 2~3 sentences. No bullet points.
 // ── Main handler ──────────────────────────────────────
 export default async function handler(req, res){
   if(req.method!=="POST") return res.status(405).json({error:"Method not allowed"});
+
+  // Rate limit check
+  const clientIP = getClientIP(req);
+  if (!checkRateLimit(clientIP)) {
+    return res.status(429).json({
+      error: "하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요. / Daily limit (10) reached. Please try again tomorrow."
+    });
+  }
+
   try{
     const payload=req.body||{};
     const lang = SUPPORTED_LANGS.includes(payload.lang) ? payload.lang : "Korean";
