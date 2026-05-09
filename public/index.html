@@ -503,17 +503,17 @@ footer{text-align:center;padding:20px;font-size:11px;color:rgba(255,255,255,.2);
       <p id="featDesc">Designed for viral sharing, fan edits, ship wars, and late-night delulu energy.</p>
     </div>
     <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🔮</div>
+      <div class="feature-card" onclick="setMode('idol');document.getElementById('appArea').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
+        <div class="feature-icon">⭐</div>
         <h4 id="feat1Title">Idol Soul Match</h4>
         <p id="feat1Desc">Find which idols match your destiny based on Saju and zodiac energy.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" onclick="setMode('compat');document.getElementById('appArea').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
         <div class="feature-icon">💫</div>
         <h4 id="feat2Title">Ship Compatibility</h4>
         <p id="feat2Desc">Compare yourself with any person and discover your ideal pairing.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" onclick="setMode('idol');document.getElementById('appArea').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
         <div class="feature-icon">✨</div>
         <h4 id="feat3Title">Viral Share Cards</h4>
         <p id="feat3Desc">Auto-generate aesthetic readings optimized for TikTok and Instagram stories.</p>
@@ -1076,6 +1076,9 @@ function setLang(lang) {
   document.getElementById('mtab1').innerHTML = t.tabs[1].split(' ')[0]+' <span id="tabCompatLabel">'+t.tabs[1].replace(/^[^ ]+ /,'')+'</span>';
   document.getElementById('mtab0').onclick = ()=>setMode('saju');
   document.getElementById('mtab1').onclick = ()=>setMode('compat');
+  const idolTabNames={ko:'아이돌 매치',en:'Idol Match',ja:'アイドル相性',zh:'偶像匹配',es:'Match Idol'};
+  const mt2=document.getElementById('mtab2');
+  if(mt2){mt2.innerHTML='⭐ <span id="tabIdolLabel">'+(idolTabNames[lang]||'Idol Match')+'</span>';mt2.onclick=()=>setMode('idol');}
   // Saju panel
   document.getElementById('lblTarotPanel').textContent = t.tarotPanel;
   document.getElementById('lblTarotIntro').textContent = t.tarotIntro;
@@ -1114,6 +1117,26 @@ function setLang(lang) {
   buildTarotGrid();
   renderState();
   renderCompatState();
+
+  // Idol tab & form labels
+  const idolTabNames={ko:'아이돌 매치',en:'Idol Match',ja:'アイドル相性',zh:'偶像匹配',es:'Match Idol'};
+  const mt2=document.getElementById('mtab2');
+  if(mt2){mt2.innerHTML='⭐ <span id="tabIdolLabel">'+(idolTabNames[lang]||'Idol Match')+'</span>';mt2.onclick=()=>setMode('idol');}
+  const idolTitles={ko:'나의 사주로 보는 아이돌 매치 타입',en:'Your Idol Match Type by Saju',ja:'四柱推命で見るアイドルマッチタイプ',zh:'根据四柱命理的偶像匹配类型',es:'Tu Tipo de Match Idol por Saju'};
+  const idolDescs={ko:'생년월일을 입력하면 사주 에너지를 기반으로 어떤 아이돌 타입과 궁합이 맞는지 분석해드립니다.',en:'Enter your birth date to discover which idol type aligns with your Saju energy.',ja:'生年月日を入力すると、四柱推命エネルギーに基づいてどのアイドルタイプと相性が良いか分析します。',zh:'输入生日，根据四柱命理能量分析与哪种偶像类型最为契合。',es:'Ingresa tu fecha de nacimiento para descubrir qué tipo de idol se alinea con tu energía Saju.'};
+  const btnIdolLabels={ko:'내 아이돌 타입 분석',en:'Analyze My Idol Type',ja:'アイドルタイプを分析',zh:'分析我的偶像类型',es:'Analizar Mi Tipo Idol'};
+  const shareBtnLabels={ko:'📸 공유 카드 저장',en:'📸 Save Share Card',ja:'📸 シェアカードを保存',zh:'📸 保存分享卡片',es:'📸 Guardar Tarjeta'};
+  const elIT=document.getElementById('lblIdolTitle'); if(elIT) elIT.textContent=idolTitles[lang]||idolTitles.en;
+  const elID=document.getElementById('lblIdolDesc');  if(elID) elID.textContent=idolDescs[lang]||idolDescs.en;
+  const elBI=document.getElementById('btnIdol');      if(elBI) elBI.textContent=btnIdolLabels[lang]||btnIdolLabels.en;
+  const elSB=document.getElementById('shareBtn');     if(elSB) elSB.textContent=shareBtnLabels[lang]||shareBtnLabels.en;
+  ['lblIdolYear','lblIdolMonth','lblIdolDay','lblIdolHour','lblIdolGender'].forEach((id,i)=>{
+    const vals=[t.lblYear,t.lblMonth,t.lblDay,t.lblHour,t.lblGender];
+    const el=document.getElementById(id); if(el) el.textContent=vals[i];
+  });
+  const elIM=document.getElementById('iMaleChip'); if(elIM) elIM.textContent=t.male;
+  const elIF=document.getElementById('iFemaleChip'); if(elIF) elIF.textContent=t.female;
+  renderIdolState();
 }
 
 // ══════════════════════════════════════════════════════
@@ -1207,6 +1230,26 @@ function setCGender(who,g) { compatState[who].gender=g; renderCompatState(); }
 // ══════════════════════════════════════════════════════
 function openSheet(type) {
   const t = I18N[currentLang];
+
+  // Idol fields
+  const idolMatch = type.match(/^i(year|month|day|hour)$/);
+  if (idolMatch) {
+    const field = idolMatch[1];
+    const titleMap = {year:'sheetYear',month:'sheetMonth',day:'sheetDay',hour:'sheetHour'};
+    document.getElementById('sheetTitle').textContent = t[titleMap[field]]||t.select;
+    _fillSheet(field, idolState, v => {
+      idolState[field] = (v===t.hourUnknown)?null:v;
+      if((field==='year'||field==='month')&&idolState.day){
+        const d=new Date(idolState.year||2000,idolState.month||1,0).getDate();
+        if(idolState.day>d) idolState.day=d;
+      }
+      renderIdolState();
+    });
+    document.getElementById('sheetBackdrop').classList.add('active');
+    document.getElementById('sheet').classList.add('active');
+    return;
+  }
+
   const compatMatch = type.match(/^([ab])(year|month|day|hour)$/);
   const titleMap = {year:'sheetYear',month:'sheetMonth',day:'sheetDay',hour:'sheetHour'};
 
@@ -1605,76 +1648,10 @@ function downloadShareCard() {
 // ══════════════════════════════════════════════════════
 //  EXTEND openSheet for idol fields
 // ══════════════════════════════════════════════════════
-const _origOpenSheet = openSheet;
-function openSheet(type) {
-  const idolMatch = type.match(/^i(year|month|day|hour)$/);
-  if (!idolMatch) { _origOpenSheet(type); return; }
-
-  const field = idolMatch[1];
-  const t = I18N[currentLang];
-  const titleMap = {year:'sheetYear',month:'sheetMonth',day:'sheetDay',hour:'sheetHour'};
-  document.getElementById('sheetTitle').textContent = t[titleMap[field]]||t.select;
-  _fillSheet(field, idolState, v => {
-    idolState[field] = (v===t.hourUnknown)?null:v;
-    if((field==='year'||field==='month')&&idolState.day){
-      const d=new Date(idolState.year||2000,idolState.month||1,0).getDate();
-      if(idolState.day>d) idolState.day=d;
-    }
-    renderIdolState();
-  });
-  document.getElementById('sheetBackdrop').classList.add('active');
-  document.getElementById('sheet').classList.add('active');
-}
 
 // ══════════════════════════════════════════════════════
 //  UPDATE setLang for idol tab labels
 // ══════════════════════════════════════════════════════
-const _setLangBase = setLang;
-function setLang(lang) {
-  _setLangBase(lang);
-  const tabIdolLabels = {
-    ko:'아이돌 매치', en:'Idol Match', ja:'アイドル相性', zh:'偶像匹配', es:'Match Idol'
-  };
-  const el = document.getElementById('tabIdolLabel');
-  if (el) el.textContent = tabIdolLabels[lang]||'Idol Match';
-
-  const idolTitles = {
-    ko:'나의 사주로 보는 아이돌 매치 타입',
-    en:'Your Idol Match Type by Saju',
-    ja:'四柱推命で見るアイドルマッチタイプ',
-    zh:'根据四柱命理的偶像匹配类型',
-    es:'Tu Tipo de Match Idol por Saju'
-  };
-  const idolDescs = {
-    ko:'생년월일을 입력하면 사주 에너지를 기반으로 어떤 아이돌 타입과 궁합이 맞는지 분석해드립니다.',
-    en:'Enter your birth date to discover which idol type aligns with your Saju energy.',
-    ja:'生年月日を入力すると、四柱推命エネルギーに基づいてどのアイドルタイプと相性が良いか分析します。',
-    zh:'输入生日，根据四柱命理能量分析与哪种偶像类型最为契合。',
-    es:'Ingresa tu fecha de nacimiento para descubrir qué tipo de idol se alinea con tu energía Saju.'
-  };
-  const btnIdolLabels = {
-    ko:'내 아이돌 타입 분석', en:'Analyze My Idol Type',
-    ja:'アイドルタイプを分析', zh:'分析我的偶像类型', es:'Analizar Mi Tipo Idol'
-  };
-  const t2 = document.getElementById('lblIdolTitle');
-  const d2 = document.getElementById('lblIdolDesc');
-  const b2 = document.getElementById('btnIdol');
-  if(t2) t2.textContent = idolTitles[lang]||idolTitles.en;
-  if(d2) d2.textContent = idolDescs[lang]||idolDescs.en;
-  if(b2) b2.textContent = btnIdolLabels[lang]||btnIdolLabels.en;
-
-  // Idol form labels
-  ['lblIdolYear','lblIdolMonth','lblIdolDay','lblIdolHour','lblIdolGender'].forEach((id,i)=>{
-    const vals = [I18N[lang].lblYear,I18N[lang].lblMonth,I18N[lang].lblDay,I18N[lang].lblHour,I18N[lang].lblGender];
-    const el2=document.getElementById(id); if(el2) el2.textContent=vals[i];
-  });
-  ['iMaleChip','iFemaleChip'].forEach((id,i)=>{
-    const el3=document.getElementById(id);
-    if(el3) el3.textContent=[I18N[lang].male,I18N[lang].female][i];
-  });
-  renderIdolState();
-}
-
 // Init
 setLang(currentLang);
 </script>
