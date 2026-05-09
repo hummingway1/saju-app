@@ -25,8 +25,56 @@ const LANG_HOOKS = {
     love: { decision:"관계의 문은 열려 있지만, 지금은 감정의 온도차를 가볍게 보면 마음에 잔상이 남기 쉬운 시기입니다.", timing:"가까운 흐름 안에서 마음을 확인해야 할 장면이 한 번 또렷하게 다가올 수 있습니다." },
     money: { decision:"재물의 흐름은 들어오기보다, 먼저 지키는 쪽에 뜻이 실려 있습니다. 크게 넓히기보다 손실을 줄이는 선택이 더 빛을 냅니다.", risk:"이번에는 자신감보다 계산이 중요합니다. 마음이 들뜬 순간일수록 숫자를 다시 확인하는 편이 좋습니다." },
     metalWater: "멈춰 있던 것처럼 보여도 안쪽의 물결은 이미 움직이고 있습니다. 다만 너무 빨리 답을 정하려 하기보다, 방향을 먼저 바로잡는 편이 좋습니다.",
-    paidSections: ["지금의 결","왜 이런 흐름이 보이는지","조심해야 할 그림자","지금 가장 어울리는 움직임"],
-    paidStyle: "한국어로 답변. 말투는 상냥하고 신비롭되 과하지 않게. '~일 수 있습니다', '~흐름입니다', '~보입니다' 같은 표현 사용."
+    paidSections: ["✦ CURRENT ENERGY","✦ MAY → JUNE","✦ YOUR PATTERN","✦ YOUR RED FLAG","✦ JULY → SEPTEMBER","✦ WHAT YOU ATTRACT","✦ NEXT YEAR PREVIEW"],
+    paidStyle: `한국어로 답변.
+
+전체 분위기:
+- TikTok / Instagram 세대가 저장하고 공유하고 싶어지는 스타일
+- AI가 감정과 운명의 흐름을 읽어주는 느낌
+- 신비롭지만 너무 철학관 같지 않게
+- "헐 맞아", "내 얘기 같은데?" 느낌 중요
+- 문장은 짧고 리듬감 있게
+- 모바일에서 읽기 쉽게 구성
+
+스타일 규칙:
+- 긴 문단 금지
+- 반드시 문단 사이 공백 넣기
+- 중요한 문장은 단독 줄 사용
+- 보고서처럼 쓰지 말 것
+- "~입니다" 반복 금지
+- 너무 딱딱한 명리학 용어 설명 금지
+- 감정 흐름 중심으로 해석
+
+톤:
+- 차분하지만 중독성 있는 말투
+- 너무 과장된 TikTok 밈 말투는 금지
+- 살짝 현실적인 astrology reader 느낌
+- "지금 너는...", "이상하게 요즘...", "솔직히 이번 흐름은..." 같은 말투 사용 가능
+
+반드시 아래 구조로 출력:
+✦ CURRENT ENERGY — 현재 가장 강한 감정 흐름과 에너지
+✦ MAY → JUNE — 다가오는 1~2개월 흐름, 인간관계 / 감정 / 기회 변화 포함
+✦ YOUR PATTERN — 반복되는 감정 패턴이나 연애 흐름, 사용자가 공감할 만하게
+✦ YOUR RED FLAG — 지금 시기 가장 조심해야 할 감정이나 행동
+✦ JULY → SEPTEMBER — 올해 하반기 흐름, 새로운 관계 / 변화 / 이동 포함
+✦ WHAT YOU ATTRACT — 지금 끌어당기는 사람 유형이나 에너지
+✦ NEXT YEAR PREVIEW — 내년에 강해질 흐름 간단히
+
+추가 규칙:
+- 중간중간 짧고 강한 한줄 훅 넣기
+- 읽는 사람이 저장하고 싶게 만들기
+- 너무 단정짓지 말고 "가능성", "흐름", "느낌" 표현 사용
+- 연애/인간관계 관련 해석 비중 높게
+- fandom / astrology 사용자 감성 고려
+
+좋은 예시:
+- "너는 차가운 사람에게 자꾸 끌리는 흐름이 강함."
+- "이번 여름엔 관계 하나가 예상보다 오래 남을 가능성 있음."
+- "지금은 예전처럼 참고 넘기기 힘든 시기."
+- "감정보다 직감을 먼저 믿게 되는 흐름."
+- "이상하게 사람 보는 기준이 확 바뀌기 시작함."
+
+출력은 반드시 aesthetic한 모바일 앱 느낌으로 작성.`
   },
   English: {
     defaultDecision: "The current flow calls for alignment between your heart and reality before any rush forward.",
@@ -675,14 +723,18 @@ ${tarot?.title||"None"}: ${tarot?.message||"None"}
 [QUESTION]
 ${question||"General life path"}
 
-Output format (exactly 4 sections, no extra text):
-1. ${sections[0]}
-2. ${sections[1]}
-3. ${sections[2]}
-4. ${sections[3]}
-Each section: one title line + 3~5 sentences with specific insights from the data. No bullet points.
-Be concrete and specific — reference the actual pillars, ten gods, yongsin, and current daeun in your interpretation.
-Do NOT give generic fortune-cookie advice. Ground every sentence in the actual saju and astrology data provided.
+Output format — exactly these sections in order, no extra text:
+${sections.map((s,i) => (i+1)+'. '+s).join('\n')}
+
+Rules:
+- Each section starts with the section title on its own line
+- Short paragraphs only (2~4 lines max per paragraph)
+- Empty line between paragraphs
+- Important sentences stand alone on their own line
+- Ground every insight in the actual saju/astrology data
+- Do NOT give generic advice — be specific to this person's chart
+- Prioritize emotional and relationship insights
+- Make it saveable and shareable
 `.trim();
 
   const resp=await fetch("https://api.openai.com/v1/chat/completions",{
