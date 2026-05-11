@@ -760,8 +760,7 @@ OUTPUT FORMAT — valid JSON only, no markdown:
   "shareLine": "SNS에 올리고 싶은 한 줄",
   "cliffhanger": "다음 흐름 암시 (재방문 유도)",
   "sections": [
-    ${sections.map((s,i)=>'{"title":"'+s+'","body":"...2~4 lines, ultra short, cold oracle tone, empty lines between sentences, hook lines stand alone"}').join(",
-    ")}
+    ${sections.map((sec,i)=>`{"title":"${sec}","body":"...2~4 lines, ultra short, cold oracle tone, empty lines between sentences, hook lines stand alone"}`).join(",\n    ")}
   ]
 }
 
