@@ -175,9 +175,9 @@ input::placeholder,textarea::placeholder{color:rgba(255,255,255,.2)}
 .badge-idol{background:rgba(236,72,153,.1);color:#f9a8d4;border:1px solid rgba(236,72,153,.2)}
 .headline{font-size:19px;color:#fff;margin:0 0 10px;line-height:1.4;font-weight:700}
 .decision{font-size:15px;line-height:1.9;color:rgba(255,255,255,.85)}
-.hooks{margin-top:12px;padding:13px;border-radius:14px;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.15)}
-.hooks h3{margin:0 0 7px;font-size:9px;color:#c084fc;letter-spacing:3px;text-transform:uppercase;font-weight:700}
-.hooks p{margin:4px 0;font-size:13px;line-height:1.8;color:rgba(255,255,255,.5)}
+.hooks{margin-top:12px;padding:13px;border-radius:14px;background:rgba(168,85,247,.04);border:1px solid rgba(168,85,247,.12)}
+.hooks h3{margin:0 0 10px;font-size:9px;color:rgba(168,85,247,.6);letter-spacing:3px;text-transform:uppercase;font-weight:700}
+.hooks p{margin:8px 0;font-size:14px;line-height:1.75;color:rgba(255,255,255,.7);letter-spacing:.2px}
 .meta{font-size:12px;color:var(--muted);line-height:1.7;margin-top:9px}
 
 /* DETAIL */
@@ -185,7 +185,7 @@ input::placeholder,textarea::placeholder{color:rgba(255,255,255,.2)}
 .detail-sec-title{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--violet);margin-bottom:12px;display:block}
 .detail-sec-body{padding-left:14px;border-left:2px solid rgba(168,85,247,.22)}
 .detail-para{margin-bottom:10px;color:rgba(255,255,255,.75);line-height:1.9;font-size:14px}
-.detail-hook{display:block;margin:12px 0;color:#f0e8ff;font-size:15px;font-weight:600;padding:9px 13px;background:rgba(168,85,247,.08);border-radius:10px;border-left:3px solid rgba(168,85,247,.45)}
+.detail-hook{display:block;margin:14px 0;color:#fff;font-size:15px;font-weight:700;padding:10px 14px;background:rgba(168,85,247,.07);border-radius:10px;border-left:3px solid rgba(168,85,247,.5);letter-spacing:.3px;line-height:1.6}
 
 /* SCORE */
 .score-wrap{text-align:center;padding:14px 0 8px}
@@ -217,6 +217,76 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
 .sheet-title{font-size:12px;color:rgba(255,255,255,.55);letter-spacing:2px;font-weight:600}
 .sheet-list .sitem{padding:14px;text-align:center;border-bottom:1px solid var(--border);cursor:pointer;font-size:14px;color:rgba(255,255,255,.65);transition:.15s}
 .sheet-list .sitem:hover{background:var(--surface);color:#fff}
+
+/* FANDOM THEME */
+.fandom-header{
+  text-align:center;padding:16px 0 8px;margin-bottom:4px;
+  border-radius:16px;position:relative;overflow:hidden;
+}
+.fandom-header-bg{
+  position:absolute;inset:0;opacity:.15;
+}
+.fandom-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:999px;font-size:11px;
+  font-weight:700;letter-spacing:2px;margin-bottom:8px;
+  border:1px solid currentColor;position:relative;
+}
+.fandom-type{
+  font-size:12px;color:rgba(255,255,255,.5);
+  letter-spacing:3px;text-transform:uppercase;margin-top:4px;
+  position:relative;
+}
+
+/* SHORT LINES */
+.short-lines{
+  padding:14px 0;margin:10px 0;
+  border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.short-line{
+  font-size:15px;color:rgba(255,255,255,.82);
+  line-height:1.7;margin-bottom:6px;
+  padding:0 2px;
+}
+.short-line:last-child{margin-bottom:0}
+
+/* CLIFFHANGER */
+.cliffhanger{
+  margin-top:14px;padding:13px 16px;
+  border-radius:14px;
+  background:rgba(236,72,153,.06);
+  border:1px solid rgba(236,72,153,.2);
+  font-size:13px;color:#f9a8d4;
+  letter-spacing:.3px;line-height:1.7;
+  text-align:center;font-style:italic;
+}
+.cliffhanger::before{
+  content:"◈ ";color:rgba(236,72,153,.6);font-style:normal;
+}
+
+/* SHARE LINE BOX */
+.share-line-box{
+  margin-top:12px;padding:12px 14px;
+  border-radius:12px;
+  background:rgba(168,85,247,.07);
+  border:1px solid rgba(168,85,247,.2);
+  font-size:13px;color:#c084fc;
+  line-height:1.7;cursor:pointer;
+  transition:.2s;
+}
+.share-line-box:hover{background:rgba(168,85,247,.12)}
+.share-line-box::before{
+  display:block;font-size:9px;
+  color:rgba(168,85,247,.5);letter-spacing:3px;
+  margin-bottom:6px;content:"✦ SHARE LINE";
+}
+
+/* IDOL MATCH CARD enhanced */
+.idol-card.top-match{
+  border-color:rgba(168,85,247,.4);
+  background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(236,72,153,.05));
+}
 
 /* ORACLE UI */
 .oracle-access{
@@ -421,7 +491,7 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
         <h2 class="headline" id="sajuTitle"></h2>
         <div class="decision" id="sajuDecision"></div>
         <div class="hooks"><h3 id="lblHooks">더 깊은 흐름</h3><p id="hookRisk"></p><p id="hookTime"></p></div>
-        <button class="subcta" id="unlockBtn" onclick="runSajuFull()" style="display:none">✦ 출생 차트 상세 보기</button>
+        <button class="subcta" id="unlockBtn" onclick="showDeepSignalTeaser()" style="display:none">DEEP SIGNAL ARCHIVE — OPENING SOON</button>
         <div class="meta" id="sajuMeta"></div>
         <div id="sajuDetail"></div>
       </div>
@@ -553,7 +623,7 @@ const T = {
     ph:"예: 서울, 부산",phQ:"예: 올해 이직하는 게 맞을까요?",
     male:"남성",female:"여성",btnSaju:"운세 보기",
     sajuLoad:"✦ 기운을 읽는 중…",lblHooks:"더 깊은 흐름",
-    unlockBtn:"✦ 출생 차트 상세 보기",
+    unlockBtn:"DEEP SIGNAL ARCHIVE — OPENING SOON",
     freeMeta:"출생지를 입력하면 점성술 차트까지 더한 상세 분석이 열립니다.",
     fullMeta:"사주와 점성술 차트로 더 깊은 흐름을 읽었습니다.",
     shYr:"생년 선택",shMo:"월 선택",shDy:"일 선택",shHr:"시각 선택",hrUnk:"모름",
@@ -1080,11 +1150,14 @@ async function runSaju(){
     const oracleEl = document.getElementById('oracleAccess');
     const loadEl = document.getElementById('sajuLoad');
     const ORACLE_MSGS = [
-      'ACCESSING YOUR FLOW...',
-      'SIGNAL DETECTED',
-      'EMOTIONAL PATTERN FOUND',
-      'READING DESTINY LINES...',
-      'UNRESOLVED ENERGY FOUND',
+      'ACCESSING SIGNAL...',
+      'PATTERN DETECTED',
+      'EMOTIONAL LOG FOUND',
+      'UNRESOLVED ENERGY...',
+      'THIS WAS NOT RANDOM',
+      'READING DESTINY LINES',
+      'SIGNAL CONFIRMED',
+      'ANALYZING FLOW...',
     ];
     let msgIdx = 0;
     loadEl.style.display = 'block';
@@ -1103,13 +1176,13 @@ async function runSaju(){
 
     if(locVal){
       if(!lastLoc||lastLoc.query!==locVal)lastLoc=await geocode();
-      payload={...payload,minute:0,location:lastLoc,paid:true};
+      payload={...payload,minute:0,location:lastLoc,paid:false};
       isPaid=true;
     }
 
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요.');
+    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 흐름은 모두 소진됨.\n다음 신호는 내일 다시 열림.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
 
     clearInterval(oracleInterval);
@@ -1121,15 +1194,15 @@ async function runSaju(){
     // Show oracle signal header
     const sigEl=document.getElementById('oracleSignal');
     if(sigEl){
-      const signals={ko:'신호 감지됨',en:'SIGNAL DETECTED',ja:'シグナル検出',zh:'信号已捕获',es:'SEÑAL DETECTADA'};
+      const signals={ko:'◉ PATTERN DETECTED',en:'◉ SIGNAL DETECTED',ja:'◉ シグナル検出',zh:'◉ 信号已捕获',es:'◉ SEÑAL DETECTADA'};
       sigEl.textContent=signals[curLang]||'SIGNAL DETECTED';
       sigEl.style.display='flex';
     }
-    document.getElementById('sajuBadge').textContent='YOUR READING';
+    document.getElementById('sajuBadge').textContent='◉ SIGNAL DETECTED';
     setText('sajuTitle',data.free.title||'');
     setText('sajuDecision',data.free.decision||'');
-    setText('hookRisk','⚠ '+(data.free.riskHook||''));
-    setText('hookTime','⏱ '+(data.free.timingHook||''));
+    setText('hookRisk',data.free.riskHook||'');
+    setText('hookTime',data.free.timingHook||'');
 
     if(isPaid){
       setText('sajuMeta',t.fullMeta);
@@ -1156,9 +1229,9 @@ async function runSajuFull(){
     if(!lastLoc)lastLoc=await geocode();
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({...ST.s,minute:0,question:document.getElementById('qInput').value.trim(),
-        location:lastLoc,paid:true,tarot:selTarot,lang:t.aiLang,fortuneCat:t.fcatKeys[fcatIdx]})});
+        location:lastLoc,paid:false,tarot:selTarot,lang:t.aiLang,fortuneCat:t.fcatKeys[fcatIdx]})});
     const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요.');
+    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 흐름은 모두 소진됨.\n다음 신호는 내일 다시 열림.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     setText('sajuMeta',t.fullMeta);
     document.getElementById('unlockBtn').style.display='none';
@@ -1182,7 +1255,7 @@ async function runCompat(){
         partnerYear:ST.b.year,partnerMonth:ST.b.month,partnerDay:ST.b.day,partnerHour:ST.b.hour,
         partnerGender:ST.b.gender||'unknown',mode:'compat',lang:t.aiLang,paid:false})});
     const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요.');
+    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 흐름은 모두 소진됨.\n다음 신호는 내일 다시 열림.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     const box=document.getElementById('compatResult');
     box.style.display='';
@@ -1204,7 +1277,7 @@ async function runIdol(){
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({...ST.i,paid:false,mode:'idol',lang:t.aiLang,question:'idol match type analysis'})});
     const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요.');
+    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 흐름은 모두 소진됨.\n다음 신호는 내일 다시 열림.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     const box=document.getElementById('idolResult');
     box.style.display='';
@@ -1248,7 +1321,7 @@ async function runIdol(){
 // ══════════════════════════════════════════
 //  SHARE CARD
 // ══════════════════════════════════════════
-function drawCard(title, highlight){
+function drawCard(title, highlight, fandomTheme){
   const wrap=document.getElementById('shareCardWrap');
   const canvas=document.getElementById('shareCanvas');
   const dpr=window.devicePixelRatio||1;
@@ -1258,20 +1331,24 @@ function drawCard(title, highlight){
   const ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
 
-  // BG
+  // BG - fandom themed
+  const fd = fandomTheme || {color:'#a855f7', grad:['#060010','#12002a']};
   const g=ctx.createLinearGradient(0,0,W,H);
-  g.addColorStop(0,'#060010'); g.addColorStop(.45,'#12002a'); g.addColorStop(1,'#060010');
+  g.addColorStop(0, fd.grad?.[0]||'#060010');
+  g.addColorStop(.45, fd.grad?.[1]||'#12002a');
+  g.addColorStop(1, fd.grad?.[0]||'#060010');
   ctx.fillStyle=g;
   ctx.beginPath(); ctx.roundRect(0,0,W,H,24); ctx.fill();
 
-  // Glow center
+  // Glow center - fandom color
+  const fc = fd.color||'#a855f7';
+  const r=parseInt(fc.slice(1,3),16)||168, gg2=parseInt(fc.slice(3,5),16)||85, b=parseInt(fc.slice(5,7),16)||247;
   const glow=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,200);
-  glow.addColorStop(0,'rgba(168,85,247,.22)'); glow.addColorStop(1,'rgba(168,85,247,0)');
+  glow.addColorStop(0,`rgba(${r},${gg2},${b},.22)`); glow.addColorStop(1,`rgba(${r},${gg2},${b},0)`);
   ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
 
-  // Top glow
   const topGlow=ctx.createRadialGradient(W/2,0,0,W/2,0,180);
-  topGlow.addColorStop(0,'rgba(236,72,153,.18)'); topGlow.addColorStop(1,'rgba(236,72,153,0)');
+  topGlow.addColorStop(0,`rgba(${r},${gg2},${b},.15)`); topGlow.addColorStop(1,`rgba(${r},${gg2},${b},0)`);
   ctx.fillStyle=topGlow; ctx.fillRect(0,0,W,H);
 
   // Stars
@@ -1311,10 +1388,20 @@ function drawCard(title, highlight){
 
   // Brand
   ctx.font='bold 10px Inter,sans-serif';
-  ctx.fillStyle='rgba(168,85,247,.7)';
+  ctx.fillStyle=`rgba(${r},${gg2},${b},.7)`;
   ctx.letterSpacing='3px';
   ctx.fillText('SAJUSTRO',W/2,y+brandH);
-  y+=brandH+14;
+  y+=brandH+6;
+
+  // Fandom badge
+  if(fd.fandom) {
+    ctx.font='bold 9px Inter,sans-serif';
+    ctx.fillStyle=`rgba(${r},${gg2},${b},.5)`;
+    ctx.letterSpacing='2px';
+    ctx.fillText(fd.fandom+' SIGNAL',W/2,y+10);
+    y+=16;
+  }
+  y+=8;
 
   // Symbol ✦
   ctx.font='32px serif';
@@ -1345,7 +1432,7 @@ function drawCard(title, highlight){
   if(hLines.length){
     // Label
     ctx.font='bold 9px Inter,sans-serif';
-    ctx.fillStyle='rgba(236,72,153,.7)';
+    ctx.fillStyle=`rgba(${r},${gg2},${b},.7)`;
     ctx.letterSpacing='2px';
     ctx.fillText('MY IDOL MATCH',W/2,y);
     y+=18;
@@ -1370,6 +1457,18 @@ function wrapTxt(ctx,text,max){
   for(const w of words){const t=cur?cur+' '+w:w;if(ctx.measureText(t).width>max&&cur){lines.push(cur);cur=w;}else cur=t;}
   if(cur)lines.push(cur); return lines;
 }
+function copyShareLine(el){
+  const text=el.textContent||el.innerText;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>{
+      const orig=el.style.background;
+      el.style.background='rgba(168,85,247,.25)';
+      el.setAttribute('title','복사됨!');
+      setTimeout(()=>{el.style.background=orig;el.setAttribute('title','탭해서 복사');},700);
+    });
+  }
+}
+
 async function downloadCard(){
   const canvas=document.getElementById('shareCanvas');
   const t=T[curLang];
@@ -1410,6 +1509,40 @@ async function downloadCard(){
 }
 
 // ══════════════════════════════════════════
+//  FANDOM THEME HELPER
+// ══════════════════════════════════════════
+const FANDOM_MAP = {
+  "BTS":       { fandom:"ARMY",    color:"#9B59B6", grad:["#3d1a6e","#1a0a35"] },
+  "BLACKPINK": { fandom:"BLINK",   color:"#FF1493", grad:["#1a0010","#3d0020"] },
+  "aespa":     { fandom:"MY",      color:"#00FFFF", grad:["#001a2e","#002040"] },
+  "NewJeans":  { fandom:"Bunnies", color:"#87CEEB", grad:["#0a1520","#101a28"] },
+  "IVE":       { fandom:"DIVE",    color:"#D4AF37", grad:["#1a1400","#251c00"] },
+  "LE SSERAFIM":{ fandom:"FEARNOT",color:"#FF6B35", grad:["#1a0800","#250f00"] },
+  "TWICE":     { fandom:"ONCE",    color:"#FF69B4", grad:["#1a0010","#200015"] },
+  "ITZY":      { fandom:"MIDZY",   color:"#00FF88", grad:["#001a0e","#002015"] },
+  "Red Velvet":{ fandom:"ReVeluv", color:"#FF4444", grad:["#1a0000","#250000"] },
+  "MAMAMOO":   { fandom:"MooMoo",  color:"#FFD700", grad:["#1a1400","#201900"] },
+  "EXO":       { fandom:"EXO-L",   color:"#5B7FD4", grad:["#0a0f1a","#101520"] },
+  "NCT":       { fandom:"NCTzen",  color:"#00FF9F", grad:["#001a0e","#002010"] },
+  "Stray Kids":{ fandom:"STAY",    color:"#FFFF00", grad:["#1a1a00","#252500"] },
+  "ATEEZ":     { fandom:"ATINY",   color:"#FF8C00", grad:["#1a0800","#201000"] },
+  "TXT":       { fandom:"MOA",     color:"#9B59B6", grad:["#0f001a","#150025"] },
+  "ENHYPEN":   { fandom:"ENGENE",  color:"#E74C3C", grad:["#1a0000","#200500"] },
+  "SEVENTEEN": { fandom:"CARAT",   color:"#00BFFF", grad:["#001520","#001a2a"] },
+  "SHINee":    { fandom:"SHINee World", color:"#4169E1", grad:["#000d1a","#001020"] },
+  "ZEROBASEONE":{ fandom:"ZERONI", color:"#00FFAA", grad:["#001a10","#002015"] },
+  "RIIZE":     { fandom:"BRIIZE",  color:"#FF6EC7", grad:["#1a0010","#200015"] },
+  "SNSD":      { fandom:"SONE",    color:"#FFB6C1", grad:["#1a0010","#200015"] },
+  "2NE1":      { fandom:"Blackjack",color:"#888",   grad:["#0a0a0a","#151515"] },
+};
+function getFandomTheme(idolName) {
+  for(const [g, d] of Object.entries(FANDOM_MAP)) {
+    if(idolName.includes(g)) return d;
+  }
+  return { fandom:"", color:"#a855f7", grad:["#0a0014","#160028"] };
+}
+
+// ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
 
@@ -1442,6 +1575,29 @@ function updateProofNumbers() {
 
 setLang(curLang);
 updateProofNumbers();
+
+function showDeepSignalTeaser(){
+  alert('DEEP SIGNAL ARCHIVE — OPENING SOON');
+}
+
+async function playRevealSequence(){
+  const steps=[
+    'SIGNAL DETECTED',
+    'READING EMOTIONAL STATIC...',
+    'MATCHING FANDOM RESONANCE...',
+    'UNRESOLVED ENERGY FOUND...',
+    'ACCESS GRANTED'
+  ];
+
+  const el=document.getElementById('oracleSignal');
+  if(!el) return;
+
+  for(const step of steps){
+    el.textContent=step;
+    await new Promise(r=>setTimeout(r,800));
+  }
+}
+
 </script>
 </body>
 </html>
