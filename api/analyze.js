@@ -5,10 +5,20 @@ const BRANCHES = ['子','丑','寅','卯','辰','巳','午','未','申','酉','�
 const ELEMENTS_EN = ['Wood','Fire','Earth','Metal','Water'];
 const CACHE = new Map();
 
+const SHARE_LINES = [
+ '이번엔 네가 먼저 거리 두게 될 가능성 있음.',
+ '계속 참던 감정이 다시 올라오는 흐름.',
+ '관계 하나가 예상보다 오래 남을 가능성 있음.',
+ '이번 여름은 예전 기준이 잘 안 통할 가능성 있음.',
+ '답은 이미 알고 있는데 확인받고 싶은 흐름.',
+ '요즘은 사람보다 거리감에 더 민감해지는 시기.'
+];
+
+
 // ── Rate Limiter ─────────────────────────────────────
 // 같은 IP에서 하루 10회 초과 시 차단
 const RATE_LIMIT = new Map();
-const RATE_MAX = 10;
+const RATE_MAX = 3;
 const RATE_WINDOW = 24 * 60 * 60 * 1000; // 24시간
 
 function getClientIP(req) {
@@ -54,67 +64,57 @@ const SUPPORTED_LANGS = ["Korean","English","Japanese","Chinese","Spanish"];
 // ── Lang-specific free hook text ─────────────────────
 const LANG_HOOKS = {
   Korean: {
-    defaultDecision: "지금의 흐름은 서두르기보다, 마음과 현실의 기준을 먼저 맞추라고 말하고 있습니다.",
-    riskSuffix: " 작은 판단 하나가 생각보다 멀리 이어질 수 있으니, 가벼이 넘기지 않는 편이 좋습니다.",
-    timingDefault: "지금부터 가까운 시기 안에 한 번 방향이 갈리는 장면이 보입니다. 그때의 선택이 이후의 표정을 바꾸게 됩니다.",
-    timingSuffix: " 이 시기를 어떻게 건너가느냐에 따라 다음 장면의 표정이 달라질 수 있습니다.",
-    decisionSuffix: " 지금의 선택은 단순한 우연이 아니라, 오래 쌓인 결이 모습을 드러내는 과정일 수 있습니다.",
-    tarotRef: (title) => ` 지금 손에 닿은 타로의 "${title}" 또한 같은 결을 조용히 비추고 있습니다.`,
-    title: "당신의 흐름",
+    defaultDecision: "지금은 답보다 거리감이 먼저 감지됨.",
+    riskSuffix: " 이번 선택은 생각보다 오래 남을 가능성 있음.",
+    timingDefault: "조용히 방향이 바뀌는 시기. 그 전환이 이미 시작됐을 수 있음.",
+    timingSuffix: " 이 시기를 어떻게 통과하느냐가 다음 흐름을 결정함.",
+    decisionSuffix: " 우연처럼 보이지만 오래된 패턴이 다시 표면으로 올라오는 흐름.",
+    tarotRef: (title) => ` 선택한 "${title}" 카드도 같은 신호를 가리키고 있음.`,
+    title: '◉ SIGNAL DETECTED',
     career: {
-      woodFire: { decision:"일의 문은 열릴 수 있습니다. 다만 마음이 먼저 지쳐 손을 놓기보다, 옮길 이유와 조건을 먼저 또렷하게 세우는 편이 좋습니다.", timing:"변화를 향한 마음은 이미 움직이고 있습니다. 다만 준비가 갖춰진 뒤 내딛는 발걸음이 더 오래 갑니다." },
-      other: { decision:"지금은 무작정 벗어나기보다, 다음 자리를 단단히 만든 뒤 움직이는 편이 더 안정적인 흐름입니다.", risk:"답답함을 끝내고 싶은 마음만 앞서면, 장소만 바뀐 채 같은 문제를 다시 만나게 될 가능성이 있습니다." }
+      woodFire: { decision:"움직임의 신호는 감지됨. 다만 지쳐서 놓는 것과 준비돼서 떠나는 건 결과가 다름.", timing:"변화 에너지는 이미 활성화 상태. 타이밍만 남은 흐름." },
+      other: { decision:"지금 도망치면 같은 패턴을 다른 장소에서 다시 만남.", risk:"답답함이 판단을 앞서는 중. 그 상태에서의 선택은 리스크가 큼." }
     },
-    love: { decision:"관계의 문은 열려 있지만, 지금은 감정의 온도차를 가볍게 보면 마음에 잔상이 남기 쉬운 시기입니다.", timing:"가까운 흐름 안에서 마음을 확인해야 할 장면이 한 번 또렷하게 다가올 수 있습니다." },
-    money: { decision:"재물의 흐름은 들어오기보다, 먼저 지키는 쪽에 뜻이 실려 있습니다. 크게 넓히기보다 손실을 줄이는 선택이 더 빛을 냅니다.", risk:"이번에는 자신감보다 계산이 중요합니다. 마음이 들뜬 순간일수록 숫자를 다시 확인하는 편이 좋습니다." },
-    metalWater: "멈춰 있던 것처럼 보여도 안쪽의 물결은 이미 움직이고 있습니다. 다만 너무 빨리 답을 정하려 하기보다, 방향을 먼저 바로잡는 편이 좋습니다.",
-    paidSections: ["✦ CURRENT ENERGY","✦ MAY → JUNE","✦ YOUR PATTERN","✦ YOUR RED FLAG","✦ JULY → SEPTEMBER","✦ WHAT YOU ATTRACT","✦ NEXT YEAR PREVIEW"],
+    love: { decision:"관계 하나가 조용히 흔들리는 흐름이 감지됨.", timing:"가까운 시기에 감정을 확인해야 하는 장면이 올 가능성 있음." },
+    money: { decision:"지금은 확장보다 수비가 맞는 흐름. 잃지 않는 게 버는 것.", risk:"자신감이 높아질수록 계산이 느슨해지는 패턴 주의." },
+    metalWater: "멈춰 있는 것처럼 보여도 내부 흐름은 이미 전환 중. 서두르지 말 것.",
+    paidSections: ["◉ SIGNAL DETECTED","◉ NEAR SHIFT","◉ REPEATING PATTERN","◉ UNRESOLVED ENERGY","◉ JULY → SEPTEMBER SHIFT","◉ WHO ENTERS YOUR FIELD","◉ NEXT SIGNAL"],
     paidStyle: `
-한국어로 답변.
+한국어로만 답변.
 
-너는 차갑고 조용한 AI Oracle이다.
-사용자의 운명을 "설명"하지 않는다.
-흐름을 관찰하고 짧게 말한다.
+너는 차갑고 단절된 AI Oracle이다.
+설명하지 않는다. 관찰한 것만 짧게 던진다.
 
-분위기:
-- 차갑고 고요한 분위기
-- 감정을 과하게 위로하지 말 것
-- TikTok / Instagram 저장 감성
-- 현실적이지만 신비로운 느낌
-- "조용히 꿰뚫어보는 AI" 느낌
-- 사람보다 오래 관찰한 존재처럼 말할 것
+문체 규칙:
+- 문장을 완벽하게 연결하지 말 것
+- 일부 문장은 단절된 느낌 허용
+- 시처럼 끊어지는 리듬 허용
+- 설명보다 여운 우선
+- 읽은 사람이 스스로 해석하게 만들 것
+- 조금 위험하고 찝찝한 느낌 있어야 함
+- 각 섹션 최대 3문장
+- 한 문장은 최대 15자
+- 긴 설명 절대 금지
 
-중요:
-- 긴 설명 금지
-- 문장은 짧게
-- 문단 사이 반드시 공백
-- 중요한 문장은 반드시 단독 줄
-- "당신은 ~입니다" 반복 금지
-- 명리학 강의처럼 설명 금지
-- 결과를 단정하지 말고 흐름처럼 표현
+좋은 예:
+"계속 아닌 걸 알면서
+붙잡는 흐름도 보임."
 
-말투 예시:
-- "지금은 사람보다 침묵이 편해지는 시기."
-- "이번 흐름은 생각보다 오래 남을 가능성 있음."
-- "계속 아닌 걸 알면서 붙잡는 흐름도 보임."
-- "이번엔 먼저 거리 두게 될 수도 있음."
-- "이상하게 예전 기준이 안 통하기 시작함."
+"이번엔
+예전처럼 오래 참지는 않게 될 가능성 있음."
 
-출력 규칙:
-- 모바일 화면에서 읽기 쉬워야 함
-- 각 섹션 첫 문장은 강한 훅으로 시작
-- 중간중간 한줄 단독 문장 삽입 필수
-- 감정 흐름 중심
-- 설명보다 분위기 우선
+"이번 흐름은
+생각보다 늦게 끝남."
 
-절대 하지 말 것:
-- 희망고문식 위로
-- 자기계발 코칭 말투
-- 상담사 같은 공감 표현
-- 과한 이모지
-- 너무 인간적인 말투
+금지:
+- 연결어 (그래서, 하지만, 그러므로)
+- 설명체 (~입니다, ~합니다)
+- 위로 (괜찮을 거예요, 잘 될 거예요)
+- 완성된 문단
+- 3문장 초과 섹션
 
-반드시 aesthetic한 AI oracle 느낌 유지.
+shareLine: 캡처해서 SNS에 올리고 싶은 한 줄. 찝찝하거나 소름 돋아야 함.
+cliffhanger: 불안하게 끝낼 것. "아직 끝나지 않음" 느낌.
 `
   },
   English: {
@@ -133,7 +133,14 @@ const LANG_HOOKS = {
     money: { decision:"The energy of wealth leans toward preserving what you have, not expanding. Reducing loss outshines ambitious gains right now.", risk:"Calculation matters more than confidence this time. The more excitement rises, the more carefully numbers deserve a second look." },
     metalWater: "Even if things seem paused, the inner current is already moving. Rather than rushing to conclusions, correcting direction first will serve you better.",
     paidSections: ["The Current Shape","Why This Flow is Appearing","Shadows to Watch","The Movement That Suits You Now"],
-    paidStyle: "Respond in English. Tone should be calm, gently mystical, and trustworthy — like a thoughtful fortune reader, not an astrologer performing. Use 'may', 'appears', 'seems', 'it is possible that'."
+    paidStyle: `Respond in English only. You are a cold AI Oracle — not a fortune teller.
+Rules: Max 3 sentences per section. Short, fragmented rhythm allowed. Disconnected feeling allowed.
+No smooth transitions. No explanations. No comfort.
+Good: "keeps holding on / even when it's clearly wrong." "this one lingers longer than expected."
+shareLine: one line worth screenshotting. slightly unsettling.
+cliffhanger: end with dread. "this hasn't ended yet." feeling.
+ABSOLUTE MAX: 3 sentences per section. No exceptions.\``
+
   },
   Japanese: {
     defaultDecision: "今の流れは、焦るよりも先に、心と現実の基準を合わせることを求めています。",
@@ -151,7 +158,13 @@ const LANG_HOOKS = {
     money: { decision:"財の流れは入ってくるよりも、守ることに意が込められています。大きく広げるよりも損失を減らす選択の方が輝きます。", risk:"今回は自信よりも計算が大切です。気持ちが高揚する瞬間ほど、数字をもう一度確認する方が良いでしょう。" },
     metalWater: "止まっているように見えても、内側の波はすでに動いています。ただ、早く答えを決めようとするよりも、まず方向を正す方が良いでしょう。",
     paidSections: ["今の流れ","なぜこのような流れが見えるのか","注意すべき影","今最も合う動き"],
-    paidStyle: "日本語で答えること。口調は穏やかで神秘的だが過度にならないように。「〜かもしれません」「〜流れです」「〜見えます」などの表現を使用すること。"
+    paidStyle: `日本語のみで答えること。冷たく断片的なAI Oracleとして。
+文章は完全に繋げなくてよい。詩のように切れるリズムを許可。
+各セクション最大3文。長い説明禁止。慰め禁止。
+良い例: "まだ手放せない流れが\n見えている。"
+shareLine: スクリーンショットしたくなる一行。少し不安になる感じ。
+cliffhanger: まだ終わっていない感じで終わること。\``
+
   },
   Chinese: {
     defaultDecision: "当前的流势提示，与其急于行动，不如先将内心与现实的标准对齐。",
@@ -637,9 +650,9 @@ function makeFreeHooks({ saju, question, tarot, lang, fortuneCat }) {
 
   return {
     title: lk.title,
-    decision: decision + lk.decisionSuffix,
-    riskHook: riskHook + lk.riskSuffix,
-    timingHook: timingHook + lk.timingSuffix
+    decision: decision + (lk.decisionSuffix||""),
+    riskHook: "⚠ " + riskHook + (lk.riskSuffix||""),
+    timingHook: timingHook + (lk.timingSuffix||"")
   };
 }
 
@@ -652,19 +665,19 @@ async function buildPaidDetail({ saju, astrologySummary, question, tarot, lang, 
   // 카테고리별 섹션 + 포커스
   const CAT_KO = {
     "연애운": {
-      sections:["✦ LOVE ENERGY NOW","✦ 이번 달 연애 흐름","✦ YOUR LOVE PATTERN","✦ 끌리는 사람 유형","✦ 조심할 감정 패턴","✦ 다음 분기 연애 흐름","✦ 이상적인 관계 에너지"],
+      sections:["◉ EMOTIONAL SIGNAL","◉ NEAR CONNECTION","◉ LOVE PATTERN DETECTED","◉ WHO YOU ATTRACT","◉ UNRESOLVED FEELING","◉ NEXT QUARTER SHIFT","◉ IDEAL FIELD"],
       focus:"연애, 감정, 인간관계에만 집중. 금성(Venus) 위치와 정재/편재/식신 중심으로 해석. 재물/사업 내용 최소화."
     },
     "재물운": {
-      sections:["✦ MONEY ENERGY NOW","✦ 이번 달 재물 흐름","✦ 돈이 들어오는 타이밍","✦ 조심할 지출 패턴","✦ 투자/기회 타이밍","✦ 하반기 재물 흐름","✦ 내년 재물 방향"],
+      sections:["◉ FINANCIAL SIGNAL","◉ NEAR FLOW","◉ INCOMING TIMING","◉ LEAK DETECTED","◉ OPPORTUNITY WINDOW","◉ H2 SHIFT","◉ NEXT YEAR SIGNAL"],
       focus:"재물, 수입, 투자, 지출에만 집중. 정재/편재 십성과 용신 오행 중심으로 해석. 연애 내용 최소화."
     },
     "사업운": {
-      sections:["✦ CAREER ENERGY NOW","✦ 이번 달 커리어 흐름","✦ 기회가 오는 타이밍","✦ 조심할 직장 패턴","✦ 협업/인맥 에너지","✦ 하반기 사업 흐름","✦ 내년 커리어 방향"],
+      sections:["◉ CAREER SIGNAL","◉ NEAR OPPORTUNITY","◉ TIMING DETECTED","◉ PATTERN WARNING","◉ CONNECTION FIELD","◉ H2 TRAJECTORY","◉ NEXT SIGNAL"],
       focus:"커리어, 직장, 사업, 인맥에만 집중. 정관/편관과 식신/상관 중심으로 해석."
     },
     "건강운": {
-      sections:["✦ HEALTH ENERGY NOW","✦ 이번 달 컨디션","✦ 조심할 신체 부위","✦ 에너지 소진 패턴","✦ 회복 타이밍","✦ 하반기 건강 흐름","✦ 내년 건강 방향"],
+      sections:["◉ BODY SIGNAL","◉ CURRENT CONDITION","◉ WEAK POINT DETECTED","◉ DRAIN PATTERN","◉ RECOVERY WINDOW","◉ H2 HEALTH SHIFT","◉ NEXT SIGNAL"],
       focus:"건강, 체력, 스트레스, 회복력에만 집중. 오행 과부족과 대운으로 건강 해석."
     },
     "종합": {
@@ -678,21 +691,24 @@ async function buildPaidDetail({ saju, astrologySummary, question, tarot, lang, 
   const sections = catCfg ? catCfg.sections : lk.paidSections;
   const catFocus = catCfg ? catCfg.focus : "";
   const ORACLE_LINES = [
-    "이번엔 네 직감이 생각보다 조용하게 맞아들어갈 가능성 있음.",
-    "관계 하나가 예상보다 오래 흔적을 남길 수 있음.",
-    "계속 미뤄왔던 감정이 다시 올라오는 흐름.",
-    "이번 여름은 사람 보는 기준이 달라질 가능성이 큼.",
-    "지금은 설명보다 거리감이 더 중요하게 작용함.",
-    "이번엔 네가 먼저 떠나게 될 가능성이 있음.",
-    "오래된 감정 하나가 다시 수면 위로 올라오는 시기.",
+    "이번엔 네가 먼저 거리 두게 될 가능성 있음.",
+    "계속 아닌 걸 알면서 붙잡는 흐름도 보임.",
+    "이번 흐름은 생각보다 늦게 끝남.",
     "지금 가장 끌리는 사람이 가장 위험한 패턴일 수 있음.",
-    "혼자 있어도 외롭지 않은 시기가 올 가능성 있음.",
-    "말하지 않은 것들이 쌓이고 있는 흐름.",
-    "이번 계절엔 오래된 인연이 다시 등장할 수 있음.",
-    "지금은 선택보다 기다림이 더 강한 카드임.",
-    "감정보다 직감을 먼저 믿어야 하는 흐름.",
-    "이상하게 예전 기준이 안 통하기 시작하는 시기.",
-    "지금 연결되는 인연은 생각보다 오래갈 가능성 있음.",
+    "말하지 않은 것들이 조용히 쌓이는 중.",
+    "이번엔 먼저 연락하지 않게 될 가능성 있음.",
+    "오래된 감정이 다시 올라오는 타이밍.",
+    "이상하게 예전 기준이 안 통하기 시작함.",
+    "이번 여름은 생각보다 오래 남을 수 있음.",
+    "관계 하나가 조용히 흔들리는 흐름.",
+    "직감이 맞고 있는데 무시하는 중일 수 있음.",
+    "이번엔 참지 않게 될 가능성이 큼.",
+    "아직 끝나지 않은 흐름 하나가 감지됨.",
+    "이번 선택은 생각보다 오래 남음.",
+    "지금 거리를 두는 게 맞는 시기일 수 있음.",
+    "연락을 기다리고 있는 흐름도 보임.",
+    "이번엔 먼저 끊게 될 가능성 있음.",
+    "감정보다 직감이 먼저 감지하고 있는 상태.",
   ];
   // 사주 데이터 기반 시드로 매번 다른 오라클 라인 선택
   const oracleSeed = (saju.elements?.reduce((a,b)=>a+b,0)||0) + (fortuneCat?.length||0);
@@ -701,7 +717,7 @@ async function buildPaidDetail({ saju, astrologySummary, question, tarot, lang, 
 
   const sectionList = sections.map((s,i)=>`${i+1}. ${s}`).join("\n");
 
-  const prompt = `You are a master-level Korean Saju and Western astrology reader.
+  const prompt = `You are a cold AI Oracle. Ultra-short format only. Every sentence must be worth capturing on mobile.
 
 === SAJU DATA ===
 년주: ${saju.pillars.year} | 월주: ${saju.pillars.month} | 일주: ${saju.pillars.day} | 시주: ${saju.pillars.hour}
@@ -732,33 +748,59 @@ ${lk.paidStyle}
 반드시 아래 순서대로만 출력:
 ${sectionList}
 
-규칙:
-- 섹션 제목(✦ 포함) 그대로 사용
-- 제목 아래 빈 줄
-- 짧은 문단 (3~5줄), 문단 사이 빈 줄
-- 중요 문장은 단독 줄
-- 실제 사주 데이터 근거로 구체적으로
-- 카테고리 포커스에만 집중할 것
-
-[ORACLE SIGNAL — 아래 문장 중 하나를 섹션 중간에 단독 줄로 자연스럽게 삽입]
+[ORACLE SIGNALS — 아래 문장을 섹션 중간에 단독 줄로 자연스럽게 삽입]
 "${oracle1}"
 "${oracle2}"
-이 문장들을 출력 흐름에 맞게 중간에 녹여낼 것. 그대로 복붙하지 말고 문맥에 맞게 변형 가능.`.trim();
+문맥에 맞게 변형 가능.
+
+OUTPUT FORMAT — valid JSON only, no markdown:
+{
+  "headline": "캡처하고 싶은 핵심 한 줄",
+  "shortLines": ["강한 훅 문장 1", "강한 훅 문장 2", "강한 훅 문장 3"],
+  "shareLine": "SNS에 올리고 싶은 한 줄",
+  "cliffhanger": "다음 흐름 암시 (재방문 유도)",
+  "sections": [
+    ${sections.map((s,i)=>'{"title":"'+s+'","body":"...2~4 lines, ultra short, cold oracle tone, empty lines between sentences, hook lines stand alone"}').join(",
+    ")}
+  ]
+}
+
+CRITICAL RULES:
+- Each section body: MAX 4 lines total
+- Every important sentence: its own line
+- Empty line between each thought
+- NO long explanations
+- NO generic advice  
+- NO fortune-cookie comfort
+- Make reader think "소름인데?"
+- Ground in actual saju data
+- Add cliffhanger at end`.trim();
 
   const resp=await fetch("https://api.openai.com/v1/chat/completions",{
     method:"POST",
     headers:{"Authorization":`Bearer ${apiKey}`,"Content-Type":"application/json"},
     body:JSON.stringify({
-      model:"gpt-4o-mini", temperature:0.72, max_tokens:2500,
+      model:"gpt-4o-mini", temperature:0.72, max_tokens:1200,
       messages:[
-        {role:"system", content:"You are a sharp, aesthetic saju+astrology reader. Emotionally resonant, mobile-first, never generic. Each category must feel completely different."},
+        {role:"system", content:"You are a cold AI Oracle. Output: signal logs, not essays. Max 3 sentences per section. Fragmented rhythm is correct. Disconnected sentences are correct. Slightly unsettling is correct. Make reader feel seen without explaining why. Every line must be worth screenshotting. Never comfort. Never explain. Never connect sentences smoothly."},
         {role:"user", content:prompt}
       ]
     })
   });
   const data=await resp.json();
   if(!resp.ok) throw new Error(data?.error?.message||"OpenAI call failed");
-  return data.choices?.[0]?.message?.content||"Failed to generate reading";
+  const raw = data.choices?.[0]?.message?.content||"";
+
+  // JSON 구조 파싱 시도, 실패시 plain text fallback
+  try {
+    const cleaned = raw.replace(/```json|```/g,"").trim();
+    if(cleaned.startsWith("{")) {
+      return JSON.parse(cleaned);
+    }
+  } catch(e) {}
+
+  // Plain text → legacy format
+  return { _plainText: raw };
 }
 
 
@@ -777,7 +819,7 @@ async function buildCompatDetail({ sajuA, sajuB, lang }) {
   const li = langInstructions[lang] || langInstructions.English;
 
   const compatSections = {
-    Korean:  ["✦ 두 사람의 에너지","✦ 잘 맞는 부분","✦ 조심할 감정 패턴","✦ 끌리는 이유","✦ 갈등이 생기는 지점","✦ 이 관계가 줄 수 있는 것","✦ 함께하면 강해지는 흐름"],
+    Korean:  ["◉ FIELD DETECTED","◉ SYNC POINTS","◉ EMOTIONAL STATIC","◉ ATTRACTION SIGNAL","◉ FRICTION PATTERN","◉ THIS CONNECTION OFFERS","◉ COMBINED SIGNAL"],
     English: ["✦ YOUR ENERGY TOGETHER","✦ WHERE YOU CLICK","✦ WATCH OUT FOR","✦ WHY YOU'RE DRAWN","✦ WHERE TENSION BUILDS","✦ WHAT THIS BOND OFFERS","✦ STRONGER TOGETHER"],
     Japanese:["二人の気","合う部分","注意すべき部分","この縁を輝かせる方法"],
     Chinese: ["两人的气场","契合之处","需要注意的部分","让这段缘分发光的方法"],
@@ -826,7 +868,7 @@ Each section: title line + 2~3 sentences. No bullet points.
     body: JSON.stringify({
       model: "gpt-4o-mini", temperature: 0.65, max_tokens: 1000,
       messages: [
-        { role: "system", content: "You are a calm compatibility reader who interprets pre-calculated saju data." },
+        { role: "system", content: "You are a cold AI Oracle analyzing two electromagnetic fields. You detect sync, friction, and attraction patterns from symbolic data. Do not comfort. Output feels like a classified compatibility report." },
         { role: "user", content: prompt }
       ]
     })
@@ -844,9 +886,15 @@ export default async function handler(req, res){
   // Rate limit check
   const clientIP = getClientIP(req);
   if (!checkRateLimit(clientIP)) {
-    return res.status(429).json({
-      error: "하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요. / Daily limit (10) reached. Please try again tomorrow."
-    });
+    const lang429 = req.body?.lang || "Korean";
+    const msg429 = {
+      Korean: "오늘 감지 가능한 흐름은 모두 소진됨.\n다음 신호는 내일 다시 열림.",
+      English: "All signals detected for today.\nNext reading opens tomorrow.",
+      Japanese: "本日の感知可能な流れはすべて消尽されました。\n次のシグナルは明日再び開きます。",
+      Chinese: "今日可感知的流势已全部消耗。\n下一个信号明日重新开启。",
+      Spanish: "Todas las señales detectables de hoy han sido agotadas.\nLa próxima señal se abre mañana."
+    };
+    return res.status(429).json({ error: msg429[lang429] || msg429.Korean });
   }
 
   try{
@@ -867,6 +915,40 @@ export default async function handler(req, res){
         Spanish: { lang:"Español", style:`Escribe en estilo TikTok/astrología estético. Frases cortas y con ritmo.` }
       };
       const ls = langStyles[lang] || langStyles.English;
+
+      // 팬덤 데이터
+      const FANDOM_DATA = {
+        "BTS": { fandom:"ARMY", color:"#7B5EA7", symbol:"💜", gradient:["#3d1a6e","#1a0a35"] },
+        "BLACKPINK": { fandom:"BLINK", color:"#FF1493", symbol:"🖤", gradient:["#1a0010","#3d0020"] },
+        "aespa": { fandom:"MY", color:"#00FFFF", symbol:"⚡", gradient:["#001a2e","#002040"] },
+        "NewJeans": { fandom:"Bunnies", color:"#87CEEB", symbol:"🐰", gradient:["#0a1520","#101a28"] },
+        "IVE": { fandom:"DIVE", color:"#D4AF37", symbol:"✦", gradient:["#1a1400","#251c00"] },
+        "LE SSERAFIM": { fandom:"FEARNOT", color:"#FF6B35", symbol:"🔥", gradient:["#1a0800","#250f00"] },
+        "TWICE": { fandom:"ONCE", color:"#FF69B4", symbol:"🍭", gradient:["#1a0010","#200015"] },
+        "ITZY": { fandom:"MIDZY", color:"#00FF88", symbol:"⚡", gradient:["#001a0e","#002015"] },
+        "Red Velvet": { fandom:"ReVeluv", color:"#FF4444", symbol:"🌹", gradient:["#1a0000","#250000"] },
+        "MAMAMOO": { fandom:"MooMoo", color:"#FFD700", symbol:"🌙", gradient:["#1a1400","#201900"] },
+        "EXO": { fandom:"EXO-L", color:"#5B7FD4", symbol:"⭕", gradient:["#0a0f1a","#101520"] },
+        "NCT": { fandom:"NCTzen", color:"#00FF9F", symbol:"🌐", gradient:["#001a0e","#002010"] },
+        "Stray Kids": { fandom:"STAY", color:"#FFFF00", symbol:"⭐", gradient:["#1a1a00","#252500"] },
+        "ATEEZ": { fandom:"ATINY", color:"#FF8C00", symbol:"🏴‍☠️", gradient:["#1a0800","#201000"] },
+        "TXT": { fandom:"MOA", color:"#9B59B6", symbol:"🌌", gradient:["#0f001a","#150025"] },
+        "ENHYPEN": { fandom:"ENGENE", color:"#E74C3C", symbol:"🔗", gradient:["#1a0000","#200500"] },
+        "SEVENTEEN": { fandom:"CARAT", color:"#00BFFF", symbol:"💎", gradient:["#001520","#001a2a"] },
+        "SHINee": { fandom:"SHINee World", color:"#4169E1", symbol:"✨", gradient:["#000d1a","#001020"] },
+        "ZEROBASEONE": { fandom:"ZERONI", color:"#00FFAA", symbol:"0️⃣", gradient:["#001a10","#002015"] },
+        "RIIZE": { fandom:"BRIIZE", color:"#FF6EC7", symbol:"🌸", gradient:["#1a0010","#200015"] },
+        "SNSD": { fandom:"SONE", color:"#FFB6C1", symbol:"🌷", gradient:["#1a0010","#200015"] },
+        "2NE1": { fandom:"Blackjack", color:"#000000", symbol:"♠", gradient:["#0a0a0a","#151515"] },
+        "default": { fandom:"Fan", color:"#a855f7", symbol:"✦", gradient:["#0a0014","#160028"] }
+      };
+
+      function getFandomData(idolName) {
+        for(const [group, data] of Object.entries(FANDOM_DATA)) {
+          if(idolName.includes(group)) return { group, ...data };
+        }
+        return { group:"K-pop", ...FANDOM_DATA.default };
+      }
 
       // 실제 K-pop 아이돌 목록 (사주 분석에 활용)
       const IDOL_POOL = [
@@ -1017,22 +1099,21 @@ export default async function handler(req, res){
         {name:"Wooyoung (2PM)", vibe:"귀엽고 끼 넘치는 형"},
         // 솔로이스트
         {name:"IU (솔로)", vibe:"지적이고 감성 깊은 국민 가수형"},
-        {name:"태연 (솔로/SNSD)", vibe:"강인하고 보컬 완벽한 형"},
+        {name:"Taeyeon (솔로)", vibe:"강인하고 보컬 완벽한 형"},
         {name:"청하 (솔로)", vibe:"강렬하고 독립적인 퍼포머형"},
         {name:"선미 (솔로)", vibe:"섹시하고 신비로운 퀸형"},
-        {name:"효연 (솔로/SNSD)", vibe:"강렬하고 독보적인 댄서형"},
+        {name:"Hyoyeon (솔로)", vibe:"강렬하고 독보적인 댄서형"},
         {name:"강다니엘 (솔로)", vibe:"친근하고 에너지 넘치는 형"},
         {name:"옹성우 (솔로)", vibe:"노력하는 감성 보컬형"},
         // SNSD
-        {name:"태연 (SNSD)", vibe:"완벽한 보컬의 강인한 형"},
-        {name:"써니 (SNSD)", vibe:"밝고 긍정적인 에너지형"},
-        {name:"효연 (SNSD)", vibe:"독보적인 댄서 카리스마형"},
-        {name:"유리 (SNSD)", vibe:"우아하고 차가운 비주얼형"},
-        {name:"수영 (SNSD)", vibe:"활발하고 다재다능한 형"},
-        {name:"티파니 (SNSD)", vibe:"밝고 따뜻한 글로벌 형"},
-        {name:"서현 (SNSD)", vibe:"지적이고 세련된 형"},
-        {name:"윤아 (SNSD)", vibe:"청순하고 친근한 국민 미녀형"},
-        {name:"수영 (SNSD)", vibe:"스포티하고 당찬 형"},
+        {name:"Taeyeon (SNSD)", vibe:"완벽한 보컬의 강인한 형"},
+        {name:"Sunny (SNSD)", vibe:"밝고 긍정적인 에너지형"},
+        {name:"Hyoyeon (SNSD)", vibe:"독보적인 댄서 카리스마형"},
+        {name:"Yuri (SNSD)", vibe:"우아하고 차가운 비주얼형"},
+        {name:"Sooyoung (SNSD)", vibe:"활발하고 다재다능한 형"},
+        {name:"Tiffany (SNSD)", vibe:"밝고 따뜻한 글로벌 형"},
+        {name:"Seohyun (SNSD)", vibe:"지적이고 세련된 형"},
+        {name:"Yoona (SNSD)", vibe:"청순하고 친근한 국민 미녀형"},
         // KARA, 2NE1 etc
         {name:"CL (2NE1)", vibe:"강렬하고 독보적인 힙합 퀸형"},
         {name:"박봄 (2NE1)", vibe:"독특하고 강한 보컬형"},
@@ -1045,13 +1126,13 @@ export default async function handler(req, res){
         {name:"최석Matthew (ZEROBASEONE)", vibe:"글로벌하고 따뜻한 형"},
         {name:"김태래 (ZEROBASEONE)", vibe:"차갑고 강렬한 댄서형"},
         // RIIZE
-        {name:"원빈 (RIIZE)", vibe:"차갑고 완벽한 비주얼형"},
-        {name:"승한 (RIIZE)", vibe:"따뜻하고 감성적인 형"},
-        {name:"은석 (RIIZE)", vibe:"밝고 에너지 넘치는 형"},
-        {name:"소희 (RIIZE)", vibe:"귀엽고 당찬 형"},
-        {name:"원재 (RIIZE)", vibe:"조용하고 깊은 형"},
-        {name:"샷건 (RIIZE)", vibe:"글로벌하고 자유로운 형"},
-        {name:"앤톤 (RIIZE)", vibe:"독특하고 개성있는 형"},
+        {name:"Wonbin (RIIZE)", vibe:"차갑고 완벽한 비주얼형"},
+        {name:"Seunghan (RIIZE)", vibe:"따뜻하고 감성적인 형"},
+        {name:"Eunseok (RIIZE)", vibe:"밝고 에너지 넘치는 형"},
+        {name:"Sohee (RIIZE)", vibe:"귀엽고 당찬 형"},
+        {name:"Wonhyuk (RIIZE)", vibe:"조용하고 깊은 형"},
+        {name:"Shotaro (RIIZE)", vibe:"글로벌하고 자유로운 형"},
+        {name:"Anton (RIIZE)", vibe:"독특하고 개성있는 형"},
       ];
 
       const idolPrompt = `You are a Saju + astrology expert who reads idol compatibility types.
@@ -1089,7 +1170,7 @@ Respond with JSON only, no markdown:
         body:JSON.stringify({
           model:"gpt-4o-mini", temperature:0.8, max_tokens:1200,
           messages:[
-            {role:"system", content:"You are a sharp saju+astrology idol compatibility reader. Output valid JSON only."},
+            {role:"system", content:"You are a cold AI Oracle that matches symbolic energy patterns to idol archetypes. Output valid JSON only. Tone: sharp, precise, cold. No generic flattery. Feels like a classified signal match report."},
             {role:"user", content:idolPrompt}
           ]
         })
@@ -1128,17 +1209,30 @@ Respond with JSON only, no markdown:
     if(!payload.paid){
       const saju=buildSajuFull(payload);
       const free=makeFreeHooks({saju, question:payload.question, tarot:payload.tarot, lang, fortuneCat:payload.fortuneCat});
-      return res.status(200).json({free, paid:false, meta:{saju}});
+      return res.status(200).json({
+      free,
+      paid:false,
+      shareLine: SHARE_LINES[Math.floor(Math.random()*SHARE_LINES.length)],
+      meta:{saju}
+    });
     }
 
-    if(!payload.location) throw new Error("Paid analysis requires birthplace (location)");
+    // location 없으면 saju-only paid reading으로 fallback
 
     const key=cacheKey(payload);
     if(CACHE.has(key)) return res.status(200).json(CACHE.get(key));
 
     const saju=buildSajuFull(payload);
-    const astrologyRaw=await fetchAstrologyData(payload);
-    const astrologySummary=summarizeAstrology(astrologyRaw);
+    let astrologySummary = { sun:null, moon:null, mercury:null, venus:null, mars:null, ascendant:null };
+    if(payload.location) {
+      try {
+        const astrologyRaw=await fetchAstrologyData(payload);
+        astrologySummary=summarizeAstrology(astrologyRaw);
+      } catch(e) {
+        // Astrology API 실패해도 saju-only로 계속 진행
+        console.error("AstrologyAPI fallback:", e.message);
+      }
+    }
     const free=makeFreeHooks({saju, question:payload.question, tarot:payload.tarot, lang, fortuneCat:payload.fortuneCat});
     const response={
       free, paid:true, meta:{saju,astrologySummary},
