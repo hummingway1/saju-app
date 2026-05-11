@@ -1134,8 +1134,216 @@ export default async function handler(req, res){
         {name:"Shotaro (RIIZE)", vibe:"글로벌하고 자유로운 형"},
         {name:"Anton (RIIZE)", vibe:"독특하고 개성있는 형"},
       ];
+      // ── Fandom archetype database ─────────────────────
+      // 팬덤 테스트의 핵심은 "랜덤 추천"이 아니라
+      // 멤버별 대중/팬덤 캐릭터성을 태그화하고, 사용자의 사주 패턴과 매칭하는 것.
+      const FANDOM_THEMES = {
+        "BTS": { fandom:"ARMY", color:"#A855F7", accent:"BORAAHAE SIGNAL", emoji:"💜" },
+        "BLACKPINK": { fandom:"BLINK", color:"#FF4FB8", accent:"BLACKPINK AREA", emoji:"🖤💗" },
+        "aespa": { fandom:"MY", color:"#7DD3FC", accent:"SYNK SIGNAL", emoji:"🦋" },
+        "NewJeans": { fandom:"Bunnies", color:"#7DD3FC", accent:"Y2K STATIC", emoji:"🐰" },
+        "IVE": { fandom:"DIVE", color:"#FDE68A", accent:"ROYAL SIGNAL", emoji:"✨" },
+        "LE SSERAFIM": { fandom:"FEARNOT", color:"#F5F5F5", accent:"FEARLESS FIELD", emoji:"🪽" },
+        "TWICE": { fandom:"ONCE", color:"#F9A8D4", accent:"HEART SIGNAL", emoji:"🍭" },
+        "NCT": { fandom:"NCTzen", color:"#86EFAC", accent:"NEO SIGNAL", emoji:"💚" },
+        "Stray Kids": { fandom:"STAY", color:"#EF4444", accent:"NOISE SIGNAL", emoji:"🔥" },
+        "SEVENTEEN": { fandom:"CARAT", color:"#FBCFE8", accent:"CARAT FIELD", emoji:"💎" },
+        "ENHYPEN": { fandom:"ENGENE", color:"#C4B5FD", accent:"DARK MOON SIGNAL", emoji:"🌙" },
+        "TXT": { fandom:"MOA", color:"#93C5FD", accent:"DREAM STATIC", emoji:"🦊" },
+        "ATEEZ": { fandom:"ATINY", color:"#F59E0B", accent:"PIRATE SIGNAL", emoji:"🏴‍☠️" },
+        "RIIZE": { fandom:"BRIIZE", color:"#FB923C", accent:"RIISING SIGNAL", emoji:"🧡" }
+      };
 
-      const idolPrompt = `You are a Saju + astrology expert who reads idol compatibility types.
+      const IDOL_ARCHETYPE_DB = [
+        // BTS
+        {name:"RM (BTS)", group:"BTS", tags:["intellectual","leader","philosophical","protective","deep talk","responsibility"], fanPattern:"생각 많은 리더형에게 안정감을 느끼는 타입"},
+        {name:"Jin (BTS)", group:"BTS", tags:["warm","humor","classic beauty","stable","gentle","older brother"], fanPattern:"가벼운 농담 뒤에 숨어있는 다정함에 약한 타입"},
+        {name:"Suga (BTS)", group:"BTS", tags:["cold","artist","quiet intensity","wounded genius","producer","distance"], fanPattern:"차갑고 말수 적지만 안쪽이 깊은 사람에게 오래 끌리는 타입"},
+        {name:"J-Hope (BTS)", group:"BTS", tags:["sunshine","energy","dance","hope","bright","discipline"], fanPattern:"밝은 에너지 뒤의 성실함을 알아보는 타입"},
+        {name:"Jimin (BTS)", group:"BTS", tags:["emotional","sensual","soft charisma","performer","delicate","attachment"], fanPattern:"부드럽지만 위험하게 흔들리는 감정선에 반응하는 타입"},
+        {name:"V (BTS)", group:"BTS", tags:["mysterious","artist","vintage aura","cold outside warm inside","dreamy","distance"], fanPattern:"낯설고 몽환적인 사람을 오래 곱씹는 타입"},
+        {name:"Jungkook (BTS)", group:"BTS", tags:["all-rounder","youngest","perfectionist","athletic","sincere","growth"], fanPattern:"완벽해 보이는데 계속 성장하는 사람에게 감정이 쌓이는 타입"},
+
+        // BLACKPINK
+        {name:"Jisoo (BLACKPINK)", group:"BLACKPINK", tags:["classic","elegant","warm","stable","visual","quiet confidence"], fanPattern:"화려함보다 흔들리지 않는 안정감에 끌리는 타입"},
+        {name:"Jennie (BLACKPINK)", group:"BLACKPINK", tags:["it girl","cold charisma","independent","luxury","dual charm","queen"], fanPattern:"차갑고 독립적인 퀸 에너지에 약한 타입"},
+        {name:"Rosé (BLACKPINK)", group:"BLACKPINK", tags:["artist","emotional voice","free spirit","fragile","guitar","nostalgia"], fanPattern:"감성적인 목소리와 쓸쓸한 자유로움에 반응하는 타입"},
+        {name:"Lisa (BLACKPINK)", group:"BLACKPINK", tags:["performance","global","confidence","dance","bright","power"], fanPattern:"무대 장악력과 자신감에 바로 반응하는 타입"},
+
+        // aespa
+        {name:"Karina (aespa)", group:"aespa", tags:["cold beauty","leader","ai aura","power","perfect","magnetic"], fanPattern:"완벽하고 차가운 비현실감에 끌리는 타입"},
+        {name:"Winter (aespa)", group:"aespa", tags:["icy","mystery","cat-like","minimal","sharp","quiet"], fanPattern:"무표정 속 작은 변화에 과몰입하는 타입"},
+        {name:"Giselle (aespa)", group:"aespa", tags:["cool","hip","individual","rap","urban","free"], fanPattern:"남들과 다른 결을 가진 쿨한 사람에게 반응하는 타입"},
+        {name:"Ningning (aespa)", group:"aespa", tags:["vocal","bold","bright","talent","glam","confident"], fanPattern:"재능이 선명하게 터지는 사람에게 끌리는 타입"},
+
+        // NewJeans
+        {name:"Minji (NewJeans)", group:"NewJeans", tags:["natural","clean","leader","calm","classic","first love"], fanPattern:"꾸미지 않은 담백함과 첫사랑 이미지에 약한 타입"},
+        {name:"Hanni (NewJeans)", group:"NewJeans", tags:["cute","active","warm","playful","friendly","spark"], fanPattern:"가볍고 귀여운 에너지에 마음이 풀리는 타입"},
+        {name:"Danielle (NewJeans)", group:"NewJeans", tags:["sunshine","pure","emotional","visual","soft","dreamy"], fanPattern:"맑고 따뜻한 사람에게 감정을 투영하는 타입"},
+        {name:"Haerin (NewJeans)", group:"NewJeans", tags:["cat-like","mysterious","quiet","icy","minimal","distance"], fanPattern:"가까워질 듯 멀어지는 고양이 같은 타입에 끌리는 흐름"},
+        {name:"Hyein (NewJeans)", group:"NewJeans", tags:["youngest","chic","mysterious","cool","growth","unique"], fanPattern:"어리고 신비로운데 묘하게 쿨한 에너지에 반응하는 타입"},
+
+        // IVE
+        {name:"Yujin (IVE)", group:"IVE", tags:["leader","bright","confident","active","responsible","dog-like"], fanPattern:"밝은 리더십과 건강한 자신감에 끌리는 타입"},
+        {name:"Gaeul (IVE)", group:"IVE", tags:["calm","urban","elegant","quiet","autumn","mature"], fanPattern:"차분하고 도시적인 분위기를 오래 기억하는 타입"},
+        {name:"Rei (IVE)", group:"IVE", tags:["cute","unique","soft","individual","artsy","playful"], fanPattern:"귀여운데 자기 세계가 분명한 사람에게 반응하는 타입"},
+        {name:"Wonyoung (IVE)", group:"IVE", tags:["princess","visual","perfect","royal","it girl","confidence"], fanPattern:"비현실적인 공주 에너지와 자기관리력에 끌리는 타입"},
+        {name:"Liz (IVE)", group:"IVE", tags:["vocal","friendly","bright","soft","warm","smile"], fanPattern:"편안하고 따뜻한 목소리 같은 사람에게 약한 타입"},
+        {name:"Leeseo (IVE)", group:"IVE", tags:["youngest","fresh","bold","cute","growth","spark"], fanPattern:"신선하고 당찬 막내 에너지에 반응하는 타입"},
+
+        // LE SSERAFIM
+        {name:"Sakura (LE SSERAFIM)", group:"LE SSERAFIM", tags:["veteran","elegant","resilient","soft power","history","quiet"], fanPattern:"긴 서사와 버틴 사람의 분위기에 약한 타입"},
+        {name:"Chaewon (LE SSERAFIM)", group:"LE SSERAFIM", tags:["leader","strong","cute","sharp","discipline","dual charm"], fanPattern:"귀여움과 강단이 동시에 있는 사람에게 끌리는 타입"},
+        {name:"Yunjin (LE SSERAFIM)", group:"LE SSERAFIM", tags:["artist","vocal","free","honest","emotional","bold"], fanPattern:"솔직하고 예술적인 자유로움에 감정이 움직이는 타입"},
+        {name:"Kazuha (LE SSERAFIM)", group:"LE SSERAFIM", tags:["elegant","ballet","quiet strength","noble","calm","visual"], fanPattern:"고요한 우아함과 절제된 힘에 끌리는 타입"},
+        {name:"Eunchae (LE SSERAFIM)", group:"LE SSERAFIM", tags:["youngest","bright","playful","fresh","sunshine","cute"], fanPattern:"맑고 장난스러운 막내 에너지에 마음이 풀리는 타입"},
+
+        // TWICE
+        {name:"Nayeon (TWICE)", group:"TWICE", tags:["bright","rabbit","center","cute","confident","spark"], fanPattern:"밝고 확실한 센터 에너지에 바로 반응하는 타입"},
+        {name:"Jeongyeon (TWICE)", group:"TWICE", tags:["cool","boyish","honest","stable","protective","fresh"], fanPattern:"시원하고 솔직한 사람에게 편안함을 느끼는 타입"},
+        {name:"Momo (TWICE)", group:"TWICE", tags:["dance","performance","power","cute","discipline","body"], fanPattern:"무대에서 증명하는 에너지에 끌리는 타입"},
+        {name:"Sana (TWICE)", group:"TWICE", tags:["lovely","charm","soft","flirty","warm","cute"], fanPattern:"사람을 녹이는 애교와 따뜻함에 약한 타입"},
+        {name:"Jihyo (TWICE)", group:"TWICE", tags:["leader","vocal","strong","reliable","passion","power"], fanPattern:"강하고 믿음직한 사람에게 감정적으로 기대는 타입"},
+        {name:"Mina (TWICE)", group:"TWICE", tags:["elegant","quiet","swan","soft","introvert","grace"], fanPattern:"조용하고 우아한 사람의 작은 표정에 반응하는 타입"},
+        {name:"Dahyun (TWICE)", group:"TWICE", tags:["funny","unique","bright","humor","white","quirky"], fanPattern:"엉뚱하고 밝은 사람에게 긴장을 풀어버리는 타입"},
+        {name:"Chaeyoung (TWICE)", group:"TWICE", tags:["artist","independent","small but strong","unique","creative","free"], fanPattern:"작지만 자기 세계가 강한 예술가형에 끌리는 타입"},
+        {name:"Tzuyu (TWICE)", group:"TWICE", tags:["visual","calm","classic","pure","quiet","grace"], fanPattern:"말없이 선명한 비주얼과 고요함에 반응하는 타입"},
+
+        // NCT
+        {name:"Taeyong (NCT)", group:"NCT", tags:["leader","performance","intense","artist","sharp","vulnerable"], fanPattern:"강렬한 무대 뒤의 예민함까지 읽고 싶어지는 타입"},
+        {name:"Doyoung (NCT)", group:"NCT", tags:["vocal","sensitive","intellectual","emotional","clean","sincere"], fanPattern:"예민하고 섬세한 감정선에 오래 머무는 타입"},
+        {name:"Jaehyun (NCT)", group:"NCT", tags:["classic","visual","gentleman","calm","romantic","low voice"], fanPattern:"차분하고 클래식한 설렘에 약한 타입"},
+        {name:"Mark (NCT)", group:"NCT", tags:["all-rounder","sincere","rapper","awkward charm","growth","hardworking"], fanPattern:"성실하고 계속 성장하는 사람에게 정이 쌓이는 타입"},
+        {name:"Haechan (NCT)", group:"NCT", tags:["sunshine","playful","vocal","mischief","bright","clingy"], fanPattern:"장난스럽고 밝은데 묘하게 의존하게 되는 타입"},
+        {name:"Jeno (NCT)", group:"NCT", tags:["quiet","strong","dog-like","visual","calm","physical"], fanPattern:"조용한 힘과 든든함에 반응하는 타입"},
+        {name:"Jaemin (NCT)", group:"NCT", tags:["sweet","visual","soft","romantic","dual charm","dreamy"], fanPattern:"달콤한 말투와 묘한 거리감에 흔들리는 타입"},
+        {name:"Ten (NCT)", group:"NCT", tags:["artist","dance","unique","fluid","cat-like","free"], fanPattern:"정해지지 않는 예술가형에게 끌리는 타입"},
+
+        // Stray Kids
+        {name:"Bang Chan (Stray Kids)", group:"Stray Kids", tags:["leader","producer","protective","warm","responsible","safe"], fanPattern:"기댈 수 있는 리더형에게 안정감을 느끼는 타입"},
+        {name:"Lee Know (Stray Kids)", group:"Stray Kids", tags:["cat-like","cold","dance","weird charm","quiet","sharp"], fanPattern:"차갑고 이상한데 자꾸 신경 쓰이는 타입에 약함"},
+        {name:"Changbin (Stray Kids)", group:"Stray Kids", tags:["power","rap","intense","funny","strong","soft inside"], fanPattern:"강한 에너지 안쪽의 다정함을 알아보는 타입"},
+        {name:"Hyunjin (Stray Kids)", group:"Stray Kids", tags:["artist","visual","dramatic","sensual","dreamy","performance"], fanPattern:"드라마틱하고 예술적인 분위기에 깊게 빠지는 타입"},
+        {name:"Han (Stray Kids)", group:"Stray Kids", tags:["genius","rapper","anxious artist","humor","sensitive","creative"], fanPattern:"웃기지만 예민한 천재형에게 감정이 흔들리는 타입"},
+        {name:"Felix (Stray Kids)", group:"Stray Kids", tags:["sunshine","deep voice","angel","global","soft","bright"], fanPattern:"밝은 얼굴과 낮은 목소리의 반전에 약한 타입"},
+        {name:"Seungmin (Stray Kids)", group:"Stray Kids", tags:["vocal","clean","sincere","calm","dry humor","stable"], fanPattern:"담백하고 꾸준한 사람에게 오래 마음이 가는 타입"},
+        {name:"I.N (Stray Kids)", group:"Stray Kids", tags:["youngest","cute","growth","sharp","fresh","bold"], fanPattern:"귀여운데 점점 선명해지는 성장형에 끌리는 타입"},
+
+        // SEVENTEEN
+        {name:"S.Coups (SEVENTEEN)", group:"SEVENTEEN", tags:["leader","protective","strong","responsible","soft inside","anchor"], fanPattern:"강하게 지켜주는 리더형에게 깊게 끌리는 타입"},
+        {name:"Jeonghan (SEVENTEEN)", group:"SEVENTEEN", tags:["angel","strategic","soft","mischief","pretty","clever"], fanPattern:"부드러운데 속을 알 수 없는 사람에게 약한 타입"},
+        {name:"Joshua (SEVENTEEN)", group:"SEVENTEEN", tags:["gentleman","soft","warm","classic","calm","sweet"], fanPattern:"조용하고 다정한 신사형에 안정감을 느끼는 타입"},
+        {name:"Jun (SEVENTEEN)", group:"SEVENTEEN", tags:["visual","mysterious","elegant","cat-like","quiet","performance"], fanPattern:"멀리 있는 듯한 비주얼형에게 오래 끌리는 타입"},
+        {name:"Hoshi (SEVENTEEN)", group:"SEVENTEEN", tags:["performance","tiger","energy","passion","chaos","dance"], fanPattern:"감정이 폭발하는 퍼포머에게 반응하는 타입"},
+        {name:"Wonwoo (SEVENTEEN)", group:"SEVENTEEN", tags:["quiet","intellectual","deep voice","glasses","calm","distance"], fanPattern:"말수 적고 지적인 거리감에 끌리는 타입"},
+        {name:"Woozi (SEVENTEEN)", group:"SEVENTEEN", tags:["producer","genius","small but strong","work","quiet intensity","artist"], fanPattern:"작지만 단단한 천재형에게 존경과 애정이 섞이는 타입"},
+        {name:"DK (SEVENTEEN)", group:"SEVENTEEN", tags:["bright","vocal","sunshine","funny","warm","emotional"], fanPattern:"밝은 목소리와 솔직한 감정에 마음이 열리는 타입"},
+        {name:"Mingyu (SEVENTEEN)", group:"SEVENTEEN", tags:["visual","tall","friendly","dog-like","warm","domestic"], fanPattern:"크고 따뜻한 생활형 매력에 약한 타입"},
+        {name:"The8 (SEVENTEEN)", group:"SEVENTEEN", tags:["artist","philosophical","elegant","unique","quiet","style"], fanPattern:"철학적이고 자기 세계가 강한 사람에게 끌리는 타입"},
+        {name:"Seungkwan (SEVENTEEN)", group:"SEVENTEEN", tags:["vocal","variety","emotional","funny","warm","expressive"], fanPattern:"웃기지만 감정 깊은 사람에게 정이 쌓이는 타입"},
+        {name:"Vernon (SEVENTEEN)", group:"SEVENTEEN", tags:["cool","hip","unique","calm","free","lowkey"], fanPattern:"과하게 꾸미지 않는 쿨함에 반응하는 타입"},
+        {name:"Dino (SEVENTEEN)", group:"SEVENTEEN", tags:["youngest","dance","growth","hardworking","bright","ambition"], fanPattern:"성실하게 올라오는 막내 서사에 끌리는 타입"},
+
+        // TXT
+        {name:"Yeonjun (TXT)", group:"TXT", tags:["ace","performance","fox","fashion","confident","it boy"], fanPattern:"무대 위 확신과 여우 같은 매력에 약한 타입"},
+        {name:"Soobin (TXT)", group:"TXT", tags:["leader","soft","bunny","calm","introvert","gentle"], fanPattern:"큰데 순하고 조용한 안정감에 끌리는 타입"},
+        {name:"Beomgyu (TXT)", group:"TXT", tags:["playful","chaos","pretty","sensitive","humor","boyish"], fanPattern:"장난스러움 뒤의 예민함을 알아보는 타입"},
+        {name:"Taehyun (TXT)", group:"TXT", tags:["vocal","sharp","rational","strong","clear","intense"], fanPattern:"또렷하고 냉정한 에너지에 신뢰를 느끼는 타입"},
+        {name:"Huening Kai (TXT)", group:"TXT", tags:["dreamy","unique","bright","global","soft","creative"], fanPattern:"몽글하고 독특한 세계관에 끌리는 타입"},
+
+        // ENHYPEN
+        {name:"Jungwon (ENHYPEN)", group:"ENHYPEN", tags:["leader","cat-like","calm","responsible","young","clean"], fanPattern:"어린데 단단한 리더 에너지에 반응하는 타입"},
+        {name:"Heeseung (ENHYPEN)", group:"ENHYPEN", tags:["ace","vocal","all-rounder","mature","romantic","skill"], fanPattern:"실력으로 설득하는 에이스형에 끌리는 타입"},
+        {name:"Jay (ENHYPEN)", group:"ENHYPEN", tags:["global","cool","honest","fashion","passionate","funny"], fanPattern:"솔직하고 세련된 열정에 반응하는 타입"},
+        {name:"Jake (ENHYPEN)", group:"ENHYPEN", tags:["warm","dog-like","global","sweet","friendly","soft"], fanPattern:"따뜻하고 친근한 에너지에 마음이 풀리는 타입"},
+        {name:"Sunghoon (ENHYPEN)", group:"ENHYPEN", tags:["ice prince","visual","calm","elegant","distance","classic"], fanPattern:"차갑고 완벽한 왕자형 거리감에 약한 타입"},
+        {name:"Sunoo (ENHYPEN)", group:"ENHYPEN", tags:["bright","cute","expressive","sunshine","soft","charm"], fanPattern:"표정이 풍부하고 사랑스러운 사람에게 반응하는 타입"},
+        {name:"Ni-ki (ENHYPEN)", group:"ENHYPEN", tags:["dance","youngest","cold","growth","performance","sharp"], fanPattern:"차갑고 빠르게 성장하는 퍼포머형에 끌리는 타입"},
+
+        // ATEEZ
+        {name:"Hongjoong (ATEEZ)", group:"ATEEZ", tags:["leader","producer","charisma","artist","small but strong","rebel"], fanPattern:"작지만 강한 반항적 리더 에너지에 끌리는 타입"},
+        {name:"Seonghwa (ATEEZ)", group:"ATEEZ", tags:["elegant","visual","soft","motherly","perfect","calm"], fanPattern:"고요하고 완벽한 다정함에 약한 타입"},
+        {name:"Yunho (ATEEZ)", group:"ATEEZ", tags:["bright","tall","dance","dog-like","warm","energy"], fanPattern:"크고 밝은 에너지에 마음이 안정되는 타입"},
+        {name:"Yeosang (ATEEZ)", group:"ATEEZ", tags:["mysterious","visual","quiet","unique","delicate","otherworldly"], fanPattern:"말수 적고 비현실적인 사람에게 오래 끌리는 타입"},
+        {name:"San (ATEEZ)", group:"ATEEZ", tags:["performance","intense","emotional","sensual","power","dual charm"], fanPattern:"감정이 무대에서 터지는 타입에게 약함"},
+        {name:"Mingi (ATEEZ)", group:"ATEEZ", tags:["rap","tall","funny","power","soft inside","energy"], fanPattern:"크고 강한데 안쪽은 부드러운 반전에 끌리는 타입"},
+        {name:"Wooyoung (ATEEZ)", group:"ATEEZ", tags:["playful","flirty","dance","social","mischief","charm"], fanPattern:"장난스럽고 사람을 흔드는 매력에 반응하는 타입"},
+        {name:"Jongho (ATEEZ)", group:"ATEEZ", tags:["vocal","strong","stable","serious","power","maknae"], fanPattern:"흔들리지 않는 실력과 안정감에 끌리는 타입"},
+
+        // RIIZE
+        {name:"Shotaro (RIIZE)", group:"RIIZE", tags:["dance","bright","soft","global","smile","clean"], fanPattern:"밝고 깨끗한 댄서 에너지에 반응하는 타입"},
+        {name:"Eunseok (RIIZE)", group:"RIIZE", tags:["visual","calm","dry humor","tall","cool","classic"], fanPattern:"차분하고 담백한 비주얼형에게 끌리는 타입"},
+        {name:"Sungchan (RIIZE)", group:"RIIZE", tags:["tall","bright","reliable","friendly","visual","energy"], fanPattern:"큰 키와 밝은 안정감에 마음이 가는 타입"},
+        {name:"Wonbin (RIIZE)", group:"RIIZE", tags:["cold beauty","guitar","visual","mysterious","star aura","distance"], fanPattern:"차갑고 스타성 있는 거리감에 강하게 반응하는 타입"},
+        {name:"Sohee (RIIZE)", group:"RIIZE", tags:["cute","vocal","fresh","bright","quirky","smile"], fanPattern:"귀엽고 신선한 목소리에 마음이 풀리는 타입"},
+        {name:"Anton (RIIZE)", group:"RIIZE", tags:["soft","global","youngest","dreamy","gentle","lowkey"], fanPattern:"조용하고 부드러운 막내형 분위기에 끌리는 타입"}
+      ];
+
+      function deriveUserArchetype(saju){
+        const elems=saju.elements||[0,0,0,0,0]; // 木火土金水
+        const strong=(saju.strong||[]).join(" ");
+        const weak=(saju.weak||[]).join(" ");
+        const hints=saju.personalityHints||[];
+        const tags=[];
+
+        if(elems[3]>=Math.max(...elems)-1 || strong.includes("金")) tags.push("cold","sharp","distance","classic","cool","icy","calm");
+        if(elems[4]>=Math.max(...elems)-1 || strong.includes("水")) tags.push("mysterious","dreamy","deep","emotional","quiet","nostalgia");
+        if(elems[1]>=Math.max(...elems)-1 || strong.includes("火")) tags.push("sunshine","performance","bright","passion","energy","expressive");
+        if(elems[0]>=Math.max(...elems)-1 || strong.includes("木")) tags.push("growth","artist","free","creative","fresh","playful");
+        if(elems[2]>=Math.max(...elems)-1 || strong.includes("土")) tags.push("stable","protective","leader","warm","reliable","responsible");
+
+        if(hints.some(h=>h.includes("책임")||h.includes("원칙"))) tags.push("leader","responsible","stable");
+        if(hints.some(h=>h.includes("창의")||h.includes("예술"))) tags.push("artist","creative","performance");
+        if(hints.some(h=>h.includes("직관")||h.includes("예민"))) tags.push("mysterious","sensitive","distance","emotional");
+        if(hints.some(h=>h.includes("독립")||h.includes("경쟁"))) tags.push("independent","cool","power","confidence");
+
+        // Weak element creates attraction toward the missing energy
+        if(weak.includes("火")) tags.push("sunshine","bright","energy");
+        if(weak.includes("水")) tags.push("deep","mysterious","emotional");
+        if(weak.includes("金")) tags.push("cold","classic","visual","distance");
+        if(weak.includes("木")) tags.push("fresh","growth","playful");
+        if(weak.includes("土")) tags.push("stable","protective","warm");
+
+        return [...new Set(tags)];
+      }
+
+      function scoreIdolByTags(userTags,idol){
+        const set=new Set(userTags);
+        let score=0;
+        for(const tag of idol.tags||[]){
+          if(set.has(tag)) score+=8;
+        }
+        // loose affinities
+        const affinities = {
+          "cold":["distance","icy","classic","visual","mysterious"],
+          "artist":["creative","performance","unique","dreamy"],
+          "leader":["protective","responsible","stable","reliable"],
+          "sunshine":["bright","warm","playful","cute"],
+          "mysterious":["quiet","distance","dreamy","cat-like"],
+          "stable":["warm","reliable","calm","protective"]
+        };
+        for(const t of userTags){
+          for(const near of affinities[t]||[]){
+            if((idol.tags||[]).includes(near)) score+=3;
+          }
+        }
+        return score;
+      }
+
+
+
+      const selectedGroup = payload.selectedGroup || "BTS";
+      const theme = FANDOM_THEMES[selectedGroup] || { fandom:"FANDOM", color:"#A855F7", accent:"SIGNAL", emoji:"✦" };
+      const userArchetypeTags = deriveUserArchetype(saju);
+      const groupPool = selectedGroup && selectedGroup !== "ALL"
+        ? IDOL_ARCHETYPE_DB.filter(i => i.group === selectedGroup)
+        : IDOL_ARCHETYPE_DB;
+      const rankedPool = [...(groupPool.length ? groupPool : IDOL_ARCHETYPE_DB)]
+        .map(i => ({...i, matchScore: scoreIdolByTags(userArchetypeTags, i)}))
+        .sort((a,b)=>b.matchScore-a.matchScore);
+      const effectiveIdolPool = rankedPool.slice(0, Math.min(8, rankedPool.length));
+
+      const idolPrompt = `You are a Saju + astrology expert who reads fandom bias patterns. The user usually arrives as a fan of the selected group. If selectedGroup is not ALL, you MUST choose matches only from that group, so the experience feels like finding their bias pattern inside their own fandom.
 ${ls.style}
 
 SAJU DATA:
@@ -1148,20 +1356,23 @@ SAJU DATA:
 성향: ${(saju.personalityHints||[]).join(", ")||"미상"}
 성별: ${payload.gender}
 
-IDOL POOL (아래 아이돌 중에서 사주 에너지와 가장 잘 맞는 3명 선택):
-${IDOL_POOL.map(i=>i.name+' ('+i.vibe+')').join(', ')}
+IDOL ARCHETYPE POOL (아래 후보 중에서만 선택. selectedGroup이 있으면 반드시 그 그룹 안에서 3명 선택. scoreHint와 tags를 우선 고려):
+${effectiveIdolPool.map(i=>`${i.name} | tags=${(i.tags||[]).join('/')}; fanPattern=${i.fanPattern}; scoreHint=${i.matchScore}`).join('\n')}
 
-OUTPUT in ${ls.lang}:
-Respond with JSON only, no markdown:
+SELECTED GROUP: ${selectedGroup}\nFANDOM: ${theme.fandom}\nFANDOM ACCENT: ${theme.accent} ${theme.emoji}\nUSER ARCHETYPE TAGS: ${userArchetypeTags.join(', ')}\n\nOUTPUT in ${ls.lang}:\nRespond with JSON only, no markdown:
 {
-  "title": "한 줄로 이 사람의 아이돌 소울 타입 (예: '차가운 카리스마형에 끌리는 감성파')",
-  "highlight": "이 사람의 핵심 매력 포인트 한 문장",
+  "title": "한 줄로 이 사람의 BIAS PATTERN / IDOL SIGNAL TYPE (예: '차가운 카리스마에 무너지는 감정형')",
+  "highlight": "이 사람이 왜 이 그룹의 특정 멤버 타입에 끌리는지 한 문장",
+  "fandom": "${theme.fandom}",
+  "fandomAccent": "${theme.accent}",
+  "fandomColor": "${theme.color}",
+  "shareLine": "SNS 카드에 넣을 짧고 강한 한 줄",
   "idolMatches": [
-    {"name": "아이돌 이름 (그룹명)", "reason": "이 아이돌과 에너지가 맞는 이유 한 문장", "score": 92},
+    {"name": "아이돌 이름 (그룹명)", "reason": "tags/fanPattern 기반으로 왜 이 멤버인지 한 문장", "score": 92},
     {"name": "아이돌 이름 (그룹명)", "reason": "이유 한 문장", "score": 87},
     {"name": "아이돌 이름 (그룹명)", "reason": "이유 한 문장", "score": 81}
   ],
-  "detail": "✦ YOUR IDOL TYPE\n(어떤 타입의 아이돌과 에너지가 맞는지, 위에서 선택한 아이돌 언급)\n\n✦ WHY YOU ATTRACT THEM\n(사주 에너지로 보는 끌림의 이유)\n\n✦ YOUR FAN ENERGY\n(팬으로서의 성향과 덕질 스타일)\n\n✦ RED FLAG IN FANDOM\n(조심할 감정 패턴)\n\n✦ YOUR DESTINY TYPE\n(운명적으로 끌릴 아이돌 에너지 유형)"
+  "detail": "◉ BIAS PATTERN DETECTED\n(선택한 그룹 안에서 어떤 멤버 시그널에 반응하는지)\n\n◉ WHY THIS SIGNAL HITS\n(끌림의 이유. 팬심/감정투영 중심)\n\n◉ YOUR FANDOM ENERGY\n(덕질 스타일. 친구와 비교하고 싶은 문장)\n\n◉ UNRESOLVED ATTACHMENT\n(조심할 감정 패턴)\n\n◉ SIGNAL MATCH FOUND\n(최종적으로 반응하는 아이돌 에너지 유형)"
 }`.trim();
 
       const resp = await fetch("https://api.openai.com/v1/chat/completions",{
@@ -1180,7 +1391,28 @@ Respond with JSON only, no markdown:
       let raw = gptData.choices?.[0]?.message?.content||"{}";
       raw = raw.replace(/```json|```/g,"").trim();
       let result;
-      try { result = JSON.parse(raw); } catch { result = { title:"분석 완료", detail:raw }; }
+      try { result = JSON.parse(raw); } catch { result = { title:"BIAS PATTERN DETECTED", detail:raw }; }
+
+      // Ensure fandom metadata survives even if the model omits it.
+      result.fandom = result.fandom || theme.fandom;
+      result.fandomAccent = result.fandomAccent || theme.accent;
+      result.fandomColor = result.fandomColor || theme.color;
+      result.selectedGroup = selectedGroup;
+      result.userArchetypeTags = userArchetypeTags;
+      result.shareLine = result.shareLine || (result.highlight || "SIGNAL MATCH FOUND.");
+
+      // Guardrail: if a selected group exists, remove any match outside that group.
+      if (selectedGroup !== "ALL" && Array.isArray(result.idolMatches)) {
+        result.idolMatches = result.idolMatches.filter(m => String(m.name||"").includes(`(${selectedGroup})`));
+      }
+      if (!Array.isArray(result.idolMatches) || result.idolMatches.length < 3) {
+        result.idolMatches = effectiveIdolPool.slice(0,3).map((i,idx)=>({
+          name:i.name,
+          reason:i.fanPattern,
+          score:Math.max(78, 94 - idx*5)
+        }));
+      }
+
       return res.status(200).json(result);
     }
 
