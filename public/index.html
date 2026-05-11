@@ -560,7 +560,7 @@ button {
         <button class="lang-item" data-lang="es" onclick="setLang('es')">🇪🇸 Español</button>
       </div>
     </div>
-    <button class="nav-cta" id="navCta" onclick="scrollToApp()">Read My Fate</button>
+    <button class="nav-cta" id="navCta" onclick="goMode('saju')">Read My Fate</button>
   </div>
 </nav>
 
@@ -672,29 +672,7 @@ button {
           <button class="fcat" onclick="setFcat(3)">📈 <span id="fc3">사업운</span></button>
           <button class="fcat" onclick="setFcat(4)">🌿 <span id="fc4">건강운</span></button>
         </div>
-        
-        <div class="field full" style="margin-bottom:12px">
-          <div class="flabel" id="lbIGroup">좋아하는 그룹</div>
-          <select class="box" id="idolGroup" style="width:100%;appearance:none;color:#fff;background:rgba(255,255,255,.04);font-family:inherit">
-            <option value="BTS">BTS</option>
-            <option value="BLACKPINK">BLACKPINK</option>
-            <option value="aespa">aespa</option>
-            <option value="NewJeans">NewJeans</option>
-            <option value="IVE">IVE</option>
-            <option value="LE SSERAFIM">LE SSERAFIM</option>
-            <option value="TWICE">TWICE</option>
-            <option value="NCT">NCT</option>
-            <option value="Stray Kids">Stray Kids</option>
-            <option value="SEVENTEEN">SEVENTEEN</option>
-            <option value="ENHYPEN">ENHYPEN</option>
-            <option value="TXT">TXT</option>
-            <option value="ATEEZ">ATEEZ</option>
-            <option value="RIIZE">RIIZE</option>
-            <option value="ALL">전체 그룹에서 보기</option>
-          </select>
-        </div>
-
-        <div class="form-grid">
+<div class="form-grid">
           <div class="field"><div class="flabel" id="lbYr">생년</div><div class="box" id="sYr" onclick="openSheet('sYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbMo">월</div><div class="box" id="sMo" onclick="openSheet('sMo')">-</div></div>
           <div class="field"><div class="flabel" id="lbDy">일</div><div class="box" id="sDy" onclick="openSheet('sDy')">-</div></div>
@@ -776,7 +754,28 @@ button {
       <div class="panel">
         <div class="panel-title" id="lblIdolTitle">BIAS PATTERN DETECTED</div>
         <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.8" id="lblIdolDesc">좋아하는 그룹을 먼저 고르세요. 멤버별 팬덤 캐릭터 태그와 당신의 사주 패턴을 매칭해, 그 그룹 안에서 반응하는 bias signal을 감지합니다.</p>
-        <div class="form-grid">
+                <div class="field full" style="margin-bottom:12px">
+          <div class="flabel" id="lbIGroup">좋아하는 그룹</div>
+          <select class="box" id="idolGroup" style="width:100%;appearance:none;color:#fff;background:rgba(255,255,255,.04);font-family:inherit">
+            <option value="BTS">BTS</option>
+            <option value="BLACKPINK">BLACKPINK</option>
+            <option value="aespa">aespa</option>
+            <option value="NewJeans">NewJeans</option>
+            <option value="IVE">IVE</option>
+            <option value="LE SSERAFIM">LE SSERAFIM</option>
+            <option value="TWICE">TWICE</option>
+            <option value="NCT">NCT</option>
+            <option value="Stray Kids">Stray Kids</option>
+            <option value="SEVENTEEN">SEVENTEEN</option>
+            <option value="ENHYPEN">ENHYPEN</option>
+            <option value="TXT">TXT</option>
+            <option value="ATEEZ">ATEEZ</option>
+            <option value="RIIZE">RIIZE</option>
+            <option value="ALL">전체 그룹에서 보기</option>
+          </select>
+        </div>
+
+<div class="form-grid">
           <div class="field"><div class="flabel" id="lbIYr">생년</div><div class="box" id="iYr" onclick="openSheet('iYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbIMo">월</div><div class="box" id="iMo" onclick="openSheet('iMo')">-</div></div>
           <div class="field"><div class="flabel" id="lbIDy">일</div><div class="box" id="iDy" onclick="openSheet('iDy')">-</div></div>
@@ -810,7 +809,7 @@ button {
   <div class="footer-cta-box">
     <h3 id="ftH">Your Bias Pattern Was <span id="ftSpan">Detected.</span></h3>
     <p id="ftP">Join millions of fans discovering hidden compatibility through Korean fate reading and astrology.</p>
-    <button class="footer-cta-btn" id="ftBtn" onclick="scrollToApp()">Start Free Reading</button>
+    <button class="footer-cta-btn" id="ftBtn" onclick="goMode('saju')">Start Free Reading</button>
   </div>
 </div>
 <footer>SAJUSTRO · K-Fate Meets Astrology · sajustro.vercel.app</footer>
@@ -1191,8 +1190,15 @@ function setMode(mode){
   document.getElementById('mtab1').classList.toggle('active',mode==='compat');
   document.getElementById('mtab2').classList.toggle('active',mode==='idol');
 }
-function goMode(mode){setMode(mode);scrollToApp();}
-function scrollToApp(){document.getElementById('appArea').scrollIntoView({behavior:'smooth'});}
+function goMode(mode){
+  setMode(mode || 'saju');
+  scrollToApp();
+}
+function scrollToApp(){
+  setMode('saju');
+  const target=document.getElementById('appArea')||document.querySelector('.app-area');
+  if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+}
 
 // ══════════════════════════════════════════
 //  FORTUNE CAT
