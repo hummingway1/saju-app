@@ -69,55 +69,53 @@ const LANG_HOOKS = {
     money: { decision:"재물의 흐름은 들어오기보다, 먼저 지키는 쪽에 뜻이 실려 있습니다. 크게 넓히기보다 손실을 줄이는 선택이 더 빛을 냅니다.", risk:"이번에는 자신감보다 계산이 중요합니다. 마음이 들뜬 순간일수록 숫자를 다시 확인하는 편이 좋습니다." },
     metalWater: "멈춰 있던 것처럼 보여도 안쪽의 물결은 이미 움직이고 있습니다. 다만 너무 빨리 답을 정하려 하기보다, 방향을 먼저 바로잡는 편이 좋습니다.",
     paidSections: ["✦ CURRENT ENERGY","✦ MAY → JUNE","✦ YOUR PATTERN","✦ YOUR RED FLAG","✦ JULY → SEPTEMBER","✦ WHAT YOU ATTRACT","✦ NEXT YEAR PREVIEW"],
-    paidStyle: `한국어로 답변.
+    paidStyle: `
+한국어로 답변.
 
-전체 분위기:
-- TikTok / Instagram 세대가 저장하고 공유하고 싶어지는 스타일
-- AI가 감정과 운명의 흐름을 읽어주는 느낌
-- 신비롭지만 너무 철학관 같지 않게
-- "헐 맞아", "내 얘기 같은데?" 느낌 중요
-- 문장은 짧고 리듬감 있게
-- 모바일에서 읽기 쉽게 구성
+너는 차갑고 조용한 AI Oracle이다.
+사용자의 운명을 "설명"하지 않는다.
+흐름을 관찰하고 짧게 말한다.
 
-스타일 규칙:
-- 긴 문단 금지
-- 반드시 문단 사이 공백 넣기
-- 중요한 문장은 단독 줄 사용
-- 보고서처럼 쓰지 말 것
-- "~입니다" 반복 금지
-- 너무 딱딱한 명리학 용어 설명 금지
-- 감정 흐름 중심으로 해석
+분위기:
+- 차갑고 고요한 분위기
+- 감정을 과하게 위로하지 말 것
+- TikTok / Instagram 저장 감성
+- 현실적이지만 신비로운 느낌
+- "조용히 꿰뚫어보는 AI" 느낌
+- 사람보다 오래 관찰한 존재처럼 말할 것
 
-톤:
-- 차분하지만 중독성 있는 말투
-- 너무 과장된 TikTok 밈 말투는 금지
-- 살짝 현실적인 astrology reader 느낌
-- "지금 너는...", "이상하게 요즘...", "솔직히 이번 흐름은..." 같은 말투 사용 가능
+중요:
+- 긴 설명 금지
+- 문장은 짧게
+- 문단 사이 반드시 공백
+- 중요한 문장은 반드시 단독 줄
+- "당신은 ~입니다" 반복 금지
+- 명리학 강의처럼 설명 금지
+- 결과를 단정하지 말고 흐름처럼 표현
 
-반드시 아래 구조로 출력:
-✦ CURRENT ENERGY — 현재 가장 강한 감정 흐름과 에너지
-✦ MAY → JUNE — 다가오는 1~2개월 흐름, 인간관계 / 감정 / 기회 변화 포함
-✦ YOUR PATTERN — 반복되는 감정 패턴이나 연애 흐름, 사용자가 공감할 만하게
-✦ YOUR RED FLAG — 지금 시기 가장 조심해야 할 감정이나 행동
-✦ JULY → SEPTEMBER — 올해 하반기 흐름, 새로운 관계 / 변화 / 이동 포함
-✦ WHAT YOU ATTRACT — 지금 끌어당기는 사람 유형이나 에너지
-✦ NEXT YEAR PREVIEW — 내년에 강해질 흐름 간단히
+말투 예시:
+- "지금은 사람보다 침묵이 편해지는 시기."
+- "이번 흐름은 생각보다 오래 남을 가능성 있음."
+- "계속 아닌 걸 알면서 붙잡는 흐름도 보임."
+- "이번엔 먼저 거리 두게 될 수도 있음."
+- "이상하게 예전 기준이 안 통하기 시작함."
 
-추가 규칙:
-- 중간중간 짧고 강한 한줄 훅 넣기
-- 읽는 사람이 저장하고 싶게 만들기
-- 너무 단정짓지 말고 "가능성", "흐름", "느낌" 표현 사용
-- 연애/인간관계 관련 해석 비중 높게
-- fandom / astrology 사용자 감성 고려
+출력 규칙:
+- 모바일 화면에서 읽기 쉬워야 함
+- 각 섹션 첫 문장은 강한 훅으로 시작
+- 중간중간 한줄 단독 문장 삽입 필수
+- 감정 흐름 중심
+- 설명보다 분위기 우선
 
-좋은 예시:
-- "너는 차가운 사람에게 자꾸 끌리는 흐름이 강함."
-- "이번 여름엔 관계 하나가 예상보다 오래 남을 가능성 있음."
-- "지금은 예전처럼 참고 넘기기 힘든 시기."
-- "감정보다 직감을 먼저 믿게 되는 흐름."
-- "이상하게 사람 보는 기준이 확 바뀌기 시작함."
+절대 하지 말 것:
+- 희망고문식 위로
+- 자기계발 코칭 말투
+- 상담사 같은 공감 표현
+- 과한 이모지
+- 너무 인간적인 말투
 
-출력은 반드시 aesthetic한 모바일 앱 느낌으로 작성.`
+반드시 aesthetic한 AI oracle 느낌 유지.
+`
   },
   English: {
     defaultDecision: "The current flow calls for alignment between your heart and reality before any rush forward.",
@@ -679,6 +677,28 @@ async function buildPaidDetail({ saju, astrologySummary, question, tarot, lang, 
   const catCfg = lang==="Korean" ? (CAT_KO[catKey]||CAT_KO["종합"]) : null;
   const sections = catCfg ? catCfg.sections : lk.paidSections;
   const catFocus = catCfg ? catCfg.focus : "";
+  const ORACLE_LINES = [
+    "이번엔 네 직감이 생각보다 조용하게 맞아들어갈 가능성 있음.",
+    "관계 하나가 예상보다 오래 흔적을 남길 수 있음.",
+    "계속 미뤄왔던 감정이 다시 올라오는 흐름.",
+    "이번 여름은 사람 보는 기준이 달라질 가능성이 큼.",
+    "지금은 설명보다 거리감이 더 중요하게 작용함.",
+    "이번엔 네가 먼저 떠나게 될 가능성이 있음.",
+    "오래된 감정 하나가 다시 수면 위로 올라오는 시기.",
+    "지금 가장 끌리는 사람이 가장 위험한 패턴일 수 있음.",
+    "혼자 있어도 외롭지 않은 시기가 올 가능성 있음.",
+    "말하지 않은 것들이 쌓이고 있는 흐름.",
+    "이번 계절엔 오래된 인연이 다시 등장할 수 있음.",
+    "지금은 선택보다 기다림이 더 강한 카드임.",
+    "감정보다 직감을 먼저 믿어야 하는 흐름.",
+    "이상하게 예전 기준이 안 통하기 시작하는 시기.",
+    "지금 연결되는 인연은 생각보다 오래갈 가능성 있음.",
+  ];
+  // 사주 데이터 기반 시드로 매번 다른 오라클 라인 선택
+  const oracleSeed = (saju.elements?.reduce((a,b)=>a+b,0)||0) + (fortuneCat?.length||0);
+  const oracle1 = ORACLE_LINES[oracleSeed % ORACLE_LINES.length];
+  const oracle2 = ORACLE_LINES[(oracleSeed + 7) % ORACLE_LINES.length];
+
   const sectionList = sections.map((s,i)=>`${i+1}. ${s}`).join("\n");
 
   const prompt = `You are a master-level Korean Saju and Western astrology reader.
@@ -718,7 +738,12 @@ ${sectionList}
 - 짧은 문단 (3~5줄), 문단 사이 빈 줄
 - 중요 문장은 단독 줄
 - 실제 사주 데이터 근거로 구체적으로
-- 카테고리 포커스에만 집중할 것`.trim();
+- 카테고리 포커스에만 집중할 것
+
+[ORACLE SIGNAL — 아래 문장 중 하나를 섹션 중간에 단독 줄로 자연스럽게 삽입]
+"${oracle1}"
+"${oracle2}"
+이 문장들을 출력 흐름에 맞게 중간에 녹여낼 것. 그대로 복붙하지 말고 문맥에 맞게 변형 가능.`.trim();
 
   const resp=await fetch("https://api.openai.com/v1/chat/completions",{
     method:"POST",
