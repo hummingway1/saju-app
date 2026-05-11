@@ -1055,7 +1055,7 @@ Respond with JSON only, no markdown:
     {"name": "아이돌 이름 (그룹명)", "reason": "이유 한 문장", "score": 87},
     {"name": "아이돌 이름 (그룹명)", "reason": "이유 한 문장", "score": 81}
   ],
-  "detail": "아래 섹션 형식으로 작성:\n\n✦ YOUR IDOL TYPE\n(어떤 타입의 아이돌과 에너지가 맞는지, 위에서 선택한 아이돌 언급)\n\n✦ WHY YOU ATTRACT THEM\n(사주 에너지로 보는 끌림의 이유)\n\n✦ YOUR FAN ENERGY\n(팬으로서의 성향과 덕질 스타일)\n\n✦ RED FLAG IN FANDOM\n(조심할 감정 패턴)\n\n✦ YOUR DESTINY TYPE\n(운명적으로 끌릴 아이돌 에너지 유형)"
+  "detail": "✦ YOUR IDOL TYPE\n(어떤 타입의 아이돌과 에너지가 맞는지, 위에서 선택한 아이돌 언급)\n\n✦ WHY YOU ATTRACT THEM\n(사주 에너지로 보는 끌림의 이유)\n\n✦ YOUR FAN ENERGY\n(팬으로서의 성향과 덕질 스타일)\n\n✦ RED FLAG IN FANDOM\n(조심할 감정 패턴)\n\n✦ YOUR DESTINY TYPE\n(운명적으로 끌릴 아이돌 에너지 유형)"
 }`.trim();
 
       const resp = await fetch("https://api.openai.com/v1/chat/completions",{
