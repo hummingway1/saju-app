@@ -217,6 +217,26 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
 .sheet-title{font-size:12px;color:rgba(255,255,255,.55);letter-spacing:2px;font-weight:600}
 .sheet-list .sitem{padding:14px;text-align:center;border-bottom:1px solid var(--border);cursor:pointer;font-size:14px;color:rgba(255,255,255,.65);transition:.15s}
 .sheet-list .sitem:hover{background:var(--surface);color:#fff}
+
+/* ORACLE UI */
+.oracle-access{
+  display:none;text-align:center;padding:18px 0 6px;
+  font-size:10px;letter-spacing:4px;color:rgba(168,85,247,.5);
+  font-weight:700;animation:blink 2s ease-in-out infinite;
+}
+.oracle-access.show{display:block}
+@keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+.oracle-signal{
+  display:flex;align-items:center;gap:8px;
+  font-size:9px;letter-spacing:3px;color:rgba(236,72,153,.6);
+  font-weight:700;margin:12px 0 6px;
+  text-transform:uppercase;
+}
+.oracle-signal::before{content:'';width:18px;height:1px;background:rgba(236,72,153,.4)}
+.oracle-signal::after{content:'';flex:1;height:1px;background:rgba(236,72,153,.4)}
+.result-card .badge-read{
+  animation:none;
+}
 .idol-matches{display:flex;flex-direction:column;gap:10px;margin:14px 0}
 .idol-card{border-radius:16px;border:1px solid var(--border);background:var(--surface);padding:14px 16px;display:flex;align-items:center;gap:14px;transition:.2s}
 .idol-card:hover{border-color:rgba(236,72,153,.35);background:rgba(236,72,153,.06)}
@@ -392,10 +412,12 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
         </div>
         <button class="cta" id="btnSaju" onclick="runSaju()">운세 보기</button>
         <div id="sajuLoad" class="loading">✦ 기운을 읽는 중…</div>
+<div id="oracleAccess" class="oracle-access">ACCESSING YOUR FLOW...</div>
         <div id="sajuErr" class="err-box"></div>
       </div>
       <div id="sajuResult" class="result-card hidden">
-        <div class="badge badge-read" id="sajuBadge">YOUR READING</div>
+        <div class="oracle-signal" id="oracleSignal" style="display:none">SIGNAL DETECTED</div>
+<div class="badge badge-read" id="sajuBadge">YOUR READING</div>
         <h2 class="headline" id="sajuTitle"></h2>
         <div class="decision" id="sajuDecision"></div>
         <div class="hooks"><h3 id="lblHooks">더 깊은 흐름</h3><p id="hookRisk"></p><p id="hookTime"></p></div>
@@ -1052,7 +1074,26 @@ function renderDetail(text,containerId){
 async function runSaju(){
   const t=T[curLang];
   try{
-    hideErr('sajuErr'); validate('s'); showLoad('sajuLoad',true);
+    hideErr('sajuErr'); validate('s');
+
+    // Oracle loading sequence
+    const oracleEl = document.getElementById('oracleAccess');
+    const loadEl = document.getElementById('sajuLoad');
+    const ORACLE_MSGS = [
+      'ACCESSING YOUR FLOW...',
+      'SIGNAL DETECTED',
+      'EMOTIONAL PATTERN FOUND',
+      'READING DESTINY LINES...',
+      'UNRESOLVED ENERGY FOUND',
+    ];
+    let msgIdx = 0;
+    loadEl.style.display = 'block';
+    oracleEl.classList.add('show');
+    oracleEl.textContent = ORACLE_MSGS[0];
+    const oracleInterval = setInterval(()=>{
+      msgIdx = (msgIdx+1) % ORACLE_MSGS.length;
+      oracleEl.textContent = ORACLE_MSGS[msgIdx];
+    }, 900);
     const locVal=document.getElementById('locInput').value.trim();
     const question=document.getElementById('qInput').value.trim();
     const cat=t.fcatKeys[fcatIdx];
@@ -1071,8 +1112,19 @@ async function runSaju(){
     if(res.status===429)throw new Error(data.error||'하루 분석 횟수(10회)를 초과했습니다. 내일 다시 시도해 주세요.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
 
+    clearInterval(oracleInterval);
+    oracleEl.classList.remove('show');
+    loadEl.style.display='none';
+
     const box=document.getElementById('sajuResult');
     box.classList.remove('hidden');
+    // Show oracle signal header
+    const sigEl=document.getElementById('oracleSignal');
+    if(sigEl){
+      const signals={ko:'신호 감지됨',en:'SIGNAL DETECTED',ja:'シグナル検出',zh:'信号已捕获',es:'SEÑAL DETECTADA'};
+      sigEl.textContent=signals[curLang]||'SIGNAL DETECTED';
+      sigEl.style.display='flex';
+    }
     document.getElementById('sajuBadge').textContent='YOUR READING';
     setText('sajuTitle',data.free.title||'');
     setText('sajuDecision',data.free.decision||'');
@@ -1089,8 +1141,12 @@ async function runSaju(){
       document.getElementById('sajuDetail').innerHTML='';
     }
     box.scrollIntoView({behavior:'smooth',block:'start'});
-  }catch(e){showErr('sajuErr',e.message);}
-  finally{showLoad('sajuLoad',false);}
+  }catch(e){
+    clearInterval(oracleInterval);
+    oracleEl.classList.remove('show');
+    loadEl.style.display='none';
+    showErr('sajuErr',e.message);
+  }
 }
 
 async function runSajuFull(){
