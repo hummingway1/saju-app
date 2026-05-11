@@ -4,19 +4,19 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SAJUSTRO · K-Fate Meets Astrology · Idol Compatibility</title>
-<meta name="description" content="Korean Saju + Western Astrology + Tarot. Idol soul match, compatibility, and viral share cards in 5 languages."/>
+<meta name="description" content="Korean Saju + Western Astrology + Tarot. Fandom identity, bias pattern, and viral oracle share cards."/>
 <meta name="keywords" content="idol compatibility, kpop saju, korean astrology, four pillars, 사주, 아이돌 궁합, sajustro"/>
 <link rel="canonical" href="https://sajustro.vercel.app/"/>
 <meta name="robots" content="index, follow"/>
 <meta name="theme-color" content="#000000"/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://sajustro.vercel.app/"/>
-<meta property="og:title" content="SAJUSTRO · Find Your Idol Soul Match"/>
-<meta property="og:description" content="Korean Saju + Western Astrology + Tarot. Discover which idol matches your destiny."/>
+<meta property="og:title" content="SAJUSTRO · Find Your Idol Signal Type"/>
+<meta property="og:description" content="Korean Saju + Western Astrology + Tarot. Reveal your fandom signal and bias pattern."/>
 <meta property="og:image" content="https://sajustro.vercel.app/og-image.png"/>
 <meta property="og:site_name" content="SAJUSTRO"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="SAJUSTRO · Find Your Idol Soul Match"/>
+<meta name="twitter:title" content="SAJUSTRO · Find Your Idol Signal Type"/>
 <meta name="twitter:image" content="https://sajustro.vercel.app/og-image.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"/>
@@ -466,6 +466,28 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
           <button class="fcat" onclick="setFcat(3)">📈 <span id="fc3">사업운</span></button>
           <button class="fcat" onclick="setFcat(4)">🌿 <span id="fc4">건강운</span></button>
         </div>
+        
+        <div class="field full" style="margin-bottom:12px">
+          <div class="flabel" id="lbIGroup">좋아하는 그룹</div>
+          <select class="box" id="idolGroup" style="width:100%;appearance:none;color:#fff;background:rgba(255,255,255,.04);font-family:inherit">
+            <option value="BTS">BTS</option>
+            <option value="BLACKPINK">BLACKPINK</option>
+            <option value="aespa">aespa</option>
+            <option value="NewJeans">NewJeans</option>
+            <option value="IVE">IVE</option>
+            <option value="LE SSERAFIM">LE SSERAFIM</option>
+            <option value="TWICE">TWICE</option>
+            <option value="NCT">NCT</option>
+            <option value="Stray Kids">Stray Kids</option>
+            <option value="SEVENTEEN">SEVENTEEN</option>
+            <option value="ENHYPEN">ENHYPEN</option>
+            <option value="TXT">TXT</option>
+            <option value="ATEEZ">ATEEZ</option>
+            <option value="RIIZE">RIIZE</option>
+            <option value="ALL">전체 그룹에서 보기</option>
+          </select>
+        </div>
+
         <div class="form-grid">
           <div class="field"><div class="flabel" id="lbYr">생년</div><div class="box" id="sYr" onclick="openSheet('sYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbMo">월</div><div class="box" id="sMo" onclick="openSheet('sMo')">-</div></div>
@@ -546,8 +568,8 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
     <!-- IDOL MATCH -->
     <div id="modeIdol" style="display:none">
       <div class="panel">
-        <div class="panel-title" id="lblIdolTitle">나의 사주로 보는 아이돌 매치 타입</div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.8" id="lblIdolDesc">생년월일을 입력하면 사주 에너지를 기반으로 어떤 아이돌 타입과 궁합이 맞는지 분석해드립니다.</p>
+        <div class="panel-title" id="lblIdolTitle">BIAS PATTERN DETECTED</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.8" id="lblIdolDesc">좋아하는 그룹을 먼저 고르세요. 멤버별 팬덤 캐릭터 태그와 당신의 사주 패턴을 매칭해, 그 그룹 안에서 반응하는 bias signal을 감지합니다.</p>
         <div class="form-grid">
           <div class="field"><div class="flabel" id="lbIYr">생년</div><div class="box" id="iYr" onclick="openSheet('iYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbIMo">월</div><div class="box" id="iMo" onclick="openSheet('iMo')">-</div></div>
@@ -560,13 +582,14 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
             </div>
           </div>
         </div>
-        <button class="cta" id="btnIdol" onclick="runIdol()">내 아이돌 타입 분석</button>
+        <button class="cta" id="btnIdol" onclick="runIdol()">BIAS PATTERN SCAN</button>
         <div id="idolLoad" class="loading">✦ 별자리와 사주를 읽는 중…</div>
         <div id="idolErr" class="err-box"></div>
       </div>
       <div id="idolResult" class="result-card" style="display:none;margin-top:14px">
-        <div class="badge badge-idol">IDOL MATCH</div>
+        <div class="badge badge-idol">SIGNAL MATCH FOUND</div>
         <div id="shareCardWrap"><canvas id="shareCanvas"></canvas></div>
+        <div id="idolFandomMeta" style="font-size:12px;color:var(--muted);letter-spacing:2px;text-align:center;margin:8px 0 12px;text-transform:uppercase"></div>
         <h2 class="headline" id="idolTitle"></h2>
         <div id="idolDetail"></div>
         <div id="idolDetailText"></div>
@@ -579,7 +602,7 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
 <!-- FOOTER CTA -->
 <div class="footer-cta">
   <div class="footer-cta-box">
-    <h3 id="ftH">Your Bias Might Be <span id="ftSpan">Your Destiny.</span></h3>
+    <h3 id="ftH">Your Bias Pattern Was <span id="ftSpan">Detected.</span></h3>
     <p id="ftP">Join millions of fans discovering hidden compatibility through Korean fate reading and astrology.</p>
     <button class="footer-cta-btn" id="ftBtn" onclick="scrollToApp()">Start Free Reading</button>
   </div>
@@ -600,15 +623,15 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
 const T = {
   ko:{
     lang:"ko",lbl:"한국어",
-    heroTag:"✨ 바이럴 아이돌 궁합 읽기",heroL1:"나의",heroL2:"아이돌 소울 매치",
+    heroTag:"✨ 바이럴 아이돌 궁합 읽기",heroL1:"나의",heroL2:"아이돌 시그널 타입",
     heroDesc:"한국 사주와 서양 점성술을 결합해 당신의 운명, 연애 에너지와 진정으로 맞는 아이돌 타입을 찾아보세요.",
-    heroBtn1:"내 아이돌 찾기",heroBtn2:"궁합 보기",navCta:"운세 보기",
+    heroBtn1:"내 Bias Pattern 보기",heroBtn2:"궁합 보기",navCta:"운세 보기",
     proof1:"아이돌 궁합 조회",proof2:"틱톡 공유율",proof3:"개국",
-    phoneLbl:"나의 아이돌 매치",phoneSoulLbl:"소울 궁합",
-    phoneDesc:"당신의 감성 에너지가 특정 아이돌 아키타입과 깊은 궁합을 보입니다.",
+    phoneLbl:"나의 Idol Signal",phoneSoulLbl:"SIGNAL MATCH",
+    phoneDesc:"당신의 팬심이 반응하는 bias pattern을 감지합니다.",
     phoneSajuLbl:"사주 에너지",phoneAstroLbl:"별자리",phoneShareBtn:"틱톡에 공유 ↗",
     featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"바이럴 공유, 팬 편집, 최애 커플링 논쟁, 늦은 밤 덕질 에너지를 위해 설계되었습니다.",
-    feat1T:"아이돌 소울 매치",feat1D:"사주와 별자리로 어떤 아이돌 아키타입이 당신의 에너지와 맞는지 찾아보세요.",
+    feat1T:"아이돌 시그널 타입",feat1D:"사주 에너지로 어떤 bias pattern에 반응하는지 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 사주를 비교하고 이상적인 페어링을 발견하세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 최적화된 카드를 자동 생성합니다.",
     appTitle:"운세 시작하기",appSub:"사주와 점성술로 오늘의 흐름을 확인하세요",
@@ -632,7 +655,7 @@ const T = {
     errApi:"분석에 실패했습니다.",sel:"선택",aiLang:"Korean",
     lblMyInfo:"나의 정보",lblPartInfo:"상대방 정보",btnCompat:"궁합 보기",compatLoad:"✦ 궁합을 읽는 중…",
     lblIdolTitle:"나의 사주로 보는 아이돌 매치 타입",
-    lblIdolDesc:"생년월일을 입력하면 사주 에너지를 기반으로 어떤 아이돌 타입과 궁합이 맞는지 분석해드립니다.",
+    lblIdolDesc:"좋아하는 그룹을 먼저 고르세요. 멤버별 팬덤 캐릭터 태그와 당신의 사주 패턴을 매칭해, 그 그룹 안에서 반응하는 bias signal을 감지합니다.",
     btnIdol:"내 아이돌 타입 분석",idolLoad:"✦ 별자리와 사주를 읽는 중…",
     shareBtn:"📲 공유하기",
     ftH:"내 최애가",ftSpan:"운명일 수도.",ftP:"한국 운명 읽기와 점성술로 숨겨진 궁합을 발견하는 수백만 팬들과 함께하세요.",ftBtn:"운세 시작하기",
@@ -682,9 +705,9 @@ const T = {
     errLoc:"Please enter your birthplace.",errGeo:"Could not find that location.",
     errApi:"Analysis failed. Please try again.",sel:"Select",aiLang:"English",
     lblMyInfo:"My Info",lblPartInfo:"Partner's Info",btnCompat:"Check Compatibility",compatLoad:"✦ Reading the connection…",
-    lblIdolTitle:"Your Idol Match Type by Saju",
-    lblIdolDesc:"Enter your birth date to discover which idol archetype aligns with your Saju energy.",
-    btnIdol:"Analyze My Idol Type",idolLoad:"✦ Reading the stars and Saju…",
+    lblIdolTitle:"BIAS PATTERN DETECTED",
+    lblIdolDesc:"Choose your favorite group first. Your fandom signal will be matched inside that group.",
+    btnIdol:"Scan My Bias Pattern",idolLoad:"SIGNAL DETECTED...",
     shareBtn:"📲 Share Card",
     ftH:"Your Bias Might Be",ftSpan:"Your Destiny.",ftP:"Join millions of fans discovering hidden compatibility through Korean fate reading and astrology.",ftBtn:"Start Reading",
     tarotDeck:[
@@ -1275,13 +1298,14 @@ async function runIdol(){
   try{
     hideErr('idolErr'); validate('i'); showLoad('idolLoad',true);
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({...ST.i,paid:false,mode:'idol',lang:t.aiLang,question:'idol match type analysis'})});
+      body:JSON.stringify({...ST.i,paid:false,mode:'idol',selectedGroup:document.getElementById('idolGroup')?.value||'BTS',lang:t.aiLang,question:'bias pattern fandom signal analysis'})});
     const data=await res.json();
     if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 흐름은 모두 소진됨.\n다음 신호는 내일 다시 열림.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     const box=document.getElementById('idolResult');
     box.style.display='';
     setText('idolTitle',data.title||'');
+    setText('idolFandomMeta', data.fandom ? `${data.fandomAccent||'SIGNAL'} · ${data.fandom}` : '');
 
     // Idol match rank cards
     const idolDetailEl=document.getElementById('idolDetail');
@@ -1310,8 +1334,9 @@ async function runIdol(){
 
     // Share card with top idol name
     const topName=data.idolMatches?.[0]?.name||'';
-    const cardSub=topName?(topName+(data.idolMatches[1]?' · '+data.idolMatches[1].name:'')):(data.highlight||'');
-    drawCard(data.title||'',cardSub);
+    const groupName=document.getElementById('idolGroup')?.value||'';
+    const cardSub=topName?((data.fandomAccent||'SIGNAL MATCH')+' · '+topName):(data.shareLine||data.highlight||groupName+' SIGNAL');
+    drawCard(data.title||'BIAS PATTERN DETECTED',cardSub);
     document.getElementById('shareBtn').style.display='block';
     box.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){showErr('idolErr',e.message);}
