@@ -29,7 +29,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:#000;color:#fff;font-family:'Inter','Noto Sans KR','Noto Sans JP','Noto Sans SC',sans-serif;min-height:100vh;overflow-x:hidden}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:#000;color:#fff;font-family:'Inter','Noto Sans KR','Noto Sans JP','Noto Sans SC',sans-serif;min-height:100vh;overflow-x:hidden}
 .bg1{position:fixed;top:0;left:50%;transform:translateX(-50%);width:700px;height:450px;background:radial-gradient(circle at 50% 0%,rgba(168,85,247,.2),transparent 60%);pointer-events:none;z-index:0}
 .bg2{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:700px;height:350px;background:radial-gradient(circle at 50% 100%,rgba(236,72,153,.14),transparent 60%);pointer-events:none;z-index:0}
 
@@ -78,7 +78,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .phone-lbl{font-size:11px;color:var(--muted)}
 .phone-name{font-size:18px;font-weight:700;margin-top:2px}
 .phone-avatar{width:46px;height:46px;border-radius:50%;background:var(--grad)}
-.phone-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+.phone-body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;padding:14px;display:flex;flex-direction:column;gap:10px}
 .compat-card{border-radius:22px;padding:14px;background:linear-gradient(135deg,rgba(236,72,153,.14),rgba(168,85,247,.07));border:1px solid rgba(236,72,153,.2)}
 .compat-lbl{font-size:11px;color:#f9a8d4;margin-bottom:5px}
 .compat-pct{font-size:42px;font-weight:900;line-height:1}
@@ -183,7 +183,7 @@ input::placeholder,textarea::placeholder{color:rgba(255,255,255,.2)}
 /* DETAIL */
 .detail-section{margin-bottom:26px}
 .detail-sec-title{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--violet);margin-bottom:12px;display:block}
-.detail-sec-body{padding-left:14px;border-left:2px solid rgba(168,85,247,.22)}
+.detail-sec-body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;padding-left:14px;border-left:2px solid rgba(168,85,247,.22)}
 .detail-para{margin-bottom:10px;color:rgba(255,255,255,.75);line-height:1.9;font-size:14px}
 .detail-hook{display:block;margin:14px 0;color:#fff;font-size:15px;font-weight:700;padding:10px 14px;background:rgba(168,85,247,.07);border-radius:10px;border-left:3px solid rgba(168,85,247,.5);letter-spacing:.3px;line-height:1.6}
 
@@ -331,6 +331,212 @@ footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.2);
 .idol-score-wrap{text-align:right}
 .idol-score{font-size:22px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .idol-score-lbl{font-size:9px;color:var(--muted);letter-spacing:2px;margin-top:1px}
+
+/* ── Typography Upgrade ───────────────────── */
+.result-text,
+.analysis-text,
+.card-text,
+.headline,
+.signal-line,
+.match-reason,
+.detail-section,
+.result-card,
+.result-content{
+  word-break: keep-all !important;
+  overflow-wrap: break-word !important;
+  line-break: strict !important;
+  white-space: normal;
+}
+
+.result-text,
+.analysis-text,
+.detail-section{
+  line-height: 1.78 !important;
+  letter-spacing: -0.01em;
+  font-size: 15.5px;
+}
+
+.result-content,
+.detail-section{
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+  max-width: 100%;
+}
+
+.detail-section p,
+.analysis-text p{
+  margin-top: 0;
+  margin-bottom: 18px !important;
+}
+
+.signal-line,
+.highlight-line,
+.share-line{
+  display:block;
+  margin:22px 0 !important;
+  font-weight:600;
+  line-height:1.9 !important;
+  letter-spacing:0.02em;
+}
+
+.headline{
+  line-height:1.35 !important;
+  max-width:92%;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+canvas{
+  image-rendering:auto;
+}
+
+@media (max-width: 480px){
+  .result-text,
+  .analysis-text,
+  .detail-section{
+    font-size:15px !important;
+    line-height:1.85 !important;
+  }
+
+  .headline{
+    font-size:28px !important;
+    line-height:1.32 !important;
+    max-width:88%;
+  }
+
+  .result-content{
+    padding-left:20px !important;
+    padding-right:20px !important;
+  }
+}
+
+
+/* ── Korean Copy Layout Fix ─────────────────────
+   Avoid ugly Korean word splits in hero/feature sections.
+*/
+.hero-copy,
+.hero-copy p,
+.hero-desc,
+.hero p,
+.phone-desc,
+.feat-head,
+.feat-head p,
+.feat-card,
+.feat-card p,
+.feat-card h4,
+.app-hdr,
+.app-hdr p,
+.panel,
+.panel p,
+.footer-cta,
+.footer-cta p,
+.footer-cta h3,
+.proof,
+.proof small,
+button,
+.cta,
+.footer-cta-btn,
+.mtab,
+.fcat,
+.flabel,
+.box,
+.chip,
+.result-card,
+.result-card * {
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  line-break: strict !important;
+  text-wrap: pretty;
+}
+
+.hero-copy p,
+.hero-desc,
+.feat-head p,
+.feat-card p,
+.phone-desc,
+.app-hdr p,
+.panel p,
+.footer-cta p {
+  max-width: 34em;
+  line-height: 1.85 !important;
+  letter-spacing: -0.015em;
+}
+
+.hero-copy p,
+.hero-desc {
+  max-width: 30em;
+}
+
+.feat-head p {
+  max-width: 38em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.feat-card p {
+  max-width: 24em;
+}
+
+.feat-card h4 {
+  line-height: 1.35 !important;
+  letter-spacing: -0.035em;
+}
+
+.hero-copy h1,
+.hero h1,
+.feat-head h2,
+.app-hdr h3,
+.footer-cta h3 {
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.cta,
+.footer-cta-btn,
+button {
+  white-space: nowrap;
+}
+
+.proof {
+  min-width: max-content;
+}
+
+@media (max-width: 640px) {
+  .hero-copy,
+  .hero {
+    text-align: left;
+  }
+
+  .hero-copy p,
+  .hero-desc,
+  .feat-head p,
+  .feat-card p,
+  .phone-desc,
+  .app-hdr p,
+  .panel p,
+  .footer-cta p {
+    max-width: 100%;
+    font-size: 14.5px !important;
+    line-height: 1.9 !important;
+  }
+
+  .feat-head h2,
+  .app-hdr h3 {
+    font-size: clamp(28px, 8vw, 38px) !important;
+  }
+
+  .feat-card {
+    padding: 22px 22px 24px !important;
+  }
+
+  .feat-card p {
+    min-height: auto;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -624,16 +830,16 @@ const T = {
   ko:{
     lang:"ko",lbl:"한국어",
     heroTag:"✨ 바이럴 아이돌 궁합 읽기",heroL1:"나의",heroL2:"아이돌 시그널 타입",
-    heroDesc:"한국 사주와 서양 점성술을 결합해 당신의 운명, 연애 에너지와 진정으로 맞는 아이돌 타입을 찾아보세요.",
+    heroDesc:"사주 에너지와 팬심 패턴을 읽어, 당신이 반응하는 아이돌 시그널을 감지해보세요.",
     heroBtn1:"내 Bias Pattern 보기",heroBtn2:"궁합 보기",navCta:"운세 보기",
     proof1:"아이돌 궁합 조회",proof2:"틱톡 공유율",proof3:"개국",
     phoneLbl:"나의 Idol Signal",phoneSoulLbl:"SIGNAL MATCH",
     phoneDesc:"당신의 팬심이 반응하는 bias pattern을 감지합니다.",
     phoneSajuLbl:"사주 에너지",phoneAstroLbl:"별자리",phoneShareBtn:"틱톡에 공유 ↗",
-    featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"바이럴 공유, 팬 편집, 최애 커플링 논쟁, 늦은 밤 덕질 에너지를 위해 설계되었습니다.",
-    feat1T:"아이돌 시그널 타입",feat1D:"사주 에너지로 어떤 bias pattern에 반응하는지 감지해보세요.",
-    feat2T:"궁합 보기",feat2D:"두 사람의 사주를 비교하고 이상적인 페어링을 발견하세요.",
-    feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 최적화된 카드를 자동 생성합니다.",
+    featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"친구와 비교하고, 캡처하고, 다시 보고 싶게 만드는 팬덤용 시그널 테스트.",
+    feat1T:"아이돌 시그널 타입",feat1D:"사주 에너지로 당신이 반응하는 bias pattern을 감지해보세요.",
+    feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
+    feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
     appTitle:"운세 시작하기",appSub:"사주와 점성술로 오늘의 흐름을 확인하세요",
     tab0:"사주 운세",tab1:"궁합 보기",tab2:"아이돌 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
@@ -1346,6 +1552,16 @@ async function runIdol(){
 // ══════════════════════════════════════════
 //  SHARE CARD
 // ══════════════════════════════════════════
+
+function formatOracleText(text){
+  if(!text) return '';
+  return text
+    .replace(/\n\n+/g,'<br><br>')
+    .replace(/([.!?…])\s+/g,'$1<br><br>')
+    .replace(/(◉[^\n<]+)/g,'<div class="signal-line">$1</div>')
+    .replace(/(✦[^\n<]+)/g,'<div class="signal-line">$1</div>');
+}
+
 function drawCard(title, highlight, fandomTheme){
   const wrap=document.getElementById('shareCardWrap');
   const canvas=document.getElementById('shareCanvas');
