@@ -666,6 +666,14 @@ select#idolGroup option:hover {
   color: #ffffff !important;
 }
 
+
+select#idolGroup optgroup,
+select.box optgroup {
+  background-color:#111111 !important;
+  color:#c084fc !important;
+  font-weight:800;
+}
+
 </style>
 
 <style>
@@ -969,21 +977,35 @@ text-transform:uppercase;
         <div class="field full" style="margin-bottom:12px">
           <div class="flabel" id="lbIGroup">좋아하는 그룹</div>
           <select class="box" id="idolGroup" style="width:100%;appearance:none;color:#fff;background:rgba(255,255,255,.04);font-family:inherit;background-color:#151019!important;color:#fff!important;">
-            <option value="BTS">BTS</option>
-            <option value="BLACKPINK">BLACKPINK</option>
-            <option value="aespa">aespa</option>
-            <option value="NewJeans">NewJeans</option>
-            <option value="IVE">IVE</option>
-            <option value="LE SSERAFIM">LE SSERAFIM</option>
-            <option value="TWICE">TWICE</option>
-            <option value="NCT">NCT</option>
-            <option value="Stray Kids">Stray Kids</option>
-            <option value="SEVENTEEN">SEVENTEEN</option>
-            <option value="ENHYPEN">ENHYPEN</option>
-            <option value="TXT">TXT</option>
-            <option value="ATEEZ">ATEEZ</option>
-            <option value="RIIZE">RIIZE</option>
-            <option value="ALL">전체 그룹에서 보기</option>
+            <option value="ALL">ALL SIGNALS</option>
+            <optgroup label="🔥 TRENDING">
+              <option value="NewJeans">NewJeans</option>
+              <option value="IVE">IVE</option>
+              <option value="aespa">aespa</option>
+              <option value="LE SSERAFIM">LE SSERAFIM</option>
+              <option value="ILLIT">ILLIT</option>
+              <option value="KISS OF LIFE">KISS OF LIFE</option>
+              <option value="TWS">TWS</option>
+              <option value="BOYNEXTDOOR">BOYNEXTDOOR</option>
+              <option value="ZEROBASEONE">ZEROBASEONE</option>
+            </optgroup>
+            <optgroup label="💜 LEGEND">
+              <option value="BTS">BTS</option>
+              <option value="BLACKPINK">BLACKPINK</option>
+              <option value="TWICE">TWICE</option>
+              <option value="SEVENTEEN">SEVENTEEN</option>
+            </optgroup>
+            <optgroup label="⚡ BOY GROUP">
+              <option value="Stray Kids">Stray Kids</option>
+              <option value="ENHYPEN">ENHYPEN</option>
+              <option value="TXT">TXT (TOMORROW X TOGETHER)</option>
+              <option value="ATEEZ">ATEEZ</option>
+              <option value="RIIZE">RIIZE</option>
+              <option value="NCT">NCT</option>
+              <option value="NCT 127">NCT 127</option>
+              <option value="NCT DREAM">NCT DREAM</option>
+              <option value="WayV">WayV</option>
+            </optgroup>
           </select>
         </div>
 
