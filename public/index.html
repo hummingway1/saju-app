@@ -867,7 +867,7 @@ text-transform:uppercase;
   <div class="app-inner">
     <div class="app-hdr">
       <h3 id="appTitle">Start Your Reading</h3>
-      <p id="appSub">사주와 점성술로 오늘의 흐름을 확인하세요</p>
+      <p id="appSub">최애는 우연처럼 들어오지 않음</p>
     </div>
     <div class="mode-tabs">
       <button class="mtab active" id="mtab0" onclick="setMode('idol')">🔮 <span id="tab0Txt">사주 운세</span></button>
@@ -1073,7 +1073,7 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"운세 시작하기",appSub:"사주와 점성술로 오늘의 흐름을 확인하세요",
+    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",
     tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
@@ -1423,6 +1423,10 @@ function setMode(mode){
   document.getElementById('mtab0').classList.toggle('active',mode==='saju');
   document.getElementById('mtab1').classList.toggle('active',mode==='compat');
   document.getElementById('mtab2').classList.toggle('active',mode==='idol');
+  const _subMap={idol:'최애는 우연처럼 들어오지 않음',saju:'이미 바뀌기 시작한 흐름이 있음',compat:'두 사람 사이엔
+이미 잡힌 흐름이 있음'};
+  const _subEl=document.getElementById('appSub');
+  if(_subEl) _subEl.textContent=_subMap[mode]||_subMap.idol;
 }
 function goMode(mode){
   setMode(mode || 'idol');
@@ -3335,7 +3339,7 @@ text-transform:uppercase;
   <div class="app-inner">
     <div class="app-hdr">
       <h3 id="appTitle">Start Your Reading</h3>
-      <p id="appSub">사주와 점성술로 오늘의 흐름을 확인하세요</p>
+      <p id="appSub">최애는 우연처럼 들어오지 않음</p>
     </div>
     <div class="mode-tabs">
       <button class="mtab active" id="mtab0" onclick="setMode('idol')">🔮 <span id="tab0Txt">사주 운세</span></button>
@@ -3527,7 +3531,7 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"운세 시작하기",appSub:"사주와 점성술로 오늘의 흐름을 확인하세요",
+    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",
     tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
@@ -3877,6 +3881,10 @@ function setMode(mode){
   document.getElementById('mtab0').classList.toggle('active',mode==='saju');
   document.getElementById('mtab1').classList.toggle('active',mode==='compat');
   document.getElementById('mtab2').classList.toggle('active',mode==='idol');
+  const _subMap={idol:'최애는 우연처럼 들어오지 않음',saju:'이미 바뀌기 시작한 흐름이 있음',compat:'두 사람 사이엔
+이미 잡힌 흐름이 있음'};
+  const _subEl=document.getElementById('appSub');
+  if(_subEl) _subEl.textContent=_subMap[mode]||_subMap.idol;
 }
 function goMode(mode){
   setMode(mode || 'idol');
@@ -5713,7 +5721,7 @@ text-transform:uppercase;
   <div class="app-inner">
     <div class="app-hdr">
       <h3 id="appTitle">Start Your Reading</h3>
-      <p id="appSub">사주와 점성술로 오늘의 흐름을 확인하세요</p>
+      <p id="appSub">최애는 우연처럼 들어오지 않음</p>
     </div>
     <div class="mode-tabs">
       <button class="mtab active" id="mtab0" onclick="setMode('idol')">🔮 <span id="tab0Txt">사주 운세</span></button>
@@ -5905,7 +5913,7 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"운세 시작하기",appSub:"사주와 점성술로 오늘의 흐름을 확인하세요",
+    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",
     tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
@@ -6255,6 +6263,10 @@ function setMode(mode){
   document.getElementById('mtab0').classList.toggle('active',mode==='saju');
   document.getElementById('mtab1').classList.toggle('active',mode==='compat');
   document.getElementById('mtab2').classList.toggle('active',mode==='idol');
+  const _subMap={idol:'최애는 우연처럼 들어오지 않음',saju:'이미 바뀌기 시작한 흐름이 있음',compat:'두 사람 사이엔
+이미 잡힌 흐름이 있음'};
+  const _subEl=document.getElementById('appSub');
+  if(_subEl) _subEl.textContent=_subMap[mode]||_subMap.idol;
 }
 function goMode(mode){
   setMode(mode || 'idol');
@@ -8095,7 +8107,7 @@ text-transform:uppercase;
   <div class="app-inner">
     <div class="app-hdr">
       <h3 id="appTitle">Start Your Reading</h3>
-      <p id="appSub">사주와 점성술로 오늘의 흐름을 확인하세요</p>
+      <p id="appSub">최애는 우연처럼 들어오지 않음</p>
     </div>
     <div class="mode-tabs">
       <button class="mtab active" id="mtab0" onclick="setMode('idol')">🔮 <span id="tab0Txt">사주 운세</span></button>
@@ -8287,7 +8299,7 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"운세 시작하기",appSub:"사주와 점성술로 오늘의 흐름을 확인하세요",
+    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",
     tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
@@ -8637,6 +8649,10 @@ function setMode(mode){
   document.getElementById('mtab0').classList.toggle('active',mode==='saju');
   document.getElementById('mtab1').classList.toggle('active',mode==='compat');
   document.getElementById('mtab2').classList.toggle('active',mode==='idol');
+  const _subMap={idol:'최애는 우연처럼 들어오지 않음',saju:'이미 바뀌기 시작한 흐름이 있음',compat:'두 사람 사이엔
+이미 잡힌 흐름이 있음'};
+  const _subEl=document.getElementById('appSub');
+  if(_subEl) _subEl.textContent=_subMap[mode]||_subMap.idol;
 }
 function goMode(mode){
   setMode(mode || 'idol');
@@ -9367,6 +9383,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   </div>
 </div>
 
+
 <script>
 // ════════════════════════════════════════════════
 //  PIXEL ORACLE — 4~8초 Reveal
@@ -9633,7 +9650,6 @@ async function _shareCanvas(canvas, filename) {
 function _dlCanvas(canvas,name){const a=document.createElement('a');a.download=name;a.href=canvas.toDataURL('image/png');a.click();}
 async function shareSajuCard(){await _shareCanvas(document.getElementById('sajuShareCanvas'),'sajustro-signal.png');}
 async function shareIdolCard(){await _shareCanvas(document.getElementById('idolShareCanvas'),'sajustro-idol.png');}
-
 </script>
 </body>
 </html>
