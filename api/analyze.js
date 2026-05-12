@@ -887,7 +887,7 @@ export default async function handler(req, res){
   if (!checkRateLimit(clientIP)) {
     const lang429 = req.body?.lang || "Korean";
     const msg429 = {
-      Korean: "오늘 감지 가능한 신호는 모두 소진됨.\n다음 신호는 내일 다시 열림.",
+      Korean: "오늘 감지 가능한 흐름은 모두 소진됨.\n다음 신호는 내일 다시 열림.",
       English: "All signals detected for today.\nNext reading opens tomorrow.",
       Japanese: "本日の感知可能な流れはすべて消尽されました。\n次のシグナルは明日再び開きます。",
       Chinese: "今日可感知的流势已全部消耗。\n下一个信号明日重新开启。",
@@ -898,7 +898,6 @@ export default async function handler(req, res){
 
   try{
     const payload=req.body||{};
-    payload.paid = false; // 무료 단계: Deep Reading 미오픈
     const lang = SUPPORTED_LANGS.includes(payload.lang) ? payload.lang : "Korean";
     // ── Idol Match mode ──
     if (payload.mode === 'idol') {
