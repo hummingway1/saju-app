@@ -108,7 +108,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .app-inner{max-width:540px;margin:0 auto}
 .app-hdr{text-align:center;padding:40px 0 20px}
 .app-hdr h3{font-size:26px;font-weight:900;letter-spacing:-1px}
-.app-hdr p{margin-top:8px;font-size:14px;color:var(--muted)}
+.app-hdr p{margin-top:8px;font-size:14px;color:var(--muted);text-align:center;margin-left:auto;margin-right:auto}
 
 /* MODE TABS */
 .mode-tabs{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
@@ -866,7 +866,7 @@ text-transform:uppercase;
 <div class="app-area" id="appArea">
   <div class="app-inner">
     <div class="app-hdr">
-      <h3 id="appTitle">Start Your Reading</h3>
+      <h3 id="appTitle">운세 시작하기</h3>
       <p id="appSub">최애는 우연처럼 들어오지 않음</p>
     </div>
     <div class="mode-tabs">
@@ -1073,7 +1073,7 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",
+    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",appSubSaju:"이미 바뀌기 시작한 흐름이 있음",appSubCompat:"두 사람 사이엔 이미 잡힌 흐름이 있음",
     tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
@@ -1124,7 +1124,7 @@ const T = {
     feat1T:"Idol Signal Match",feat1D:"Find which idol archetype matches your Saju and zodiac energy.",
     feat2T:"Ship Compatibility",feat2D:"Compare yourself with any person and discover your ideal pairing.",
     feat3T:"Viral Share Cards",feat3D:"Auto-generate aesthetic cards optimized for TikTok and Instagram stories.",
-    appTitle:"Start Your Reading",appSub:"Discover your destiny through Saju and astrology.",
+    appTitle:"Start Your Reading",appSub:"Your bias didn't appear by accident.",appSubSaju:"Something is already shifting.",appSubCompat:"There's already a current between you two.",
     tab0:"Saju Reading",tab1:"Compatibility",tab2:"Idol Match",
     fcats:["General","Love","Wealth","Career","Health"],
     fcatKeys:["general","love","wealth","career","health"],
@@ -1175,7 +1175,7 @@ const T = {
     feat1T:"アイドル魂マッチ",feat1D:"四柱推命と星座エネルギーでアイドルタイプを見つけましょう。",
     feat2T:"相性診断",feat2D:"自分と誰かを比較して、理想のペアリングを発見しましょう。",
     feat3T:"バイラル共有カード",feat3D:"TikTokとインスタグラムに最適化したカードを自動生成します。",
-    appTitle:"鑑定を始める",appSub:"四柱推命と占星術で運命を読み解きましょう",
+    appTitle:"鑑定を始める",appSub:"推しは偶然に現れない。",appSubSaju:"すでに変わり始めた流れがある。",appSubCompat:"二人の間にはすでに流れが生まれている。",
     tab0:"四柱鑑定",tab1:"相性を見る",tab2:"アイドル相性",
     fcats:["総合運","恋愛運","財運","仕事運","健康運"],
     fcatKeys:["総合","恋愛運","財運","仕事運","健康運"],
@@ -1226,7 +1226,7 @@ const T = {
     feat1T:"偶像灵魂配对",feat1D:"根据四柱命理和星座能量，找出与你命运相符的偶像类型。",
     feat2T:"缘分配对",feat2D:"比较两人四柱，发现你们的理想配对。",
     feat3T:"病毒分享卡片",feat3D:"自动生成适合TikTok和Instagram故事的美观解读卡片。",
-    appTitle:"开始解读",appSub:"通过四柱命理和占星术发现你的命运",
+    appTitle:"开始解读",appSub:"你的偏爱不是偶然出现的。",appSubSaju:"已经开始改变的流势。",appSubCompat:"两人之间已有一条流势。",
     tab0:"四柱运势",tab1:"缘分配对",tab2:"偶像匹配",
     fcats:["综合运","感情运","财运","事业运","健康运"],
     fcatKeys:["综合","感情运","财运","事业运","健康运"],
@@ -1277,7 +1277,7 @@ const T = {
     feat1T:"Alma Gemela Idol",feat1D:"Encuentra qué arquetipo idol coincide con tu energía Saju y zodiacal.",
     feat2T:"Compatibilidad de Ships",feat2D:"Compara tus datos con cualquier persona y descubre tu pairing ideal.",
     feat3T:"Tarjetas Virales",feat3D:"Genera tarjetas estéticas optimizadas para TikTok e Instagram Stories.",
-    appTitle:"Comenzar tu Lectura",appSub:"Descubre tu destino a través del Saju y la astrología.",
+    appTitle:"Comenzar tu Lectura",appSub:"Tu bias no apareció por accidente.",appSubSaju:"Ya hay algo cambiando.",appSubCompat:"Ya hay una corriente entre ustedes dos.",
     tab0:"Lectura Saju",tab1:"Compatibilidad",tab2:"Match Idol",
     fcats:["General","Amor","Riqueza","Carrera","Salud"],
     fcatKeys:["general","love","wealth","career","health"],
@@ -1375,6 +1375,12 @@ function setLang(lang){
   setText('feat3T',t.feat3T); setText('feat3D',t.feat3D);
   // App
   setText('appTitle',t.appTitle); setText('appSub',t.appSub);
+  // 탭별 문구 반영
+  if(typeof curMode!=='undefined'){
+    const _m={idol:t.appSub,saju:t.appSubSaju||t.appSub,compat:t.appSubCompat||t.appSub};
+    const _el=document.getElementById('appSub');
+    if(_el&&_m[curMode]) _el.textContent=_m[curMode];
+  }
   // Tabs
   setText('tab0Txt',t.tab0); setText('tab1Txt',t.tab1); setText('tab2Txt',t.tab2);
   // Saju form
@@ -1423,8 +1429,12 @@ function setMode(mode){
   document.getElementById('mtab0').classList.toggle('active',mode==='saju');
   document.getElementById('mtab1').classList.toggle('active',mode==='compat');
   document.getElementById('mtab2').classList.toggle('active',mode==='idol');
-  const _subMap={idol:'최애는 우연처럼 들어오지 않음',saju:'이미 바뀌기 시작한 흐름이 있음',compat:'두 사람 사이엔
-이미 잡힌 흐름이 있음'};
+  const _t=(typeof T!=='undefined'&&T[typeof curLang!=='undefined'?curLang:'ko'])||{};
+  const _subMap={
+    idol:_t.appSub||'최애는 우연처럼 들어오지 않음',
+    saju:_t.appSubSaju||'이미 바뀌기 시작한 흐름이 있음',
+    compat:_t.appSubCompat||'두 사람 사이엔 이미 잡힌 흐름이 있음'
+  };
   const _subEl=document.getElementById('appSub');
   if(_subEl) _subEl.textContent=_subMap[mode]||_subMap.idol;
 }
@@ -2619,7 +2629,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .app-inner{max-width:540px;margin:0 auto}
 .app-hdr{text-align:center;padding:40px 0 20px}
 .app-hdr h3{font-size:26px;font-weight:900;letter-spacing:-1px}
-.app-hdr p{margin-top:8px;font-size:14px;color:var(--muted)}
+.app-hdr p{margin-top:8px;font-size:14px;color:var(--muted);text-align:center;margin-left:auto;margin-right:auto}
 
 /* MODE TABS */
 .mode-tabs{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
@@ -3338,7 +3348,7 @@ text-transform:uppercase;
 <div class="app-area" id="appArea">
   <div class="app-inner">
     <div class="app-hdr">
-      <h3 id="appTitle">Start Your Reading</h3>
+      <h3 id="appTitle">운세 시작하기</h3>
       <p id="appSub">최애는 우연처럼 들어오지 않음</p>
     </div>
     <div class="mode-tabs">
@@ -3531,7 +3541,7 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",
+    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",appSubSaju:"이미 바뀌기 시작한 흐름이 있음",appSubCompat:"두 사람 사이엔 이미 잡힌 흐름이 있음",
     tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
@@ -3582,7 +3592,7 @@ const T = {
     feat1T:"Idol Signal Match",feat1D:"Find which idol archetype matches your Saju and zodiac energy.",
     feat2T:"Ship Compatibility",feat2D:"Compare yourself with any person and discover your ideal pairing.",
     feat3T:"Viral Share Cards",feat3D:"Auto-generate aesthetic cards optimized for TikTok and Instagram stories.",
-    appTitle:"Start Your Reading",appSub:"Discover your destiny through Saju and astrology.",
+    appTitle:"Start Your Reading",appSub:"Your bias didn't appear by accident.",appSubSaju:"Something is already shifting.",appSubCompat:"There's already a current between you two.",
     tab0:"Saju Reading",tab1:"Compatibility",tab2:"Idol Match",
     fcats:["General","Love","Wealth","Career","Health"],
     fcatKeys:["general","love","wealth","career","health"],
@@ -3633,7 +3643,7 @@ const T = {
     feat1T:"アイドル魂マッチ",feat1D:"四柱推命と星座エネルギーでアイドルタイプを見つけましょう。",
     feat2T:"相性診断",feat2D:"自分と誰かを比較して、理想のペアリングを発見しましょう。",
     feat3T:"バイラル共有カード",feat3D:"TikTokとインスタグラムに最適化したカードを自動生成します。",
-    appTitle:"鑑定を始める",appSub:"四柱推命と占星術で運命を読み解きましょう",
+    appTitle:"鑑定を始める",appSub:"推しは偶然に現れない。",appSubSaju:"すでに変わり始めた流れがある。",appSubCompat:"二人の間にはすでに流れが生まれている。",
     tab0:"四柱鑑定",tab1:"相性を見る",tab2:"アイドル相性",
     fcats:["総合運","恋愛運","財運","仕事運","健康運"],
     fcatKeys:["総合","恋愛運","財運","仕事運","健康運"],
@@ -3684,7 +3694,7 @@ const T = {
     feat1T:"偶像灵魂配对",feat1D:"根据四柱命理和星座能量，找出与你命运相符的偶像类型。",
     feat2T:"缘分配对",feat2D:"比较两人四柱，发现你们的理想配对。",
     feat3T:"病毒分享卡片",feat3D:"自动生成适合TikTok和Instagram故事的美观解读卡片。",
-    appTitle:"开始解读",appSub:"通过四柱命理和占星术发现你的命运",
+    appTitle:"开始解读",appSub:"你的偏爱不是偶然出现的。",appSubSaju:"已经开始改变的流势。",appSubCompat:"两人之间已有一条流势。",
     tab0:"四柱运势",tab1:"缘分配对",tab2:"偶像匹配",
     fcats:["综合运","感情运","财运","事业运","健康运"],
     fcatKeys:["综合","感情运","财运","事业运","健康运"],
@@ -3735,7 +3745,7 @@ const T = {
     feat1T:"Alma Gemela Idol",feat1D:"Encuentra qué arquetipo idol coincide con tu energía Saju y zodiacal.",
     feat2T:"Compatibilidad de Ships",feat2D:"Compara tus datos con cualquier persona y descubre tu pairing ideal.",
     feat3T:"Tarjetas Virales",feat3D:"Genera tarjetas estéticas optimizadas para TikTok e Instagram Stories.",
-    appTitle:"Comenzar tu Lectura",appSub:"Descubre tu destino a través del Saju y la astrología.",
+    appTitle:"Comenzar tu Lectura",appSub:"Tu bias no apareció por accidente.",appSubSaju:"Ya hay algo cambiando.",appSubCompat:"Ya hay una corriente entre ustedes dos.",
     tab0:"Lectura Saju",tab1:"Compatibilidad",tab2:"Match Idol",
     fcats:["General","Amor","Riqueza","Carrera","Salud"],
     fcatKeys:["general","love","wealth","career","health"],
@@ -3833,6 +3843,12 @@ function setLang(lang){
   setText('feat3T',t.feat3T); setText('feat3D',t.feat3D);
   // App
   setText('appTitle',t.appTitle); setText('appSub',t.appSub);
+  // 탭별 문구 반영
+  if(typeof curMode!=='undefined'){
+    const _m={idol:t.appSub,saju:t.appSubSaju||t.appSub,compat:t.appSubCompat||t.appSub};
+    const _el=document.getElementById('appSub');
+    if(_el&&_m[curMode]) _el.textContent=_m[curMode];
+  }
   // Tabs
   setText('tab0Txt',t.tab0); setText('tab1Txt',t.tab1); setText('tab2Txt',t.tab2);
   // Saju form
@@ -3881,8 +3897,12 @@ function setMode(mode){
   document.getElementById('mtab0').classList.toggle('active',mode==='saju');
   document.getElementById('mtab1').classList.toggle('active',mode==='compat');
   document.getElementById('mtab2').classList.toggle('active',mode==='idol');
-  const _subMap={idol:'최애는 우연처럼 들어오지 않음',saju:'이미 바뀌기 시작한 흐름이 있음',compat:'두 사람 사이엔
-이미 잡힌 흐름이 있음'};
+  const _t=(typeof T!=='undefined'&&T[typeof curLang!=='undefined'?curLang:'ko'])||{};
+  const _subMap={
+    idol:_t.appSub||'최애는 우연처럼 들어오지 않음',
+    saju:_t.appSubSaju||'이미 바뀌기 시작한 흐름이 있음',
+    compat:_t.appSubCompat||'두 사람 사이엔 이미 잡힌 흐름이 있음'
+  };
   const _subEl=document.getElementById('appSub');
   if(_subEl) _subEl.textContent=_subMap[mode]||_subMap.idol;
 }
@@ -5001,7 +5021,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .app-inner{max-width:540px;margin:0 auto}
 .app-hdr{text-align:center;padding:40px 0 20px}
 .app-hdr h3{font-size:26px;font-weight:900;letter-spacing:-1px}
-.app-hdr p{margin-top:8px;font-size:14px;color:var(--muted)}
+.app-hdr p{margin-top:8px;font-size:14px;color:var(--muted);text-align:center;margin-left:auto;margin-right:auto}
 
 /* MODE TABS */
 .mode-tabs{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
@@ -5720,7 +5740,7 @@ text-transform:uppercase;
 <div class="app-area" id="appArea">
   <div class="app-inner">
     <div class="app-hdr">
-      <h3 id="appTitle">Start Your Reading</h3>
+      <h3 id="appTitle">운세 시작하기</h3>
       <p id="appSub">최애는 우연처럼 들어오지 않음</p>
     </div>
     <div class="mode-tabs">
@@ -5913,7 +5933,7 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",
+    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",appSubSaju:"이미 바뀌기 시작한 흐름이 있음",appSubCompat:"두 사람 사이엔 이미 잡힌 흐름이 있음",
     tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
@@ -5964,7 +5984,7 @@ const T = {
     feat1T:"Idol Signal Match",feat1D:"Find which idol archetype matches your Saju and zodiac energy.",
     feat2T:"Ship Compatibility",feat2D:"Compare yourself with any person and discover your ideal pairing.",
     feat3T:"Viral Share Cards",feat3D:"Auto-generate aesthetic cards optimized for TikTok and Instagram stories.",
-    appTitle:"Start Your Reading",appSub:"Discover your destiny through Saju and astrology.",
+    appTitle:"Start Your Reading",appSub:"Your bias didn't appear by accident.",appSubSaju:"Something is already shifting.",appSubCompat:"There's already a current between you two.",
     tab0:"Saju Reading",tab1:"Compatibility",tab2:"Idol Match",
     fcats:["General","Love","Wealth","Career","Health"],
     fcatKeys:["general","love","wealth","career","health"],
@@ -6015,7 +6035,7 @@ const T = {
     feat1T:"アイドル魂マッチ",feat1D:"四柱推命と星座エネルギーでアイドルタイプを見つけましょう。",
     feat2T:"相性診断",feat2D:"自分と誰かを比較して、理想のペアリングを発見しましょう。",
     feat3T:"バイラル共有カード",feat3D:"TikTokとインスタグラムに最適化したカードを自動生成します。",
-    appTitle:"鑑定を始める",appSub:"四柱推命と占星術で運命を読み解きましょう",
+    appTitle:"鑑定を始める",appSub:"推しは偶然に現れない。",appSubSaju:"すでに変わり始めた流れがある。",appSubCompat:"二人の間にはすでに流れが生まれている。",
     tab0:"四柱鑑定",tab1:"相性を見る",tab2:"アイドル相性",
     fcats:["総合運","恋愛運","財運","仕事運","健康運"],
     fcatKeys:["総合","恋愛運","財運","仕事運","健康運"],
@@ -6066,7 +6086,7 @@ const T = {
     feat1T:"偶像灵魂配对",feat1D:"根据四柱命理和星座能量，找出与你命运相符的偶像类型。",
     feat2T:"缘分配对",feat2D:"比较两人四柱，发现你们的理想配对。",
     feat3T:"病毒分享卡片",feat3D:"自动生成适合TikTok和Instagram故事的美观解读卡片。",
-    appTitle:"开始解读",appSub:"通过四柱命理和占星术发现你的命运",
+    appTitle:"开始解读",appSub:"你的偏爱不是偶然出现的。",appSubSaju:"已经开始改变的流势。",appSubCompat:"两人之间已有一条流势。",
     tab0:"四柱运势",tab1:"缘分配对",tab2:"偶像匹配",
     fcats:["综合运","感情运","财运","事业运","健康运"],
     fcatKeys:["综合","感情运","财运","事业运","健康运"],
@@ -6117,7 +6137,7 @@ const T = {
     feat1T:"Alma Gemela Idol",feat1D:"Encuentra qué arquetipo idol coincide con tu energía Saju y zodiacal.",
     feat2T:"Compatibilidad de Ships",feat2D:"Compara tus datos con cualquier persona y descubre tu pairing ideal.",
     feat3T:"Tarjetas Virales",feat3D:"Genera tarjetas estéticas optimizadas para TikTok e Instagram Stories.",
-    appTitle:"Comenzar tu Lectura",appSub:"Descubre tu destino a través del Saju y la astrología.",
+    appTitle:"Comenzar tu Lectura",appSub:"Tu bias no apareció por accidente.",appSubSaju:"Ya hay algo cambiando.",appSubCompat:"Ya hay una corriente entre ustedes dos.",
     tab0:"Lectura Saju",tab1:"Compatibilidad",tab2:"Match Idol",
     fcats:["General","Amor","Riqueza","Carrera","Salud"],
     fcatKeys:["general","love","wealth","career","health"],
@@ -6215,6 +6235,12 @@ function setLang(lang){
   setText('feat3T',t.feat3T); setText('feat3D',t.feat3D);
   // App
   setText('appTitle',t.appTitle); setText('appSub',t.appSub);
+  // 탭별 문구 반영
+  if(typeof curMode!=='undefined'){
+    const _m={idol:t.appSub,saju:t.appSubSaju||t.appSub,compat:t.appSubCompat||t.appSub};
+    const _el=document.getElementById('appSub');
+    if(_el&&_m[curMode]) _el.textContent=_m[curMode];
+  }
   // Tabs
   setText('tab0Txt',t.tab0); setText('tab1Txt',t.tab1); setText('tab2Txt',t.tab2);
   // Saju form
@@ -6263,8 +6289,12 @@ function setMode(mode){
   document.getElementById('mtab0').classList.toggle('active',mode==='saju');
   document.getElementById('mtab1').classList.toggle('active',mode==='compat');
   document.getElementById('mtab2').classList.toggle('active',mode==='idol');
-  const _subMap={idol:'최애는 우연처럼 들어오지 않음',saju:'이미 바뀌기 시작한 흐름이 있음',compat:'두 사람 사이엔
-이미 잡힌 흐름이 있음'};
+  const _t=(typeof T!=='undefined'&&T[typeof curLang!=='undefined'?curLang:'ko'])||{};
+  const _subMap={
+    idol:_t.appSub||'최애는 우연처럼 들어오지 않음',
+    saju:_t.appSubSaju||'이미 바뀌기 시작한 흐름이 있음',
+    compat:_t.appSubCompat||'두 사람 사이엔 이미 잡힌 흐름이 있음'
+  };
   const _subEl=document.getElementById('appSub');
   if(_subEl) _subEl.textContent=_subMap[mode]||_subMap.idol;
 }
@@ -7387,7 +7417,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .app-inner{max-width:540px;margin:0 auto}
 .app-hdr{text-align:center;padding:40px 0 20px}
 .app-hdr h3{font-size:26px;font-weight:900;letter-spacing:-1px}
-.app-hdr p{margin-top:8px;font-size:14px;color:var(--muted)}
+.app-hdr p{margin-top:8px;font-size:14px;color:var(--muted);text-align:center;margin-left:auto;margin-right:auto}
 
 /* MODE TABS */
 .mode-tabs{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
@@ -8106,7 +8136,7 @@ text-transform:uppercase;
 <div class="app-area" id="appArea">
   <div class="app-inner">
     <div class="app-hdr">
-      <h3 id="appTitle">Start Your Reading</h3>
+      <h3 id="appTitle">운세 시작하기</h3>
       <p id="appSub">최애는 우연처럼 들어오지 않음</p>
     </div>
     <div class="mode-tabs">
@@ -8299,7 +8329,7 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",
+    appTitle:"운세 시작하기",appSub:"최애는 우연처럼 들어오지 않음",appSubSaju:"이미 바뀌기 시작한 흐름이 있음",appSubCompat:"두 사람 사이엔 이미 잡힌 흐름이 있음",
     tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
@@ -8350,7 +8380,7 @@ const T = {
     feat1T:"Idol Signal Match",feat1D:"Find which idol archetype matches your Saju and zodiac energy.",
     feat2T:"Ship Compatibility",feat2D:"Compare yourself with any person and discover your ideal pairing.",
     feat3T:"Viral Share Cards",feat3D:"Auto-generate aesthetic cards optimized for TikTok and Instagram stories.",
-    appTitle:"Start Your Reading",appSub:"Discover your destiny through Saju and astrology.",
+    appTitle:"Start Your Reading",appSub:"Your bias didn't appear by accident.",appSubSaju:"Something is already shifting.",appSubCompat:"There's already a current between you two.",
     tab0:"Saju Reading",tab1:"Compatibility",tab2:"Idol Match",
     fcats:["General","Love","Wealth","Career","Health"],
     fcatKeys:["general","love","wealth","career","health"],
@@ -8401,7 +8431,7 @@ const T = {
     feat1T:"アイドル魂マッチ",feat1D:"四柱推命と星座エネルギーでアイドルタイプを見つけましょう。",
     feat2T:"相性診断",feat2D:"自分と誰かを比較して、理想のペアリングを発見しましょう。",
     feat3T:"バイラル共有カード",feat3D:"TikTokとインスタグラムに最適化したカードを自動生成します。",
-    appTitle:"鑑定を始める",appSub:"四柱推命と占星術で運命を読み解きましょう",
+    appTitle:"鑑定を始める",appSub:"推しは偶然に現れない。",appSubSaju:"すでに変わり始めた流れがある。",appSubCompat:"二人の間にはすでに流れが生まれている。",
     tab0:"四柱鑑定",tab1:"相性を見る",tab2:"アイドル相性",
     fcats:["総合運","恋愛運","財運","仕事運","健康運"],
     fcatKeys:["総合","恋愛運","財運","仕事運","健康運"],
@@ -8452,7 +8482,7 @@ const T = {
     feat1T:"偶像灵魂配对",feat1D:"根据四柱命理和星座能量，找出与你命运相符的偶像类型。",
     feat2T:"缘分配对",feat2D:"比较两人四柱，发现你们的理想配对。",
     feat3T:"病毒分享卡片",feat3D:"自动生成适合TikTok和Instagram故事的美观解读卡片。",
-    appTitle:"开始解读",appSub:"通过四柱命理和占星术发现你的命运",
+    appTitle:"开始解读",appSub:"你的偏爱不是偶然出现的。",appSubSaju:"已经开始改变的流势。",appSubCompat:"两人之间已有一条流势。",
     tab0:"四柱运势",tab1:"缘分配对",tab2:"偶像匹配",
     fcats:["综合运","感情运","财运","事业运","健康运"],
     fcatKeys:["综合","感情运","财运","事业运","健康运"],
@@ -8503,7 +8533,7 @@ const T = {
     feat1T:"Alma Gemela Idol",feat1D:"Encuentra qué arquetipo idol coincide con tu energía Saju y zodiacal.",
     feat2T:"Compatibilidad de Ships",feat2D:"Compara tus datos con cualquier persona y descubre tu pairing ideal.",
     feat3T:"Tarjetas Virales",feat3D:"Genera tarjetas estéticas optimizadas para TikTok e Instagram Stories.",
-    appTitle:"Comenzar tu Lectura",appSub:"Descubre tu destino a través del Saju y la astrología.",
+    appTitle:"Comenzar tu Lectura",appSub:"Tu bias no apareció por accidente.",appSubSaju:"Ya hay algo cambiando.",appSubCompat:"Ya hay una corriente entre ustedes dos.",
     tab0:"Lectura Saju",tab1:"Compatibilidad",tab2:"Match Idol",
     fcats:["General","Amor","Riqueza","Carrera","Salud"],
     fcatKeys:["general","love","wealth","career","health"],
@@ -8601,6 +8631,12 @@ function setLang(lang){
   setText('feat3T',t.feat3T); setText('feat3D',t.feat3D);
   // App
   setText('appTitle',t.appTitle); setText('appSub',t.appSub);
+  // 탭별 문구 반영
+  if(typeof curMode!=='undefined'){
+    const _m={idol:t.appSub,saju:t.appSubSaju||t.appSub,compat:t.appSubCompat||t.appSub};
+    const _el=document.getElementById('appSub');
+    if(_el&&_m[curMode]) _el.textContent=_m[curMode];
+  }
   // Tabs
   setText('tab0Txt',t.tab0); setText('tab1Txt',t.tab1); setText('tab2Txt',t.tab2);
   // Saju form
@@ -8649,8 +8685,12 @@ function setMode(mode){
   document.getElementById('mtab0').classList.toggle('active',mode==='saju');
   document.getElementById('mtab1').classList.toggle('active',mode==='compat');
   document.getElementById('mtab2').classList.toggle('active',mode==='idol');
-  const _subMap={idol:'최애는 우연처럼 들어오지 않음',saju:'이미 바뀌기 시작한 흐름이 있음',compat:'두 사람 사이엔
-이미 잡힌 흐름이 있음'};
+  const _t=(typeof T!=='undefined'&&T[typeof curLang!=='undefined'?curLang:'ko'])||{};
+  const _subMap={
+    idol:_t.appSub||'최애는 우연처럼 들어오지 않음',
+    saju:_t.appSubSaju||'이미 바뀌기 시작한 흐름이 있음',
+    compat:_t.appSubCompat||'두 사람 사이엔 이미 잡힌 흐름이 있음'
+  };
   const _subEl=document.getElementById('appSub');
   if(_subEl) _subEl.textContent=_subMap[mode]||_subMap.idol;
 }
