@@ -931,6 +931,15 @@ export default async function handler(req, res){
         "TXT": { fandom:"MOA", color:"#93C5FD", accent:"DREAM STATIC", emoji:"🦊" },
         "ATEEZ": { fandom:"ATINY", color:"#F59E0B", accent:"PIRATE SIGNAL", emoji:"🏴‍☠️" },
         "RIIZE": { fandom:"BRIIZE", color:"#FB923C", accent:"RIISING SIGNAL", emoji:"🧡" },
+
+        "NCT 127": { fandom:"NCTzen", color:"#86EFAC", accent:"127 SIGNAL", emoji:"💚" },
+        "NCT DREAM": { fandom:"NCTzen", color:"#86EFAC", accent:"DREAM SIGNAL", emoji:"💚" },
+        "WayV": { fandom:"WayZenNi", color:"#86EFAC", accent:"WAYV SIGNAL", emoji:"💚" },
+        "ZEROBASEONE": { fandom:"ZEROSE", color:"#A7F3D0", accent:"ZERO SIGNAL", emoji:"🌹" },
+        "BOYNEXTDOOR": { fandom:"ONEDOOR", color:"#93C5FD", accent:"DOOR SIGNAL", emoji:"🚪" },
+        "TWS": { fandom:"42", color:"#BFDBFE", accent:"FIRST MEETING SIGNAL", emoji:"💙" },
+        "ILLIT": { fandom:"GLLIT", color:"#F9A8D4", accent:"GLITTER SIGNAL", emoji:"✨" },
+        "KISS OF LIFE": { fandom:"KISSY", color:"#FB7185", accent:"KISS SIGNAL", emoji:"💋" },
         "ALL": { fandom:"FANDOM", color:"#A855F7", accent:"IDOL SIGNAL", emoji:"✦" }
       };
 
@@ -1110,6 +1119,51 @@ export default async function handler(req, res){
         "부정해도 결국 이런 타입에 반응함."
       ];
 
+
+        // NCT units
+        {name:"Taeyong (NCT 127)", group:"NCT 127", tags:["leader","performance","intense","artist","vulnerable"], fanPattern:"강렬한데 예민한 무대형에 감김"},
+        {name:"Jaehyun (NCT 127)", group:"NCT 127", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 약함"},
+        {name:"Doyoung (NCT 127)", group:"NCT 127", tags:["vocal","sensitive","intellectual","emotional","clean"], fanPattern:"예민하고 섬세한 보컬형에 오래 머무름"},
+        {name:"Mark (NCT 127)", group:"NCT 127", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"성실하게 계속 성장하는 타입한테 정이 쌓임"},
+        {name:"Haechan (NCT 127)", group:"NCT 127", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난스러운데 묘하게 의존하게 되는 타입"},
+        {name:"Mark (NCT DREAM)", group:"NCT DREAM", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"잘하는데 허술한 반전까지 있는 타입에 감김"},
+        {name:"Renjun (NCT DREAM)", group:"NCT DREAM", tags:["sensitive","artist","vocal","clean","emotional"], fanPattern:"예민하고 맑은 감정선에 오래 끌림"},
+        {name:"Jeno (NCT DREAM)", group:"NCT DREAM", tags:["quiet","strong","visual","calm","physical"], fanPattern:"조용한 힘과 든든함에 반응함"},
+        {name:"Haechan (NCT DREAM)", group:"NCT DREAM", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난치는데 결국 분위기 가져가는 타입에 약함"},
+        {name:"Jaemin (NCT DREAM)", group:"NCT DREAM", tags:["sweet","visual","soft","romantic","dreamy"], fanPattern:"달콤한데 거리감 있는 타입에 흔들림"},
+        {name:"Chenle (NCT DREAM)", group:"NCT DREAM", tags:["bright","free","vocal","global","playful"], fanPattern:"자유롭고 밝은 에너지에 기분이 풀림"},
+        {name:"Jisung (NCT DREAM)", group:"NCT DREAM", tags:["youngest","dance","growth","shy","soft"], fanPattern:"수줍은데 무대에서 바뀌는 성장형에 약함"},
+        {name:"Kun (WayV)", group:"WayV", tags:["leader","calm","responsible","vocal","stable"], fanPattern:"차분하게 중심 잡아주는 타입에 안정감을 느낌"},
+        {name:"Ten (WayV)", group:"WayV", tags:["artist","dance","unique","fluid","free"], fanPattern:"정해지지 않는 예술가형에 끌림"},
+        {name:"Winwin (WayV)", group:"WayV", tags:["quiet","elegant","visual","mysterious","soft"], fanPattern:"조용하고 우아한 분위기에 오래 감김"},
+        {name:"Xiaojun (WayV)", group:"WayV", tags:["vocal","dramatic","emotional","visual","artist"], fanPattern:"감정선 진한 보컬형에 약함"},
+        {name:"Hendery (WayV)", group:"WayV", tags:["funny","unique","bright","chaos","visual"], fanPattern:"엉뚱한데 비주얼까지 되는 타입에 반응함"},
+        {name:"Yangyang (WayV)", group:"WayV", tags:["rapper","youngest","cool","playful","global"], fanPattern:"쿨하고 장난스러운 막내 에너지에 끌림"},
+
+        // Newer / trending groups
+        {name:"Sung Hanbin (ZEROBASEONE)", group:"ZEROBASEONE", tags:["leader","bright","dance","clean","responsible"], fanPattern:"밝고 단정한 리더 에너지에 바로 반응함"},
+        {name:"Zhang Hao (ZEROBASEONE)", group:"ZEROBASEONE", tags:["elegant","global","vocal","calm","artist"], fanPattern:"고요하고 우아한 실력형에 약함"},
+        {name:"Kim Jiwoong (ZEROBASEONE)", group:"ZEROBASEONE", tags:["visual","mature","calm","romantic","actor"], fanPattern:"성숙하고 조용한 분위기에 오래 감김"},
+        {name:"Ricky (ZEROBASEONE)", group:"ZEROBASEONE", tags:["cold","visual","luxury","cool","distance"], fanPattern:"다가가기 어려운 냉미남 타입에 약함"},
+        {name:"Kim Gyuvin (ZEROBASEONE)", group:"ZEROBASEONE", tags:["tall","bright","playful","warm","energy"], fanPattern:"크고 장난스러운 에너지에 마음이 풀림"},
+        {name:"Han Yujin (ZEROBASEONE)", group:"ZEROBASEONE", tags:["youngest","fresh","growth","cute","dance"], fanPattern:"어리고 선명한 성장형에 계속 눈이 감"},
+        {name:"Myung Jaehyun (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["leader","bright","boyfriend","playful","warm"], fanPattern:"동네 친구 같은데 은근 설레는 타입에 약함"},
+        {name:"Taesan (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["cool","artist","quiet","independent","chic"], fanPattern:"무심하고 자기 세계 있는 타입에 감김"},
+        {name:"Leehan (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["calm","visual","soft","unique","quiet"], fanPattern:"조용하고 독특한 분위기에 오래 끌림"},
+        {name:"Woonhak (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["youngest","bright","cute","fresh","energy"], fanPattern:"밝고 신선한 막내 에너지에 반응함"},
+        {name:"Shinyu (TWS)", group:"TWS", tags:["leader","clean","firstlove","calm","visual"], fanPattern:"깨끗한 첫사랑상 리더 에너지에 약함"},
+        {name:"Dohoon (TWS)", group:"TWS", tags:["cool","visual","calm","chic","distance"], fanPattern:"차분하고 쿨한 분위기에 감김"},
+        {name:"Youngjae (TWS)", group:"TWS", tags:["bright","fresh","cute","soft","vocal"], fanPattern:"맑고 귀여운 에너지에 마음이 풀림"},
+        {name:"Hanjin (TWS)", group:"TWS", tags:["global","quiet","soft","mysterious","visual"], fanPattern:"낯설고 조용한 분위기에 계속 눈이 감"},
+        {name:"Wonhee (ILLIT)", group:"ILLIT", tags:["cute","fresh","soft","spark","young"], fanPattern:"귀엽고 신선한 에너지에 바로 반응함"},
+        {name:"Minju (ILLIT)", group:"ILLIT", tags:["visual","soft","vocal","calm","classic"], fanPattern:"차분하고 맑은 비주얼형에 약함"},
+        {name:"Moka (ILLIT)", group:"ILLIT", tags:["cute","unique","playful","bright","charm"], fanPattern:"귀여운데 묘하게 독특한 타입에 감김"},
+        {name:"Yunah (ILLIT)", group:"ILLIT", tags:["leader","cool","confident","bright","strong"], fanPattern:"자신감 있고 시원한 언니라인에 반응함"},
+        {name:"Natty (KISS OF LIFE)", group:"KISS OF LIFE", tags:["performance","confident","sensual","dance","power"], fanPattern:"무대에서 바로 납득시키는 퍼포머형에 약함"},
+        {name:"Belle (KISS OF LIFE)", group:"KISS OF LIFE", tags:["vocal","artist","glam","bright","talent"], fanPattern:"재능이 선명하게 보이는 보컬형에 끌림"},
+        {name:"Julie (KISS OF LIFE)", group:"KISS OF LIFE", tags:["cool","leader","hip","charisma","confident"], fanPattern:"쿨하고 힙한 리더 에너지에 반응함"},
+        {name:"Haneul (KISS OF LIFE)", group:"KISS OF LIFE", tags:["youngest","soft","fresh","vocal","cute"], fanPattern:"부드럽고 신선한 막내 보컬형에 마음이 감"},
+
       function deriveUserArchetype(saju){
         const elems=saju.elements||[0,0,0,0,0]; // 木火土金水
         const strong=(saju.strong||[]).join(" ");
@@ -1183,7 +1237,7 @@ export default async function handler(req, res){
       const theme = FANDOM_THEMES[selectedGroup] || FANDOM_THEMES.ALL;
       const userArchetypeTags = deriveUserArchetype(saju);
       const pool = selectedGroup && selectedGroup !== "ALL"
-        ? IDOL_ARCHETYPE_DB.filter(i=>i.group===selectedGroup)
+        ? IDOL_ARCHETYPE_DB.filter(i=> selectedGroup==="NCT" ? (i.group==="NCT" || i.group==="NCT 127" || i.group==="NCT DREAM" || i.group==="WayV") : i.group===selectedGroup)
         : IDOL_ARCHETYPE_DB;
 
       const ranked = [...(pool.length ? pool : IDOL_ARCHETYPE_DB)]
