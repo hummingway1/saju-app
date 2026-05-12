@@ -133,13 +133,13 @@ cliffhanger: 불안하게 끝낼 것. "아직 끝나지 않음" 느낌.
     money: { decision:"The energy of wealth leans toward preserving what you have, not expanding. Reducing loss outshines ambitious gains right now.", risk:"Calculation matters more than confidence this time. The more excitement rises, the more carefully numbers deserve a second look." },
     metalWater: "Even if things seem paused, the inner current is already moving. Rather than rushing to conclusions, correcting direction first will serve you better.",
     paidSections: ["The Current Shape","Why This Flow is Appearing","Shadows to Watch","The Movement That Suits You Now"],
-    paidStyle: `Respond in English only. You are a cold AI Oracle — not a fortune teller.
-Rules: Max 3 sentences per section. Short, fragmented rhythm allowed. Disconnected feeling allowed.
-No smooth transitions. No explanations. No comfort.
-Good: "keeps holding on / even when it's clearly wrong." "this one lingers longer than expected."
-shareLine: one line worth screenshotting. slightly unsettling.
-cliffhanger: end with dread. "this hasn't ended yet." feeling.
-ABSOLUTE MAX: 3 sentences per section. No exceptions.\``
+    paidStyle: "Respond in English only. You are a cold AI Oracle — not a fortune teller.\n" +
+      "Rules: Max 3 sentences per section. Short, fragmented rhythm allowed. Disconnected feeling allowed.\n" +
+      "No smooth transitions. No explanations. No comfort.\n" +
+      "Good: \"keeps holding on / even when it's clearly wrong.\" \"this one lingers longer than expected.\"\n" +
+      "shareLine: one line worth screenshotting. slightly unsettling.\n" +
+      "cliffhanger: end with dread. \"this hasn't ended yet.\" feeling.\n" +
+      "ABSOLUTE MAX: 3 sentences per section. No exceptions."
 
   },
   Japanese: {
@@ -158,12 +158,12 @@ ABSOLUTE MAX: 3 sentences per section. No exceptions.\``
     money: { decision:"財の流れは入ってくるよりも、守ることに意が込められています。大きく広げるよりも損失を減らす選択の方が輝きます。", risk:"今回は自信よりも計算が大切です。気持ちが高揚する瞬間ほど、数字をもう一度確認する方が良いでしょう。" },
     metalWater: "止まっているように見えても、内側の波はすでに動いています。ただ、早く答えを決めようとするよりも、まず方向を正す方が良いでしょう。",
     paidSections: ["今の流れ","なぜこのような流れが見えるのか","注意すべき影","今最も合う動き"],
-    paidStyle: `日本語のみで答えること。冷たく断片的なAI Oracleとして。
-文章は完全に繋げなくてよい。詩のように切れるリズムを許可。
-各セクション最大3文。長い説明禁止。慰め禁止。
-良い例: "まだ手放せない流れが\n見えている。"
-shareLine: スクリーンショットしたくなる一行。少し不安になる感じ。
-cliffhanger: まだ終わっていない感じで終わること。\``
+    paidStyle: "日本語のみで答えること。冷たく断片的なAI Oracleとして。\n" +
+      "文章は完全に繋げなくてよい。詩のように切れるリズムを許可。\n" +
+      "各セクション最大3文。長い説明禁止。慰め禁止。\n" +
+      "良い例: \"まだ手放せない流れが\\n見えている。\"\n" +
+      "shareLine: スクリーンショットしたくなる一行。少し不安になる感じ。\n" +
+      "cliffhanger: まだ終わっていない感じで終わること。"
 
   },
   Chinese: {
@@ -1176,7 +1176,49 @@ export default async function handler(req, res){
         {name:"Sungchan (RIIZE)", group:"RIIZE", tags:["tall","bright","reliable","friendly","visual"], fanPattern:"큰 키와 밝은 안정감에 마음이 감"},
         {name:"Wonbin (RIIZE)", group:"RIIZE", tags:["cold","guitar","visual","mysterious","star","distance"], fanPattern:"차갑고 스타성 있는 거리감에 강하게 반응함"},
         {name:"Sohee (RIIZE)", group:"RIIZE", tags:["cute","vocal","fresh","bright","quirky"], fanPattern:"귀엽고 신선한 목소리에 마음이 풀림"},
-        {name:"Anton (RIIZE)", group:"RIIZE", tags:["soft","global","youngest","dreamy","gentle"], fanPattern:"조용하고 부드러운 막내형 분위기에 끌림"}
+        {name:"Anton (RIIZE)", group:"RIIZE", tags:["soft","global","youngest","dreamy","gentle"], fanPattern:"조용하고 부드러운 막내형 분위기에 끌림"},
+        {name:"Taeyong (NCT 127)", group:"NCT 127", tags:["leader","performance","intense","artist","vulnerable"], fanPattern:"강렬한데 예민한 무대형에 감김"},
+        {name:"Jaehyun (NCT 127)", group:"NCT 127", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 약함"},
+        {name:"Doyoung (NCT 127)", group:"NCT 127", tags:["vocal","sensitive","intellectual","emotional","clean"], fanPattern:"예민하고 섬세한 보컬형에 오래 머무름"},
+        {name:"Mark (NCT 127)", group:"NCT 127", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"성실하게 계속 성장하는 타입한테 정이 쌓임"},
+        {name:"Haechan (NCT 127)", group:"NCT 127", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난스러운데 묘하게 의존하게 되는 타입"},
+        {name:"Mark (NCT DREAM)", group:"NCT DREAM", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"잘하는데 허술한 반전까지 있는 타입에 감김"},
+        {name:"Renjun (NCT DREAM)", group:"NCT DREAM", tags:["sensitive","artist","vocal","clean","emotional"], fanPattern:"예민하고 맑은 감정선에 오래 끌림"},
+        {name:"Jeno (NCT DREAM)", group:"NCT DREAM", tags:["quiet","strong","visual","calm","physical"], fanPattern:"조용한 힘과 든든함에 반응함"},
+        {name:"Haechan (NCT DREAM)", group:"NCT DREAM", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난치는데 결국 분위기 가져가는 타입에 약함"},
+        {name:"Jaemin (NCT DREAM)", group:"NCT DREAM", tags:["sweet","visual","soft","romantic","dreamy"], fanPattern:"달콤한데 거리감 있는 타입에 흔들림"},
+        {name:"Chenle (NCT DREAM)", group:"NCT DREAM", tags:["bright","free","vocal","global","playful"], fanPattern:"자유롭고 밝은 에너지에 기분이 풀림"},
+        {name:"Jisung (NCT DREAM)", group:"NCT DREAM", tags:["youngest","dance","growth","shy","soft"], fanPattern:"수줍은데 무대에서 바뀌는 성장형에 약함"},
+        {name:"Kun (WayV)", group:"WayV", tags:["leader","calm","responsible","vocal","stable"], fanPattern:"차분하게 중심 잡아주는 타입에 안정감을 느낌"},
+        {name:"Ten (WayV)", group:"WayV", tags:["artist","dance","unique","fluid","free"], fanPattern:"정해지지 않는 예술가형에 끌림"},
+        {name:"Winwin (WayV)", group:"WayV", tags:["quiet","elegant","visual","mysterious","soft"], fanPattern:"조용하고 우아한 분위기에 오래 감김"},
+        {name:"Xiaojun (WayV)", group:"WayV", tags:["vocal","dramatic","emotional","visual","artist"], fanPattern:"감정선 진한 보컬형에 약함"},
+        {name:"Hendery (WayV)", group:"WayV", tags:["funny","unique","bright","chaos","visual"], fanPattern:"엉뚱한데 비주얼까지 되는 타입에 반응함"},
+        {name:"Yangyang (WayV)", group:"WayV", tags:["rapper","youngest","cool","playful","global"], fanPattern:"쿨하고 장난스러운 막내 에너지에 끌림"},
+
+        // Newer / trending groups
+        {name:"Sung Hanbin (ZEROBASEONE)", group:"ZEROBASEONE", tags:["leader","bright","dance","clean","responsible"], fanPattern:"밝고 단정한 리더 에너지에 바로 반응함"},
+        {name:"Zhang Hao (ZEROBASEONE)", group:"ZEROBASEONE", tags:["elegant","global","vocal","calm","artist"], fanPattern:"고요하고 우아한 실력형에 약함"},
+        {name:"Kim Jiwoong (ZEROBASEONE)", group:"ZEROBASEONE", tags:["visual","mature","calm","romantic","actor"], fanPattern:"성숙하고 조용한 분위기에 오래 감김"},
+        {name:"Ricky (ZEROBASEONE)", group:"ZEROBASEONE", tags:["cold","visual","luxury","cool","distance"], fanPattern:"다가가기 어려운 냉미남 타입에 약함"},
+        {name:"Kim Gyuvin (ZEROBASEONE)", group:"ZEROBASEONE", tags:["tall","bright","playful","warm","energy"], fanPattern:"크고 장난스러운 에너지에 마음이 풀림"},
+        {name:"Han Yujin (ZEROBASEONE)", group:"ZEROBASEONE", tags:["youngest","fresh","growth","cute","dance"], fanPattern:"어리고 선명한 성장형에 계속 눈이 감"},
+        {name:"Myung Jaehyun (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["leader","bright","boyfriend","playful","warm"], fanPattern:"동네 친구 같은데 은근 설레는 타입에 약함"},
+        {name:"Taesan (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["cool","artist","quiet","independent","chic"], fanPattern:"무심하고 자기 세계 있는 타입에 감김"},
+        {name:"Leehan (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["calm","visual","soft","unique","quiet"], fanPattern:"조용하고 독특한 분위기에 오래 끌림"},
+        {name:"Woonhak (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["youngest","bright","cute","fresh","energy"], fanPattern:"밝고 신선한 막내 에너지에 반응함"},
+        {name:"Shinyu (TWS)", group:"TWS", tags:["leader","clean","firstlove","calm","visual"], fanPattern:"깨끗한 첫사랑상 리더 에너지에 약함"},
+        {name:"Dohoon (TWS)", group:"TWS", tags:["cool","visual","calm","chic","distance"], fanPattern:"차분하고 쿨한 분위기에 감김"},
+        {name:"Youngjae (TWS)", group:"TWS", tags:["bright","fresh","cute","soft","vocal"], fanPattern:"맑고 귀여운 에너지에 마음이 풀림"},
+        {name:"Hanjin (TWS)", group:"TWS", tags:["global","quiet","soft","mysterious","visual"], fanPattern:"낯설고 조용한 분위기에 계속 눈이 감"},
+        {name:"Wonhee (ILLIT)", group:"ILLIT", tags:["cute","fresh","soft","spark","young"], fanPattern:"귀엽고 신선한 에너지에 바로 반응함"},
+        {name:"Minju (ILLIT)", group:"ILLIT", tags:["visual","soft","vocal","calm","classic"], fanPattern:"차분하고 맑은 비주얼형에 약함"},
+        {name:"Moka (ILLIT)", group:"ILLIT", tags:["cute","unique","playful","bright","charm"], fanPattern:"귀여운데 묘하게 독특한 타입에 감김"},
+        {name:"Yunah (ILLIT)", group:"ILLIT", tags:["leader","cool","confident","bright","strong"], fanPattern:"자신감 있고 시원한 언니라인에 반응함"},
+        {name:"Natty (KISS OF LIFE)", group:"KISS OF LIFE", tags:["performance","confident","sensual","dance","power"], fanPattern:"무대에서 바로 납득시키는 퍼포머형에 약함"},
+        {name:"Belle (KISS OF LIFE)", group:"KISS OF LIFE", tags:["vocal","artist","glam","bright","talent"], fanPattern:"재능이 선명하게 보이는 보컬형에 끌림"},
+        {name:"Julie (KISS OF LIFE)", group:"KISS OF LIFE", tags:["cool","leader","hip","charisma","confident"], fanPattern:"쿨하고 힙한 리더 에너지에 반응함"},
+        {name:"Haneul (KISS OF LIFE)", group:"KISS OF LIFE", tags:["youngest","soft","fresh","vocal","cute"], fanPattern:"부드럽고 신선한 막내 보컬형에 마음이 감"},
       ];
 
       const TITLE_LINES = {
@@ -1231,51 +1273,6 @@ export default async function handler(req, res){
       ];
 
 
-        // NCT units
-        {name:"Taeyong (NCT 127)", group:"NCT 127", tags:["leader","performance","intense","artist","vulnerable"], fanPattern:"강렬한데 예민한 무대형에 감김"},
-        {name:"Jaehyun (NCT 127)", group:"NCT 127", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 약함"},
-        {name:"Doyoung (NCT 127)", group:"NCT 127", tags:["vocal","sensitive","intellectual","emotional","clean"], fanPattern:"예민하고 섬세한 보컬형에 오래 머무름"},
-        {name:"Mark (NCT 127)", group:"NCT 127", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"성실하게 계속 성장하는 타입한테 정이 쌓임"},
-        {name:"Haechan (NCT 127)", group:"NCT 127", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난스러운데 묘하게 의존하게 되는 타입"},
-        {name:"Mark (NCT DREAM)", group:"NCT DREAM", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"잘하는데 허술한 반전까지 있는 타입에 감김"},
-        {name:"Renjun (NCT DREAM)", group:"NCT DREAM", tags:["sensitive","artist","vocal","clean","emotional"], fanPattern:"예민하고 맑은 감정선에 오래 끌림"},
-        {name:"Jeno (NCT DREAM)", group:"NCT DREAM", tags:["quiet","strong","visual","calm","physical"], fanPattern:"조용한 힘과 든든함에 반응함"},
-        {name:"Haechan (NCT DREAM)", group:"NCT DREAM", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난치는데 결국 분위기 가져가는 타입에 약함"},
-        {name:"Jaemin (NCT DREAM)", group:"NCT DREAM", tags:["sweet","visual","soft","romantic","dreamy"], fanPattern:"달콤한데 거리감 있는 타입에 흔들림"},
-        {name:"Chenle (NCT DREAM)", group:"NCT DREAM", tags:["bright","free","vocal","global","playful"], fanPattern:"자유롭고 밝은 에너지에 기분이 풀림"},
-        {name:"Jisung (NCT DREAM)", group:"NCT DREAM", tags:["youngest","dance","growth","shy","soft"], fanPattern:"수줍은데 무대에서 바뀌는 성장형에 약함"},
-        {name:"Kun (WayV)", group:"WayV", tags:["leader","calm","responsible","vocal","stable"], fanPattern:"차분하게 중심 잡아주는 타입에 안정감을 느낌"},
-        {name:"Ten (WayV)", group:"WayV", tags:["artist","dance","unique","fluid","free"], fanPattern:"정해지지 않는 예술가형에 끌림"},
-        {name:"Winwin (WayV)", group:"WayV", tags:["quiet","elegant","visual","mysterious","soft"], fanPattern:"조용하고 우아한 분위기에 오래 감김"},
-        {name:"Xiaojun (WayV)", group:"WayV", tags:["vocal","dramatic","emotional","visual","artist"], fanPattern:"감정선 진한 보컬형에 약함"},
-        {name:"Hendery (WayV)", group:"WayV", tags:["funny","unique","bright","chaos","visual"], fanPattern:"엉뚱한데 비주얼까지 되는 타입에 반응함"},
-        {name:"Yangyang (WayV)", group:"WayV", tags:["rapper","youngest","cool","playful","global"], fanPattern:"쿨하고 장난스러운 막내 에너지에 끌림"},
-
-        // Newer / trending groups
-        {name:"Sung Hanbin (ZEROBASEONE)", group:"ZEROBASEONE", tags:["leader","bright","dance","clean","responsible"], fanPattern:"밝고 단정한 리더 에너지에 바로 반응함"},
-        {name:"Zhang Hao (ZEROBASEONE)", group:"ZEROBASEONE", tags:["elegant","global","vocal","calm","artist"], fanPattern:"고요하고 우아한 실력형에 약함"},
-        {name:"Kim Jiwoong (ZEROBASEONE)", group:"ZEROBASEONE", tags:["visual","mature","calm","romantic","actor"], fanPattern:"성숙하고 조용한 분위기에 오래 감김"},
-        {name:"Ricky (ZEROBASEONE)", group:"ZEROBASEONE", tags:["cold","visual","luxury","cool","distance"], fanPattern:"다가가기 어려운 냉미남 타입에 약함"},
-        {name:"Kim Gyuvin (ZEROBASEONE)", group:"ZEROBASEONE", tags:["tall","bright","playful","warm","energy"], fanPattern:"크고 장난스러운 에너지에 마음이 풀림"},
-        {name:"Han Yujin (ZEROBASEONE)", group:"ZEROBASEONE", tags:["youngest","fresh","growth","cute","dance"], fanPattern:"어리고 선명한 성장형에 계속 눈이 감"},
-        {name:"Myung Jaehyun (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["leader","bright","boyfriend","playful","warm"], fanPattern:"동네 친구 같은데 은근 설레는 타입에 약함"},
-        {name:"Taesan (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["cool","artist","quiet","independent","chic"], fanPattern:"무심하고 자기 세계 있는 타입에 감김"},
-        {name:"Leehan (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["calm","visual","soft","unique","quiet"], fanPattern:"조용하고 독특한 분위기에 오래 끌림"},
-        {name:"Woonhak (BOYNEXTDOOR)", group:"BOYNEXTDOOR", tags:["youngest","bright","cute","fresh","energy"], fanPattern:"밝고 신선한 막내 에너지에 반응함"},
-        {name:"Shinyu (TWS)", group:"TWS", tags:["leader","clean","firstlove","calm","visual"], fanPattern:"깨끗한 첫사랑상 리더 에너지에 약함"},
-        {name:"Dohoon (TWS)", group:"TWS", tags:["cool","visual","calm","chic","distance"], fanPattern:"차분하고 쿨한 분위기에 감김"},
-        {name:"Youngjae (TWS)", group:"TWS", tags:["bright","fresh","cute","soft","vocal"], fanPattern:"맑고 귀여운 에너지에 마음이 풀림"},
-        {name:"Hanjin (TWS)", group:"TWS", tags:["global","quiet","soft","mysterious","visual"], fanPattern:"낯설고 조용한 분위기에 계속 눈이 감"},
-        {name:"Wonhee (ILLIT)", group:"ILLIT", tags:["cute","fresh","soft","spark","young"], fanPattern:"귀엽고 신선한 에너지에 바로 반응함"},
-        {name:"Minju (ILLIT)", group:"ILLIT", tags:["visual","soft","vocal","calm","classic"], fanPattern:"차분하고 맑은 비주얼형에 약함"},
-        {name:"Moka (ILLIT)", group:"ILLIT", tags:["cute","unique","playful","bright","charm"], fanPattern:"귀여운데 묘하게 독특한 타입에 감김"},
-        {name:"Yunah (ILLIT)", group:"ILLIT", tags:["leader","cool","confident","bright","strong"], fanPattern:"자신감 있고 시원한 언니라인에 반응함"},
-        {name:"Natty (KISS OF LIFE)", group:"KISS OF LIFE", tags:["performance","confident","sensual","dance","power"], fanPattern:"무대에서 바로 납득시키는 퍼포머형에 약함"},
-        {name:"Belle (KISS OF LIFE)", group:"KISS OF LIFE", tags:["vocal","artist","glam","bright","talent"], fanPattern:"재능이 선명하게 보이는 보컬형에 끌림"},
-        {name:"Julie (KISS OF LIFE)", group:"KISS OF LIFE", tags:["cool","leader","hip","charisma","confident"], fanPattern:"쿨하고 힙한 리더 에너지에 반응함"},
-        {name:"Haneul (KISS OF LIFE)", group:"KISS OF LIFE", tags:["youngest","soft","fresh","vocal","cute"], fanPattern:"부드럽고 신선한 막내 보컬형에 마음이 감"},
-
-      function deriveUserArchetype(saju){
         const elems=saju.elements||[0,0,0,0,0]; // 木火土金水
         const strong=(saju.strong||[]).join(" ");
         const weak=(saju.weak||[]).join(" ");
@@ -1363,59 +1360,49 @@ export default async function handler(req, res){
       const shareLine = chooseLine(SHARE_LINES_LOCAL, second.name.length);
       const scoreBase = Math.min(97, Math.max(82, 82 + (top.matchScore % 16)));
 
+      const variety = buildVarietyNarrative(top?.tags || []);
+
+      const detailLines = [
+        '\u2756 SIGNAL MATCH',
+        '',
+        variety.aura[0],
+        '',
+        variety.aura[1],
+        '',
+        variety.aura[2],
+        '',
+        '\u2756 YOUR FANDOM PATTERN',
+        '',
+        variety.fandom,
+        '',
+        '\u2756 RED FLAG',
+        '',
+        variety.redFlag,
+        '',
+        '\u2756 SIGNAL ENERGY',
+        '',
+        variety.micro
+      ];
+
       const result = {
         title,
-        highlight: top.fanPattern,
+        highlight: variety.aura[0],
         fandom: theme.fandom,
         fandomAccent: theme.accent,
         fandomColor: theme.color,
         selectedGroup,
         shareLine,
         userArchetypeTags,
-        idolMatches: [top, second, third].map((i,idx)=>({
-          name:i.name,
-          reason:i.fanPattern,
-          score: Math.max(77, scoreBase - idx*5)
-        })),
-        detail:
-`◉ BIAS PATTERN DETECTED
-
-${title}
-
-◉ WHY THIS SIGNAL HITS
-
-${top.fanPattern}.
-
-◉ YOUR FANDOM ENERGY
-
-${shareLine}
-
-◉ SIGNAL MATCH FOUND
-
-${top.name} 쪽으로 신호가 가장 강하게 잡힘.`
+        idolMatches: [top, second, third].map(function(i, idx) {
+          return {
+            name: i.name,
+            reason: i.fanPattern,
+            score: Math.max(77, scoreBase - idx * 5)
+          };
+        }),
+        detail: detailLines.join('\n')
       };
 
-      const variety = buildVarietyNarrative(bestMatch?.tags || []);
-      result.highlight = variety.aura[0];
-      result.detail = `✦ SIGNAL MATCH
-
-${variety.aura[0]}
-
-${variety.aura[1]}
-
-${variety.aura[2]}
-
-✦ YOUR FANDOM PATTERN
-
-${variety.fandom}
-
-✦ RED FLAG
-
-${variety.redFlag}
-
-✦ SIGNAL ENERGY
-
-${variety.micro}`;
       return res.status(200).json(result);
     }
 
