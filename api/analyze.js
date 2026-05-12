@@ -878,6 +878,117 @@ Each section: title line + 2~3 sentences. No bullet points.
   return { score, detail: data.choices?.[0]?.message?.content || "" };
 }
 
+
+// ── SIGNAL VARIETY ENGINE ─────────────────────────────
+const SIGNAL_LINES = {
+  cold_visual: [
+    "다정한 사람보다, 거리감 있는 사람에게 더 오래 감정이 남는 타입.",
+    "무심하게 굴다가 한번 웃어주는 순간에 약함.",
+    "처음엔 차갑다고 느끼는데 결국 제일 오래 생각나는 스타일.",
+    "쉽게 다가오는 사람보다, 해석이 어려운 사람한테 더 끌림.",
+    "분위기로 압도하는 타입을 보면 감정이 오래 잔상처럼 남음."
+  ],
+  sunshine: [
+    "밝은 에너지한테 기분까지 같이 흔들리는 흐름.",
+    "장난스럽게 다가오는 사람한테 경계가 빨리 풀림.",
+    "같이 있으면 텐션이 올라가는 타입에 약함.",
+    "햇살 같은 사람을 보면 이상하게 오래 기억하게 됨.",
+    "웃는 얼굴 하나로 분위기를 바꾸는 타입에 감김."
+  ],
+  artist: [
+    "자기 세계가 강한 사람을 보면 더 궁금해지는 흐름.",
+    "예술가 같은 분위기에 쉽게 과몰입하는 타입.",
+    "감정선이 깊은 사람한테 오래 끌리는 편.",
+    "설명하기 어려운 분위기형에 특히 약함.",
+    "평범하지 않은 무드에 시선이 오래 머무는 타입."
+  ],
+  leader: [
+    "은근히 중심 잡아주는 사람에게 안정감을 느낌.",
+    "리더형 에너지에 무의식적으로 의지하는 흐름.",
+    "책임감 강한 타입을 보면 신뢰부터 생김.",
+    "조용히 분위기를 이끄는 사람한테 약함.",
+    "확신 있는 사람 옆에서 감정이 안정되는 편."
+  ],
+  playful: [
+    "장난스러운데 선 넘지 않는 타입에 크게 반응함.",
+    "친구 같다가 갑자기 설레는 흐름에 약함.",
+    "편하게 웃게 만드는 사람한테 오래 감김.",
+    "가볍게 시작됐는데 생각보다 깊게 빠지는 타입.",
+    "텐션 높은 사람 옆에서 감정도 같이 움직임."
+  ],
+  romantic: [
+    "은근한 다정함에 생각보다 쉽게 흔들리는 편.",
+    "사소한 배려 하나가 오래 기억에 남는 타입.",
+    "말보다 분위기로 설레게 하는 사람에게 약함.",
+    "감정을 티 안 내는 사람한테 더 궁금해지는 흐름.",
+    "느린 템포의 관계에 더 깊게 빠지는 스타일."
+  ]
+};
+
+const RED_FLAG_LINES = [
+  "최애를 '이해하고 싶다'는 마음이 과몰입으로 이어질 수 있음.",
+  "차가운 타입한테 의미 부여를 너무 크게 하는 흐름.",
+  "한번 꽂히면 혼자 서사를 계속 만들 가능성 높음.",
+  "거리감 있는 사람을 더 특별하게 느끼는 패턴 주의.",
+  "현실보다 분위기에 먼저 빠질 수 있는 시기."
+];
+
+const FANDOM_BEHAVIOR_LINES = [
+  "무대 직캠 하나로 갑자기 과몰입 시작하는 타입.",
+  "처음엔 가볍게 보다가 어느 순간 저장만 수십 장 하는 흐름.",
+  "최애 한명 정하면 꽤 오래 가는 편.",
+  "무대보다 평소 분위기에서 더 크게 치이는 타입.",
+  "팬싸 영상이나 비하인드에서 감정이 확 커지는 스타일."
+];
+
+const MICRO_REACTIONS = [
+  "이상하게 이번엔 평소 취향이랑 다르게 반응할 수도 있음.",
+  "최근 들어 사람 보는 기준이 조금 바뀌는 흐름.",
+  "예전보다 분위기 자체를 더 중요하게 보기 시작함.",
+  "한번 눈에 들어오면 오래 남는 시기.",
+  "생각보다 감정이 빠르게 커질 가능성 있음."
+];
+
+function pickRandom(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function buildVarietyNarrative(tags=[]){
+  const lines = [];
+
+  if(tags.includes('cold') || tags.includes('visual') || tags.includes('mysterious')){
+    lines.push(pickRandom(SIGNAL_LINES.cold_visual));
+  }
+  if(tags.includes('bright') || tags.includes('sunshine') || tags.includes('cute')){
+    lines.push(pickRandom(SIGNAL_LINES.sunshine));
+  }
+  if(tags.includes('artist') || tags.includes('unique')){
+    lines.push(pickRandom(SIGNAL_LINES.artist));
+  }
+  if(tags.includes('leader') || tags.includes('responsible')){
+    lines.push(pickRandom(SIGNAL_LINES.leader));
+  }
+  if(tags.includes('playful') || tags.includes('funny')){
+    lines.push(pickRandom(SIGNAL_LINES.playful));
+  }
+  if(tags.includes('romantic') || tags.includes('soft')){
+    lines.push(pickRandom(SIGNAL_LINES.romantic));
+  }
+
+  const allPools = Object.values(SIGNAL_LINES).flat();
+
+  while(lines.length < 3){
+    lines.push(pickRandom(allPools));
+  }
+
+  return {
+    aura: lines.slice(0,3),
+    redFlag: pickRandom(RED_FLAG_LINES),
+    fandom: pickRandom(FANDOM_BEHAVIOR_LINES),
+    micro: pickRandom(MICRO_REACTIONS)
+  };
+}
+
 // ── Main handler ──────────────────────────────────────
 export default async function handler(req, res){
   if(req.method!=="POST") return res.status(405).json({error:"Method not allowed"});
@@ -1284,6 +1395,27 @@ ${shareLine}
 ${top.name} 쪽으로 신호가 가장 강하게 잡힘.`
       };
 
+      const variety = buildVarietyNarrative(bestMatch?.tags || []);
+      result.highlight = variety.aura[0];
+      result.detail = `✦ SIGNAL MATCH
+
+${variety.aura[0]}
+
+${variety.aura[1]}
+
+${variety.aura[2]}
+
+✦ YOUR FANDOM PATTERN
+
+${variety.fandom}
+
+✦ RED FLAG
+
+${variety.redFlag}
+
+✦ SIGNAL ENERGY
+
+${variety.micro}`;
       return res.status(200).json(result);
     }
 
