@@ -538,6 +538,89 @@ button {
 }
 
 </style>
+
+<style>
+.fandom-card-theme{position:relative;overflow:hidden}
+.fandom-card-theme::before{
+content:'';
+position:absolute;
+inset:0;
+opacity:.18;
+background-size:120px 120px;
+pointer-events:none;
+}
+.theme-bts::before{
+background-image:
+radial-gradient(circle at 20% 20%, #c084fc 0 2px, transparent 2px),
+radial-gradient(circle at 70% 60%, #a855f7 0 1.5px, transparent 1.5px);
+}
+.theme-blackpink::before{
+background-image:
+linear-gradient(45deg, rgba(255,79,184,.25) 25%, transparent 25%),
+linear-gradient(-45deg, rgba(255,79,184,.18) 25%, transparent 25%);
+}
+.theme-newjeans::before{
+background-image:
+radial-gradient(circle at 50% 50%, rgba(125,211,252,.4) 0 2px, transparent 2px);
+}
+.theme-seventeen::before{
+background-image:
+radial-gradient(circle at 20% 20%, rgba(251,207,232,.4) 0 2px, transparent 2px),
+radial-gradient(circle at 80% 70%, rgba(191,219,254,.35) 0 2px, transparent 2px);
+}
+.theme-aespa::before{
+background-image:
+linear-gradient(rgba(125,211,252,.25) 1px, transparent 1px),
+linear-gradient(90deg, rgba(125,211,252,.2) 1px, transparent 1px);
+background-size:24px 24px;
+}
+.fandom-chip{
+display:inline-flex;
+align-items:center;
+gap:8px;
+padding:8px 14px;
+border-radius:999px;
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.15);
+font-size:12px;
+letter-spacing:.12em;
+text-transform:uppercase;
+backdrop-filter: blur(8px);
+}
+.signal-divider{
+width:100%;
+height:1px;
+background:linear-gradient(to right, transparent, rgba(255,255,255,.25), transparent);
+margin:18px 0;
+}
+.pixel-stars{
+position:absolute;
+inset:0;
+pointer-events:none;
+opacity:.22;
+background-image: radial-gradient(#fff 1px, transparent 1px);
+background-size:22px 22px;
+}
+.share-oracle-line{
+font-size:15px;
+line-height:1.8;
+letter-spacing:.01em;
+opacity:.92;
+}
+.share-big-name{
+font-size:34px;
+font-weight:800;
+line-height:1.1;
+letter-spacing:-0.04em;
+}
+.share-subsignal{
+font-size:13px;
+opacity:.72;
+letter-spacing:.18em;
+text-transform:uppercase;
+}
+</style>
+
 </head>
 <body>
 <div class="bg1"></div>
@@ -650,9 +733,9 @@ button {
       <p id="appSub">사주와 점성술로 오늘의 흐름을 확인하세요</p>
     </div>
     <div class="mode-tabs">
-      <button class="mtab active" id="mtab0" onclick="setMode('saju')">🔮 <span id="tab0Txt">사주 운세</span></button>
+      <button class="mtab active" id="mtab0" onclick="setMode('idol')">🔮 <span id="tab0Txt">사주 운세</span></button>
       <button class="mtab" id="mtab1" onclick="setMode('compat')">💫 <span id="tab1Txt">궁합 보기</span></button>
-      <button class="mtab" id="mtab2" onclick="setMode('idol')">⭐ <span id="tab2Txt">아이돌 매치</span></button>
+      <button class="mtab" id="mtab2" onclick="setMode('idol')">⭐ <span id="tab2Txt">시그널 매치</span></button>
     </div>
 
     <!-- SAJU -->
@@ -753,7 +836,7 @@ button {
     <div id="modeIdol" style="display:none">
       <div class="panel">
         <div class="panel-title" id="lblIdolTitle">BIAS PATTERN DETECTED</div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.8" id="lblIdolDesc">좋아하는 그룹을 먼저 고르세요. 멤버별 팬덤 캐릭터 태그와 당신의 사주 패턴을 매칭해, 그 그룹 안에서 반응하는 bias signal을 감지합니다.</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.8" id="lblIdolDesc">좋아하는 그룹을 먼저 고르세요. 팬덤 컬러와 시그널 무드 기반으로, 네 취향이 반응하는 멤버 에너지를 감지해줘요.</p>
                 <div class="field full" style="margin-bottom:12px">
           <div class="flabel" id="lbIGroup">좋아하는 그룹</div>
           <select class="box" id="idolGroup" style="width:100%;appearance:none;color:#fff;background:rgba(255,255,255,.04);font-family:inherit">
@@ -787,7 +870,7 @@ button {
             </div>
           </div>
         </div>
-        <button class="cta" id="btnIdol" onclick="runIdol()">BIAS PATTERN SCAN</button>
+        <button class="cta" id="btnIdol" onclick="runIdol()">FANDOM SIGNAL SCAN</button>
         <div id="idolLoad" class="loading">✦ 별자리와 사주를 읽는 중…</div>
         <div id="idolErr" class="err-box"></div>
       </div>
@@ -829,18 +912,18 @@ const T = {
   ko:{
     lang:"ko",lbl:"한국어",
     heroTag:"✨ 바이럴 아이돌 궁합 읽기",heroL1:"나의",heroL2:"아이돌 시그널 타입",
-    heroDesc:"사주 에너지와 팬심 패턴을 읽어, 당신이 반응하는 아이돌 시그널을 감지해보세요.",
-    heroBtn1:"내 Bias Pattern 보기",heroBtn2:"궁합 보기",navCta:"운세 보기",
+    heroDesc:"사주 흐름으로 지금 네가 가장 끌리는 아이돌 시그널을 분석해보세요.",
+    heroBtn1:"무료 시그널 매치 보기",heroBtn2:"궁합 보기",navCta:"운세 보기",
     proof1:"아이돌 궁합 조회",proof2:"틱톡 공유율",proof3:"개국",
     phoneLbl:"나의 Idol Signal",phoneSoulLbl:"SIGNAL MATCH",
     phoneDesc:"당신의 팬심이 반응하는 bias pattern을 감지합니다.",
     phoneSajuLbl:"사주 에너지",phoneAstroLbl:"별자리",phoneShareBtn:"틱톡에 공유 ↗",
     featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"친구와 비교하고, 캡처하고, 다시 보고 싶게 만드는 팬덤용 시그널 테스트.",
-    feat1T:"아이돌 시그널 타입",feat1D:"사주 에너지로 당신이 반응하는 bias pattern을 감지해보세요.",
+    feat1T:"아이돌 시그널 타입",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
     feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
     appTitle:"운세 시작하기",appSub:"사주와 점성술로 오늘의 흐름을 확인하세요",
-    tab0:"사주 운세",tab1:"궁합 보기",tab2:"아이돌 매치",
+    tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
     lblTarot:"오늘의 타로",tarotIntro:"열 장 중 가장 끌리는 카드를 골라보세요.",
@@ -859,9 +942,9 @@ const T = {
     errLoc:"출생지를 입력해 주세요.",errGeo:"출생지를 찾지 못했습니다.",
     errApi:"분석에 실패했습니다.",sel:"선택",aiLang:"Korean",
     lblMyInfo:"나의 정보",lblPartInfo:"상대방 정보",btnCompat:"궁합 보기",compatLoad:"✦ 궁합을 읽는 중…",
-    lblIdolTitle:"나의 사주로 보는 아이돌 매치 타입",
-    lblIdolDesc:"좋아하는 그룹을 먼저 고르세요. 멤버별 팬덤 캐릭터 태그와 당신의 사주 패턴을 매칭해, 그 그룹 안에서 반응하는 bias signal을 감지합니다.",
-    btnIdol:"내 아이돌 타입 분석",idolLoad:"✦ 별자리와 사주를 읽는 중…",
+    lblIdolTitle:"나의 사주로 보는 시그널 매치 타입",
+    lblIdolDesc:"좋아하는 그룹을 먼저 고르세요. 팬덤 컬러와 시그널 무드 기반으로, 네 취향이 반응하는 멤버 에너지를 감지해줘요.",
+    btnIdol:"무료 시그널 매치 보기",idolLoad:"✦ 별자리와 사주를 읽는 중…",
     shareBtn:"📲 공유하기",
     ftH:"내 최애가",ftSpan:"운명일 수도.",ftP:"한국 운명 읽기와 점성술로 숨겨진 궁합을 발견하는 수백만 팬들과 함께하세요.",ftBtn:"운세 시작하기",
     tarotDeck:[
@@ -912,7 +995,7 @@ const T = {
     lblMyInfo:"My Info",lblPartInfo:"Partner's Info",btnCompat:"Check Compatibility",compatLoad:"✦ Reading the connection…",
     lblIdolTitle:"BIAS PATTERN DETECTED",
     lblIdolDesc:"Choose your favorite group first. Your fandom signal will be matched inside that group.",
-    btnIdol:"Scan My Bias Pattern",idolLoad:"SIGNAL DETECTED...",
+    btnIdol:"Scan My Bias Pattern",idolLoad:"SYNCING FANDOM SIGNAL...",
     shareBtn:"📲 Share Card",
     ftH:"Your Bias Might Be",ftSpan:"Your Destiny.",ftP:"Join millions of fans discovering hidden compatibility through Korean fate reading and astrology.",ftBtn:"Start Reading",
     tarotDeck:[
@@ -1548,7 +1631,16 @@ async function runIdol(){
     const topName=data.idolMatches?.[0]?.name||'';
     const groupName=document.getElementById('idolGroup')?.value||'';
     const cardSub=topName?((data.fandomAccent||'SIGNAL MATCH')+' · '+topName):(data.shareLine||data.highlight||groupName+' SIGNAL');
-    drawCard(data.title||'BIAS PATTERN DETECTED',cardSub);
+    drawCard(
+      data.title||data.shareLine||'BIAS PATTERN DETECTED',
+      cardSub,
+      {
+        color:data.fandomColor||'#a855f7',
+        fandom:data.fandom||'FANDOM',
+        accent:data.fandomAccent||'SIGNAL MATCH',
+        grad:[data.fandomColor ? data.fandomColor+'33' : '#12002a', '#090010']
+      }
+    );
     document.getElementById('shareBtn').style.display='block';
     box.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){showErr('idolErr',e.message);}
@@ -1578,123 +1670,146 @@ function drawCard(title, highlight, fandomTheme){
   const ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
 
-  // BG - fandom themed
-  const fd = fandomTheme || {color:'#a855f7', grad:['#060010','#12002a']};
-  const g=ctx.createLinearGradient(0,0,W,H);
-  g.addColorStop(0, fd.grad?.[0]||'#060010');
-  g.addColorStop(.45, fd.grad?.[1]||'#12002a');
-  g.addColorStop(1, fd.grad?.[0]||'#060010');
-  ctx.fillStyle=g;
-  ctx.beginPath(); ctx.roundRect(0,0,W,H,24); ctx.fill();
+  const fd = fandomTheme || {color:'#a855f7', grad:['#07000f','#19002e'], fandom:'SIGNAL'};
+  const fc = fd.color || '#a855f7';
+  const r=parseInt(fc.slice(1,3),16)||168;
+  const g=parseInt(fc.slice(3,5),16)||85;
+  const b=parseInt(fc.slice(5,7),16)||247;
 
-  // Glow center - fandom color
-  const fc = fd.color||'#a855f7';
-  const r=parseInt(fc.slice(1,3),16)||168, gg2=parseInt(fc.slice(3,5),16)||85, b=parseInt(fc.slice(5,7),16)||247;
-  const glow=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,200);
-  glow.addColorStop(0,`rgba(${r},${gg2},${b},.22)`); glow.addColorStop(1,`rgba(${r},${gg2},${b},0)`);
-  ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
+  // Background
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0, fd.grad?.[0]||'#07000f');
+  bg.addColorStop(.52, fd.grad?.[1]||'#19002e');
+  bg.addColorStop(1, '#050008');
+  ctx.fillStyle=bg;
+  ctx.beginPath();
+  ctx.roundRect(0,0,W,H,28);
+  ctx.fill();
 
-  const topGlow=ctx.createRadialGradient(W/2,0,0,W/2,0,180);
-  topGlow.addColorStop(0,`rgba(${r},${gg2},${b},.15)`); topGlow.addColorStop(1,`rgba(${r},${gg2},${b},0)`);
-  ctx.fillStyle=topGlow; ctx.fillRect(0,0,W,H);
+  // soft vertical glow
+  let glow=ctx.createRadialGradient(W/2,120,0,W/2,120,210);
+  glow.addColorStop(0,`rgba(${r},${g},${b},.34)`);
+  glow.addColorStop(.42,`rgba(${r},${g},${b},.14)`);
+  glow.addColorStop(1,`rgba(${r},${g},${b},0)`);
+  ctx.fillStyle=glow;
+  ctx.fillRect(0,0,W,H);
 
-  // Stars
-  const seed=title.length*37+highlight.length*13;
-  for(let i=0;i<50;i++){
+  let lowerGlow=ctx.createRadialGradient(W/2,360,0,W/2,360,180);
+  lowerGlow.addColorStop(0,`rgba(255,255,255,.08)`);
+  lowerGlow.addColorStop(1,`rgba(255,255,255,0)`);
+  ctx.fillStyle=lowerGlow;
+  ctx.fillRect(0,0,W,H);
+
+  // Stars / signal noise
+  const seed=(title||'').length*41+(highlight||'').length*17+7;
+  for(let i=0;i<76;i++){
     const sx=((seed*i*127+i*431)%W+W)%W;
     const sy=((seed*i*89+i*223)%H+H)%H;
-    const sr=0.4+((seed*i*11)%10)/10*1.2;
-    const sa=0.2+((seed*i*7)%10)/10*0.6;
+    const sr=0.35+((seed*i*11)%10)/10*1.1;
+    const sa=0.16+((seed*i*7)%10)/10*0.55;
     ctx.fillStyle=`rgba(255,255,255,${sa})`;
-    ctx.beginPath(); ctx.arc(sx,sy,sr,0,Math.PI*2); ctx.fill();
+    ctx.beginPath();
+    ctx.arc(sx,sy,sr,0,Math.PI*2);
+    ctx.fill();
   }
 
-  // === 세로 전체 레이아웃 계산 (수직 중앙 정렬) ===
+  // subtle frame
+  ctx.strokeStyle=`rgba(${r},${g},${b},.22)`;
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.roundRect(13,13,W-26,H-26,24);
+  ctx.stroke();
+
   ctx.textAlign='center';
+  ctx.textBaseline='alphabetic';
 
-  // 텍스트 미리 계산
-  ctx.font='bold 20px Inter,sans-serif';
-  const tLines=wrapTxt(ctx,title,W-60);
-
-  ctx.font='13px Inter,sans-serif';
-  const hLines=highlight?wrapTxt(ctx,highlight,W-80).slice(0,3):[];
-
-  // 총 콘텐츠 높이 계산
-  const brandH=16, symbolH=36, gapAfterSym=16;
-  const titleH=tLines.length*30;
-  const dividerH=24;
-  const highlightH=hLines.length*22;
-  const footerH=16;
-  const totalContent=brandH+symbolH+gapAfterSym+titleH+dividerH+highlightH;
-
-  // 수직 중앙 시작점 (브랜드는 맨 위, 푸터는 맨 아래 고정)
-  const usableH=H-40-30; // 상하 패딩
-  const startY=20+(usableH-totalContent)/2;
-
-  let y=startY;
-
-  // Brand
-  ctx.font='bold 10px Inter,sans-serif';
-  ctx.fillStyle=`rgba(${r},${gg2},${b},.7)`;
-  ctx.letterSpacing='3px';
-  ctx.fillText('SAJUSTRO',W/2,y+brandH);
-  y+=brandH+6;
-
-  // Fandom badge
-  if(fd.fandom) {
-    ctx.font='bold 9px Inter,sans-serif';
-    ctx.fillStyle=`rgba(${r},${gg2},${b},.5)`;
-    ctx.letterSpacing='2px';
-    ctx.fillText(fd.fandom+' SIGNAL',W/2,y+10);
-    y+=16;
+  // Parse highlight: "Y2K STATIC · Minji (NewJeans)" or "SIGNAL MATCH: ..."
+  let idolLine = highlight || '';
+  let accentLine = fd.accent || 'SIGNAL MATCH';
+  if(idolLine.includes(' · ')){
+    const parts=idolLine.split(' · ');
+    accentLine=parts[0].trim() || accentLine;
+    idolLine=parts.slice(1).join(' · ').trim();
   }
-  y+=8;
+  idolLine = idolLine.replace(/^SIGNAL MATCH:\s*/i,'').trim();
 
-  // Symbol ✦
-  ctx.font='32px serif';
-  ctx.fillStyle='#a855f7';
-  ctx.shadowColor='rgba(168,85,247,.6)';
-  ctx.shadowBlur=12;
-  ctx.fillText('✦',W/2,y+symbolH*0.75);
-  ctx.shadowBlur=0;
-  y+=symbolH+gapAfterSym;
+  // Top brand
+  ctx.font='700 10px Inter, sans-serif';
+  ctx.fillStyle=`rgba(${r},${g},${b},.78)`;
+  ctx.letterSpacing='4px';
+  ctx.fillText('SAJUSTRO',W/2,38);
+  ctx.letterSpacing='0px';
 
-  // Divider top
-  ctx.strokeStyle='rgba(168,85,247,.25)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(W/2-60,y); ctx.lineTo(W/2+60,y); ctx.stroke();
-  y+=16;
+  // Fandom pill
+  const fandomText=(fd.fandom||'FANDOM')+' SIGNAL';
+  ctx.font='700 10px Inter, sans-serif';
+  const pillW=Math.min(220, ctx.measureText(fandomText).width+34);
+  const pillX=(W-pillW)/2;
+  ctx.fillStyle=`rgba(${r},${g},${b},.16)`;
+  ctx.strokeStyle=`rgba(${r},${g},${b},.36)`;
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.roundRect(pillX,58,pillW,28,14);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.78)';
+  ctx.fillText(fandomText,W/2,77);
 
-  // Title
-  ctx.font='bold 20px Inter,sans-serif';
+  // Idol main block: make the member the hero
+  let y=126;
+  ctx.font='900 30px Inter, sans-serif';
   ctx.fillStyle='#fff';
-  tLines.forEach(l=>{ ctx.fillText(l,W/2,y); y+=30; });
-  y+=8;
+  ctx.shadowColor=`rgba(${r},${g},${b},.42)`;
+  ctx.shadowBlur=16;
+  const idolLines=wrapTxt(ctx,idolLine || 'SIGNAL MATCH FOUND',W-56).slice(0,2);
+  idolLines.forEach(line=>{
+    ctx.fillText(line,W/2,y);
+    y+=36;
+  });
+  ctx.shadowBlur=0;
 
-  // Divider bottom
-  ctx.strokeStyle='rgba(168,85,247,.25)';
-  ctx.beginPath(); ctx.moveTo(W/2-60,y); ctx.lineTo(W/2+60,y); ctx.stroke();
+  // Accent under idol
+  ctx.font='700 11px Inter, sans-serif';
+  ctx.fillStyle=`rgba(${r},${g},${b},.86)`;
+  ctx.letterSpacing='2.4px';
+  ctx.fillText(accentLine.toUpperCase(),W/2,y+10);
+  ctx.letterSpacing='0px';
+
+  // divider
+  y+=38;
+  const lineGrad=ctx.createLinearGradient(82,y,278,y);
+  lineGrad.addColorStop(0,'rgba(255,255,255,0)');
+  lineGrad.addColorStop(.5,`rgba(${r},${g},${b},.72)`);
+  lineGrad.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.strokeStyle=lineGrad;
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(70,y);
+  ctx.lineTo(W-70,y);
+  ctx.stroke();
+
+  // Title / oracle line bottom half
+  y+=48;
+  ctx.font='800 22px Inter, sans-serif';
+  ctx.fillStyle='rgba(255,255,255,.96)';
+  const titleLines=wrapTxt(ctx,title||'BIAS PATTERN DETECTED',W-58).slice(0,3);
+  titleLines.forEach(line=>{
+    ctx.fillText(line,W/2,y);
+    y+=31;
+  });
+
+  // small label
   y+=16;
+  ctx.font='700 9px Inter, sans-serif';
+  ctx.fillStyle=`rgba(${r},${g},${b},.66)`;
+  ctx.letterSpacing='3px';
+  ctx.fillText('BIAS PATTERN DETECTED',W/2,y);
+  ctx.letterSpacing='0px';
 
-  // Highlight (아이돌 이름)
-  if(hLines.length){
-    // Label
-    ctx.font='bold 9px Inter,sans-serif';
-    ctx.fillStyle=`rgba(${r},${gg2},${b},.7)`;
-    ctx.letterSpacing='2px';
-    ctx.fillText('MY IDOL MATCH',W/2,y);
-    y+=18;
-    ctx.letterSpacing='0px';
-
-    ctx.font='14px Inter,sans-serif';
-    ctx.fillStyle='rgba(255,255,255,.75)';
-    hLines.forEach(l=>{ ctx.fillText(l,W/2,y); y+=22; });
-  }
-
-  // Footer (항상 하단 고정)
-  ctx.font='10px Inter,sans-serif';
-  ctx.fillStyle='rgba(168,85,247,.4)';
-  ctx.letterSpacing='1px';
-  ctx.fillText('sajustro.vercel.app',W/2,H-16);
+  // bottom mini URL
+  ctx.font='600 10px Inter, sans-serif';
+  ctx.fillStyle=`rgba(255,255,255,.38)`;
+  ctx.fillText('sajustro.vercel.app',W/2,H-26);
 
   wrap.style.display='block';
 }
@@ -1846,5 +1961,10 @@ async function playRevealSequence(){
 }
 
 </script>
+
+<div style="margin-top:10px;font-size:12px;opacity:.7;line-height:1.7;">
+픽셀 오라클 카드 + 팬덤 무드 컬러 기반 공유 카드 생성
+</div>
+
 </body>
 </html>
