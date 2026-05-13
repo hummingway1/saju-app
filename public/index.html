@@ -932,7 +932,7 @@ text-transform:uppercase;
           </div>
           <div class="field full"><div class="flabel" id="lbQ">질문 (선택)</div><textarea id="qInput" placeholder="예: 올해 이직하는 게 맞을까요?"></textarea></div>
         </div>
-        <button class="cta" id="btnSaju" onclick="runSaju()">FLOW READING</button>
+        <button class="cta" id="btnSaju" onclick="runSaju()">오늘의 흐름 보기</button>
         <div id="sajuLoad" class="loading">✦ 기운을 읽는 중…</div>
 <div id="oracleAccess" class="oracle-access">ACCESSING YOUR FLOW...</div>
         <div id="sajuErr" class="err-box"></div>
@@ -942,8 +942,8 @@ text-transform:uppercase;
 <div class="badge badge-read" id="sajuBadge">YOUR READING</div>
         <h2 class="headline" id="sajuTitle"></h2>
         <div class="decision" id="sajuDecision"></div>
-        <div class="hooks"><h3 id="lblHooks">더 깊은 흐름</h3><p id="hookRisk"></p><p id="hookTime"></p></div>
-        <button class="subcta" id="unlockBtn" onclick="showOpeningSoon()" style="display:none">DEEP SIGNAL ARCHIVE — OPENING SOON</button>
+        <div class="hooks"><h3 id="lblHooks">더 깊은 흐름</h3><p id="hookRisk"></p><p id="hookTime"></p><p id="hookPaid"></p></div>
+        <button class="subcta" id="unlockBtn" onclick="showOpeningSoon()" style="display:none">SIGNAL+ 심층 흐름 — 곧 공개</button>
         <div class="meta" id="sajuMeta"></div>
         <div id="sajuDetail"></div>
       </div>
@@ -1097,7 +1097,7 @@ const T = {
     ph:"예: 서울, 부산",phQ:"예: 올해 이직하는 게 맞을까요?",
     male:"남성",female:"여성",btnSaju:"운세 보기",
     sajuLoad:"✦ 기운을 읽는 중…",lblHooks:"더 깊은 흐름",
-    unlockBtn:"DEEP SIGNAL ARCHIVE — OPENING SOON",
+    unlockBtn:"SIGNAL+ 심층 흐름 — 곧 공개",
     freeMeta:"출생지를 입력하면 점성술 차트까지 더한 상세 분석이 열립니다.",
     fullMeta:"사주와 점성술 차트로 더 깊은 흐름을 읽었습니다.",
     shYr:"생년 선택",shMo:"월 선택",shDy:"일 선택",shHr:"시각 선택",hrUnk:"모름",
@@ -1697,6 +1697,7 @@ async function runSaju(){
     setText('sajuDecision',data.free.decision||'');
     setText('hookRisk',data.free.riskHook||'');
     setText('hookTime',data.free.timingHook||'');
+    setText('hookPaid',data.free.paidHook||'');
 
     if(isPaid){
       setText('sajuMeta',t.fullMeta);
@@ -2147,7 +2148,7 @@ setLang(curLang);
 updateProofNumbers();
 
 function showDeepSignalTeaser(){
-  alert('DEEP SIGNAL ARCHIVE — OPENING SOON');
+  alert('SIGNAL+ 심층 흐름 — 곧 공개');
 }
 
 async function playRevealSequence(){
