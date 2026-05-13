@@ -552,6 +552,7 @@ function buildSajuFull(payload) {
   if (hasPyeonIn)   personalityHints.push('직관력과 통찰력이 뛰어남, 다소 예민');
 
   return {
+    birthYear: payload.year,
     pillars: {
       year:  `${yp.stem}${yp.branch}`,
       month: `${mp.stem}${mp.branch}`,
@@ -610,51 +611,158 @@ function summarizeAstrology(planets){
 
 // ── Free hooks (multilingual) ─────────────────────────
 function makeFreeHooks({ saju, question, tarot, lang, fortuneCat }) {
-  // fortuneCat overrides question detection when provided
-  const catQ = fortuneCat ? fortuneCat.toLowerCase() : "";
-  if (catQ) question = catQ + " " + (question||"");
   const lk = LANG_HOOKS[lang] || LANG_HOOKS["English"];
-  const q = (question||"").toLowerCase();
-  const dm = saju.dayMaster;
-  const strong = saju.strong.join(", ");
-  const weak = saju.weak.join(", ");
+  const qRaw = (question||"");
+  const q = qRaw.toLowerCase();
+  const catQ = fortuneCat ? fortuneCat.toLowerCase() : "";
+  const combinedQ = (catQ + " " + q).trim();
 
-  let decision = lk.defaultDecision;
-  let riskHook = `(${strong}) vs (${weak})`;
-  let timingHook = lk.timingDefault;
+  const strong = saju.strong?.join(", ") || "";
+  const weak = saju.weak?.join(", ") || "";
+  const strength = saju.strength?.label || "";
+  const now = new Date();
+  const m = now.getMonth() + 1;
+  const y = now.getFullYear();
+  const nextM = m === 12 ? 1 : m + 1;
+  const afterM = m >= 11 ? m - 10 : m + 2;
 
-  const isCareer = q.includes("이직")||q.includes("직장")||q.includes("career")||q.includes("job")||q.includes("転職")||q.includes("换工作")||q.includes("trabajo");
-  const isLove   = q.includes("연애")||q.includes("결혼")||q.includes("love")||q.includes("恋愛")||q.includes("感情")||q.includes("amor")||q.includes("关系");
-  const isMoney  = q.includes("돈")||q.includes("사업")||q.includes("투자")||q.includes("money")||q.includes("お金")||q.includes("钱")||q.includes("dinero");
-
-  if (isCareer) {
-    if (dm==="Wood"||dm==="Fire") {
-      decision = lk.career.woodFire.decision;
-      timingHook = lk.career.woodFire.timing;
-    } else {
-      decision = lk.career.other.decision;
-      riskHook = lk.career.other.risk || riskHook;
+  function samjaeText(year){
+    const zodiacIdx = ((Number(year)-4)%12+12)%12;
+    if ([11,3,7].includes(zodiacIdx)) {
+      if (y === 2025) return "삼재 흐름으로 보면 올해는 들삼재 성격이 있어요. 새로 시작하기 전, 방향을 먼저 확인하는 편이 좋습니다.";
+      if (y === 2026) return "삼재 흐름으로 보면 올해는 중간 구간입니다. 눌러둔 문제가 겉으로 드러나기 쉬워, 무리한 확장보다 관리가 중요합니다.";
+      if (y === 2027) return "삼재 흐름으로 보면 올해는 막삼재 성격이 강합니다. 끝나는 것처럼 보여도 마지막 정리가 남을 수 있습니다.";
     }
-  } else if (isLove) {
-    decision = lk.love.decision;
-    timingHook = lk.love.timing;
-  } else if (isMoney) {
-    decision = lk.money.decision;
-    riskHook = lk.money.risk;
-  } else {
-    if (dm==="Metal"||dm==="Water") decision = lk.metalWater;
-    riskHook = `${lang==="Korean"?"강하게 드러난 기운":"Dominant energy"} (${strong}) / ${lang==="Korean"?"약한 기운":"weaker"} (${weak})`;
+    return "삼재가 직접 강하게 걸린 해로 보긴 어렵지만, 반복되는 선택 패턴은 분명히 점검할 필요가 있습니다.";
   }
 
-  if (tarot?.title) riskHook += lk.tarotRef(tarot.title);
+  const isCareer = combinedQ.includes("이직")||combinedQ.includes("직장")||combinedQ.includes("career")||combinedQ.includes("job")||combinedQ.includes("사업");
+  const isLove   = combinedQ.includes("연애")||combinedQ.includes("결혼")||combinedQ.includes("love")||combinedQ.includes("관계")||combinedQ.includes("감정");
+  const isMoney  = combinedQ.includes("돈")||combinedQ.includes("재물")||combinedQ.includes("투자")||combinedQ.includes("money")||combinedQ.includes("수입");
+  const isHealth = combinedQ.includes("건강")||combinedQ.includes("컨디션")||combinedQ.includes("health");
+
+  if (lang !== "Korean") {
+    return {
+      title: lk.title,
+      decision: lk.defaultDecision + " " + lk.decisionSuffix,
+      riskHook: `Dominant energy (${strong}) / weaker energy (${weak}).` + lk.riskSuffix,
+      timingHook: lk.timingDefault + lk.timingSuffix,
+      paidHook: "SIGNAL+ opens deeper timing, repeated patterns, and next-cycle reading."
+    };
+  }
+
+  let focus = "전반 흐름";
+  let decision = "";
+  let riskHook = "";
+  let timingHook = "";
+
+  if (isCareer) {
+    focus = "일/이동";
+    decision = `지금의 흐름은 바로 움직이기보다, 다음 자리를 확인하고 움직이라는 쪽에 가깝습니다.
+
+마음은 이미 변화를 향해 가고 있지만, 현실 조건이 아직 완전히 맞춰진 느낌은 아닙니다.  
+특히 ${m}월에는 말이나 제안이 먼저 들어오고, ${nextM}월부터 실제 판단을 요구하는 장면이 생길 수 있습니다.
+
+${strength} 기운이 잡혀 있어, 지쳐서 떠나는 선택과 준비해서 옮기는 선택의 결과가 크게 달라질 수 있습니다.`;
+    riskHook = `주의할 점은 충동적인 결정입니다.
+
+강한 기운은 ${strong}, 약한 기운은 ${weak}로 보입니다.  
+약한 쪽을 보완하지 않은 채 움직이면, 장소만 바뀌고 비슷한 피로가 반복될 수 있습니다.
+
+${samjaeText(saju.birthYear || y)}`;
+    timingHook = `${m}월은 신호 확인, ${nextM}월은 조건 비교, ${afterM}월은 실제 선택의 흐름으로 보는 편이 좋습니다.
+
+지금 바로 답을 정하기보다, 들어오는 말의 진짜 조건을 확인하세요.`;
+  } else if (isLove) {
+    focus = "관계/감정";
+    decision = `관계운은 조용히 흔들리는 쪽입니다.
+
+갑자기 큰 사건이 온다기보다, 이미 마음 안에서 기준이 바뀌고 있습니다.  
+예전에는 넘겼던 말이나 거리감이 이번에는 그냥 지나가지 않을 수 있습니다.
+
+${m}월에는 감정의 온도차가 보이고, ${nextM}월에는 그 차이를 확인하는 대화가 생길 가능성이 있습니다.`;
+    riskHook = `주의할 점은 “내가 더 이해하면 괜찮아지겠지”라는 패턴입니다.
+
+강한 기운은 ${strong}, 약한 기운은 ${weak}.  
+강한 감정이 현실 판단을 덮으면, 상대의 작은 반응에도 의미를 크게 붙이기 쉽습니다.
+
+${samjaeText(saju.birthYear || y)}`;
+    timingHook = `${m}월 말부터 ${nextM}월 초반까지는 감정 확인 구간입니다.
+
+다가오는 사람보다, 묘하게 거리를 두는 사람에게 더 신경이 갈 수 있습니다.  
+다만 그 끌림이 안정감인지, 익숙한 불안인지 구분해야 합니다.`;
+  } else if (isMoney) {
+    focus = "돈/기회";
+    decision = `재물 흐름은 크게 벌기보다 먼저 새는 곳을 막는 쪽입니다.
+
+지금은 확장보다 정리, 투자보다 계산, 기대보다 손익표가 먼저입니다.
+
+${m}월에는 지출이나 계약 조건을 다시 볼 일이 생길 수 있고, ${nextM}월부터 작은 수익 흐름이 정리될 가능성이 있습니다.`;
+    riskHook = `주의할 점은 “이번엔 괜찮겠지”라는 감각입니다.
+
+강한 기운은 ${strong}, 약한 기운은 ${weak}.  
+약한 기운이 계산 쪽이면, 분위기나 추천만 믿고 움직이기 쉽습니다.
+
+${samjaeText(saju.birthYear || y)}`;
+    timingHook = `${m}월은 지출 관리, ${nextM}월은 조건 비교, ${afterM}월은 선택의 흐름입니다.
+
+큰돈보다 반복 지출, 자동결제, 빌린 돈, 약속된 금액부터 확인하는 게 좋습니다.`;
+  } else if (isHealth) {
+    focus = "컨디션";
+    decision = `건강 흐름은 갑작스러운 문제보다 누적된 피로 쪽이 먼저 보입니다.
+
+몸이 크게 무너진다기보다, 리듬이 깨지고 회복 속도가 느려지는 느낌에 가깝습니다.
+
+${m}월에는 수면, 위장, 어깨·목 긴장처럼 반복되는 신호를 가볍게 넘기지 않는 편이 좋습니다.`;
+    riskHook = `주의할 점은 버티는 습관입니다.
+
+강한 기운은 ${strong}, 약한 기운은 ${weak}.  
+강한 쪽이 과열되면 쉬어야 할 때도 계속 밀어붙이게 됩니다.
+
+${samjaeText(saju.birthYear || y)}`;
+    timingHook = `${m}월에는 무리한 변화보다 루틴 회복이 먼저입니다.
+
+운동을 늘리기보다 수면, 식사, 카페인, 음주 리듬부터 줄이는 쪽이 더 잘 맞습니다.`;
+  } else {
+    decision = `지금은 답보다 패턴이 먼저 보이는 시기입니다.
+
+겉으로는 별일 없는 것 같아도, 안쪽에서는 이미 기준이 바뀌고 있습니다.  
+특히 사람, 일, 돈 중 하나에서 “예전처럼 넘기기 어려운 장면”이 다시 올라올 수 있습니다.
+
+사주 흐름상 강한 기운은 ${strong}, 약한 기운은 ${weak}로 잡힙니다.`;
+    riskHook = `주의할 점은 반복되는 선택입니다.
+
+늘 비슷한 사람에게 끌리거나, 비슷한 방식으로 참고 넘기거나, 마지막에 혼자 정리하는 패턴이 보입니다.
+
+${samjaeText(saju.birthYear || y)}`;
+    timingHook = `${m}월은 신호가 드러나는 시기, ${nextM}월은 선택지가 좁혀지는 시기입니다.
+
+급하게 결론 내리기보다, 무엇이 계속 반복되는지 먼저 봐야 합니다.  
+그 반복이 이번 흐름의 핵심입니다.`;
+  }
+
+  if (tarot?.title) {
+    riskHook += `
+
+선택한 타로 "${tarot.title}"도 같은 쪽을 가리킵니다.  
+겉으로 보이는 답보다, 이미 마음이 알고 있던 방향을 확인하는 카드에 가깝습니다.`;
+  }
 
   return {
-    title: lk.title,
-    decision: decision + (lk.decisionSuffix||""),
-    riskHook: "⚠ " + riskHook + (lk.riskSuffix||""),
-    timingHook: timingHook + (lk.timingSuffix||"")
+    title: `◉ ${focus} SIGNAL DETECTED`,
+    decision,
+    riskHook,
+    timingHook,
+    paidHook: `SIGNAL+에서는 이 흐름을 더 깊게 나눠볼 수 있습니다.
+
+- ${m}월 → ${nextM}월 구체 타이밍
+- 조심해야 할 관계/돈/일 패턴
+- 반복되는 선택의 원인
+- 올해 하반기 흐름
+- 내년 초에 강해지는 운`
   };
 }
+
 
 // ── Paid detail (multilingual prompt) ───────────────
 async function buildPaidDetail({ saju, astrologySummary, question, tarot, lang, fortuneCat }){
@@ -809,7 +917,7 @@ async function buildCompatDetail({ sajuA, sajuB, lang }) {
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY");
 
   const langInstructions = {
-    Korean:  { lang:"한국어", style:"말투는 상냥하고 신비롭되 과하지 않게. '~일 수 있습니다', '~보입니다' 사용." },
+    Korean:  { lang:"한국어", style:"말투는 자연스럽고 상상력을 자극하게. 음슴체 금지. 너무 사주앱처럼 딱딱하지 않게. 바다, 자석, 파동, 온도차 같은 짧은 비유를 1~2개 섞기." },
     English: { lang:"English", style:"Calm, gently mystical tone. Use 'may', 'appears', 'seems'." },
     Japanese:{ lang:"日本語", style:"穏やかで神秘的な口調。「〜かもしれません」「〜見えます」を使用。" },
     Chinese: { lang:"中文", style:"温和、略带神秘感的语气。使用'可能'、'或许'、'看起来'。" },
@@ -858,7 +966,7 @@ Output exactly 4 sections, no extra text:
 2. ${sections[1]}
 3. ${sections[2]}
 4. ${sections[3]}
-Each section: title line + 2~3 sentences. No bullet points.
+Each section: title line + 2~3 sentences. No bullet points. For Korean, use natural sentences, not 음슴체. Add one vivid metaphor across the reading, but do not overdo it.
 `.trim();
 
   const resp = await fetch("https://api.openai.com/v1/chat/completions", {
