@@ -952,55 +952,66 @@ text-transform:uppercase;
 </style>
 
 
+
 <style id="unlock-toggle-style">
 .unlock-toggle-btn{
   width:100%;
   margin-top:14px;
-  padding:15px 16px;
+  padding:16px 18px;
   border:none;
-  border-radius:18px;
+  border-radius:20px;
   background:linear-gradient(135deg,#ec4899,#a855f7);
   color:#fff;
-  font-weight:900;
   font-family:inherit;
   cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:14px;
+  gap:16px;
   box-shadow:0 12px 34px rgba(168,85,247,.28);
 }
 .unlock-toggle-left{
   display:flex;
   flex-direction:column;
   align-items:flex-start;
-  gap:3px;
+  gap:4px;
 }
 .unlock-toggle-title{
-  font-size:15px;
+  font-size:16px;
+  font-weight:900;
   letter-spacing:-.02em;
 }
 .unlock-toggle-sub{
   font-size:11px;
-  opacity:.72;
+  opacity:.78;
   font-weight:700;
 }
 .unlock-switch{
-  width:48px;
-  height:28px;
+  width:54px;
+  height:32px;
   border-radius:999px;
-  background:rgba(255,255,255,.35);
-  padding:3px;
+  background:rgba(255,255,255,.34);
+  position:relative;
   flex:0 0 auto;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);
+  transition:.25s ease;
 }
-.unlock-knob{
-  width:22px;
-  height:22px;
+.unlock-switch::before{
+  content:'';
+  position:absolute;
+  left:4px;
+  top:4px;
+  width:24px;
+  height:24px;
   border-radius:50%;
   background:#fff;
-  box-shadow:0 2px 8px rgba(0,0,0,.25);
-  transform:translateX(20px);
+  box-shadow:0 2px 8px rgba(0,0,0,.28);
+  transition:.25s ease;
+}
+.unlock-toggle-btn:hover .unlock-switch{
+  background:#34c759;
+}
+.unlock-toggle-btn:hover .unlock-switch::before{
+  transform:translateX(22px);
 }
 .unlock-tease-grid{
   margin-top:13px;
@@ -1022,6 +1033,7 @@ text-transform:uppercase;
   font-weight:900;
 }
 </style>
+
 
 </head>
 <body>
@@ -1203,7 +1215,7 @@ text-transform:uppercase;
               <span class="unlock-toggle-title">FLOW+ 잠금 해제</span>
               <span class="unlock-toggle-sub">월별 타이밍까지 켜기</span>
             </span>
-            <span class="unlock-switch"><span class="unlock-knob"></span></span>
+            <span class="unlock-switch"></span>
           </button>
         </div>
 
@@ -1271,7 +1283,7 @@ text-transform:uppercase;
               <span class="unlock-toggle-title">SYNC+ 잠금 해제</span>
               <span class="unlock-toggle-sub">관계의 안쪽까지 켜기</span>
             </span>
-            <span class="unlock-switch"><span class="unlock-knob"></span></span>
+            <span class="unlock-switch"></span>
           </button>
         </div>
 
@@ -1339,10 +1351,10 @@ text-transform:uppercase;
           </div>
           <div class="signal-plus-list">
             <div class="unlock-tease-grid">
-              <div class="unlock-tease-item"><strong>연애하면 어떤 모습일지</strong><br/>다정한 쪽인지, 숨기는 쪽인지</div>
-              <div class="unlock-tease-item"><strong>어떤 사람에게 약해지는지</strong><br/>내가 그 타입에 가까운지 보는 재미</div>
+              <div class="unlock-tease-item"><strong>연애하면 어떤 스타일?</strong><br/>다정한 편인지, 티 안 내는 편인지</div>
+              <div class="unlock-tease-item"><strong>어떤 사람에게 끌릴까?</strong><br/>은근 계속 신경 쓰이는 타입 보기</div>
               <div class="unlock-tease-item"><strong>팬들이 계속 과몰입하는 이유</strong><br/>표정, 거리감, 분위기 중 어디서 터지는지</div>
-              <div class="unlock-tease-item"><strong>둘만 있을 때의 분위기 상상</strong><br/>무대 위 이미지와 다른 결을 부드럽게 해석</div>
+              <div class="unlock-tease-item"><strong>둘만 있으면 느낌이 어떨까?</strong><br/>무대에서 보이는 모습이랑 얼마나 다를지</div>
               <div class="unlock-tease-item"><strong>오래 남는 관계 스타일</strong><br/>가볍게 설레는지, 천천히 깊어지는지</div>
             </div>
           </div>
@@ -1350,9 +1362,9 @@ text-transform:uppercase;
             <button class="unlock-toggle-btn" onclick="showOpeningSoon()">
               <span class="unlock-toggle-left">
                 <span class="unlock-toggle-title">SIGNAL+ 잠금 해제</span>
-                <span class="unlock-toggle-sub">딸깍 켜고 심층 리딩 보기</span>
+                <span class="unlock-toggle-sub">켜는 순간 결제창으로 연결</span>
               </span>
-              <span class="unlock-switch"><span class="unlock-knob"></span></span>
+              <span class="unlock-switch"></span>
             </button>
             <button class="signal-plus-btn signal-plus-secondary" onclick="drawDeepPreviewCard()">프리미엄 카드 미리보기</button>
           </div>
