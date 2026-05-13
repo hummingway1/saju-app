@@ -870,9 +870,9 @@ text-transform:uppercase;
       <p id="appSub">최애는 우연처럼 들어오지 않음</p>
     </div>
     <div class="mode-tabs">
-      <button class="mtab active" id="mtab0" onclick="setMode('idol')">🔮 <span id="tab0Txt">사주 운세</span></button>
-      <button class="mtab" id="mtab1" onclick="setMode('compat')">💫 <span id="tab1Txt">궁합 보기</span></button>
-      <button class="mtab" id="mtab2" onclick="setMode('idol')">⭐ <span id="tab2Txt">시그널 매치</span></button>
+      <button class="mtab active" id="mtab0" onclick="setMode('idol')">⭐ <span id="tab0Txt">시그널 매치</span></button>
+      <button class="mtab" id="mtab1" onclick="setMode('saju')">🔮 <span id="tab1Txt">플로우 스캔</span></button>
+      <button class="mtab" id="mtab2" onclick="setMode('compat')">💫 <span id="tab2Txt">싱크 체크</span></button>
     </div>
 
     <!-- SAJU -->
@@ -906,7 +906,7 @@ text-transform:uppercase;
           </div>
           <div class="field full"><div class="flabel" id="lbQ">질문 (선택)</div><textarea id="qInput" placeholder="예: 올해 이직하는 게 맞을까요?"></textarea></div>
         </div>
-        <button class="cta" id="btnSaju" onclick="runSaju()">운세 보기</button>
+        <button class="cta" id="btnSaju" onclick="runSaju()">FLOW SCAN</button>
         <div id="sajuLoad" class="loading">✦ 기운을 읽는 중…</div>
 <div id="oracleAccess" class="oracle-access">ACCESSING YOUR FLOW...</div>
         <div id="sajuErr" class="err-box"></div>
@@ -954,7 +954,7 @@ text-transform:uppercase;
             </div>
           </div>
         </div>
-        <button class="cta" id="btnCompat" onclick="runCompat()">궁합 보기</button>
+        <button class="cta" id="btnCompat" onclick="runCompat()">SYNC CHECK</button>
         <div id="compatLoad" class="loading">✦ 궁합을 읽는 중…</div>
         <div id="compatErr" class="err-box"></div>
       </div>
@@ -1050,17 +1050,17 @@ const T = {
     lang:"ko",lbl:"한국어",
     heroTag:"✨ 팬덤 시그널 매치",heroL1:"나의",heroL2:"아이돌 시그널 매치",
     heroDesc:"좋아하는 그룹을 고르고, 네 팬심이 반응하는 멤버 시그널을 확인해보세요.",
-    heroBtn1:"무료 시그널 매치 보기",heroBtn2:"궁합 보기",navCta:"시그널 매치",
+    heroBtn1:"무료 시그널 매치 보기",heroBtn2:"싱크 체크",navCta:"시그널 매치",
     proof1:"아이돌 궁합 조회",proof2:"틱톡 공유율",proof3:"개국",
     phoneLbl:"나의 Signal Match",phoneSoulLbl:"SIGNAL MATCH",
     phoneDesc:"당신의 팬심이 반응하는 bias pattern을 감지합니다.",
     phoneSajuLbl:"사주 에너지",phoneAstroLbl:"별자리",phoneShareBtn:"틱톡에 공유 ↗",
     featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"친구와 비교하고, 캡처하고, 다시 보고 싶게 만드는 팬덤용 시그널 테스트.",
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
-    feat2T:"궁합 보기",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
+    feat2T:"싱크 체크",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"SIGNAL DETECT",appSub:"최애는 우연처럼 들어오지 않음",appSubSaju:"이미 바뀌기 시작한 흐름이 있음",appSubCompat:"두 사람 사이엔 이미 잡힌 흐름이 있음",
-    tab0:"사주 운세",tab1:"궁합 보기",tab2:"시그널 매치",
+    appTitle:"SIGNAL DETECT",appSub:"최애는 우연처럼 들어오지 않음",appSubSaju:"반복되는 패턴을 먼저 감지함",appSubCompat:"가볍게 시작돼도 안 가볍게 남는 조합",
+    tab0:"시그널 매치",tab1:"플로우 스캔",tab2:"싱크 체크",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
     lblTarot:"오늘의 타로",tarotIntro:"열 장 중 가장 끌리는 카드를 골라보세요.",
@@ -1078,7 +1078,7 @@ const T = {
     errDate:"생년월일을 먼저 선택해 주세요.",errGen:"성별을 선택해 주세요.",
     errLoc:"출생지를 입력해 주세요.",errGeo:"출생지를 찾지 못했습니다.",
     errApi:"분석에 실패했습니다.",sel:"선택",aiLang:"Korean",
-    lblMyInfo:"나의 정보",lblPartInfo:"상대방 정보",btnCompat:"궁합 보기",compatLoad:"✦ 궁합을 읽는 중…",
+    lblMyInfo:"나의 정보",lblPartInfo:"상대방 정보",btnCompat:"싱크 체크",compatLoad:"✦ 궁합을 읽는 중…",
     lblIdolTitle:"나의 사주로 보는 시그널 매치 타입",
     lblIdolDesc:"좋아하는 그룹을 먼저 고르세요. 팬덤 컬러와 시그널 무드 기반으로, 네 취향이 반응하는 멤버 에너지를 감지해줘요.",
     btnIdol:"무료 시그널 매치 보기",idolLoad:"✦ 별자리와 사주를 읽는 중…",
@@ -1111,7 +1111,7 @@ const T = {
     feat2T:"Ship Compatibility",feat2D:"Compare yourself with any person and discover your ideal pairing.",
     feat3T:"Viral Share Cards",feat3D:"Auto-generate aesthetic cards optimized for TikTok and Instagram stories.",
     appTitle:"Start Your Reading",appSub:"Your bias didn't appear by accident.",appSubSaju:"Something is already shifting.",appSubCompat:"There's already a current between you two.",
-    tab0:"Saju Reading",tab1:"Compatibility",tab2:"Idol Match",
+    tab0:"Signal Match",tab1:"Flow Scan",tab2:"Sync Check",
     fcats:["General","Love","Wealth","Career","Health"],
     fcatKeys:["general","love","wealth","career","health"],
     lblTarot:"TODAY'S TAROT",tarotIntro:"Ten cards lie before you. Choose the one that calls to you now.",
@@ -1412,9 +1412,9 @@ function setMode(mode){
   document.getElementById('modeSaju').style.display  =mode==='saju'  ?'':'none';
   document.getElementById('modeCompat').style.display=mode==='compat'?'':'none';
   document.getElementById('modeIdol').style.display  =mode==='idol'  ?'':'none';
-  document.getElementById('mtab0').classList.toggle('active',mode==='saju');
-  document.getElementById('mtab1').classList.toggle('active',mode==='compat');
-  document.getElementById('mtab2').classList.toggle('active',mode==='idol');
+  document.getElementById('mtab0').classList.toggle('active',mode==='idol');
+  document.getElementById('mtab1').classList.toggle('active',mode==='saju');
+  document.getElementById('mtab2').classList.toggle('active',mode==='compat');
   const _t=(typeof T!=='undefined'&&T[typeof curLang!=='undefined'?curLang:'ko'])||{};
   const _subMap={
     idol:_t.appSub||'최애는 우연처럼 들어오지 않음',
