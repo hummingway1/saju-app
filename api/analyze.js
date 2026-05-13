@@ -1129,7 +1129,7 @@ const RESULT_I18N = {
     line1: "At first they feel distant, but they end up staying in your mind the longest.",
     line2: "You are more drawn to someone hard to read than someone too easy to approach.",
     line3: "When someone has a strong atmosphere, the feeling tends to linger.",
-    fandom: "One fancam and suddenly you are emotionally invested for the next six months.",
+    fandom: "Sometimes a single moment is enough to stay in your head for days.",
     red: "Be careful not to turn distance into something more special than it is.",
     micro: "Lately, your standards for people may be quietly changing."
   },
@@ -1145,7 +1145,7 @@ const RESULT_I18N = {
     line1: "最初は冷たく感じても、結局いちばん長く心に残るタイプです。",
     line2: "すぐ近づいてくる人より、少し読みにくい人に惹かれやすいです。",
     line3: "雰囲気で圧倒するタイプを見ると、感情が余韻のように残りやすいです。",
-    fandom: "直カメ一個で急に人生狂わされるタイプです。",
+    fandom: "ステージの一瞬だけでも、気づいたらずっと思い出してしまうタイプ。",
     red: "距離感のある人を特別に見すぎないよう注意が必要です。",
     micro: "最近、人を見る基準が少し変わり始めているかもしれません。"
   },
@@ -1161,7 +1161,7 @@ const RESULT_I18N = {
     line1: "一开始会觉得有点冷，但最后反而是最容易留在心里的类型。",
     line2: "比起太容易靠近的人，你更容易被难以读懂的人吸引。",
     line3: "遇到气场很强的人时，那种感觉会像余韵一样留下来。",
-    fandom: "一个直拍就够你脑内循环一整天了。",
+    fandom: "有时候只是一个瞬间，就会在脑海里留很久。",
     red: "要注意别把距离感过度解读成特别的信号。",
     micro: "最近你看人的标准，可能正在悄悄改变。"
   },
@@ -1199,20 +1199,20 @@ function localizeIdolResult(result, lang){
 
   result.idolMatches = (result.idolMatches || []).map((m, idx) => {
     const reasons = [
-      lang==="Chinese" ? "你真的很容易对这种有距离感的人上头。" :
-      lang==="Japanese" ? "こういう“距離感あるのに気になる人”に沼りやすいです。" :
-      lang==="Spanish" ? "Siempre terminas obsesionándote con la persona emocionalmente distante." :
-      "You always end up falling for the emotionally unavailable one.",
+      lang==="Chinese" ? "你会不自觉地一直在意这种有距离感的人。" :
+      lang==="Japanese" ? "少し距離を感じる人ほど、なぜか気になってしまう。" :
+      lang==="Spanish" ? "Hay personas con cierta distancia que terminan quedándose más tiempo en tu mente." :
+      "Somehow, you keep thinking about people who never make things too obvious.",
 
-      lang==="Chinese" ? "这种越看越上头的感觉，对你特别危险。" :
-      lang==="Japanese" ? "気づいたらずっと見ちゃうタイプです。" :
-      lang==="Spanish" ? "Su vibra te engancha antes de que te des cuenta." :
-      "Their vibe feels soft at first, then suddenly you are emotionally attached.",
+      lang==="Chinese" ? "这种感觉往往会在心里停留很久。" :
+      lang==="Japanese" ? "気づいた頃には、かなり惹かれていることが多い。" :
+      lang==="Spanish" ? "Su atmósfera deja una impresión más profunda de lo esperado." :
+      "Their atmosphere feels soft at first, but it stays in your mind longer than expected.",
 
-      lang==="Chinese" ? "明明什么都没做，却会一直在你脑子里循环。" :
-      lang==="Japanese" ? "あとからじわじわ沼るタイプです。" :
-      lang==="Spanish" ? "Sigues pensando en sus pequeños gestos sin razón." :
-      "You keep replaying their little expressions in your head for no reason."
+      lang==="Chinese" ? "有些瞬间会在脑海里反复想起。" :
+      lang==="Japanese" ? "あとから静かに印象が深くなるタイプ。" :
+      lang==="Spanish" ? "Hay pequeños gestos que vuelven a tu mente sin explicación." :
+      "Certain expressions keep coming back to your mind for no clear reason."
     ];
     return {...m, reason: reasons[idx] || reasons[0]};
   });
@@ -1309,11 +1309,11 @@ export default async function handler(req, res){
 
       const IDOL_ARCHETYPE_DB = [
         // BTS
-        {name:"RM (BTS)", group:"BTS", tags:["intellectual","leader","calm","deep","responsible"], fanPattern:"말보다 분위기로 잡아주는 리더형에 약함"},
-        {name:"Jin (BTS)", group:"BTS", tags:["warm","humor","classic","stable","gentle"], fanPattern:"편하게 웃기다가 갑자기 설레게 하는 타입에 약함"},
+        {name:"RM (BTS)", group:"BTS", tags:["intellectual","leader","calm","deep","responsible"], fanPattern:"말보다 분위기로 잡아주는 리더형에 "},
+        {name:"Jin (BTS)", group:"BTS", tags:["warm","humor","classic","stable","gentle"], fanPattern:"편하게 웃기다가 갑자기 설레게 하는 타입에 "},
         {name:"Suga (BTS)", group:"BTS", tags:["cold","artist","quiet","wounded","producer","distance"], fanPattern:"무심해 보이는데 속은 깊은 타입에 오래 끌리는 편"},
         {name:"J-Hope (BTS)", group:"BTS", tags:["sunshine","energy","dance","bright","discipline"], fanPattern:"밝은데 무대 올라가면 완전 달라지는 타입에 반응함"},
-        {name:"Jimin (BTS)", group:"BTS", tags:["emotional","sensual","soft","performer","delicate"], fanPattern:"부드러운 얼굴로 위험한 분위기 만드는 타입에 약함"},
+        {name:"Jimin (BTS)", group:"BTS", tags:["emotional","sensual","soft","performer","delicate"], fanPattern:"부드러운 얼굴로 위험한 분위기 만드는 타입에 "},
         {name:"V (BTS)", group:"BTS", tags:["mysterious","artist","vintage","cold","dreamy","distance"], fanPattern:"낯설고 몽환적인 분위기를 계속 곱씹는 편"},
         {name:"Jungkook (BTS)", group:"BTS", tags:["ace","perfectionist","athletic","sincere","growth"], fanPattern:"잘하는데 계속 더 잘하려는 사람한테 마음이 쌓임"},
 
@@ -1324,13 +1324,13 @@ export default async function handler(req, res){
         {name:"Lisa (BLACKPINK)", group:"BLACKPINK", tags:["performance","global","confidence","dance","power"], fanPattern:"무대 장악력으로 바로 납득시키는 타입에 반응함"},
 
         // aespa
-        {name:"Karina (aespa)", group:"aespa", tags:["cold","leader","ai","power","perfect","magnetic"], fanPattern:"비현실적으로 완벽한 냉미녀 타입에 약함"},
+        {name:"Karina (aespa)", group:"aespa", tags:["cold","leader","ai","power","perfect","magnetic"], fanPattern:"비현실적으로 완벽한 냉미녀 타입에 "},
         {name:"Winter (aespa)", group:"aespa", tags:["icy","mystery","cat","minimal","sharp","quiet"], fanPattern:"무표정인데 자꾸 신경쓰이는 타입에 끌리는 편"},
         {name:"Giselle (aespa)", group:"aespa", tags:["cool","hip","individual","urban","free"], fanPattern:"남들이랑 결이 다른 쿨한 타입에 반응함"},
-        {name:"Ningning (aespa)", group:"aespa", tags:["vocal","bold","bright","talent","glam"], fanPattern:"실력과 자신감이 같이 터지는 타입에 약함"},
+        {name:"Ningning (aespa)", group:"aespa", tags:["vocal","bold","bright","talent","glam"], fanPattern:"실력과 자신감이 같이 터지는 타입에 "},
 
         // NewJeans
-        {name:"Minji (NewJeans)", group:"NewJeans", tags:["natural","clean","leader","calm","classic"], fanPattern:"꾸민 느낌 없이 담백한 첫사랑상에 약함"},
+        {name:"Minji (NewJeans)", group:"NewJeans", tags:["natural","clean","leader","calm","classic"], fanPattern:"꾸민 느낌 없이 담백한 첫사랑상에 "},
         {name:"Hanni (NewJeans)", group:"NewJeans", tags:["cute","active","warm","playful","spark"], fanPattern:"가볍게 웃는데 분위기를 확 바꾸는 타입에 반응함"},
         {name:"Danielle (NewJeans)", group:"NewJeans", tags:["sunshine","pure","emotional","soft","dreamy"], fanPattern:"맑고 따뜻한 에너지에 마음이 바로 풀림"},
         {name:"Haerin (NewJeans)", group:"NewJeans", tags:["cat","mysterious","quiet","icy","distance"], fanPattern:"가까워질 듯 말 듯한 고양이상에 계속 끌리는 편"},
@@ -1339,25 +1339,25 @@ export default async function handler(req, res){
         // IVE
         {name:"Yujin (IVE)", group:"IVE", tags:["leader","bright","confident","responsible","energy"], fanPattern:"건강하고 자신감 넘치는 리더형에 바로 반응하는 편"},
         {name:"Gaeul (IVE)", group:"IVE", tags:["calm","urban","elegant","quiet","mature"], fanPattern:"차분하고 도시적인 분위기가 오래 남는 타입"},
-        {name:"Rei (IVE)", group:"IVE", tags:["cute","unique","soft","artsy","playful"], fanPattern:"귀여운데 자기 세계 확실한 사람한테 약함"},
+        {name:"Rei (IVE)", group:"IVE", tags:["cute","unique","soft","artsy","playful"], fanPattern:"귀여운데 자기 세계 확실한 사람한테 "},
         {name:"Wonyoung (IVE)", group:"IVE", tags:["princess","visual","perfect","royal","itgirl"], fanPattern:"비현실적인 공주 에너지에 자연스럽게 납득하는 편"},
         {name:"Liz (IVE)", group:"IVE", tags:["vocal","friendly","bright","soft","warm"], fanPattern:"편하게 웃게 만드는 보컬형에게 마음이 풀리는 편"},
         {name:"Leeseo (IVE)", group:"IVE", tags:["youngest","fresh","bold","cute","spark"], fanPattern:"신선하고 당찬 막내 에너지에 반응함"},
 
         // LE SSERAFIM
         {name:"Sakura (LE SSERAFIM)", group:"LE SSERAFIM", tags:["veteran","elegant","resilient","history","quiet"], fanPattern:"서사가 긴 사람한테 더 깊게 빠지는 편"},
-        {name:"Chaewon (LE SSERAFIM)", group:"LE SSERAFIM", tags:["leader","strong","cute","sharp","dual"], fanPattern:"귀여운데 강단 있는 반전 타입에 약함"},
+        {name:"Chaewon (LE SSERAFIM)", group:"LE SSERAFIM", tags:["leader","strong","cute","sharp","dual"], fanPattern:"귀여운데 강단 있는 반전 타입에 "},
         {name:"Yunjin (LE SSERAFIM)", group:"LE SSERAFIM", tags:["artist","vocal","free","honest","bold"], fanPattern:"솔직하고 자유로운 아티스트형에 감정이 움직임"},
-        {name:"Kazuha (LE SSERAFIM)", group:"LE SSERAFIM", tags:["elegant","ballet","calm","noble","visual"], fanPattern:"고요한데 고급스러운 분위기에 약함"},
+        {name:"Kazuha (LE SSERAFIM)", group:"LE SSERAFIM", tags:["elegant","ballet","calm","noble","visual"], fanPattern:"고요한데 고급스러운 분위기에 "},
         {name:"Eunchae (LE SSERAFIM)", group:"LE SSERAFIM", tags:["youngest","bright","playful","fresh","cute"], fanPattern:"장난스럽고 맑은 막내 에너지에 마음이 풀림"},
 
         // TWICE
         {name:"Nayeon (TWICE)", group:"TWICE", tags:["bright","center","cute","confident","spark"], fanPattern:"밝고 확실한 센터 에너지에 바로 반응함"},
         {name:"Jeongyeon (TWICE)", group:"TWICE", tags:["cool","honest","stable","protective","fresh"], fanPattern:"시원하고 솔직한 타입한테 편안함을 느낌"},
-        {name:"Momo (TWICE)", group:"TWICE", tags:["dance","performance","power","cute","discipline"], fanPattern:"무대에서 증명하는 타입에 약함"},
+        {name:"Momo (TWICE)", group:"TWICE", tags:["dance","performance","power","cute","discipline"], fanPattern:"무대에서 증명하는 타입에 "},
         {name:"Sana (TWICE)", group:"TWICE", tags:["lovely","charm","soft","flirty","warm"], fanPattern:"사람 녹이는 애교형에 결국 반응함"},
         {name:"Jihyo (TWICE)", group:"TWICE", tags:["leader","vocal","strong","reliable","passion"], fanPattern:"강하고 믿음직한 에너지에 기대고 싶어짐"},
-        {name:"Mina (TWICE)", group:"TWICE", tags:["elegant","quiet","swan","soft","introvert"], fanPattern:"조용하고 우아한 타입의 작은 표정에 약함"},
+        {name:"Mina (TWICE)", group:"TWICE", tags:["elegant","quiet","swan","soft","introvert"], fanPattern:"조용하고 우아한 타입의 작은 표정에 "},
         {name:"Dahyun (TWICE)", group:"TWICE", tags:["funny","unique","bright","humor","quirky"], fanPattern:"엉뚱하고 밝은 사람한테 긴장이 풀림"},
         {name:"Chaeyoung (TWICE)", group:"TWICE", tags:["artist","independent","unique","creative","free"], fanPattern:"자기 세계 강한 예술가형에 끌림"},
         {name:"Tzuyu (TWICE)", group:"TWICE", tags:["visual","calm","classic","pure","quiet"], fanPattern:"말없이 선명한 비주얼에 반응함"},
@@ -1365,7 +1365,7 @@ export default async function handler(req, res){
         // NCT
         {name:"Taeyong (NCT)", group:"NCT", tags:["leader","performance","intense","artist","vulnerable"], fanPattern:"강렬한데 예민한 무대형에 끌리는 편"},
         {name:"Doyoung (NCT)", group:"NCT", tags:["vocal","sensitive","intellectual","emotional","clean"], fanPattern:"예민하고 섬세한 보컬형에 오래 머무름"},
-        {name:"Jaehyun (NCT)", group:"NCT", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 약함"},
+        {name:"Jaehyun (NCT)", group:"NCT", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 "},
         {name:"Mark (NCT)", group:"NCT", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"성실하게 계속 성장하는 타입한테 정이 쌓임"},
         {name:"Haechan (NCT)", group:"NCT", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난스러운데 묘하게 의존하게 되는 타입"},
         {name:"Jeno (NCT)", group:"NCT", tags:["quiet","strong","visual","calm","physical"], fanPattern:"조용한 힘과 든든함에 반응함"},
@@ -1374,31 +1374,31 @@ export default async function handler(req, res){
 
         // Stray Kids
         {name:"Bang Chan (Stray Kids)", group:"Stray Kids", tags:["leader","producer","protective","warm","safe"], fanPattern:"기댈 수 있는 리더형에게 안정감을 느낌"},
-        {name:"Lee Know (Stray Kids)", group:"Stray Kids", tags:["cat","cold","dance","weird","quiet","sharp"], fanPattern:"차갑고 이상한데 자꾸 신경쓰이는 타입에 약함"},
+        {name:"Lee Know (Stray Kids)", group:"Stray Kids", tags:["cat","cold","dance","weird","quiet","sharp"], fanPattern:"차갑고 이상한데 자꾸 신경쓰이는 타입에 "},
         {name:"Changbin (Stray Kids)", group:"Stray Kids", tags:["power","rap","intense","funny","soft"], fanPattern:"강한데 속은 말랑한 반전 타입에 반응함"},
         {name:"Hyunjin (Stray Kids)", group:"Stray Kids", tags:["artist","visual","dramatic","sensual","performance"], fanPattern:"드라마틱한 예술가 분위기에 깊게 빠짐"},
         {name:"Han (Stray Kids)", group:"Stray Kids", tags:["genius","rapper","anxious","humor","sensitive"], fanPattern:"웃기는데 예민한 천재형에게 흔들림"},
-        {name:"Felix (Stray Kids)", group:"Stray Kids", tags:["sunshine","deepvoice","angel","soft","bright"], fanPattern:"밝은 얼굴과 낮은 목소리 반전에 약함"},
+        {name:"Felix (Stray Kids)", group:"Stray Kids", tags:["sunshine","deepvoice","angel","soft","bright"], fanPattern:"밝은 얼굴과 낮은 목소리 반전에 "},
         {name:"Seungmin (Stray Kids)", group:"Stray Kids", tags:["vocal","clean","sincere","calm","stable"], fanPattern:"담백하고 꾸준한 타입에게 오래 마음이 감"},
         {name:"I.N (Stray Kids)", group:"Stray Kids", tags:["youngest","cute","growth","sharp","fresh"], fanPattern:"귀여운데 점점 선명해지는 성장형에 끌림"},
 
         // SEVENTEEN
         {name:"S.Coups (SEVENTEEN)", group:"SEVENTEEN", tags:["leader","protective","strong","responsible","anchor"], fanPattern:"강하게 지켜주는 리더형에 깊게 끌림"},
-        {name:"Jeonghan (SEVENTEEN)", group:"SEVENTEEN", tags:["angel","strategic","soft","mischief","clever"], fanPattern:"부드러운데 속을 알 수 없는 타입에 약함"},
+        {name:"Jeonghan (SEVENTEEN)", group:"SEVENTEEN", tags:["angel","strategic","soft","mischief","clever"], fanPattern:"부드러운데 속을 알 수 없는 타입에 "},
         {name:"Joshua (SEVENTEEN)", group:"SEVENTEEN", tags:["gentleman","soft","warm","classic","calm"], fanPattern:"조용하고 다정한 신사형에 안정감을 느낌"},
         {name:"Jun (SEVENTEEN)", group:"SEVENTEEN", tags:["visual","mysterious","elegant","cat","quiet"], fanPattern:"멀리 있는 듯한 비주얼형에 오래 끌림"},
         {name:"Hoshi (SEVENTEEN)", group:"SEVENTEEN", tags:["performance","energy","passion","chaos","dance"], fanPattern:"감정이 폭발하는 퍼포머형에 반응함"},
-        {name:"Wonwoo (SEVENTEEN)", group:"SEVENTEEN", tags:["quiet","intellectual","deepvoice","calm","distance"], fanPattern:"말수 적고 지적인 거리감에 약함"},
+        {name:"Wonwoo (SEVENTEEN)", group:"SEVENTEEN", tags:["quiet","intellectual","deepvoice","calm","distance"], fanPattern:"말수 적고 지적인 거리감에 "},
         {name:"Woozi (SEVENTEEN)", group:"SEVENTEEN", tags:["producer","genius","strong","work","artist"], fanPattern:"작지만 단단한 천재형에게 존경이 섞임"},
         {name:"DK (SEVENTEEN)", group:"SEVENTEEN", tags:["bright","vocal","sunshine","funny","warm"], fanPattern:"밝은 목소리와 솔직한 감정에 마음이 열림"},
-        {name:"Mingyu (SEVENTEEN)", group:"SEVENTEEN", tags:["visual","tall","friendly","warm","domestic"], fanPattern:"크고 따뜻한 생활형 매력에 약함"},
+        {name:"Mingyu (SEVENTEEN)", group:"SEVENTEEN", tags:["visual","tall","friendly","warm","domestic"], fanPattern:"크고 따뜻한 생활형 매력에 "},
         {name:"The8 (SEVENTEEN)", group:"SEVENTEEN", tags:["artist","philosophical","elegant","unique","style"], fanPattern:"자기 세계 확실한 예술가형에 끌림"},
         {name:"Seungkwan (SEVENTEEN)", group:"SEVENTEEN", tags:["vocal","variety","emotional","funny","warm"], fanPattern:"웃기지만 감정 깊은 타입에게 정이 쌓임"},
         {name:"Vernon (SEVENTEEN)", group:"SEVENTEEN", tags:["cool","hip","unique","calm","free"], fanPattern:"과하게 꾸미지 않는 쿨함에 반응함"},
         {name:"Dino (SEVENTEEN)", group:"SEVENTEEN", tags:["youngest","dance","growth","hardworking","ambition"], fanPattern:"성실하게 올라오는 막내 서사에 끌림"},
 
         // TXT
-        {name:"Yeonjun (TXT)", group:"TXT", tags:["ace","performance","fox","fashion","confident"], fanPattern:"무대 위 확신 있는 여우상에 약함"},
+        {name:"Yeonjun (TXT)", group:"TXT", tags:["ace","performance","fox","fashion","confident"], fanPattern:"무대 위 확신 있는 여우상에 "},
         {name:"Soobin (TXT)", group:"TXT", tags:["leader","soft","calm","introvert","gentle"], fanPattern:"큰데 순한 안정감에 끌림"},
         {name:"Beomgyu (TXT)", group:"TXT", tags:["playful","chaos","pretty","sensitive","humor"], fanPattern:"장난스러움 뒤의 예민함을 알아보는 타입"},
         {name:"Taehyun (TXT)", group:"TXT", tags:["vocal","sharp","rational","strong","clear"], fanPattern:"또렷하고 냉정한 에너지에 신뢰를 느낌"},
@@ -1406,19 +1406,19 @@ export default async function handler(req, res){
 
         // ENHYPEN
         {name:"Jungwon (ENHYPEN)", group:"ENHYPEN", tags:["leader","cat","calm","responsible","clean"], fanPattern:"어린데 단단한 리더 에너지에 반응함"},
-        {name:"Heeseung (ENHYPEN)", group:"ENHYPEN", tags:["ace","vocal","mature","romantic","skill"], fanPattern:"실력으로 설득하는 에이스형에 약함"},
+        {name:"Heeseung (ENHYPEN)", group:"ENHYPEN", tags:["ace","vocal","mature","romantic","skill"], fanPattern:"실력으로 설득하는 에이스형에 "},
         {name:"Jay (ENHYPEN)", group:"ENHYPEN", tags:["global","cool","honest","fashion","passionate"], fanPattern:"솔직하고 세련된 열정에 반응함"},
         {name:"Jake (ENHYPEN)", group:"ENHYPEN", tags:["warm","dog","global","sweet","friendly"], fanPattern:"따뜻하고 친근한 에너지에 마음이 풀림"},
-        {name:"Sunghoon (ENHYPEN)", group:"ENHYPEN", tags:["ice","visual","calm","elegant","distance"], fanPattern:"차갑고 완벽한 왕자형 거리감에 약함"},
+        {name:"Sunghoon (ENHYPEN)", group:"ENHYPEN", tags:["ice","visual","calm","elegant","distance"], fanPattern:"차갑고 완벽한 왕자형 거리감에 "},
         {name:"Sunoo (ENHYPEN)", group:"ENHYPEN", tags:["bright","cute","expressive","sunshine","charm"], fanPattern:"표정 풍부하고 사랑스러운 타입에 반응함"},
         {name:"Ni-ki (ENHYPEN)", group:"ENHYPEN", tags:["dance","youngest","cold","growth","sharp"], fanPattern:"차갑고 빠르게 성장하는 퍼포머형에 끌림"},
 
         // ATEEZ
         {name:"Hongjoong (ATEEZ)", group:"ATEEZ", tags:["leader","producer","charisma","artist","rebel"], fanPattern:"작지만 강한 반항적 리더 에너지에 끌림"},
-        {name:"Seonghwa (ATEEZ)", group:"ATEEZ", tags:["elegant","visual","soft","perfect","calm"], fanPattern:"고요하고 완벽한 다정함에 약함"},
+        {name:"Seonghwa (ATEEZ)", group:"ATEEZ", tags:["elegant","visual","soft","perfect","calm"], fanPattern:"고요하고 완벽한 다정함에 "},
         {name:"Yunho (ATEEZ)", group:"ATEEZ", tags:["bright","tall","dance","warm","energy"], fanPattern:"크고 밝은 에너지에 마음이 안정됨"},
         {name:"Yeosang (ATEEZ)", group:"ATEEZ", tags:["mysterious","visual","quiet","unique","delicate"], fanPattern:"말수 적고 비현실적인 타입에 오래 끌림"},
-        {name:"San (ATEEZ)", group:"ATEEZ", tags:["performance","intense","emotional","sensual","power"], fanPattern:"감정이 무대에서 터지는 타입에 약함"},
+        {name:"San (ATEEZ)", group:"ATEEZ", tags:["performance","intense","emotional","sensual","power"], fanPattern:"감정이 무대에서 터지는 타입에 "},
         {name:"Mingi (ATEEZ)", group:"ATEEZ", tags:["rap","tall","funny","power","soft"], fanPattern:"크고 강한데 속은 부드러운 반전에 끌림"},
         {name:"Wooyoung (ATEEZ)", group:"ATEEZ", tags:["playful","flirty","dance","social","charm"], fanPattern:"장난스럽게 사람 흔드는 타입에 반응함"},
         {name:"Jongho (ATEEZ)", group:"ATEEZ", tags:["vocal","strong","stable","serious","power"], fanPattern:"흔들리지 않는 실력과 안정감에 끌림"},
@@ -1431,21 +1431,21 @@ export default async function handler(req, res){
         {name:"Sohee (RIIZE)", group:"RIIZE", tags:["cute","vocal","fresh","bright","quirky"], fanPattern:"귀엽고 신선한 목소리에 마음이 풀리는 편"},
         {name:"Anton (RIIZE)", group:"RIIZE", tags:["soft","global","youngest","dreamy","gentle"], fanPattern:"조용하고 부드러운 막내형 분위기에 끌리는 편"},
         {name:"Taeyong (NCT 127)", group:"NCT 127", tags:["leader","performance","intense","artist","vulnerable"], fanPattern:"강렬한데 예민한 무대형에 끌리는 편"},
-        {name:"Jaehyun (NCT 127)", group:"NCT 127", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 약함"},
+        {name:"Jaehyun (NCT 127)", group:"NCT 127", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 "},
         {name:"Doyoung (NCT 127)", group:"NCT 127", tags:["vocal","sensitive","intellectual","emotional","clean"], fanPattern:"예민하고 섬세한 보컬형에 오래 머무름"},
         {name:"Mark (NCT 127)", group:"NCT 127", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"성실하게 계속 성장하는 타입한테 정이 쌓임"},
         {name:"Haechan (NCT 127)", group:"NCT 127", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난스러운데 묘하게 의존하게 되는 타입"},
         {name:"Mark (NCT DREAM)", group:"NCT DREAM", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"잘하는데 허술한 반전까지 있는 타입에 끌리는 편"},
         {name:"Renjun (NCT DREAM)", group:"NCT DREAM", tags:["sensitive","artist","vocal","clean","emotional"], fanPattern:"예민하고 맑은 감정선에 오래 끌림"},
         {name:"Jeno (NCT DREAM)", group:"NCT DREAM", tags:["quiet","strong","visual","calm","physical"], fanPattern:"조용한 힘과 든든함에 반응함"},
-        {name:"Haechan (NCT DREAM)", group:"NCT DREAM", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난치는데 결국 분위기 가져가는 타입에 약함"},
+        {name:"Haechan (NCT DREAM)", group:"NCT DREAM", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난치는데 결국 분위기 가져가는 타입에 "},
         {name:"Jaemin (NCT DREAM)", group:"NCT DREAM", tags:["sweet","visual","soft","romantic","dreamy"], fanPattern:"달콤한데 거리감 있는 타입에 흔들림"},
         {name:"Chenle (NCT DREAM)", group:"NCT DREAM", tags:["bright","free","vocal","global","playful"], fanPattern:"자유롭고 밝은 에너지에 기분이 풀림"},
-        {name:"Jisung (NCT DREAM)", group:"NCT DREAM", tags:["youngest","dance","growth","shy","soft"], fanPattern:"수줍은데 무대에서 바뀌는 성장형에 약함"},
+        {name:"Jisung (NCT DREAM)", group:"NCT DREAM", tags:["youngest","dance","growth","shy","soft"], fanPattern:"수줍은데 무대에서 바뀌는 성장형에 "},
         {name:"Kun (WayV)", group:"WayV", tags:["leader","calm","responsible","vocal","stable"], fanPattern:"차분하게 중심 잡아주는 타입에 안정감을 느낌"},
         {name:"Ten (WayV)", group:"WayV", tags:["artist","dance","unique","fluid","free"], fanPattern:"정해지지 않는 예술가형에 끌림"},
         {name:"Winwin (WayV)", group:"WayV", tags:["quiet","elegant","visual","mysterious","soft"], fanPattern:"조용하고 우아한 분위기에 오래 끌리는 편"},
-        {name:"Xiaojun (WayV)", group:"WayV", tags:["vocal","dramatic","emotional","visual","artist"], fanPattern:"감정선 진한 보컬형에 약함"},
+        {name:"Xiaojun (WayV)", group:"WayV", tags:["vocal","dramatic","emotional","visual","artist"], fanPattern:"감정선 진한 보컬형에 "},
         {name:"Hendery (WayV)", group:"WayV", tags:["funny","unique","bright","chaos","visual"], fanPattern:"엉뚱한데 비주얼까지 되는 타입에 반응함"},
         {name:"Yangyang (WayV)", group:"WayV", tags:["rapper","youngest","cool","playful","global"], fanPattern:"쿨하고 장난스러운 막내 에너지에 끌림"},
 
@@ -1476,32 +1476,32 @@ export default async function handler(req, res){
 
       const TITLE_LINES = {
         cold: [
-          "차가울수록 더 궁금해지는 타입에 약함",
-          "무표정인데 자꾸 생각나는 타입에 약함",
+          "차가울수록 더 궁금해지는 타입에 ",
+          "무표정인데 자꾸 생각나는 타입에 ",
           "쉽게 다가오지 않는 사람에게 오래 끌리는 타입"
         ],
         mysterious: [
-          "분위기 하나로 계속 신경 쓰이게 하는 타입에 약함",
+          "분위기 하나로 계속 신경 쓰이게 하는 타입에 ",
           "설명하기 어려운 묘한 분위기에 계속 반응하는 타입",
           "가까워질 듯 안 잡히는 타입에 오래 끌리는 편"
         ],
         sunshine: [
-          "밝다가도 무대 위에서 확 바뀌는 타입에 약함",
+          "밝다가도 무대 위에서 확 바뀌는 타입에 ",
           "웃는 얼굴 하나로 분위기를 바꾸는 타입에 반응함",
           "햇살 같은데 묘하게 위험한 타입에 끌림"
         ],
         leader: [
-          "믿고 기대고 싶어지는 리더형에 약함",
+          "믿고 기대고 싶어지는 리더형에 ",
           "강한데 다정한 사람에게 오래 끌리는 편",
           "책임감 있는 타입에게 마음이 천천히 쌓이는 편"
         ],
         artist: [
           "자기 세계가 확실한 아티스트형에 끌림",
-          "분위기와 서사로 사람을 끌어당기는 타입에 약함",
+          "분위기와 서사로 사람을 끌어당기는 타입에 ",
           "예민하고 감각적인 사람에게 오래 끌리는 편"
         ],
         cute: [
-          "귀여운데 은근히 자기 페이스가 있는 타입에 약함",
+          "귀여운데 은근히 자기 페이스가 있는 타입에 ",
           "가볍게 웃다가 훅 들어오는 타입에 반응함",
           "장난스러운데 이상하게 계속 생각나는 타입"
         ],
