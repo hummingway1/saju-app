@@ -871,8 +871,8 @@ text-transform:uppercase;
     </div>
     <div class="mode-tabs">
       <button class="mtab active" id="mtab0" onclick="setMode('idol')">⭐ <span id="tab0Txt">시그널 매치</span></button>
-      <button class="mtab" id="mtab1" onclick="setMode('saju')">🔮 <span id="tab1Txt">플로우 스캔</span></button>
-      <button class="mtab" id="mtab2" onclick="setMode('compat')">💫 <span id="tab2Txt">싱크 체크</span></button>
+      <button class="mtab" id="mtab1" onclick="setMode('saju')">🔮 <span id="tab1Txt">오늘의 흐름</span></button>
+      <button class="mtab" id="mtab2" onclick="setMode('compat')">💫 <span id="tab2Txt">관계 싱크</span></button>
     </div>
 
     <!-- SAJU -->
@@ -906,7 +906,7 @@ text-transform:uppercase;
           </div>
           <div class="field full"><div class="flabel" id="lbQ">질문 (선택)</div><textarea id="qInput" placeholder="예: 올해 이직하는 게 맞을까요?"></textarea></div>
         </div>
-        <button class="cta" id="btnSaju" onclick="runSaju()">FLOW SCAN</button>
+        <button class="cta" id="btnSaju" onclick="runSaju()">FLOW READING</button>
         <div id="sajuLoad" class="loading">✦ 기운을 읽는 중…</div>
 <div id="oracleAccess" class="oracle-access">ACCESSING YOUR FLOW...</div>
         <div id="sajuErr" class="err-box"></div>
@@ -1050,17 +1050,17 @@ const T = {
     lang:"ko",lbl:"한국어",
     heroTag:"✨ 팬덤 시그널 매치",heroL1:"나의",heroL2:"아이돌 시그널 매치",
     heroDesc:"좋아하는 그룹을 고르고, 네 팬심이 반응하는 멤버 시그널을 확인해보세요.",
-    heroBtn1:"무료 시그널 매치 보기",heroBtn2:"싱크 체크",navCta:"시그널 매치",
+    heroBtn1:"무료 시그널 매치 보기",heroBtn2:"관계 싱크",navCta:"시그널 매치",
     proof1:"아이돌 궁합 조회",proof2:"틱톡 공유율",proof3:"개국",
     phoneLbl:"나의 Signal Match",phoneSoulLbl:"SIGNAL MATCH",
     phoneDesc:"당신의 팬심이 반응하는 bias pattern을 감지합니다.",
     phoneSajuLbl:"사주 에너지",phoneAstroLbl:"별자리",phoneShareBtn:"틱톡에 공유 ↗",
     featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"친구와 비교하고, 캡처하고, 다시 보고 싶게 만드는 팬덤용 시그널 테스트.",
     feat1T:"아이돌 시그널 매치",feat1D:"요즘 네가 계속 반응하게 되는 아이돌 에너지를 감지해보세요.",
-    feat2T:"싱크 체크",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
+    feat2T:"관계 싱크",feat2D:"두 사람의 흐름이 어디서 끌리고 어긋나는지 감지해보세요.",
     feat3T:"바이럴 공유 카드",feat3D:"틱톡과 인스타그램 스토리에 맞는 시그널 카드를 생성합니다.",
-    appTitle:"SIGNAL DETECT",appSub:"최애는 우연처럼 들어오지 않음",appSubSaju:"반복되는 패턴을 먼저 감지함",appSubCompat:"가볍게 시작돼도 안 가볍게 남는 조합",
-    tab0:"시그널 매치",tab1:"플로우 스캔",tab2:"싱크 체크",
+    appTitle:"SIGNAL DETECT",appSub:"최애는 우연처럼 들어오지 않음",appSubSaju:"사주로 지금 바뀌는 흐름을 읽어봄",appSubCompat:"두 사람 사이의 끌림과 어긋남을 확인함",
+    tab0:"시그널 매치",tab1:"오늘의 흐름",tab2:"관계 싱크",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
     lblTarot:"오늘의 타로",tarotIntro:"열 장 중 가장 끌리는 카드를 골라보세요.",
