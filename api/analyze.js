@@ -1098,6 +1098,150 @@ function buildVarietyNarrative(tags=[], picker=pickRandom){
   };
 }
 
+
+// ── Result localization ───────────────────────────────
+const RESULT_I18N = {
+  Korean: {
+    signalFound: "SIGNAL MATCH FOUND",
+    signalMatch: "❖ SIGNAL MATCH",
+    fandomPattern: "❖ YOUR FANDOM PATTERN",
+    redFlag: "❖ RED FLAG",
+    signalEnergy: "❖ SIGNAL ENERGY",
+    match: "MATCH",
+    shareDefault: "부정해도 결국 이런 타입에 반응함.",
+    titleDefault: "쉽게 다가오지 않는 사람에게 오래 끌리는 타입",
+    line1: "처음엔 차갑게 느껴지는데, 결국 가장 오래 생각나는 스타일.",
+    line2: "쉽게 다가오는 사람보다, 해석이 어려운 사람에게 더 끌리는 편.",
+    line3: "분위기로 압도하는 타입을 보면 감정이 오래 잔상처럼 남는 편.",
+    fandom: "무대 직캠 하나로 갑자기 과몰입 시작하는 타입.",
+    red: "거리감 있는 사람을 더 특별하게 느끼는 패턴 주의.",
+    micro: "최근 들어 사람 보는 기준이 조금 바뀌는 흐름."
+  },
+  English: {
+    signalFound: "SIGNAL MATCH FOUND",
+    signalMatch: "❖ SIGNAL MATCH",
+    fandomPattern: "❖ YOUR FANDOM PATTERN",
+    redFlag: "❖ RED FLAG",
+    signalEnergy: "❖ SIGNAL ENERGY",
+    match: "MATCH",
+    shareDefault: "You can deny it, but this is exactly the type you react to.",
+    titleDefault: "You are drawn to someone who does not open up easily",
+    line1: "At first they feel distant, but they end up staying in your mind the longest.",
+    line2: "You are more drawn to someone hard to read than someone too easy to approach.",
+    line3: "When someone has a strong atmosphere, the feeling tends to linger.",
+    fandom: "One fancam and suddenly you are emotionally invested for the next six months.",
+    red: "Be careful not to turn distance into something more special than it is.",
+    micro: "Lately, your standards for people may be quietly changing."
+  },
+  Japanese: {
+    signalFound: "シグナルマッチ検出",
+    signalMatch: "❖ シグナルマッチ",
+    fandomPattern: "❖ 推し方のパターン",
+    redFlag: "❖ 気をつけたいポイント",
+    signalEnergy: "❖ シグナルエネルギー",
+    match: "MATCH",
+    shareDefault: "否定しても、結局こういうタイプに反応しやすい。",
+    titleDefault: "簡単には近づけない人に長く惹かれるタイプ",
+    line1: "最初は冷たく感じても、結局いちばん長く心に残るタイプです。",
+    line2: "すぐ近づいてくる人より、少し読みにくい人に惹かれやすいです。",
+    line3: "雰囲気で圧倒するタイプを見ると、感情が余韻のように残りやすいです。",
+    fandom: "直カメ一個で急に人生狂わされるタイプです。",
+    red: "距離感のある人を特別に見すぎないよう注意が必要です。",
+    micro: "最近、人を見る基準が少し変わり始めているかもしれません。"
+  },
+  Chinese: {
+    signalFound: "已检测到信号匹配",
+    signalMatch: "❖ 信号匹配",
+    fandomPattern: "❖ 你的追星模式",
+    redFlag: "❖ 需要注意的点",
+    signalEnergy: "❖ 信号能量",
+    match: "MATCH",
+    shareDefault: "就算否认，你还是会被这种类型吸引。",
+    titleDefault: "你容易被不轻易靠近的人长期吸引",
+    line1: "一开始会觉得有点冷，但最后反而是最容易留在心里的类型。",
+    line2: "比起太容易靠近的人，你更容易被难以读懂的人吸引。",
+    line3: "遇到气场很强的人时，那种感觉会像余韵一样留下来。",
+    fandom: "一个直拍就够你脑内循环一整天了。",
+    red: "要注意别把距离感过度解读成特别的信号。",
+    micro: "最近你看人的标准，可能正在悄悄改变。"
+  },
+  Spanish: {
+    signalFound: "SEÑAL DE MATCH DETECTADA",
+    signalMatch: "❖ SIGNAL MATCH",
+    fandomPattern: "❖ TU PATRÓN FANDOM",
+    redFlag: "❖ CUIDADO CON ESTO",
+    signalEnergy: "❖ ENERGÍA DE SEÑAL",
+    match: "MATCH",
+    shareDefault: "Puedes negarlo, pero este es el tipo al que reaccionas.",
+    titleDefault: "Te atrae quien no se abre fácilmente",
+    line1: "Al principio parece distante, pero termina quedándose más tiempo en tu mente.",
+    line2: "Te atrae más alguien difícil de leer que alguien demasiado fácil de acercar.",
+    line3: "Cuando alguien tiene una atmósfera fuerte, la emoción suele quedarse.",
+    fandom: "Un solo fancam puede arruinarte emocionalmente por semanas.",
+    red: "Cuidado con convertir la distancia en algo más especial de lo que es.",
+    micro: "Últimamente, tu forma de mirar a las personas puede estar cambiando."
+  }
+};
+
+function localizeIdolResult(result, lang){
+  const L = RESULT_I18N[lang] || RESULT_I18N.Korean;
+  if (lang === "Korean") {
+    result.badge = L.signalFound;
+    result.matchLabel = L.match;
+    return result;
+  }
+
+  result.badge = L.signalFound;
+  result.matchLabel = L.match;
+  result.title = L.titleDefault;
+  result.highlight = L.line1;
+  result.shareLine = L.shareDefault;
+
+  result.idolMatches = (result.idolMatches || []).map((m, idx) => {
+    const reasons = [
+      lang==="Chinese" ? "你真的很容易对这种有距离感的人上头。" :
+      lang==="Japanese" ? "こういう“距離感あるのに気になる人”に沼りやすいです。" :
+      lang==="Spanish" ? "Siempre terminas obsesionándote con la persona emocionalmente distante." :
+      "You always end up falling for the emotionally unavailable one.",
+
+      lang==="Chinese" ? "这种越看越上头的感觉，对你特别危险。" :
+      lang==="Japanese" ? "気づいたらずっと見ちゃうタイプです。" :
+      lang==="Spanish" ? "Su vibra te engancha antes de que te des cuenta." :
+      "Their vibe feels soft at first, then suddenly you are emotionally attached.",
+
+      lang==="Chinese" ? "明明什么都没做，却会一直在你脑子里循环。" :
+      lang==="Japanese" ? "あとからじわじわ沼るタイプです。" :
+      lang==="Spanish" ? "Sigues pensando en sus pequeños gestos sin razón." :
+      "You keep replaying their little expressions in your head for no reason."
+    ];
+    return {...m, reason: reasons[idx] || reasons[0]};
+  });
+
+  result.detail = [
+    L.signalMatch,
+    "",
+    L.line1,
+    "",
+    L.line2,
+    "",
+    L.line3,
+    "",
+    L.fandomPattern,
+    "",
+    L.fandom,
+    "",
+    L.redFlag,
+    "",
+    L.red,
+    "",
+    L.signalEnergy,
+    "",
+    L.micro
+  ].join("\n");
+
+  return result;
+}
+
 // ── Main handler ──────────────────────────────────────
 export default async function handler(req, res){
   if(req.method!=="POST") return res.status(405).json({error:"Method not allowed"});
@@ -1548,7 +1692,7 @@ export default async function handler(req, res){
         detail: detailLines.join('\n')
       };
 
-      return res.status(200).json(result);
+      return res.status(200).json(localizeIdolResult(result, lang));
     }
 
     // ── Compat mode ──
