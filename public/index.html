@@ -2104,6 +2104,7 @@ async function runIdol(){
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     const box=document.getElementById('idolResult');
     box.style.display='';
+    document.querySelector('#idolResult .badge-idol').textContent = data.badge||'SIGNAL MATCH FOUND';
     setText('idolTitle',data.title||'');
     setText('idolFandomMeta', data.fandom ? `${data.fandomAccent||'SIGNAL'} · ${data.fandom}` : '');
 
@@ -2121,7 +2122,7 @@ async function runIdol(){
             </div>
             <div class="idol-score-wrap">
               <div class="idol-score">${m.score||'-'}</div>
-              <div class="idol-score-lbl">MATCH</div>
+              <div class="idol-score-lbl">${data.matchLabel||'MATCH'}</div>
             </div>
           </div>`).join('')+
         '</div>';
@@ -2505,8 +2506,75 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 
 function buildSignalPlusTeaser(data){
-  const top = data?.idolMatches?.[0]?.name || "이 사람";
+  const top = data?.idolMatches?.[0]?.name || "this person";
   const group = data?.selectedGroup || "FANDOM";
+  const lang = (typeof curLang !== 'undefined') ? curLang : 'ko';
+
+  if(lang === 'zh'){
+    return {
+      title: `${top}隐藏的魅力，从这里开始才会更清楚。`,
+      preview:
+`表面上看只是你的取向，
+但让粉丝一直放不下的点，其实更像是一种很私人的想象。
+
+“如果站在他/她身边的人是我呢？”
+“恋爱时会露出什么样的表情？”
+
+这种让人忍不住代入的点是存在的。
+
+在 ${group} 里，这个人让人反复想起的理由，
+比起外貌，更接近距离感、时机和氛围。`
+    };
+  }
+  if(lang === 'ja'){
+    return {
+      title: `${top}の隠れた魅力は、ここからもっと深く見えてきます。`,
+      preview:
+`ただの好みに見えても、
+ファンが長く惹かれるポイントはもっと私的な想像に近いです。
+
+「もし隣にいたらどうだろう？」
+「恋愛したらどんな表情を見せるんだろう？」
+
+そう考えさせるポイントがあります。
+
+${group}の中でこの人が長く記憶に残る理由は、
+見た目より距離感、言葉よりタイミング、表情より雰囲気に近いです。`
+    };
+  }
+  if(lang === 'en'){
+    return {
+      title: `${top}'s hidden charm starts getting deeper here.`,
+      preview:
+`It may look like simple taste at first,
+but the reason fans keep coming back feels much more personal.
+
+“What if I was the one standing next to them?”
+“What kind of expression would they show in love?”
+
+That kind of imagination is exactly where the pull begins.
+
+Inside ${group}, the reason this person stays in your mind
+is less about looks and more about distance, timing, and atmosphere.`
+    };
+  }
+  if(lang === 'es'){
+    return {
+      title: `El encanto oculto de ${top} empieza a sentirse más profundo aquí.`,
+      preview:
+`Puede parecer solo una preferencia,
+pero el punto que hace que los fans se queden suele sentirse mucho más personal.
+
+“¿Cómo sería estar a su lado?”
+“¿Qué expresión mostraría si se enamorara?”
+
+Esa imaginación es parte de la atracción.
+
+Dentro de ${group}, la razón por la que esta persona se queda en tu mente
+tiene más que ver con distancia, timing y atmósfera que solo con apariencia.`
+    };
+  }
+
   return {
     title: `${top}의 숨겨진 매력은 여기서부터 더 깊게 보여.`,
     preview:
@@ -2523,6 +2591,52 @@ ${group} 안에서 이 사람이 유독 오래 생각나는 이유는,
   };
 }
 
+
+function renderUnlockTeaseLabels(){
+  const grid = document.querySelector('#signalPlusLock .unlock-tease-grid');
+  if(!grid) return;
+  const lang = (typeof curLang !== 'undefined') ? curLang : 'ko';
+  const sets = {
+    ko:[
+      ['연애하면 어떤 스타일?','다정한 편인지, 티 안 내는 편인지'],
+      ['어떤 사람에게 끌릴까?','은근 계속 신경 쓰이는 타입 보기'],
+      ['팬들이 계속 과몰입하는 이유','표정, 거리감, 분위기 중 어디서 터지는지'],
+      ['둘만 있으면 느낌이 어떨까?','무대에서 보이는 모습이랑 얼마나 다를지'],
+      ['오래 남는 관계 스타일','가볍게 설레는지, 천천히 깊어지는지']
+    ],
+    zh:[
+      ['恋爱时会是什么类型？','是温柔表达，还是默默藏起来'],
+      ['会被什么样的人吸引？','看看你是不是接近那种类型'],
+      ['粉丝为什么一直上头','表情、距离感、氛围，到底哪里最戳人'],
+      ['如果只有两个人会是什么感觉？','和舞台上看到的样子会有多不同'],
+      ['会留下很久的关系类型','是轻快心动，还是慢慢变深']
+    ],
+    ja:[
+      ['恋愛したらどんなタイプ？','優しく出すのか、気持ちを隠すのか'],
+      ['どんな人に惹かれる？','自分がそのタイプに近いか見る楽しさ'],
+      ['ファンが沼る理由','表情、距離感、雰囲気のどこで刺さるのか'],
+      ['二人きりならどんな感じ？','ステージ上の姿とどれくらい違うのか'],
+      ['長く残る関係タイプ','軽くときめくのか、ゆっくり深まるのか']
+    ],
+    en:[
+      ['What are they like in love?','Warm and open, or quietly guarded?'],
+      ['Who are they drawn to?','See if you feel close to that type'],
+      ['Why fans get attached','Where it hits: expression, distance, or atmosphere'],
+      ['What would it feel like alone together?','How different they may feel off stage'],
+      ['Their lasting relationship style','A quick spark or something that deepens slowly']
+    ],
+    es:[
+      ['¿Cómo serían en una relación?','Cariñosos y abiertos, o más reservados'],
+      ['¿Qué tipo les atrae?','Mira si tú te acercas a ese tipo'],
+      ['Por qué los fans se enganchan','Expresión, distancia o atmósfera: dónde pega más'],
+      ['¿Cómo sería estar a solas?','Qué tan diferente se sentiría fuera del escenario'],
+      ['Su estilo de relación duradera','Chispa rápida o algo que crece despacio']
+    ]
+  };
+  const arr = sets[lang] || sets.ko;
+  grid.innerHTML = arr.map(x=>`<div class="unlock-tease-item"><strong>${x[0]}</strong><br/>${x[1]}</div>`).join('');
+}
+
 function renderSignalPlusLock(data){
   const box = document.getElementById('signalPlusLock');
   if(!box) return;
@@ -2531,6 +2645,7 @@ function renderSignalPlusLock(data){
   const preview = document.getElementById('signalPlusPreview');
   if(title) title.textContent = teaser.title;
   if(preview) preview.textContent = teaser.preview;
+  renderUnlockTeaseLabels();
   box.style.display = 'block';
 }
 
