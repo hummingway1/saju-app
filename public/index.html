@@ -951,6 +951,78 @@ text-transform:uppercase;
 }
 </style>
 
+
+<style id="unlock-toggle-style">
+.unlock-toggle-btn{
+  width:100%;
+  margin-top:14px;
+  padding:15px 16px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,#ec4899,#a855f7);
+  color:#fff;
+  font-weight:900;
+  font-family:inherit;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  box-shadow:0 12px 34px rgba(168,85,247,.28);
+}
+.unlock-toggle-left{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:3px;
+}
+.unlock-toggle-title{
+  font-size:15px;
+  letter-spacing:-.02em;
+}
+.unlock-toggle-sub{
+  font-size:11px;
+  opacity:.72;
+  font-weight:700;
+}
+.unlock-switch{
+  width:48px;
+  height:28px;
+  border-radius:999px;
+  background:rgba(255,255,255,.35);
+  padding:3px;
+  flex:0 0 auto;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);
+}
+.unlock-knob{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+  transform:translateX(20px);
+}
+.unlock-tease-grid{
+  margin-top:13px;
+  display:grid;
+  gap:8px;
+}
+.unlock-tease-item{
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  font-size:13px;
+  line-height:1.65;
+  color:rgba(255,255,255,.77);
+  word-break:keep-all;
+}
+.unlock-tease-item strong{
+  color:#fff;
+  font-weight:900;
+}
+</style>
+
 </head>
 <body>
 <div class="bg1"></div>
@@ -1126,7 +1198,13 @@ text-transform:uppercase;
             <div>✦ 조심해야 할 관계 / 돈 / 일 패턴</div>
             <div>✦ 올해 하반기와 내년 초 흐름</div>
           </div>
-          <button class="premium-cta-btn" onclick="showOpeningSoon()">FLOW+ 잠금 해제</button>
+          <button class="unlock-toggle-btn" onclick="showOpeningSoon()">
+            <span class="unlock-toggle-left">
+              <span class="unlock-toggle-title">FLOW+ 잠금 해제</span>
+              <span class="unlock-toggle-sub">월별 타이밍까지 켜기</span>
+            </span>
+            <span class="unlock-switch"><span class="unlock-knob"></span></span>
+          </button>
         </div>
 
       </div>
@@ -1188,7 +1266,13 @@ text-transform:uppercase;
             <div>✦ 반복될 수 있는 갈등 포인트</div>
             <div>✦ 오래 가려면 조심해야 할 타이밍</div>
           </div>
-          <button class="premium-cta-btn" onclick="showOpeningSoon()">SYNC+ 잠금 해제</button>
+          <button class="unlock-toggle-btn" onclick="showOpeningSoon()">
+            <span class="unlock-toggle-left">
+              <span class="unlock-toggle-title">SYNC+ 잠금 해제</span>
+              <span class="unlock-toggle-sub">관계의 안쪽까지 켜기</span>
+            </span>
+            <span class="unlock-switch"><span class="unlock-knob"></span></span>
+          </button>
         </div>
 
       </div>
@@ -1254,16 +1338,22 @@ text-transform:uppercase;
             특히 이 사람은 가까워질수록 더 멀게 느껴지는 독특한 구조가 있어요.
           </div>
           <div class="signal-plus-list">
-            잠금 해제하면 볼 수 있는 내용<br/>
-            ✦ 연애하면 어떤 스타일에 가까운지<br/>
-            ✦ 누구한테 유독 약해지는 타입인지<br/>
-            ✦ 팬들이 계속 과몰입하는 이유<br/>
-            ✦ 무대 밖 분위기는 어떤 느낌인지<br/>
-            ✦ 오래 가는 관계를 만드는 스타일인지<br/>
-            ✦ 올해 감정선이 크게 바뀌는 시기
+            <div class="unlock-tease-grid">
+              <div class="unlock-tease-item"><strong>연애하면 어떤 모습일지</strong><br/>다정한 쪽인지, 숨기는 쪽인지</div>
+              <div class="unlock-tease-item"><strong>어떤 사람에게 약해지는지</strong><br/>내가 그 타입에 가까운지 보는 재미</div>
+              <div class="unlock-tease-item"><strong>팬들이 계속 과몰입하는 이유</strong><br/>표정, 거리감, 분위기 중 어디서 터지는지</div>
+              <div class="unlock-tease-item"><strong>둘만 있을 때의 분위기 상상</strong><br/>무대 위 이미지와 다른 결을 부드럽게 해석</div>
+              <div class="unlock-tease-item"><strong>오래 남는 관계 스타일</strong><br/>가볍게 설레는지, 천천히 깊어지는지</div>
+            </div>
           </div>
           <div class="signal-plus-btns">
-            <button class="signal-plus-btn signal-plus-primary" onclick="showOpeningSoon()">SIGNAL+ 잠금 해제</button>
+            <button class="unlock-toggle-btn" onclick="showOpeningSoon()">
+              <span class="unlock-toggle-left">
+                <span class="unlock-toggle-title">SIGNAL+ 잠금 해제</span>
+                <span class="unlock-toggle-sub">딸깍 켜고 심층 리딩 보기</span>
+              </span>
+              <span class="unlock-switch"><span class="unlock-knob"></span></span>
+            </button>
             <button class="signal-plus-btn signal-plus-secondary" onclick="drawDeepPreviewCard()">프리미엄 카드 미리보기</button>
           </div>
           <div id="deepShareCardWrap"><canvas id="deepShareCanvas"></canvas></div>
@@ -2408,13 +2498,16 @@ function buildSignalPlusTeaser(data){
   return {
     title: `${top}의 숨겨진 매력은 여기서부터 더 깊게 보여.`,
     preview:
-`겉으로는 단순한 취향처럼 보여도,
-팬들이 오래 과몰입하는 포인트는 따로 있는 타입에 가까워.
+`겉으로는 그냥 취향처럼 보여도,
+사실 팬들이 오래 붙잡는 지점은 훨씬 더 사적인 느낌에 가까워.
 
-특히 가까워질수록 분위기가 달라 보이는 순간이 있는데...
+“내가 옆에 있으면 어떨까?”
+“연애하면 어떤 표정을 보여줄까?”
+
+이런 상상을 하게 만드는 포인트가 따로 있어.
 
 ${group} 안에서 이 사람이 유독 오래 생각나는 이유는,
-표정보다 분위기, 말보다 타이밍 쪽에 더 가까워.`
+잘생김보다 거리감, 말보다 타이밍, 표정보다 분위기 쪽에 더 가까워.`
   };
 }
 
