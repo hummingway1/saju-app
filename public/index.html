@@ -2595,46 +2595,85 @@ ${group} 안에서 이 사람이 유독 오래 생각나는 이유는,
 function renderUnlockTeaseLabels(){
   const grid = document.querySelector('#signalPlusLock .unlock-tease-grid');
   if(!grid) return;
+
   const lang = (typeof curLang !== 'undefined') ? curLang : 'ko';
+
   const sets = {
-    ko:[
-      ['연애하면 어떤 스타일?','다정한 편인지, 티 안 내는 편인지'],
-      ['어떤 사람에게 끌릴까?','은근 계속 신경 쓰이는 타입 보기'],
-      ['팬들이 계속 과몰입하는 이유','표정, 거리감, 분위기 중 어디서 터지는지'],
-      ['둘만 있으면 느낌이 어떨까?','무대에서 보이는 모습이랑 얼마나 다를지'],
-      ['오래 남는 관계 스타일','가볍게 설레는지, 천천히 깊어지는지']
-    ],
-    zh:[
-      ['恋爱时会是什么类型？','是温柔表达，还是默默藏起来'],
-      ['会被什么样的人吸引？','看看你是不是接近那种类型'],
-      ['粉丝为什么一直上头','表情、距离感、氛围，到底哪里最戳人'],
-      ['如果只有两个人会是什么感觉？','和舞台上看到的样子会有多不同'],
-      ['会留下很久的关系类型','是轻快心动，还是慢慢变深']
-    ],
-    ja:[
-      ['恋愛したらどんなタイプ？','優しく出すのか、気持ちを隠すのか'],
-      ['どんな人に惹かれる？','自分がそのタイプに近いか見る楽しさ'],
-      ['ファンが沼る理由','表情、距離感、雰囲気のどこで刺さるのか'],
-      ['二人きりならどんな感じ？','ステージ上の姿とどれくらい違うのか'],
-      ['長く残る関係タイプ','軽くときめくのか、ゆっくり深まるのか']
-    ],
-    en:[
-      ['What are they like in love?','Warm and open, or quietly guarded?'],
-      ['Who are they drawn to?','See if you feel close to that type'],
-      ['Why fans get attached','Where it hits: expression, distance, or atmosphere'],
-      ['What would it feel like alone together?','How different they may feel off stage'],
-      ['Their lasting relationship style','A quick spark or something that deepens slowly']
-    ],
-    es:[
-      ['¿Cómo serían en una relación?','Cariñosos y abiertos, o más reservados'],
-      ['¿Qué tipo les atrae?','Mira si tú te acercas a ese tipo'],
-      ['Por qué los fans se enganchan','Expresión, distancia o atmósfera: dónde pega más'],
-      ['¿Cómo sería estar a solas?','Qué tan diferente se sentiría fuera del escenario'],
-      ['Su estilo de relación duradera','Chispa rápida o algo que crece despacio']
-    ]
+    ko:{
+      items:[
+        ['연애하면 어떤 스타일?','다정한 편인지, 티 안 내는 편인지'],
+        ['어떤 사람에게 끌릴까?','은근 계속 신경 쓰이는 타입 보기'],
+        ['팬들이 계속 과몰입하는 이유','표정, 거리감, 분위기 중 어디서 터지는지'],
+        ['둘만 있으면 느낌이 어떨까?','무대에서 보이는 모습이랑 얼마나 다를지'],
+        ['오래 남는 관계 스타일','가볍게 설레는지, 천천히 깊어지는지']
+      ],
+      unlock:'SIGNAL+ 잠금 해제',
+      sub:'켜는 순간 결제창으로 연결',
+      preview:'프리미엄 카드 미리보기'
+    },
+    zh:{
+      items:[
+        ['恋爱时会是什么类型？','是会主动表达，还是默默藏起来'],
+        ['会被什么样的人吸引？','看看你是不是接近那种类型'],
+        ['粉丝为什么会一直上头','到底是表情、距离感还是氛围最让人陷进去'],
+        ['如果只有两个人会是什么感觉？','会不会和舞台上的样子完全不一样'],
+        ['会留下很久的关系类型','是一瞬间心动，还是慢慢越陷越深']
+      ],
+      unlock:'解锁 SIGNAL+',
+      sub:'打开后直接进入付款',
+      preview:'预览高级卡片'
+    },
+    ja:{
+      items:[
+        ['恋愛したらどんなタイプ？','優しく伝えるのか、気持ちを隠すのか'],
+        ['どんな人に惹かれる？','自分がそのタイプに近いか見る楽しさ'],
+        ['ファンがずっと沼る理由','表情・距離感・雰囲気のどこで刺さるのか'],
+        ['二人きりならどんな感じ？','ステージ上とどれくらい違うのか'],
+        ['長く残る関係タイプ','一瞬で落ちるのか、じわじわ深まるのか']
+      ],
+      unlock:'SIGNAL+ を解除',
+      sub:'オンにすると決済画面へ移動',
+      preview:'プレミアムカードを見る'
+    },
+    en:{
+      items:[
+        ['What are they like in love?','Warm and expressive, or quietly guarded?'],
+        ['Who are they attracted to?','See if you match that vibe'],
+        ['Why fans get emotionally attached','Expression, distance, or atmosphere — what hits hardest'],
+        ['What would it feel like alone together?','Would they feel different off stage?'],
+        ['What kind of relationship lasts for them?','Fast spark or slow emotional pull']
+      ],
+      unlock:'Unlock SIGNAL+',
+      sub:'Tap to continue to checkout',
+      preview:'Preview Premium Card'
+    },
+    es:{
+      items:[
+        ['¿Cómo serían en una relación?','¿Expresivos o más reservados?'],
+        ['¿Qué tipo les atrae?','Mira si encajas en ese tipo'],
+        ['Por qué los fans se obsesionan','Qué impacta más: expresión, distancia o atmósfera'],
+        ['¿Cómo sería estar a solas?','¿Se sentirían distintos fuera del escenario?'],
+        ['Qué tipo de relación dejan huella','¿Chispa instantánea o conexión lenta?']
+      ],
+      unlock:'Desbloquear SIGNAL+',
+      sub:'Activa esto para ir al pago',
+      preview:'Vista previa premium'
+    }
   };
-  const arr = sets[lang] || sets.ko;
-  grid.innerHTML = arr.map(x=>`<div class="unlock-tease-item"><strong>${x[0]}</strong><br/>${x[1]}</div>`).join('');
+
+  const cfg = sets[lang] || sets.ko;
+
+  grid.innerHTML = cfg.items.map(x =>
+    `<div class="unlock-tease-item"><strong>${x[0]}</strong><br/>${x[1]}</div>`
+  ).join('');
+
+  const btnTitle = document.querySelector('.unlock-toggle-title');
+  const btnSub = document.querySelector('.unlock-toggle-sub');
+  const previewBtn = document.querySelector('.signal-plus-preview-btn');
+
+  if(btnTitle) btnTitle.textContent = cfg.unlock;
+  if(btnSub) btnSub.textContent = cfg.sub;
+  if(previewBtn) previewBtn.textContent = cfg.preview;
 }
 
 function renderSignalPlusLock(data){
