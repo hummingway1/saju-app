@@ -1273,6 +1273,7 @@ export default async function handler(req, res){
       ];
 
 
+      function deriveUserArchetype(saju){
         const elems=saju.elements||[0,0,0,0,0]; // 木火土金水
         const strong=(saju.strong||[]).join(" ");
         const weak=(saju.weak||[]).join(" ");
