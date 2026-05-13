@@ -753,12 +753,12 @@ ${samjaeText(saju.birthYear || y)}`;
     decision,
     riskHook,
     timingHook,
-    paidHook: `SIGNAL+에서는 이 흐름을 더 깊게 나눠볼 수 있어.
+    paidHook: `SIGNAL+에서는 이 신호를 더 깊게 나눠볼 수 있어.
 
 ✦ ${m}월 → ${nextM}월 구체 타이밍
 ✦ 조심해야 할 관계 / 돈 / 일 패턴
 ✦ 반복되는 선택의 원인
-✦ 올해 하반기 흐름
+✦ 올해 하반기 분위기
 ✦ 내년 초에 강해지는 운`
   };
 }
