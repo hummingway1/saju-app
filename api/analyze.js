@@ -953,39 +953,40 @@ function pickRandom(arr){
   return arr[Math.floor(Math.random()*arr.length)];
 }
 
-function buildVarietyNarrative(tags=[]){
+function buildVarietyNarrative(tags=[], picker=pickRandom){
   const lines = [];
 
   if(tags.includes('cold') || tags.includes('visual') || tags.includes('mysterious')){
-    lines.push(pickRandom(SIGNAL_LINES.cold_visual));
+    lines.push(picker(SIGNAL_LINES.cold_visual));
   }
   if(tags.includes('bright') || tags.includes('sunshine') || tags.includes('cute')){
-    lines.push(pickRandom(SIGNAL_LINES.sunshine));
+    lines.push(picker(SIGNAL_LINES.sunshine));
   }
   if(tags.includes('artist') || tags.includes('unique')){
-    lines.push(pickRandom(SIGNAL_LINES.artist));
+    lines.push(picker(SIGNAL_LINES.artist));
   }
   if(tags.includes('leader') || tags.includes('responsible')){
-    lines.push(pickRandom(SIGNAL_LINES.leader));
+    lines.push(picker(SIGNAL_LINES.leader));
   }
   if(tags.includes('playful') || tags.includes('funny')){
-    lines.push(pickRandom(SIGNAL_LINES.playful));
+    lines.push(picker(SIGNAL_LINES.playful));
   }
   if(tags.includes('romantic') || tags.includes('soft')){
-    lines.push(pickRandom(SIGNAL_LINES.romantic));
+    lines.push(picker(SIGNAL_LINES.romantic));
   }
 
   const allPools = Object.values(SIGNAL_LINES).flat();
 
+  let fillSalt = 100;
   while(lines.length < 3){
-    lines.push(pickRandom(allPools));
+    lines.push(picker(allPools, fillSalt++));
   }
 
   return {
     aura: lines.slice(0,3),
-    redFlag: pickRandom(RED_FLAG_LINES),
-    fandom: pickRandom(FANDOM_BEHAVIOR_LINES),
-    micro: pickRandom(MICRO_REACTIONS)
+    redFlag: picker(RED_FLAG_LINES, 201),
+    fandom: picker(FANDOM_BEHAVIOR_LINES, 301),
+    micro: picker(MICRO_REACTIONS, 401)
   };
 }
 
@@ -1272,6 +1273,43 @@ export default async function handler(req, res){
         "부정해도 결국 이런 타입에 반응함."
       ];
 
+      function _seedString(str){
+        let h = 2166136261;
+        for (let i=0; i<str.length; i++){
+          h ^= str.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return h >>> 0;
+      }
+
+      function _makeRng(seed){
+        let t = seed >>> 0;
+        return function(){
+          t += 0x6D2B79F5;
+          let r = Math.imul(t ^ (t >>> 15), 1 | t);
+          r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+          return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      const deterministicSeed = _seedString([
+        payload.year,
+        payload.month,
+        payload.day,
+        payload.hour ?? "unknown",
+        payload.gender ?? "unknown",
+        selectedGroup
+      ].join("|"));
+
+      const rng = _makeRng(deterministicSeed);
+
+      function pickSeeded(arr, salt=0){
+        if (!arr || !arr.length) return "";
+        const local = _makeRng((deterministicSeed + salt * 2654435761) >>> 0);
+        return arr[Math.floor(local() * arr.length) % arr.length];
+      }
+
+
 
       function deriveUserArchetype(saju){
         const elems=saju.elements||[0,0,0,0,0]; // 木火土金水
@@ -1339,9 +1377,7 @@ export default async function handler(req, res){
         return "default";
       }
 
-      function chooseLine(pool, salt=0){
-        return pool[(payload.year + payload.month*3 + payload.day*5 + salt) % pool.length];
-      }
+      function chooseLine(pool, salt=0){ return pickSeeded(pool, salt); }
 
       const theme = FANDOM_THEMES[selectedGroup] || FANDOM_THEMES.ALL;
       const userArchetypeTags = deriveUserArchetype(saju);
@@ -1351,7 +1387,7 @@ export default async function handler(req, res){
 
       const ranked = [...(pool.length ? pool : IDOL_ARCHETYPE_DB)]
         .map(i=>({...i, matchScore:scoreIdolByTags(userArchetypeTags,i)}))
-        .sort((a,b)=>b.matchScore-a.matchScore);
+        .sort((a,b)=> (b.matchScore-a.matchScore) || a.name.localeCompare(b.name));
 
       const top = ranked[0];
       const second = ranked[1] || ranked[0];
@@ -1361,7 +1397,7 @@ export default async function handler(req, res){
       const shareLine = chooseLine(SHARE_LINES_LOCAL, second.name.length);
       const scoreBase = Math.min(97, Math.max(82, 82 + (top.matchScore % 16)));
 
-      const variety = buildVarietyNarrative(top?.tags || []);
+      const variety = buildVarietyNarrative(top?.tags || [], pickSeeded);
 
       const detailLines = [
         '\u2756 SIGNAL MATCH',
