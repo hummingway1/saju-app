@@ -784,6 +784,106 @@ text-transform:uppercase;
 }
 </style>
 
+
+<style id="signal-plus-lock-style">
+.signal-plus-lock{
+  margin-top:18px;
+  border:1px solid rgba(236,72,153,.22);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(236,72,153,.13), transparent 38%),
+    radial-gradient(circle at 90% 20%, rgba(168,85,247,.13), transparent 42%),
+    rgba(255,255,255,.025);
+  border-radius:18px;
+  padding:18px 16px;
+  overflow:hidden;
+  position:relative;
+}
+.signal-plus-lock::after{
+  content:'';
+  position:absolute;
+  inset:auto 0 0 0;
+  height:42%;
+  background:linear-gradient(to bottom, transparent, rgba(0,0,0,.86));
+  pointer-events:none;
+}
+.signal-plus-kicker{
+  font-size:9px;
+  letter-spacing:3px;
+  color:#f9a8d4;
+  font-weight:800;
+  margin-bottom:10px;
+}
+.signal-plus-title{
+  font-size:18px;
+  font-weight:900;
+  line-height:1.45;
+  letter-spacing:-.03em;
+  margin-bottom:10px;
+}
+.signal-plus-preview{
+  font-size:14px;
+  line-height:1.9;
+  color:rgba(255,255,255,.78);
+  word-break:keep-all;
+}
+.signal-plus-blur{
+  filter:blur(4px);
+  opacity:.46;
+  user-select:none;
+}
+.signal-plus-list{
+  position:relative;
+  z-index:2;
+  margin-top:14px;
+  padding:13px 14px;
+  border-radius:14px;
+  border:1px solid rgba(168,85,247,.18);
+  background:rgba(0,0,0,.32);
+  font-size:13px;
+  line-height:1.9;
+  color:rgba(255,255,255,.72);
+}
+.signal-plus-btns{
+  position:relative;
+  z-index:3;
+  display:flex;
+  gap:8px;
+  margin-top:14px;
+}
+.signal-plus-btn{
+  flex:1;
+  border:none;
+  border-radius:13px;
+  padding:13px 12px;
+  font-weight:800;
+  cursor:pointer;
+  font-family:inherit;
+}
+.signal-plus-primary{
+  background:linear-gradient(135deg,#ec4899,#a855f7);
+  color:#fff;
+}
+.signal-plus-secondary{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.78);
+}
+#deepShareCardWrap{
+  display:none;
+  width:100%;
+  margin:16px auto 4px;
+  text-align:center;
+}
+#deepShareCanvas{
+  display:block;
+  width:360px;
+  max-width:calc(100vw - 64px);
+  height:auto;
+  margin:0 auto;
+  border-radius:16px;
+}
+</style>
+
 </head>
 <body>
 <div class="bg1"></div>
@@ -1045,6 +1145,30 @@ text-transform:uppercase;
         <div id="idolDetail"></div>
         <div id="idolDetailText"></div>
         <button class="cta" id="shareBtn" onclick="downloadCard()" style="display:none;margin-top:14px;background:var(--grad)">📲 공유하기</button>
+
+        <div id="signalPlusLock" class="signal-plus-lock">
+          <div class="signal-plus-kicker">🔒 SIGNAL+ LOCKED</div>
+          <div class="signal-plus-title" id="signalPlusTitle">심층 리딩은 여기서부터 시작됩니다.</div>
+          <div class="signal-plus-preview" id="signalPlusPreview"></div>
+          <div class="signal-plus-preview signal-plus-blur" id="signalPlusBlur">
+            올해 하반기부터는 감정선, 관계운, 무대운이 한 번 더 크게 갈라지는 흐름이 보입니다.
+            특히 이 사람은 가까워질수록 더 멀게 느껴지는 독특한 구조가 있어요.
+          </div>
+          <div class="signal-plus-list">
+            포함 내용<br/>
+            ✦ 최애의 연애/결혼 흐름<br/>
+            ✦ 잘 맞는 이상형 에너지<br/>
+            ✦ 팬들이 느끼는 aura 분석<br/>
+            ✦ 올해 하반기와 내년 상승 시기<br/>
+            ✦ 프리미엄 공유 카드
+          </div>
+          <div class="signal-plus-btns">
+            <button class="signal-plus-btn signal-plus-primary" onclick="showOpeningSoon()">SIGNAL+ 열기</button>
+            <button class="signal-plus-btn signal-plus-secondary" onclick="drawDeepPreviewCard()">심층 카드 미리보기</button>
+          </div>
+          <div id="deepShareCardWrap"><canvas id="deepShareCanvas"></canvas></div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1821,6 +1945,7 @@ async function runIdol(){
       }
     );
     document.getElementById('shareBtn').style.display='block';
+    renderSignalPlusLock(data);
     box.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){showErr('idolErr',e.message);}
   finally{showLoad('idolLoad',false);}
@@ -2173,6 +2298,107 @@ async function playRevealSequence(){
 window.addEventListener('DOMContentLoaded',()=>{
   setMode('idol');
 });
+
+
+function buildSignalPlusTeaser(data){
+  const top = data?.idolMatches?.[0]?.name || "이 사람";
+  const group = data?.selectedGroup || "FANDOM";
+  const base = data?.title || "쉽게 지나치기 어려운 타입";
+  return {
+    title: `${top}의 심층 흐름은 여기서부터 갈립니다.`,
+    preview:
+`${base}
+
+겉으로는 단순한 취향처럼 보이지만,
+이 끌림은 “거리감, 타이밍, 감정의 온도차”가 같이 만든 흐름에 가깝습니다.
+
+특히 ${group} 에너지 안에서는
+팬들이 유독 오래 붙잡게 되는 장면이 따로 있습니다.`
+  };
+}
+
+function renderSignalPlusLock(data){
+  const box = document.getElementById('signalPlusLock');
+  if(!box) return;
+  const teaser = buildSignalPlusTeaser(data);
+  const title = document.getElementById('signalPlusTitle');
+  const preview = document.getElementById('signalPlusPreview');
+  if(title) title.textContent = teaser.title;
+  if(preview) preview.textContent = teaser.preview;
+  box.style.display = 'block';
+}
+
+function drawDeepPreviewCard(){
+  const wrap = document.getElementById('deepShareCardWrap');
+  const canvas = document.getElementById('deepShareCanvas');
+  if(!wrap || !canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = 360, H = 480;
+  canvas.width = W*dpr;
+  canvas.height = H*dpr;
+  canvas.style.width = W+'px';
+  canvas.style.height = H+'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+
+  const grad = ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0,'#2a061f');
+  grad.addColorStop(.45,'#100015');
+  grad.addColorStop(1,'#050008');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.roundRect(0,0,W,H,28);
+  ctx.fill();
+
+  for(let i=0;i<85;i++){
+    const x=(i*47)%W, y=(i*83)%H;
+    ctx.fillStyle=`rgba(255,255,255,${.08+(i%7)*.035})`;
+    ctx.beginPath();
+    ctx.arc(x,y,(i%3)+.4,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  ctx.strokeStyle='rgba(236,72,153,.32)';
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.roundRect(18,18,W-36,H-36,24);
+  ctx.stroke();
+
+  ctx.textAlign='center';
+  ctx.fillStyle='rgba(249,168,212,.88)';
+  ctx.font='900 10px Inter, sans-serif';
+  ctx.letterSpacing='4px';
+  ctx.fillText('SIGNAL+ ARCHIVE',W/2,58);
+  ctx.letterSpacing='0px';
+
+  ctx.fillStyle='#fff';
+  ctx.font='900 32px Inter, sans-serif';
+  ctx.fillText('DEEP',W/2,130);
+  ctx.fillText('READING',W/2,168);
+
+  ctx.fillStyle='rgba(255,255,255,.82)';
+  ctx.font='800 18px Inter, Noto Sans KR, sans-serif';
+  const lines=[
+    '이 끌림은',
+    '단순한 취향이 아니라',
+    '반복되는 감정 패턴에',
+    '가깝습니다.'
+  ];
+  let y=240;
+  lines.forEach(line=>{ctx.fillText(line,W/2,y); y+=31;});
+
+  ctx.fillStyle='rgba(236,72,153,.78)';
+  ctx.font='800 10px Inter, sans-serif';
+  ctx.letterSpacing='3px';
+  ctx.fillText('UNLOCK TO SHARE FULL CARD',W/2,390);
+  ctx.letterSpacing='0px';
+
+  ctx.fillStyle='rgba(255,255,255,.32)';
+  ctx.font='600 10px Inter, sans-serif';
+  ctx.fillText('sajustro.vercel.app',W/2,H-34);
+
+  wrap.style.display='block';
+}
 
 </script>
 
