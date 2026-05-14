@@ -1704,15 +1704,15 @@ text-transform:uppercase;
           <div class="daily-signal-lead" id="dailySignalLead"></div>
 
           <div id="dailyBirthGate" class="daily-birth-gate">
-            <div class="daily-birth-title">최애 생년월일을 넣으면 오늘의 시그널이 열려</div>
-            <div class="daily-birth-sub">생년월일을 넣어야 같은 생일, 같은 조회 날짜 기준으로 같은 결과가 고정돼</div>
+            <div class="daily-birth-title">오늘의 최애 시그널 미리보기</div>
+            <div class="daily-birth-sub">최애의 생년월일을 토대로 최애의 오늘을 함께하기</div>
             <div class="form-grid compact-birth daily-birth-grid">
               <div class="field"><div class="flabel">생년</div><div class="box" id="cYr" onclick="openSheet('cYr')">선택</div></div>
               <div class="field"><div class="flabel">월</div><div class="box" id="cMo" onclick="openSheet('cMo')">선택</div></div>
               <div class="field"><div class="flabel">일</div><div class="box" id="cDy" onclick="openSheet('cDy')">선택</div></div>
               <div class="field"><div class="flabel">시각</div><div class="box" id="cHr" onclick="openSheet('cHr')">모름</div></div>
             </div>
-            <button class="daily-birth-apply" type="button" onclick="refreshDailyIdolSignal()">오늘 최애 시그널 보기</button>
+            <button class="daily-birth-apply" type="button" onclick="refreshDailyIdolSignal()">오늘의 최애 시그널 보기</button>
           </div>
 
           <div class="daily-signal-grid">
@@ -1731,7 +1731,7 @@ text-transform:uppercase;
           </div>
           <div class="daily-signal-chiprow" id="dailySignalChips"></div>
           <div class="daily-signal-locked">
-            <div class="daily-signal-locked-title" id="dailyLockedTitle">매일 바뀌는 최애 시그널을 더 깊게 볼 수 있어</div>
+            <div class="daily-signal-locked-title" id="dailyLockedTitle">오늘 최애에게 더 시선이 가는 이유</div>
             <div class="daily-signal-locked-list" id="dailyLockedList">
               <div>✦ 오늘 유독 분위기가 달라 보이는 이유</div>
               <div>✦ 짧은 표정 하나가 오래 회자될 타이밍</div>
@@ -2574,7 +2574,7 @@ function dailySignalCopy(lang){
       emotionTitle:'오늘 최애의 기분',
       peopleTitle:'오늘 최애의 대인관계',
       fanTitle:'오늘 나와 최애의 시그널',
-      lockedTitle:'매일 바뀌는 최애 시그널을 더 깊게 볼 수 있어',
+      lockedTitle:'오늘 최애에게 더 시선이 가는 이유',
       unlockTitle:'DAILY SIGNAL+ 잠금 해제',
       unlockSub:'오늘의 최애 상태를 더 깊게 보기',
       locked:[
@@ -2813,14 +2813,14 @@ function renderDailyIdolSignal(data){
 
   if(!birth){
     const titleNoBirth={
-      ko:'오늘 최애의 생년월일을 먼저 넣어줘',
+      ko:'오늘의 최애 시그널 미리보기',
       en:'Add your idol’s birth date to open today’s signal',
       zh:'先输入TA的生日，才能打开今天的信号',
       ja:'今日のシグナルを見るには推しの誕生日を入力してね',
       es:'Agrega la fecha de nacimiento para abrir la señal de hoy'
     };
     const leadNoBirth={
-      ko:'생년월일 없이 나오면 그냥 랜덤처럼 보일 수 있어. 그래서 DAILY IDOL SIGNAL은 최애 생일을 기준으로 열리게 했어',
+      ko:'최애의 생년월일을 토대로 최애의 오늘을 함께하기',
       en:'Without a birth date, this can feel random. DAILY IDOL SIGNAL opens from the entered birth chart',
       zh:'没有生日会像随机结果，所以 DAILY IDOL SIGNAL 会按输入生日开启',
       ja:'誕生日なしだとランダムに見えるので、DAILY IDOL SIGNAL は入力した誕生日を基準に開きます',
