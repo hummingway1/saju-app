@@ -1552,8 +1552,7 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"누가 이상하게 오래 기억에 남는 타입일까",
     feat2T:"관계 싱크",feat2D:"왜 자꾸 같은 사람에게 끌리는 걸까",
     feat3T:"바이럴 공유 카드",feat3D:"친구한테 바로 보내고 싶은 결과 카드",
-    appTitle:"SIGNAL DETECT",appSub:"동양의 사주와 서양의 별자리가,
-결국 같은 사람을 가리키고 있어",appSubSaju:"사주로 지금 바뀌는 흐름을 읽어봄",appSubCompat:"두 사람 사이의 끌림과 어긋남을 확인함",
+    appTitle:"SIGNAL DETECT",appSub:"동양의 사주와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어",appSubSaju:"사주로 지금 바뀌는 흐름을 읽어봄",appSubCompat:"두 사람 사이의 끌림과 어긋남을 확인함",
     tab0:"시그널 매치",tab1:"오늘의 흐름",tab2:"관계 싱크",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
@@ -1911,8 +1910,7 @@ function setMode(mode){
   document.getElementById('mtab2').classList.toggle('active',mode==='compat');
   const _t=(typeof T!=='undefined'&&T[typeof curLang!=='undefined'?curLang:'ko'])||{};
   const _subMap={
-    idol:_t.appSub||'동양의 사주와 서양의 별자리가,
-결국 같은 사람을 가리키고 있어',
+    idol:_t.appSub||'동양의 사주와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어',
     saju:_t.appSubSaju||'이미 바뀌기 시작한 흐름이 있음',
     compat:_t.appSubCompat||'두 사람 사이엔 이미 잡힌 흐름이 있음'
   };
