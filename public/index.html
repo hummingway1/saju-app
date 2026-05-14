@@ -1037,6 +1037,143 @@ text-transform:uppercase;
 </style>
 
 
+
+<style id="animated-share-card-style">
+#shareCardWrap,#deepShareCardWrap{position:relative;overflow:visible}
+#shareCardWrap::before,#deepShareCardWrap::before{
+  content:'';position:absolute;inset:-18px;border-radius:28px;
+  background:radial-gradient(circle at 20% 20%,rgba(236,72,153,.28),transparent 35%),
+  radial-gradient(circle at 80% 25%,rgba(34,211,238,.18),transparent 38%),
+  radial-gradient(circle at 50% 90%,rgba(168,85,247,.26),transparent 42%);
+  filter:blur(22px);opacity:.68;z-index:-2;
+  animation:sajustroAuraMove 9s ease-in-out infinite alternate;pointer-events:none;
+}
+#shareCardWrap::after,#deepShareCardWrap::after{
+  content:'';position:absolute;inset:0;border-radius:18px;pointer-events:none;z-index:3;
+  background:radial-gradient(circle at 18% 22%,rgba(255,255,255,.35) 0 1px,transparent 1.6px),
+  radial-gradient(circle at 78% 16%,rgba(255,255,255,.22) 0 1px,transparent 1.8px),
+  radial-gradient(circle at 64% 72%,rgba(255,255,255,.20) 0 1px,transparent 1.6px),
+  linear-gradient(110deg,transparent 0%,rgba(255,255,255,.08) 45%,transparent 58%);
+  background-size:100% 100%,100% 100%,100% 100%,220% 100%;opacity:.55;
+  animation:sajustroShimmer 4.8s ease-in-out infinite;
+}
+#shareCanvas,#deepShareCanvas{
+  position:relative;z-index:1;transform-origin:center;
+  animation:sajustroCardBreath 5.2s ease-in-out infinite;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 18px 60px rgba(168,85,247,.24),0 0 42px rgba(236,72,153,.14);
+}
+.result-card.result-revealed #shareCanvas{
+  animation:sajustroCardReveal .7s cubic-bezier(.2,.9,.15,1.1),sajustroCardBreath 5.2s ease-in-out infinite .7s;
+}
+.animated-card-note{margin-top:8px;font-size:11px;color:rgba(255,255,255,.36);text-align:center;letter-spacing:.08em}
+@keyframes sajustroAuraMove{0%{transform:translate3d(-8px,-6px,0) scale(1);opacity:.48}50%{transform:translate3d(7px,5px,0) scale(1.04);opacity:.72}100%{transform:translate3d(4px,-8px,0) scale(1.02);opacity:.58}}
+@keyframes sajustroShimmer{0%,100%{background-position:0 0,0 0,0 0,-80% 0;opacity:.28}45%{opacity:.62}70%{background-position:0 0,0 0,0 0,130% 0;opacity:.5}}
+@keyframes sajustroCardBreath{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.006)}}
+@keyframes sajustroCardReveal{0%{transform:translateY(12px) scale(.965);filter:blur(8px);opacity:0}100%{transform:translateY(0) scale(1);filter:blur(0);opacity:1}}
+@media (prefers-reduced-motion:reduce){#shareCardWrap::before,#shareCardWrap::after,#deepShareCardWrap::before,#deepShareCardWrap::after,#shareCanvas,#deepShareCanvas{animation:none!important}}
+</style>
+
+
+<style id="tarot-deck-fan-style">
+.tarot-intro{
+  color:rgba(255,255,255,.64)!important;
+  font-size:14px!important;
+  line-height:1.8!important;
+  margin-bottom:18px!important;
+  word-break:keep-all;
+}
+.tarot-grid.deck-fan{
+  position:relative;
+  display:block!important;
+  height:205px;
+  max-width:360px;
+  margin:10px auto 4px;
+  perspective:1200px;
+}
+.tarot-grid.deck-fan::before{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:56%;
+  width:210px;
+  height:92px;
+  transform:translate(-50%,-50%);
+  border-radius:999px;
+  background:radial-gradient(circle, rgba(168,85,247,.22), transparent 67%);
+  filter:blur(18px);
+  pointer-events:none;
+}
+.tarot-grid.deck-fan .tarot-card{
+  position:absolute!important;
+  left:50%;
+  top:72px;
+  width:70px;
+  height:112px;
+  margin-left:-35px;
+  border-radius:15px;
+  transform-origin:50% 122%;
+  translate:none!important;
+  transition:
+    transform .72s cubic-bezier(.2,.88,.18,1),
+    opacity .35s ease,
+    filter .35s ease,
+    box-shadow .35s ease;
+  animation:tarotFanIn .68s cubic-bezier(.2,.88,.18,1) both;
+  animation-delay:calc(var(--i) * 42ms);
+}
+.tarot-grid.deck-fan .tarot-card:hover{
+  box-shadow:0 16px 38px rgba(236,72,153,.22),0 0 30px rgba(168,85,247,.16);
+  filter:brightness(1.1);
+  z-index:30!important;
+}
+.tarot-grid.deck-fan .tarot-card:not(.flipped):hover{
+  transform:
+    translateX(calc(var(--x) * 1px))
+    rotate(calc(var(--rot) * 1deg))
+    translateY(calc((var(--lift) - 14) * 1px))
+    scale(1.055);
+}
+.tarot-grid.deck-fan .tarot-card.flipped{
+  z-index:60!important;
+  transform:translateX(0) rotateY(180deg) translateY(-20px) scale(1.18)!important;
+  box-shadow:0 26px 64px rgba(236,72,153,.28),0 0 44px rgba(168,85,247,.22);
+}
+.tarot-grid.deck-fan .tarot-card.disabled{
+  opacity:.2;
+  filter:blur(1px);
+  pointer-events:none;
+}
+.tarot-grid.deck-fan .card-back{
+  background:
+    radial-gradient(circle at 28% 20%, rgba(255,255,255,.12), transparent 18%),
+    linear-gradient(155deg,#22103c,#0b0616 72%);
+  color:rgba(255,255,255,.72);
+  font-size:18px;
+}
+.tarot-grid.deck-fan .card-back::after{
+  content:'';
+  position:absolute;
+  inset:9px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.10);
+  background:linear-gradient(135deg, transparent, rgba(255,255,255,.055), transparent);
+}
+.tarot-grid.deck-fan .card-front .ctitle{
+  font-size:11px;
+  line-height:1.35;
+}
+.tarot-grid.deck-fan .card-front .cmini{
+  font-size:9px;
+}
+@keyframes tarotFanIn{
+  0%{opacity:0;transform:translateX(0) rotate(0deg) translateY(26px) scale(.84)}
+  100%{
+    opacity:1;
+    transform:translateX(calc(var(--x) * 1px)) rotate(calc(var(--rot) * 1deg)) translateY(calc(var(--lift) * 1px)) scale(1);
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="bg1"></div>
@@ -1159,7 +1296,7 @@ text-transform:uppercase;
     <div id="modeSaju" style="display:none">
       <div class="panel">
         <div class="panel-title" id="lblTarot">오늘의 타로</div>
-        <div class="tarot-intro" id="lblTarotIntro">열 장 중 가장 끌리는 카드를 골라보세요</div>
+        <div class="tarot-intro" id="lblTarotIntro">이상하게 눈이 가는 카드가 있을 거야</div>
         <div id="tarotGrid" class="tarot-grid"></div>
         <div id="tarotResult" class="tarot-result"></div>
       </div>
@@ -1342,7 +1479,8 @@ text-transform:uppercase;
         <h2 class="headline" id="idolTitle"></h2>
         <div id="idolDetail"></div>
         <div id="idolDetailText"></div>
-        <button class="cta" id="shareBtn" onclick="downloadCard()" style="display:none;margin-top:14px;background:var(--grad)">📲 공유하기</button>
+        <button class="cta" id="shareBtn" onclick="downloadCard()" style="display:none;margin-top:14px;background:var(--grad)">📲 이미지 저장</button>
+        <div id="motionCardNote" class="animated-card-note" style="display:none">카드는 화면에서 은은하게 움직여요 · TikTok은 화면녹화로 올리면 가장 자연스러워요</div>
 
         <div id="signalPlusLock" class="signal-plus-lock">
           <div class="signal-plus-kicker">🔒 SIGNAL+ 잠금</div>
@@ -1419,7 +1557,7 @@ const T = {
     tab0:"시그널 매치",tab1:"오늘의 흐름",tab2:"관계 싱크",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
-    lblTarot:"오늘의 타로",tarotIntro:"열 장 중 가장 끌리는 카드를 골라보세요",
+    lblTarot:"오늘의 타로",tarotIntro:"이상하게 눈이 가는 카드가 있을 거야",
     tarotMini:"끌린다면 이유가 있어",
     tarotAfter:(t,m)=>`<strong>${t}</strong><br>${m}<br><br>아래에서 운세를 열어보면 이 카드가 사주와 어떻게 겹쳐지는지 드러납니다.`,
     lblInput:"정밀 분석 입력",
@@ -1803,15 +1941,25 @@ function setFcat(i){
 // ══════════════════════════════════════════
 function buildTarot(){
   const t=T[curLang], grid=document.getElementById('tarotGrid');
+  grid.classList.add('deck-fan');
   grid.innerHTML='';
+  const spread = [-108,-84,-60,-36,-12,12,36,60,84,108];
+  const rots = [-22,-17,-12,-7,-2,2,7,12,17,22];
+  const lifts = [24,13,5,0,-4,-4,0,5,13,24];
+
   t.tarotDeck.forEach((card,idx)=>{
     const el=document.createElement('div');
     el.className='tarot-card';
+    el.style.setProperty('--i',idx);
+    el.style.setProperty('--x',spread[idx]||0);
+    el.style.setProperty('--rot',rots[idx]||0);
+    el.style.setProperty('--lift',lifts[idx]||0);
+    el.style.zIndex=idx+1;
     if(selTarot){
       if(selTarot._idx===idx)el.classList.add('flipped');
       else el.classList.add('disabled');
     }
-    el.innerHTML=`<div class="card-face card-back">✧</div>
+    el.innerHTML=`<div class="card-face card-back">✦</div>
       <div class="card-face card-front">
         <div class="ctitle">${card.title}</div>
         <div class="cmini">${t.tarotMini}</div>
@@ -2155,6 +2303,7 @@ async function runIdol(){
       }
     );
     document.getElementById('shareBtn').style.display='block';
+    const motionNote=document.getElementById('motionCardNote'); if(motionNote) motionNote.style.display='block';
     renderSignalPlusLock(data);
     box.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){showErr('idolErr',e.message);}
@@ -2263,6 +2412,31 @@ function drawCard(title, highlight, fandomTheme){
   ctx.beginPath();
   ctx.roundRect(13,13,W-26,H-26,24);
   ctx.stroke();
+
+
+  // Animated-look static aura details for exported image
+  for(let i=0;i<70;i++){
+    const x=(i*53 + (r||0))%W;
+    const y=(i*97 + (g||0))%H;
+    const alpha=.05 + ((i%5)*.025);
+    ctx.fillStyle=`rgba(255,255,255,${alpha})`;
+    ctx.beginPath();
+    ctx.arc(x,y,(i%3)*0.45+0.55,0,Math.PI*2);
+    ctx.fill();
+  }
+  const aura1=ctx.createRadialGradient(W*.18,H*.18,0,W*.18,H*.18,W*.78);
+  aura1.addColorStop(0,`rgba(${r},${g},${b},.18)`);
+  aura1.addColorStop(.42,`rgba(${r},${g},${b},.05)`);
+  aura1.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=aura1;
+  ctx.fillRect(0,0,W,H);
+  const shine=ctx.createLinearGradient(-W*.2,H*.1,W*1.2,H*.75);
+  shine.addColorStop(0,'rgba(255,255,255,0)');
+  shine.addColorStop(.48,'rgba(255,255,255,.045)');
+  shine.addColorStop(.55,'rgba(255,255,255,.10)');
+  shine.addColorStop(.64,'rgba(255,255,255,0)');
+  ctx.fillStyle=shine;
+  ctx.fillRect(0,0,W,H);
 
   ctx.textAlign='center';
   ctx.textBaseline='alphabetic';
