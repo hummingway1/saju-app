@@ -1174,6 +1174,117 @@ text-transform:uppercase;
 }
 </style>
 
+
+<style id="daily-idol-signal-style">
+.daily-signal-box{
+  margin-top:16px;
+  padding:17px 15px;
+  border-radius:18px;
+  border:1px solid rgba(236,72,153,.22);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(236,72,153,.14), transparent 38%),
+    radial-gradient(circle at 92% 18%, rgba(34,211,238,.11), transparent 42%),
+    rgba(255,255,255,.026);
+  box-shadow:0 18px 48px rgba(0,0,0,.22);
+}
+.daily-signal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px;
+}
+.daily-signal-kicker{
+  font-size:9px;
+  letter-spacing:3px;
+  color:#f9a8d4;
+  font-weight:900;
+}
+.daily-signal-date{
+  font-size:11px;
+  color:rgba(255,255,255,.45);
+  font-weight:700;
+}
+.daily-signal-title{
+  font-size:18px;
+  line-height:1.45;
+  letter-spacing:-.035em;
+  font-weight:900;
+  margin-bottom:8px;
+  word-break:keep-all;
+}
+.daily-signal-lead{
+  font-size:13px;
+  line-height:1.85;
+  color:rgba(255,255,255,.72);
+  word-break:keep-all;
+  white-space:pre-line;
+}
+.daily-signal-grid{
+  display:grid;
+  gap:9px;
+  margin-top:13px;
+}
+.daily-signal-card{
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.035);
+}
+.daily-signal-card h4{
+  margin:0 0 6px;
+  font-size:13px;
+  color:#fff;
+  letter-spacing:-.02em;
+}
+.daily-signal-card p{
+  margin:0;
+  font-size:13px;
+  line-height:1.75;
+  color:rgba(255,255,255,.70);
+  word-break:keep-all;
+}
+.daily-signal-locked{
+  margin-top:12px;
+  padding:13px 12px;
+  border-radius:15px;
+  background:rgba(0,0,0,.22);
+  border:1px solid rgba(168,85,247,.17);
+}
+.daily-signal-locked-title{
+  font-size:13px;
+  font-weight:900;
+  color:#fff;
+  margin-bottom:8px;
+}
+.daily-signal-locked-list{
+  display:grid;
+  gap:7px;
+  font-size:13px;
+  line-height:1.7;
+  color:rgba(255,255,255,.72);
+}
+.daily-signal-locked-list div{
+  padding:8px 10px;
+  border-radius:11px;
+  background:rgba(255,255,255,.034);
+}
+.daily-signal-chiprow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px;
+}
+.daily-signal-chip{
+  font-size:11px;
+  padding:6px 9px;
+  border-radius:999px;
+  background:rgba(236,72,153,.10);
+  border:1px solid rgba(236,72,153,.18);
+  color:rgba(255,255,255,.78);
+}
+</style>
+
 </head>
 <body>
 <div class="bg1"></div>
@@ -1361,6 +1472,46 @@ text-transform:uppercase;
 
       </div>
     </div>
+
+
+        <div id="dailyIdolSignal" class="daily-signal-box" style="display:none">
+          <div class="daily-signal-head">
+            <div class="daily-signal-kicker" id="dailySignalKicker">DAILY IDOL SIGNAL</div>
+            <div class="daily-signal-date" id="dailySignalDate"></div>
+          </div>
+          <div class="daily-signal-title" id="dailySignalTitle"></div>
+          <div class="daily-signal-lead" id="dailySignalLead"></div>
+          <div class="daily-signal-grid">
+            <div class="daily-signal-card">
+              <h4 id="dailyEmotionTitle">오늘 최애의 기분</h4>
+              <p id="dailyEmotionText"></p>
+            </div>
+            <div class="daily-signal-card">
+              <h4 id="dailyPeopleTitle">오늘 최애의 대인관계</h4>
+              <p id="dailyPeopleText"></p>
+            </div>
+            <div class="daily-signal-card">
+              <h4 id="dailyFanTitle">오늘 나와 최애의 시그널</h4>
+              <p id="dailyFanText"></p>
+            </div>
+          </div>
+          <div class="daily-signal-chiprow" id="dailySignalChips"></div>
+          <div class="daily-signal-locked">
+            <div class="daily-signal-locked-title" id="dailyLockedTitle">매일 바뀌는 최애 시그널을 더 깊게 볼 수 있어</div>
+            <div class="daily-signal-locked-list" id="dailyLockedList">
+              <div>✦ 오늘 유독 분위기가 달라 보이는 이유</div>
+              <div>✦ 짧은 표정 하나가 오래 회자될 타이밍</div>
+              <div>✦ 오늘 네가 더 신경 쓰게 되는 포인트</div>
+            </div>
+            <button class="unlock-toggle-btn" onclick="showOpeningSoon()">
+              <span class="unlock-toggle-left">
+                <span class="unlock-toggle-title" id="dailyUnlockTitle">DAILY SIGNAL+ 잠금 해제</span>
+                <span class="unlock-toggle-sub" id="dailyUnlockSub">오늘의 최애 상태를 더 깊게 보기</span>
+              </span>
+              <span class="unlock-switch"></span>
+            </button>
+          </div>
+        </div>
 
     <!-- COMPAT -->
     <div id="modeCompat" style="display:none">
@@ -2303,10 +2454,269 @@ async function runIdol(){
     document.getElementById('shareBtn').style.display='block';
     const motionNote=document.getElementById('motionCardNote'); if(motionNote) motionNote.style.display='block';
     renderSignalPlusLock(data);
+    renderDailyIdolSignal(data);
     box.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){showErr('idolErr',e.message);}
   finally{showLoad('idolLoad',false);}
 }
+
+
+function dailyHash(str){
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h,16777619);
+  }
+  return h>>>0;
+}
+function dailyPick(arr, seed, salt=0){
+  if(!arr || !arr.length) return '';
+  const n = (seed + salt * 2654435761) >>> 0;
+  return arr[n % arr.length];
+}
+function todayKey(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function dailySignalCopy(lang){
+  const base = {
+    ko:{
+      kicker:'DAILY IDOL SIGNAL',
+      emotionTitle:'오늘 최애의 기분',
+      peopleTitle:'오늘 최애의 대인관계',
+      fanTitle:'오늘 나와 최애의 시그널',
+      lockedTitle:'매일 바뀌는 최애 시그널을 더 깊게 볼 수 있어',
+      unlockTitle:'DAILY SIGNAL+ 잠금 해제',
+      unlockSub:'오늘의 최애 상태를 더 깊게 보기',
+      locked:[
+        '오늘 유독 분위기가 달라 보이는 이유',
+        '짧은 표정 하나가 오래 회자될 타이밍',
+        '오늘 네가 더 신경 쓰게 되는 포인트'
+      ],
+      leads:[
+        '오늘은 평소보다 작은 표정이 더 오래 남는 날이야',
+        '겉으로는 평소 같아도, 분위기 안쪽이 조금 달라 보일 수 있어',
+        '오늘은 말보다 눈빛이나 타이밍에 더 시선이 가는 날이야'
+      ],
+      emotions:[
+        '감정이 밖으로 크게 드러나기보단, 안쪽에서 조용히 정리되는 쪽에 가까워',
+        '사람 많은 곳에서도 혼자 생각을 정리하려는 분위기가 강해질 수 있어',
+        '웃고 있어도 마음 한쪽에서는 오래 남은 장면을 다시 떠올릴 수 있어',
+        '오늘은 가벼운 말보다 조용한 반응이 더 오래 기억에 남을 수 있어'
+      ],
+      people:[
+        '텐션이 높은 사람보다, 편하게 옆에 있어주는 사람에게 더 마음이 갈 수 있어',
+        '오늘은 억지로 가까워지는 사람보다 자연스럽게 옆에 남는 사람이 더 잘 맞아',
+        '조용히 챙겨주는 사람에게 반응하기 쉬운 날이야',
+        '거리감이 있어도 안정감을 주는 사람에게 시선이 오래 갈 수 있어'
+      ],
+      fans:[
+        '짧은 표정 하나가 팬들 사이에서 오래 회자될 수 있어',
+        '오늘은 “분위기 왜 다르지?”라는 반응이 나오기 쉬운 날이야',
+        '직캠이나 사진 한 장에서 평소보다 더 오래 남는 장면이 생길 수 있어',
+        '팬들이 작은 변화에도 더 민감하게 반응할 수 있는 날이야'
+      ],
+      chips:['오늘의 무드','감정선','대인관계','팬 반응','저장각']
+    },
+    en:{
+      kicker:'DAILY IDOL SIGNAL',
+      emotionTitle:"Today's Idol Mood",
+      peopleTitle:"Today's Social Vibe",
+      fanTitle:"Your Signal With Them Today",
+      lockedTitle:'Unlock the idol signal that changes every day',
+      unlockTitle:'Unlock DAILY SIGNAL+',
+      unlockSub:"Go deeper into today's idol mood",
+      locked:[
+        'Why their atmosphere feels different today',
+        'The timing when a tiny expression stays in fans’ minds',
+        'The point that pulls your attention today'
+      ],
+      leads:[
+        'Today, one small expression may stay in your mind longer than expected',
+        'They may look the same as usual, but the atmosphere feels slightly different',
+        'Today, timing and eye contact may say more than words'
+      ],
+      emotions:[
+        'Their emotions may not show loudly today, but something feels quietly settled inside',
+        'Even around many people, they may seem like they are sorting out their thoughts alone',
+        'A soft smile can still carry something that lingers underneath',
+        'A quiet reaction may feel more memorable than a bright moment today'
+      ],
+      people:[
+        'They may respond more to someone who feels comfortable than someone too loud',
+        'The person who stays naturally nearby may feel better than someone who pushes close',
+        'Small care may matter more than obvious attention today',
+        'Someone with distance but steadiness may stay in their attention longer'
+      ],
+      fans:[
+        'One tiny expression could be remembered by fans for longer than expected',
+        'Today is the kind of day fans may say, “Why do they feel different?”',
+        'A single fancam or photo may leave a stronger impression today',
+        'Fans may notice small changes more easily than usual'
+      ],
+      chips:['daily mood','emotion line','social vibe','fan reaction','save-worthy']
+    },
+    zh:{
+      kicker:'每日偶像信号',
+      emotionTitle:'今天TA的心情',
+      peopleTitle:'今天TA的人际氛围',
+      fanTitle:'今天你和TA的信号',
+      lockedTitle:'每天变化的偶像信号，可以再看得更深一点',
+      unlockTitle:'解锁 DAILY SIGNAL+',
+      unlockSub:'深入看看今天的偶像状态',
+      locked:[
+        '今天为什么会显得氛围不一样',
+        '一个小表情被粉丝记很久的时机',
+        '今天让你格外在意的点'
+      ],
+      leads:[
+        '今天，一个小表情可能会比平时更容易留在脑海里',
+        '表面看起来和平时一样，但氛围里会有一点不一样',
+        '今天比起语言，眼神和时机更容易让人注意'
+      ],
+      emotions:[
+        '情绪不一定会明显表现出来，更像是在心里慢慢整理',
+        '即使在人多的地方，也可能有一种想独自整理想法的感觉',
+        '就算笑着，也可能让人感觉心里还有一些没有说出来的东西',
+        '今天安静的反应，可能比明亮的瞬间更让人记住'
+      ],
+      people:[
+        '比起很热闹的人，今天更容易对舒服陪在身边的人有反应',
+        '自然留在旁边的人，比强行靠近的人更合适',
+        '今天会更容易注意到默默照顾人的类型',
+        '有距离感但让人安心的人，可能会更久地留在视线里'
+      ],
+      fans:[
+        '一个很短的表情，可能会在粉丝之间被记很久',
+        '今天很容易出现“怎么感觉氛围不一样”的反应',
+        '一张照片或一个直拍，可能会留下比平时更深的印象',
+        '粉丝今天可能会比平时更容易注意到细小变化'
+      ],
+      chips:['今日氛围','情绪线','人际氛围','粉丝反应','值得保存']
+    },
+    ja:{
+      kicker:'DAILY IDOL SIGNAL',
+      emotionTitle:'今日の推しの気分',
+      peopleTitle:'今日の推しの対人ムード',
+      fanTitle:'今日のあなたと推しのシグナル',
+      lockedTitle:'毎日変わる推しのシグナルをもっと深く見られる',
+      unlockTitle:'DAILY SIGNAL+ を解除',
+      unlockSub:'今日の推しのムードを深く見る',
+      locked:[
+        '今日なぜ雰囲気が少し違って見えるのか',
+        '小さな表情がファンの記憶に残るタイミング',
+        '今日なぜか気になってしまうポイント'
+      ],
+      leads:[
+        '今日は小さな表情が、思ったより長く心に残りそう',
+        'いつも通りに見えても、雰囲気の奥が少し違って見える日',
+        '今日は言葉より、視線やタイミングに目が行きやすい日'
+      ],
+      emotions:[
+        '感情が大きく外に出るというより、内側で静かに整理される感じ',
+        '人が多い場所でも、ひとりで考えをまとめているように見えやすい',
+        '笑っていても、その奥に少し残るものを感じやすい日',
+        '明るい瞬間より、静かな反応のほうが記憶に残りやすい'
+      ],
+      people:[
+        'テンションの高い人より、そばにいて落ち着く人に反応しやすい',
+        '無理に近づく人より、自然に隣に残る人のほうが合いやすい',
+        '今日はさりげなく気にかけてくれる人に目が行きやすい',
+        '距離感があっても安心感をくれる人が、長く気になりそう'
+      ],
+      fans:[
+        '小さな表情ひとつが、ファンの間で長く残るかもしれない',
+        '今日は「なんか雰囲気違う」と言われやすい日',
+        '写真や直カメの一瞬が、いつもより深く残りやすい',
+        'ファンが小さな変化に気づきやすい日'
+      ],
+      chips:['今日のムード','感情線','対人ムード','ファン反応','保存したい']
+    },
+    es:{
+      kicker:'DAILY IDOL SIGNAL',
+      emotionTitle:'Mood de tu idol hoy',
+      peopleTitle:'Vibra social de tu idol',
+      fanTitle:'Tu señal con tu idol hoy',
+      lockedTitle:'Desbloquea la señal diaria que cambia cada día',
+      unlockTitle:'Desbloquear DAILY SIGNAL+',
+      unlockSub:'Ver más profundo el mood de hoy',
+      locked:[
+        'Por qué hoy su atmósfera se siente distinta',
+        'El momento en que un gesto pequeño queda en la mente',
+        'El punto que más te llama hoy'
+      ],
+      leads:[
+        'Hoy, una expresión pequeña puede quedarse más tiempo en tu mente',
+        'Puede verse igual que siempre, pero la atmósfera se siente un poco distinta',
+        'Hoy, la mirada y el timing pueden decir más que las palabras'
+      ],
+      emotions:[
+        'Las emociones no se muestran con fuerza, pero algo se está acomodando por dentro',
+        'Incluso entre muchas personas, puede sentirse como si estuviera ordenando sus pensamientos',
+        'Una sonrisa suave puede dejar algo más profundo debajo',
+        'Una reacción tranquila puede sentirse más memorable que un momento brillante'
+      ],
+      people:[
+        'Puede responder más a alguien cómodo que a alguien demasiado intenso',
+        'La persona que se queda cerca de forma natural puede sentirse mejor',
+        'Un cuidado pequeño puede importar más que la atención obvia',
+        'Alguien con distancia pero estabilidad puede quedarse más tiempo en su atención'
+      ],
+      fans:[
+        'Una expresión pequeña puede quedarse en la memoria de los fans',
+        'Hoy es fácil que alguien diga: “¿Por qué se siente diferente?”',
+        'Un fancam o una foto puede dejar más impresión de lo normal',
+        'Los fans pueden notar detalles pequeños con más facilidad'
+      ],
+      chips:['mood de hoy','línea emocional','vibra social','reacción fan','para guardar']
+    }
+  };
+  return base[lang] || base.ko;
+}
+function renderDailyIdolSignal(data){
+  const box=document.getElementById('dailyIdolSignal');
+  if(!box || !data) return;
+  const lang=(typeof curLang!=='undefined') ? curLang : 'ko';
+  const copy=dailySignalCopy(lang);
+  const top=data.idolMatches?.[0]?.name || data.selectedGroup || 'SIGNAL';
+  const date=todayKey();
+  const seed=dailyHash(`${date}|${top}|${data.selectedGroup||''}|${data.title||''}`);
+
+  const lead=dailyPick(copy.leads,seed,1);
+  const emotion=dailyPick(copy.emotions,seed,2);
+  const people=dailyPick(copy.people,seed,3);
+  const fan=dailyPick(copy.fans,seed,4);
+
+  const titleMap={
+    ko:`오늘 ${top}에게 오래 남을 장면이 생길 수 있어`,
+    en:`Today, ${top} may leave a moment that lingers`,
+    zh:`今天，${top} 可能会留下一个让人记很久的瞬间`,
+    ja:`今日の${top}は、長く残る瞬間を見せるかもしれない`,
+    es:`Hoy, ${top} puede dejar un momento difícil de olvidar`
+  };
+
+  const set=(id,txt)=>{const el=document.getElementById(id); if(el) el.textContent=txt;};
+  set('dailySignalKicker',copy.kicker);
+  set('dailySignalDate',date);
+  set('dailySignalTitle',titleMap[lang] || titleMap.ko);
+  set('dailySignalLead',lead);
+  set('dailyEmotionTitle',copy.emotionTitle);
+  set('dailyEmotionText',emotion);
+  set('dailyPeopleTitle',copy.peopleTitle);
+  set('dailyPeopleText',people);
+  set('dailyFanTitle',copy.fanTitle);
+  set('dailyFanText',fan);
+  set('dailyLockedTitle',copy.lockedTitle);
+  set('dailyUnlockTitle',copy.unlockTitle);
+  set('dailyUnlockSub',copy.unlockSub);
+
+  const list=document.getElementById('dailyLockedList');
+  if(list) list.innerHTML=copy.locked.map(x=>`<div>✦ ${x}</div>`).join('');
+  const chips=document.getElementById('dailySignalChips');
+  if(chips) chips.innerHTML=copy.chips.map(x=>`<span class="daily-signal-chip">${x}</span>`).join('');
+  box.style.display='block';
+}
+
 
 // ══════════════════════════════════════════
 //  SHARE CARD
