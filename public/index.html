@@ -1573,9 +1573,9 @@ text-transform:uppercase;
     <div id="modeIdol">
       <div class="panel">
         <div class="panel-title" id="lblIdolTitle">SIGNAL MATCH</div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.8" id="lblIdolDesc">좋아하는 그룹을 먼저 골라봐. 누가 나와 가장 맞는 아이돌일까</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.8" id="lblIdolDesc">나의 아이돌을 먼저 골라봐. 누가 나와 가장 맞는 시그널일까</p>
         <div class="field full" style="margin-bottom:12px">
-          <div class="flabel" id="lbIGroup">좋아하는 그룹</div>
+          <div class="flabel" id="lbIGroup">나의 아이돌</div>
           <select class="box" id="idolGroup" style="width:100%;appearance:none;color:#fff;background:rgba(255,255,255,.04);font-family:inherit;background-color:#151019!important;color:#fff!important;">
             <option value="BTS">BTS</option>
             <option value="BLACKPINK">BLACKPINK</option>
@@ -1610,10 +1610,10 @@ text-transform:uppercase;
           <div class="field full">
             <div class="flabel" id="lbIdolBirth">최애 생년월일</div>
             <div class="form-grid compact-birth">
-              <div class="field"><div class="flabel">생년</div><input id="idolBirthYear" type="number" inputmode="numeric" placeholder="예: 1997"/></div>
-              <div class="field"><div class="flabel">월</div><input id="idolBirthMonth" type="number" inputmode="numeric" placeholder="예: 2"/></div>
-              <div class="field"><div class="flabel">일</div><input id="idolBirthDay" type="number" inputmode="numeric" placeholder="예: 1"/></div>
-              <div class="field"><div class="flabel">시각</div><input id="idolBirthHour" type="number" inputmode="numeric" placeholder="모르면 12"/></div>
+              <div class="field"><div class="flabel">생년</div><div class="box" id="cYr" onclick="openSheet('cYr')">선택</div></div>
+              <div class="field"><div class="flabel">월</div><div class="box" id="cMo" onclick="openSheet('cMo')">선택</div></div>
+              <div class="field"><div class="flabel">일</div><div class="box" id="cDy" onclick="openSheet('cDy')">선택</div></div>
+              <div class="field"><div class="flabel">시각</div><div class="box" id="cHr" onclick="openSheet('cHr')">모름</div></div>
             </div>
             <div class="tiny-help" id="idolBirthHelp">결과로 나온 멤버가 아니어도 괜찮아. 생년월일을 넣으면 오늘 날짜 기준으로 같은 결과가 고정돼</div>
           </div>
@@ -1733,7 +1733,7 @@ const T = {
   ko:{
     lang:"ko",lbl:"한국어",
     heroTag:"✨ 팬덤 시그널 매치",heroL1:"나의",heroL2:"아이돌 시그널 매치",
-    heroDesc:"좋아하는 그룹을 고르고, 네 팬심이 반응하는 멤버 시그널을 확인해보세요",
+    heroDesc:"나의 아이돌을 고르고, 네 팬심이 반응하는 멤버 시그널을 확인해보세요",
     heroBtn1:"무료 시그널 매치 보기",heroBtn2:"관계 싱크",navCta:"시그널 매치",
     proof1:"아이돌 궁합 조회",proof2:"틱톡 공유율",proof3:"개국",
     phoneLbl:"나의 Signal Match",phoneSoulLbl:"SIGNAL MATCH",
@@ -1764,7 +1764,7 @@ const T = {
     errApi:"분석에 실패했습니다",sel:"선택",aiLang:"Korean",
     lblMyInfo:"나의 정보",lblPartInfo:"상대방 정보",btnCompat:"싱크 체크",compatLoad:"✦ 궁합을 읽는 중…",
     lblIdolTitle:"나의 사주로 보는 시그널 매치 타입",
-    lblIdolDesc:"좋아하는 그룹을 먼저 골라봐. 누가 나와 가장 맞는 아이돌일까",
+    lblIdolDesc:"나의 아이돌을 먼저 골라봐. 누가 나와 가장 맞는 시그널일까",
     btnIdol:"무료 시그널 매치 보기",idolLoad:"✦ 별자리와 사주를 읽는 중…",
     shareBtn:"📲 공유하기",
     ftH:"내 최애가",ftSpan:"운명일 수도",ftP:"한국 운명 읽기와 점성술로 숨겨진 궁합을 발견하는 수백만 팬들과 함께하세요",ftBtn:"SIGNAL DETECT",
@@ -1994,7 +1994,8 @@ const ST = {
   s:{year:null,month:null,day:null,hour:null,gender:null},  // saju
   a:{year:null,month:null,day:null,hour:null,gender:null},  // compat A
   b:{year:null,month:null,day:null,hour:null,gender:null},  // compat B
-  i:{year:null,month:null,day:null,hour:null,gender:null}   // idol
+  i:{year:null,month:null,day:null,hour:null,gender:null},  // user for idol match
+  c:{year:null,month:null,day:null,hour:null}               // custom idol birth
 };
 let curLang = localStorage.getItem('sj_lang')||'ko';
 let curMode = 'saju';
@@ -2182,7 +2183,7 @@ function renderAll(){
     setText(prefix+'Dy', st.day??t.sel);
     setText(prefix+'Hr', st.hour??t.hrUnk);
   };
-  renderForm('s',ST.s); renderForm('a',ST.a); renderForm('b',ST.b); renderForm('i',ST.i);
+  renderForm('s',ST.s); renderForm('a',ST.a); renderForm('b',ST.b); renderForm('i',ST.i); renderForm('c',ST.c);
   ['s','a','b','i'].forEach(p=>{
     const male=p+'Male', fem=p+'Fem', g=ST[p].gender;
     const em=document.getElementById(male), ef=document.getElementById(fem);
@@ -2205,7 +2206,8 @@ function openSheet(boxId){
     sYr:['s','year'],sMo:['s','month'],sDy:['s','day'],sHr:['s','hour'],
     aYr:['a','year'],aMo:['a','month'],aDy:['a','day'],aHr:['a','hour'],
     bYr:['b','year'],bMo:['b','month'],bDy:['b','day'],bHr:['b','hour'],
-    iYr:['i','year'],iMo:['i','month'],iDy:['i','day'],iHr:['i','hour']
+    iYr:['i','year'],iMo:['i','month'],iDy:['i','day'],iHr:['i','hour'],
+    cYr:['c','year'],cMo:['c','month'],cDy:['c','day'],cHr:['c','hour']
   };
   const [prefix,field]=map[boxId]||['s','year'];
   const st=ST[prefix];
@@ -2715,11 +2717,9 @@ function dailySignalCopy(lang){
 }
 
 function getManualIdolBirth(){
-  const y=Number(document.getElementById('idolBirthYear')?.value||0);
-  const m=Number(document.getElementById('idolBirthMonth')?.value||0);
-  const d=Number(document.getElementById('idolBirthDay')?.value||0);
-  const hRaw=document.getElementById('idolBirthHour')?.value;
-  const h=hRaw==='' ? 12 : Number(hRaw||12);
+  const c=ST.c||{};
+  const y=Number(c.year||0), m=Number(c.month||0), d=Number(c.day||0);
+  const h=(c.hour==null || c.hour==='') ? 12 : Number(c.hour);
   if(!y || !m || !d || y<1900 || m<1 || m>12 || d<1 || d>31) return null;
   return {year:y,month:m,day:d,hour:(h>=0&&h<=23?h:12)};
 }
