@@ -1285,6 +1285,35 @@ text-transform:uppercase;
 }
 </style>
 
+
+<style id="idol-birth-input-style">
+.compact-birth{
+  grid-template-columns:repeat(4,1fr)!important;
+  gap:8px!important;
+  margin-top:8px;
+}
+.compact-birth input{
+  width:100%;
+  padding:13px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.055);
+  color:#fff;
+  font-weight:700;
+  font-family:inherit;
+}
+.tiny-help{
+  margin-top:8px;
+  font-size:11px;
+  line-height:1.6;
+  color:rgba(255,255,255,.42);
+  word-break:keep-all;
+}
+@media(max-width:560px){
+  .compact-birth{grid-template-columns:repeat(2,1fr)!important}
+}
+</style>
+
 </head>
 <body>
 <div class="bg1"></div>
@@ -1399,7 +1428,7 @@ text-transform:uppercase;
     </div>
     <div class="mode-tabs">
       <button class="mtab active" id="mtab0" onclick="setMode('idol')">⭐ <span id="tab0Txt">시그널 매치</span></button>
-      <button class="mtab" id="mtab1" onclick="setMode('saju')">🔮 <span id="tab1Txt">오늘의 흐름</span></button>
+      <button class="mtab" id="mtab1" onclick="setMode('saju')">🔮 <span id="tab1Txt">오늘의 분위기</span></button>
       <button class="mtab" id="mtab2" onclick="setMode('compat')">💫 <span id="tab2Txt">관계 싱크</span></button>
     </div>
 
@@ -1434,7 +1463,7 @@ text-transform:uppercase;
           </div>
           <div class="field full"><div class="flabel" id="lbQ">질문 (선택)</div><textarea id="qInput" placeholder="예: 올해 이직하는 게 맞을까요?"></textarea></div>
         </div>
-        <button class="cta" id="btnSaju" onclick="runSaju()">오늘의 흐름 보기</button>
+        <button class="cta" id="btnSaju" onclick="runSaju()">오늘의 분위기 보기</button>
         <div id="sajuLoad" class="loading">✦ 기운을 읽는 중…</div>
 <div id="oracleAccess" class="oracle-access">ACCESSING YOUR FLOW..</div>
         <div id="sajuErr" class="err-box"></div>
@@ -1444,8 +1473,8 @@ text-transform:uppercase;
 <div class="badge badge-read" id="sajuBadge">YOUR READING</div>
         <h2 class="headline" id="sajuTitle"></h2>
         <div class="decision" id="sajuDecision"></div>
-        <div class="hooks"><h3 id="lblHooks">더 깊은 흐름</h3><p id="hookRisk"></p><p id="hookTime"></p><p id="hookPaid"></p></div>
-        <button class="subcta" id="unlockBtn" onclick="showOpeningSoon()" style="display:none">SIGNAL+ 심층 흐름 — 곧 공개</button>
+        <div class="hooks"><h3 id="lblHooks">더 깊은 분위기</h3><p id="hookRisk"></p><p id="hookTime"></p><p id="hookPaid"></p></div>
+        <button class="subcta" id="unlockBtn" onclick="showOpeningSoon()" style="display:none">SIGNAL+ 심층 분위기 — 곧 공개</button>
         <div class="meta" id="sajuMeta"></div>
         <div id="sajuDetail"></div>
 
@@ -1459,7 +1488,7 @@ text-transform:uppercase;
           <div class="premium-cta-list">
             <div>✦ 5월 → 6월 구체 타이밍</div>
             <div>✦ 조심해야 할 관계 / 돈 / 일 패턴</div>
-            <div>✦ 올해 하반기와 내년 초 흐름</div>
+            <div>✦ 올해 하반기와 내년 초 분위기</div>
           </div>
           <button class="unlock-toggle-btn" onclick="showOpeningSoon()">
             <span class="unlock-toggle-left">
@@ -1472,47 +1501,6 @@ text-transform:uppercase;
 
       </div>
     </div>
-
-
-        <div id="dailyIdolSignal" class="daily-signal-box" style="display:none">
-          <div class="daily-signal-head">
-            <div class="daily-signal-kicker" id="dailySignalKicker">DAILY IDOL SIGNAL</div>
-            <div class="daily-signal-date" id="dailySignalDate"></div>
-          </div>
-          <div class="daily-signal-title" id="dailySignalTitle"></div>
-          <div class="daily-signal-lead" id="dailySignalLead"></div>
-          <div class="daily-signal-grid">
-            <div class="daily-signal-card">
-              <h4 id="dailyEmotionTitle">오늘 최애의 기분</h4>
-              <p id="dailyEmotionText"></p>
-            </div>
-            <div class="daily-signal-card">
-              <h4 id="dailyPeopleTitle">오늘 최애의 대인관계</h4>
-              <p id="dailyPeopleText"></p>
-            </div>
-            <div class="daily-signal-card">
-              <h4 id="dailyFanTitle">오늘 나와 최애의 시그널</h4>
-              <p id="dailyFanText"></p>
-            </div>
-          </div>
-          <div class="daily-signal-chiprow" id="dailySignalChips"></div>
-          <div class="daily-signal-locked">
-            <div class="daily-signal-locked-title" id="dailyLockedTitle">매일 바뀌는 최애 시그널을 더 깊게 볼 수 있어</div>
-            <div class="daily-signal-locked-list" id="dailyLockedList">
-              <div>✦ 오늘 유독 분위기가 달라 보이는 이유</div>
-              <div>✦ 짧은 표정 하나가 오래 회자될 타이밍</div>
-              <div>✦ 오늘 네가 더 신경 쓰게 되는 포인트</div>
-            </div>
-            <button class="unlock-toggle-btn" onclick="showOpeningSoon()">
-              <span class="unlock-toggle-left">
-                <span class="unlock-toggle-title" id="dailyUnlockTitle">DAILY SIGNAL+ 잠금 해제</span>
-                <span class="unlock-toggle-sub" id="dailyUnlockSub">오늘의 최애 상태를 더 깊게 보기</span>
-              </span>
-              <span class="unlock-switch"></span>
-            </button>
-          </div>
-        </div>
-
     <!-- COMPAT -->
     <div id="modeCompat" style="display:none">
       <div class="panel">
@@ -1618,6 +1606,18 @@ text-transform:uppercase;
               <button type="button" class="chip" id="iFem" onclick="setGender('i','female')">여성</button>
             </div>
           </div>
+
+          <div class="field full">
+            <div class="flabel" id="lbIdolBirth">최애 생년월일</div>
+            <div class="form-grid compact-birth">
+              <div class="field"><div class="flabel">생년</div><input id="idolBirthYear" type="number" inputmode="numeric" placeholder="예: 1997"/></div>
+              <div class="field"><div class="flabel">월</div><input id="idolBirthMonth" type="number" inputmode="numeric" placeholder="예: 2"/></div>
+              <div class="field"><div class="flabel">일</div><input id="idolBirthDay" type="number" inputmode="numeric" placeholder="예: 1"/></div>
+              <div class="field"><div class="flabel">시각</div><input id="idolBirthHour" type="number" inputmode="numeric" placeholder="모르면 12"/></div>
+            </div>
+            <div class="tiny-help" id="idolBirthHelp">결과로 나온 멤버가 아니어도 괜찮아. 생년월일을 넣으면 오늘 날짜 기준으로 같은 결과가 고정돼</div>
+          </div>
+
         </div>
         <button class="cta" id="btnIdol" onclick="runIdol()">FANDOM SIGNAL SCAN</button>
         <div id="idolLoad" class="loading">✦ 별자리와 사주를 읽는 중…</div>
@@ -1638,7 +1638,7 @@ text-transform:uppercase;
           <div class="signal-plus-title" id="signalPlusTitle">심층 리딩은 여기서부터 시작됩니다</div>
           <div class="signal-plus-preview" id="signalPlusPreview"></div>
           <div class="signal-plus-preview signal-plus-blur" id="signalPlusBlur">
-            올해 하반기부터는 감정선, 관계운, 무대운이 한 번 더 크게 갈라지는 흐름이 보입니다.
+            올해 하반기부터는 감정선, 관계운, 무대운이 한 번 더 크게 갈라지는 분위기이 보입니다.
             특히 이 사람은 가까워질수록 더 멀게 느껴지는 독특한 구조가 있어요.
           </div>
           <div class="signal-plus-list">
@@ -1646,7 +1646,7 @@ text-transform:uppercase;
               <div class="unlock-tease-item"><strong>연애하면 어떤 스타일?</strong><br/>다정한 편인지, 티 안 내는 편인지</div>
               <div class="unlock-tease-item"><strong>어떤 사람에게 끌릴까?</strong><br/>은근 계속 신경 쓰이는 타입 보기</div>
               <div class="unlock-tease-item"><strong>팬들이 계속 과몰입하는 이유</strong><br/>표정, 거리감, 분위기 중 어디서 터지는지</div>
-              <div class="unlock-tease-item"><strong>둘만 있으면 느낌이 어떨까?</strong><br/>무대에서 보이는 모습이랑 얼마나 다를지</div>
+              <div class="unlock-tease-item"><strong>둘만 있으면 느끼는 편이 어떨까?</strong><br/>무대에서 보이는 모습이랑 얼마나 다를지</div>
               <div class="unlock-tease-item"><strong>오래 남는 관계 스타일</strong><br/>가볍게 설레는지, 천천히 깊어지는지</div>
             </div>
           </div>
@@ -1662,6 +1662,46 @@ text-transform:uppercase;
           </div>
           <div id="deepShareCardWrap"><canvas id="deepShareCanvas"></canvas></div>
         </div>
+
+        <div id="dailyIdolSignal" class="daily-signal-box" style="display:none">
+          <div class="daily-signal-head">
+            <div class="daily-signal-kicker" id="dailySignalKicker">DAILY IDOL SIGNAL</div>
+            <div class="daily-signal-date" id="dailySignalDate"></div>
+          </div>
+          <div class="daily-signal-title" id="dailySignalTitle"></div>
+          <div class="daily-signal-lead" id="dailySignalLead"></div>
+          <div class="daily-signal-grid">
+            <div class="daily-signal-card">
+              <h4 id="dailyEmotionTitle">오늘 최애의 기분</h4>
+              <p id="dailyEmotionText"></p>
+            </div>
+            <div class="daily-signal-card">
+              <h4 id="dailyPeopleTitle">오늘 최애의 대인관계</h4>
+              <p id="dailyPeopleText"></p>
+            </div>
+            <div class="daily-signal-card">
+              <h4 id="dailyFanTitle">오늘 나와 최애의 시그널</h4>
+              <p id="dailyFanText"></p>
+            </div>
+          </div>
+          <div class="daily-signal-chiprow" id="dailySignalChips"></div>
+          <div class="daily-signal-locked">
+            <div class="daily-signal-locked-title" id="dailyLockedTitle">매일 바뀌는 최애 시그널을 더 깊게 볼 수 있어</div>
+            <div class="daily-signal-locked-list" id="dailyLockedList">
+              <div>✦ 오늘 유독 분위기가 달라 보이는 이유</div>
+              <div>✦ 짧은 표정 하나가 오래 회자될 타이밍</div>
+              <div>✦ 오늘 네가 더 신경 쓰게 되는 포인트</div>
+            </div>
+            <button class="unlock-toggle-btn" onclick="showOpeningSoon()">
+              <span class="unlock-toggle-left">
+                <span class="unlock-toggle-title" id="dailyUnlockTitle">DAILY SIGNAL+ 잠금 해제</span>
+                <span class="unlock-toggle-sub" id="dailyUnlockSub">오늘의 최애 상태를 더 깊게 보기</span>
+              </span>
+              <span class="unlock-switch"></span>
+            </button>
+          </div>
+        </div>
+
 
       </div>
     </div>
@@ -1703,8 +1743,8 @@ const T = {
     feat1T:"아이돌 시그널 매치",feat1D:"누가 이상하게 오래 기억에 남는 타입일까",
     feat2T:"관계 싱크",feat2D:"왜 자꾸 같은 사람에게 끌리는 걸까",
     feat3T:"바이럴 공유 카드",feat3D:"친구한테 바로 보내고 싶은 결과 카드",
-    appTitle:"SIGNAL DETECT",appSub:"동양의 사주와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어",appSubSaju:"사주로 지금 바뀌는 흐름을 읽어봄",appSubCompat:"두 사람 사이의 끌림과 어긋남을 확인함",
-    tab0:"시그널 매치",tab1:"오늘의 흐름",tab2:"관계 싱크",
+    appTitle:"SIGNAL DETECT",appSub:"동양의 사주와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어",appSubSaju:"사주로 지금 바뀌는 분위기을 읽어봄",appSubCompat:"두 사람 사이의 끌림과 어긋남을 확인함",
+    tab0:"시그널 매치",tab1:"오늘의 분위기",tab2:"관계 싱크",
     fcats:["종합운","연애운","재물운","사업운","건강운"],
     fcatKeys:["종합","연애운","재물운","사업운","건강운"],
     lblTarot:"오늘의 타로",tarotIntro:"이상하게 눈이 가는 카드가 있을 거야",
@@ -1714,10 +1754,10 @@ const T = {
     lbYr:"생년",lbMo:"월",lbDy:"일",lbHr:"출생 시각",lbLoc:"출생지",lbGen:"성별",lbQ:"질문 (선택)",
     ph:"예: 서울, 부산",phQ:"예: 올해 이직하는 게 맞을까요?",
     male:"남성",female:"여성",btnSaju:"운세 보기",
-    sajuLoad:"✦ 기운을 읽는 중…",lblHooks:"더 깊은 흐름",
-    unlockBtn:"SIGNAL+ 심층 흐름 — 곧 공개",
+    sajuLoad:"✦ 기운을 읽는 중…",lblHooks:"더 깊은 분위기",
+    unlockBtn:"SIGNAL+ 심층 분위기 — 곧 공개",
     freeMeta:"출생지를 입력하면 점성술 차트까지 더한 상세 분석이 열립니다",
-    fullMeta:"사주와 점성술 차트로 더 깊은 흐름을 읽었습니다",
+    fullMeta:"사주와 점성술 차트로 더 깊은 분위기을 읽었습니다",
     shYr:"생년 선택",shMo:"월 선택",shDy:"일 선택",shHr:"시각 선택",hrUnk:"모름",
     errDate:"생년월일을 먼저 선택해 주세요",errGen:"성별을 선택해 주세요",
     errLoc:"출생지를 입력해 주세요",errGeo:"출생지를 찾지 못했습니다",
@@ -1729,14 +1769,14 @@ const T = {
     shareBtn:"📲 공유하기",
     ftH:"내 최애가",ftSpan:"운명일 수도",ftP:"한국 운명 읽기와 점성술로 숨겨진 궁합을 발견하는 수백만 팬들과 함께하세요",ftBtn:"SIGNAL DETECT",
     tarotDeck:[
-      {title:"별의 문",message:"조용했던 흐름이 서서히 열리기 시작합니다. 서두르지 않되, 들어오는 신호는 놓치지 않는 편이 좋습니다."},
+      {title:"별의 문",message:"조용했던 분위기이 서서히 열리기 시작합니다. 서두르지 않되, 들어오는 신호는 놓치지 않는 편이 좋습니다."},
       {title:"숨은 파도",message:"겉은 고요해 보여도 안쪽에는 움직임이 있습니다. 말보다 분위기를 먼저 읽는 것이 중요합니다."},
-      {title:"금빛 실",message:"지금 이어지는 인연이나 기회는 가볍지 않습니다. 다만 손에 쥐려 하기보다 흐름을 살피는 쪽이 좋습니다."},
+      {title:"금빛 실",message:"지금 이어지는 인연이나 기회는 가볍지 않습니다. 다만 손에 쥐려 하기보다 분위기을 살피는 쪽이 좋습니다."},
       {title:"달의 잔",message:"감정이 예민해지는 때입니다. 마음이 먼저 반응하는 순간일수록 선택은 조금 늦추는 편이 안전합니다."},
       {title:"잠든 불씨",message:"아직 꺼진 것이 아닙니다. 멈춘 듯 보여도 안쪽에서는 다시 타오를 준비가 진행되고 있습니다."},
       {title:"갈림의 바람",message:"두 방향 중 하나를 고르게 되는 기운이 가까워지고 있습니다. 지금은 기준을 세우는 시간이 필요합니다."},
       {title:"푸른 거울",message:"당신의 마음이 상대와 상황을 비추는 시기입니다. 바깥보다 안쪽을 먼저 살피는 것이 답을 빠르게 보여줍니다."},
-      {title:"쇠의 문장",message:"분명한 결정과 정리가 필요한 흐름입니다. 미뤄둔 문제를 그대로 두면 다시 같은 자리에 닿게 됩니다."},
+      {title:"쇠의 문장",message:"분명한 결정과 정리가 필요한 분위기입니다. 미뤄둔 문제를 그대로 두면 다시 같은 자리에 닿게 됩니다."},
       {title:"새벽의 씨앗",message:"아직 작게 보이는 변화가 뒤에서 크게 자랄 수 있습니다. 작다고 가볍게 넘기지 않는 것이 좋습니다."},
       {title:"은빛 항로",message:"이동과 변화의 기운이 살아 있습니다. 방향이 맞지 않으면 피로만 남을 수 있으니 목적을 또렷하게 해야 합니다."}
     ]
@@ -2062,8 +2102,8 @@ function setMode(mode){
   const _t=(typeof T!=='undefined'&&T[typeof curLang!=='undefined'?curLang:'ko'])||{};
   const _subMap={
     idol:_t.appSub||'동양의 사주와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어',
-    saju:_t.appSubSaju||'이미 바뀌기 시작한 흐름이 있음',
-    compat:_t.appSubCompat||'두 사람 사이엔 이미 잡힌 흐름이 있음'
+    saju:_t.appSubSaju||'이미 바뀌기 시작한 분위기이 있음',
+    compat:_t.appSubCompat||'두 사람 사이엔 이미 잡힌 분위기이 있음'
   };
   const _subEl=document.getElementById('appSub');
   if(_subEl) _subEl.textContent=_subMap[mode]||_subMap.idol;
@@ -2304,7 +2344,7 @@ async function runSaju(){
 
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 흐름은 모두 소진돼\n다음 신호는 내일 다시 열림.');
+    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 분위기은 모두 소진돼\n다음 신호는 내일 다시 열림.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
 
     clearInterval(oracleInterval);
@@ -2356,7 +2396,7 @@ async function runSajuFull(){
       body:JSON.stringify({...ST.s,minute:0,question:document.getElementById('qInput').value.trim(),
         location:lastLoc,paid:false,tarot:selTarot,lang:t.aiLang,fortuneCat:t.fcatKeys[fcatIdx]})});
     const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 흐름은 모두 소진돼\n다음 신호는 내일 다시 열림.');
+    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 분위기은 모두 소진돼\n다음 신호는 내일 다시 열림.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     setText('sajuMeta',t.fullMeta);
     document.getElementById('unlockBtn').style.display='none';
@@ -2380,7 +2420,7 @@ async function runCompat(){
         partnerYear:ST.b.year,partnerMonth:ST.b.month,partnerDay:ST.b.day,partnerHour:ST.b.hour,
         partnerGender:ST.b.gender||'unknown',mode:'compat',lang:t.aiLang,paid:false})});
     const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 흐름은 모두 소진돼\n다음 신호는 내일 다시 열림.');
+    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 분위기은 모두 소진돼\n다음 신호는 내일 다시 열림.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     const box=document.getElementById('compatResult');
     box.style.display='';
@@ -2402,7 +2442,7 @@ async function runIdol(){
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({...ST.i,paid:false,mode:'idol',selectedGroup:document.getElementById('idolGroup')?.value||'BTS',lang:t.aiLang,question:'bias pattern fandom signal analysis'})});
     const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 흐름은 모두 소진돼\n다음 신호는 내일 다시 열림.');
+    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 분위기은 모두 소진돼\n다음 신호는 내일 다시 열림.');
     if(!res.ok||data.error)throw new Error(data.error||t.errApi);
     const box=document.getElementById('idolResult');
     box.style.display='';
@@ -2673,33 +2713,80 @@ function dailySignalCopy(lang){
   };
   return base[lang] || base.ko;
 }
+
+function getManualIdolBirth(){
+  const y=Number(document.getElementById('idolBirthYear')?.value||0);
+  const m=Number(document.getElementById('idolBirthMonth')?.value||0);
+  const d=Number(document.getElementById('idolBirthDay')?.value||0);
+  const hRaw=document.getElementById('idolBirthHour')?.value;
+  const h=hRaw==='' ? 12 : Number(hRaw||12);
+  if(!y || !m || !d || y<1900 || m<1 || m>12 || d<1 || d>31) return null;
+  return {year:y,month:m,day:d,hour:(h>=0&&h<=23?h:12)};
+}
+function dailyStemBranchScore(birth){
+  const now=new Date();
+  const y=now.getFullYear(), m=now.getMonth()+1, d=now.getDate();
+  const dateKey=`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const heavenly=['Wood','Fire','Earth','Metal','Water'];
+  const branches=['Rat','Ox','Tiger','Rabbit','Dragon','Snake','Horse','Goat','Monkey','Rooster','Dog','Pig'];
+  const birthNum=birth.year*372 + birth.month*31 + birth.day + Math.floor((birth.hour||12)/2);
+  const dayNum=y*372 + m*31 + d;
+  const birthEl=heavenly[birthNum%5];
+  const dayEl=heavenly[dayNum%5];
+  const birthBranch=branches[birthNum%12];
+  const dayBranch=branches[dayNum%12];
+  const harmony=(birthNum*7 + dayNum*13) % 100;
+  return {dateKey,birthEl,dayEl,birthBranch,dayBranch,harmony};
+}
+
 function renderDailyIdolSignal(data){
   const box=document.getElementById('dailyIdolSignal');
   if(!box || !data) return;
   const lang=(typeof curLang!=='undefined') ? curLang : 'ko';
   const copy=dailySignalCopy(lang);
   const top=data.idolMatches?.[0]?.name || data.selectedGroup || 'SIGNAL';
+  const birth=getManualIdolBirth();
   const date=todayKey();
-  const seed=dailyHash(`${date}|${top}|${data.selectedGroup||''}|${data.title||''}`);
+  const astro=birth ? dailyStemBranchScore(birth) : null;
+  const seedSource = birth
+    ? `${astro.dateKey}|${birth.year}-${birth.month}-${birth.day}-${birth.hour}|${data.selectedGroup||''}`
+    : `${date}|${top}|${data.selectedGroup||''}|${data.title||''}`;
+  const seed=dailyHash(seedSource);
 
   const lead=dailyPick(copy.leads,seed,1);
   const emotion=dailyPick(copy.emotions,seed,2);
   const people=dailyPick(copy.people,seed,3);
   const fan=dailyPick(copy.fans,seed,4);
 
+  const birthLine = {
+    ko: birth ? `입력한 생일 기준 · ${birth.year}.${birth.month}.${birth.day}` : '생년월일을 넣으면 오늘 날짜 기준으로 더 고정된 리딩이 열려',
+    en: birth ? `Based on entered birth date · ${birth.year}.${birth.month}.${birth.day}` : 'Add their birth date to lock today’s reading to that chart',
+    zh: birth ? `按输入生日生成 · ${birth.year}.${birth.month}.${birth.day}` : '输入生日后，今天的解读会按同一命盘固定',
+    ja: birth ? `入力した誕生日基準 · ${birth.year}.${birth.month}.${birth.day}` : '誕生日を入れると今日の読みがその命盤で固定されます',
+    es: birth ? `Basado en la fecha ingresada · ${birth.year}.${birth.month}.${birth.day}` : 'Agrega su fecha de nacimiento para fijar la lectura de hoy'
+  };
+
   const titleMap={
-    ko:`오늘 ${top}에게 오래 남을 장면이 생길 수 있어`,
-    en:`Today, ${top} may leave a moment that lingers`,
-    zh:`今天，${top} 可能会留下一个让人记很久的瞬间`,
-    ja:`今日の${top}は、長く残る瞬間を見せるかもしれない`,
-    es:`Hoy, ${top} puede dejar un momento difícil de olvidar`
+    ko: birth ? `오늘 입력한 최애에게 오래 남을 장면이 생길 수 있어` : `오늘 ${top}에게 오래 남을 장면이 생길 수 있어`,
+    en: birth ? `Today’s entered idol chart may leave a lingering moment` : `Today, ${top} may leave a moment that lingers`,
+    zh: birth ? `今天输入的偶像命盘，可能会留下让人记很久的瞬间` : `今天，${top} 可能会留下一个让人记很久的瞬间`,
+    ja: birth ? `今日入力した推しの命盤に、長く残る瞬間が見えます` : `今日の${top}は、長く残る瞬間を見せるかもしれない`,
+    es: birth ? `La carta ingresada puede dejar un momento difícil de olvidar hoy` : `Hoy, ${top} puede dejar un momento difícil de olvidar`
+  };
+
+  const sajuNote = {
+    ko: astro ? `오늘의 기운 ${astro.dayEl} · 입력 생일 ${astro.birthEl} 기준으로 읽었어` : '',
+    en: astro ? `Today’s element ${astro.dayEl} · read against birth element ${astro.birthEl}` : '',
+    zh: astro ? `今日元素 ${astro.dayEl} · 以生日元素 ${astro.birthEl} 参照` : '',
+    ja: astro ? `今日の元素 ${astro.dayEl} · 誕生日の元素 ${astro.birthEl} を基準に表示` : '',
+    es: astro ? `Elemento de hoy ${astro.dayEl} · leído contra elemento natal ${astro.birthEl}` : ''
   };
 
   const set=(id,txt)=>{const el=document.getElementById(id); if(el) el.textContent=txt;};
   set('dailySignalKicker',copy.kicker);
   set('dailySignalDate',date);
   set('dailySignalTitle',titleMap[lang] || titleMap.ko);
-  set('dailySignalLead',lead);
+  set('dailySignalLead',`${lead}${sajuNote[lang] ? '\n' + sajuNote[lang] : ''}`);
   set('dailyEmotionTitle',copy.emotionTitle);
   set('dailyEmotionText',emotion);
   set('dailyPeopleTitle',copy.peopleTitle);
@@ -2713,7 +2800,10 @@ function renderDailyIdolSignal(data){
   const list=document.getElementById('dailyLockedList');
   if(list) list.innerHTML=copy.locked.map(x=>`<div>✦ ${x}</div>`).join('');
   const chips=document.getElementById('dailySignalChips');
-  if(chips) chips.innerHTML=copy.chips.map(x=>`<span class="daily-signal-chip">${x}</span>`).join('');
+  if(chips){
+    const extra = birthLine[lang] || birthLine.ko;
+    chips.innerHTML=[extra,...copy.chips].map(x=>`<span class="daily-signal-chip">${x}</span>`).join('');
+  }
   box.style.display='block';
 }
 
@@ -3065,7 +3155,7 @@ setLang(curLang);
 updateProofNumbers();
 
 function showDeepSignalTeaser(){
-  alert('SIGNAL+ 심층 흐름 — 곧 공개');
+  alert('SIGNAL+ 심층 분위기 — 곧 공개');
 }
 
 async function playRevealSequence(){
@@ -3166,7 +3256,7 @@ tiene más que ver con distancia, timing y atmósfera que solo con apariencia.`
     title: `${top}의 숨겨진 매력은 여기서부터 더 깊게 보여.`,
     preview:
 `겉으로는 그냥 취향처럼 보여도,
-사실 팬들이 오래 붙잡는 지점은 훨씬 더 사적인 느낌에 가까워.
+사실 팬들이 오래 붙잡는 지점은 훨씬 더 사적인 느끼는 편에 가까워.
 
 “내가 옆에 있으면 어떨까?”
 “연애하면 어떤 표정을 보여줄까?”
@@ -3191,7 +3281,7 @@ function renderUnlockTeaseLabels(){
         ['연애하면 어떤 스타일?','다정한 편인지, 티 안 내는 편인지'],
         ['어떤 사람에게 끌릴까?','은근 계속 신경 쓰이는 타입 보기'],
         ['팬들이 계속 과몰입하는 이유','표정, 거리감, 분위기 중 어디서 터지는지'],
-        ['둘만 있으면 느낌이 어떨까?','무대에서 보이는 모습이랑 얼마나 다를지'],
+        ['둘만 있으면 느끼는 편이 어떨까?','무대에서 보이는 모습이랑 얼마나 다를지'],
         ['오래 남는 관계 스타일','가볍게 설레는지, 천천히 깊어지는지']
       ],
       unlock:'SIGNAL+ 잠금 해제',
