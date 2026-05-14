@@ -1314,6 +1314,50 @@ text-transform:uppercase;
 }
 </style>
 
+
+<style id="daily-birth-gate-style">
+.daily-birth-gate{
+  margin-top:14px;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid rgba(168,85,247,.22);
+  background:rgba(255,255,255,.035);
+}
+.daily-birth-title{
+  font-size:14px;
+  font-weight:900;
+  color:#fff;
+  margin-bottom:5px;
+  word-break:keep-all;
+}
+.daily-birth-sub{
+  font-size:11px;
+  line-height:1.6;
+  color:rgba(255,255,255,.48);
+  margin-bottom:10px;
+  word-break:keep-all;
+}
+.daily-birth-grid{
+  margin-top:8px;
+}
+.daily-birth-apply{
+  margin-top:10px;
+  width:100%;
+  border:none;
+  border-radius:14px;
+  padding:13px 14px;
+  background:linear-gradient(135deg,#ec4899,#a855f7);
+  color:#fff;
+  font-weight:900;
+  font-family:inherit;
+  cursor:pointer;
+}
+.daily-signal-grid.locked-daily,
+.daily-signal-locked.locked-daily{
+  display:none;
+}
+</style>
+
 </head>
 <body>
 <div class="bg1"></div>
@@ -1606,19 +1650,7 @@ text-transform:uppercase;
               <button type="button" class="chip" id="iFem" onclick="setGender('i','female')">여성</button>
             </div>
           </div>
-
-          <div class="field full">
-            <div class="flabel" id="lbIdolBirth">최애 생년월일</div>
-            <div class="form-grid compact-birth">
-              <div class="field"><div class="flabel">생년</div><div class="box" id="cYr" onclick="openSheet('cYr')">선택</div></div>
-              <div class="field"><div class="flabel">월</div><div class="box" id="cMo" onclick="openSheet('cMo')">선택</div></div>
-              <div class="field"><div class="flabel">일</div><div class="box" id="cDy" onclick="openSheet('cDy')">선택</div></div>
-              <div class="field"><div class="flabel">시각</div><div class="box" id="cHr" onclick="openSheet('cHr')">모름</div></div>
-            </div>
-            <div class="tiny-help" id="idolBirthHelp">결과로 나온 멤버가 아니어도 괜찮아. 생년월일을 넣으면 오늘 날짜 기준으로 같은 결과가 고정돼</div>
-          </div>
-
-        </div>
+</div>
         <button class="cta" id="btnIdol" onclick="runIdol()">FANDOM SIGNAL SCAN</button>
         <div id="idolLoad" class="loading">✦ 별자리와 사주를 읽는 중…</div>
         <div id="idolErr" class="err-box"></div>
@@ -1670,6 +1702,19 @@ text-transform:uppercase;
           </div>
           <div class="daily-signal-title" id="dailySignalTitle"></div>
           <div class="daily-signal-lead" id="dailySignalLead"></div>
+
+          <div id="dailyBirthGate" class="daily-birth-gate">
+            <div class="daily-birth-title">최애 생년월일을 넣으면 오늘의 시그널이 열려</div>
+            <div class="daily-birth-sub">생년월일을 넣어야 같은 생일, 같은 조회 날짜 기준으로 같은 결과가 고정돼</div>
+            <div class="form-grid compact-birth daily-birth-grid">
+              <div class="field"><div class="flabel">생년</div><div class="box" id="cYr" onclick="openSheet('cYr')">선택</div></div>
+              <div class="field"><div class="flabel">월</div><div class="box" id="cMo" onclick="openSheet('cMo')">선택</div></div>
+              <div class="field"><div class="flabel">일</div><div class="box" id="cDy" onclick="openSheet('cDy')">선택</div></div>
+              <div class="field"><div class="flabel">시각</div><div class="box" id="cHr" onclick="openSheet('cHr')">모름</div></div>
+            </div>
+            <button class="daily-birth-apply" type="button" onclick="refreshDailyIdolSignal()">오늘 최애 시그널 보기</button>
+          </div>
+
           <div class="daily-signal-grid">
             <div class="daily-signal-card">
               <h4 id="dailyEmotionTitle">오늘 최애의 기분</h4>
@@ -2002,6 +2047,7 @@ let curMode = 'saju';
 let fcatIdx = 0;
 let selTarot = null;
 let lastLoc = null;
+let lastIdolDataForDaily = null;
 
 const saved = localStorage.getItem('sj_state');
 if(saved){try{Object.assign(ST.s,JSON.parse(saved));}catch(e){}}
@@ -2496,6 +2542,7 @@ async function runIdol(){
     document.getElementById('shareBtn').style.display='block';
     const motionNote=document.getElementById('motionCardNote'); if(motionNote) motionNote.style.display='block';
     renderSignalPlusLock(data);
+    lastIdolDataForDaily=data;
     renderDailyIdolSignal(data);
     box.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){showErr('idolErr',e.message);}
@@ -2716,6 +2763,11 @@ function dailySignalCopy(lang){
   return base[lang] || base.ko;
 }
 
+
+function refreshDailyIdolSignal(){
+  if(lastIdolDataForDaily) renderDailyIdolSignal(lastIdolDataForDaily);
+}
+
 function getManualIdolBirth(){
   const c=ST.c||{};
   const y=Number(c.year||0), m=Number(c.month||0), d=Number(c.day||0);
@@ -2748,10 +2800,40 @@ function renderDailyIdolSignal(data){
   const birth=getManualIdolBirth();
   const date=todayKey();
   const astro=birth ? dailyStemBranchScore(birth) : null;
+  const gate=document.getElementById('dailyBirthGate');
+  const grid=document.querySelector('#dailyIdolSignal .daily-signal-grid');
+  const locked=document.querySelector('#dailyIdolSignal .daily-signal-locked');
+  if(gate) gate.style.display = birth ? 'none' : 'block';
+  if(grid) grid.classList.toggle('locked-daily', !birth);
+  if(locked) locked.classList.toggle('locked-daily', !birth);
   const seedSource = birth
     ? `${astro.dateKey}|${birth.year}-${birth.month}-${birth.day}-${birth.hour}|${data.selectedGroup||''}`
     : `${date}|${top}|${data.selectedGroup||''}|${data.title||''}`;
   const seed=dailyHash(seedSource);
+
+  if(!birth){
+    const titleNoBirth={
+      ko:'오늘 최애의 생년월일을 먼저 넣어줘',
+      en:'Add your idol’s birth date to open today’s signal',
+      zh:'先输入TA的生日，才能打开今天的信号',
+      ja:'今日のシグナルを見るには推しの誕生日を入力してね',
+      es:'Agrega la fecha de nacimiento para abrir la señal de hoy'
+    };
+    const leadNoBirth={
+      ko:'생년월일 없이 나오면 그냥 랜덤처럼 보일 수 있어. 그래서 DAILY IDOL SIGNAL은 최애 생일을 기준으로 열리게 했어',
+      en:'Without a birth date, this can feel random. DAILY IDOL SIGNAL opens from the entered birth chart',
+      zh:'没有生日会像随机结果，所以 DAILY IDOL SIGNAL 会按输入生日开启',
+      ja:'誕生日なしだとランダムに見えるので、DAILY IDOL SIGNAL は入力した誕生日を基準に開きます',
+      es:'Sin fecha puede sentirse aleatorio. DAILY IDOL SIGNAL se abre con la fecha ingresada'
+    };
+    const set=(id,txt)=>{const el=document.getElementById(id); if(el) el.textContent=txt;};
+    set('dailySignalKicker',(dailySignalCopy(lang)).kicker);
+    set('dailySignalDate',date);
+    set('dailySignalTitle',titleNoBirth[lang]||titleNoBirth.ko);
+    set('dailySignalLead',leadNoBirth[lang]||leadNoBirth.ko);
+    box.style.display='block';
+    return;
+  }
 
   const lead=dailyPick(copy.leads,seed,1);
   const emotion=dailyPick(copy.emotions,seed,2);
@@ -2759,7 +2841,7 @@ function renderDailyIdolSignal(data){
   const fan=dailyPick(copy.fans,seed,4);
 
   const birthLine = {
-    ko: birth ? `입력한 생일 기준 · ${birth.year}.${birth.month}.${birth.day}` : '생년월일을 넣으면 오늘 날짜 기준으로 더 고정된 리딩이 열려',
+    ko: birth ? `입력한 생일 기준 · ${birth.year}.${birth.month}.${birth.day}` : '최애 생년월일을 넣으면 오늘 날짜 기준 리딩이 열려',
     en: birth ? `Based on entered birth date · ${birth.year}.${birth.month}.${birth.day}` : 'Add their birth date to lock today’s reading to that chart',
     zh: birth ? `按输入生日生成 · ${birth.year}.${birth.month}.${birth.day}` : '输入生日后，今天的解读会按同一命盘固定',
     ja: birth ? `入力した誕生日基準 · ${birth.year}.${birth.month}.${birth.day}` : '誕生日を入れると今日の読みがその命盤で固定されます',
