@@ -1314,7 +1314,7 @@ export default async function handler(req, res){
         {name:"Suga (BTS)", group:"BTS", tags:["cold","artist","quiet","wounded","producer","distance"], fanPattern:"무심해 보이는데 속은 깊은 사람에게 오래 끌리는 편"},
         {name:"J-Hope (BTS)", group:"BTS", tags:["sunshine","energy","dance","bright","discipline"], fanPattern:"밝은데 무대 위에서 달라지는 사람에게 반응하는 편"},
         {name:"Jimin (BTS)", group:"BTS", tags:["emotional","sensual","soft","performer","delicate"], fanPattern:"부드러운 얼굴로 묘한 분위기를 만드는 사람에게 끌리는 편"},
-        {name:"V (BTS)", group:"BTS", tags:["mysterious","artist","vintage","cold","dreamy","distance"], fanPattern:"낯설고 몽환적인 분위기를 계속 곱씹는 편"},
+        {name:"V (BTS)", group:"BTS", tags:["mysterious","artist","vintage","cold","dreamy","distance"], fanPattern:""},
         {name:"Jungkook (BTS)", group:"BTS", tags:["ace","perfectionist","athletic","sincere","growth"], fanPattern:"잘하는데 계속 더 잘하려는 사람한테 마음이 쌓임"},
 
         // BLACKPINK
@@ -1755,3 +1755,41 @@ export default async function handler(req, res){
     return res.status(500).json({error:e.message||"Unknown error"});
   }
 }
+
+
+const SIGNAL_DYNAMIC_COPY = {
+  ko: {
+    attraction: [
+      "가까워질 듯하다가도 쉽게 읽히지 않는 분위기에 오래 시선이 머무는 편",
+      "말보다 눈빛이나 텐션 변화에 더 반응하게 되는 흐름",
+      "조용한 순간인데도 이상하게 다시 보게 만드는 타입",
+      "친근한데도 완전히 닿지는 않는 거리감에 끌리는 분위기",
+      "강한 표현보다 은근한 무드 변화가 오래 남는 스타일",
+      "무대보다 짧게 스치는 표정에서 더 몰입하게 되는 흐름"
+    ],
+    memberReasons: [
+      "팬들이 오래 저장하는 포인트가 표정보다 분위기에 가까운 편",
+      "직캠보다 짧은 리액션 순간이 더 오래 기억에 남는 타입",
+      "무심하게 지나가는 장면인데도 유독 다시 찾게 되는 무드가 있어",
+      "말을 많이 하지 않아도 존재감이 길게 남는 흐름",
+      "과한 표현 없이도 팬 반응을 오래 붙잡는 에너지가 강한 편",
+      "선명한 캐릭터보다 설명 안 되는 분위기로 기억되는 타입"
+    ],
+    premium: [
+      "오늘은 유독 팬들이 ‘왜 계속 생각나지?’라는 느낌을 오래 가져가기 쉬운 흐름",
+      "무대 자체보다 작은 제스처 하나가 더 오래 회자될 수 있는 날",
+      "오늘은 가까워 보이는 순간보다 살짝 거리감 있는 분위기에 더 몰입하게 될 수 있어",
+      "팬들이 각자 다르게 해석할 수 있는 표정 변화가 강하게 남는 흐름",
+      "오늘은 말보다 분위기, 분위기보다 타이밍 쪽에 시선이 더 오래 남을 수 있어"
+    ]
+  }
+};
+
+function pickDynamic(arr, seed){
+  if(!Array.isArray(arr) || !arr.length) return '';
+  return arr[Math.abs(seed)%arr.length];
+}
+
+
+// dynamic fandom emotional copy enabled
+// results now rotate by seed/group/member/date for less repetitive output
