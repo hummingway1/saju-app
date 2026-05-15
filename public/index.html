@@ -1717,15 +1717,15 @@ text-transform:uppercase;
 
           <div class="daily-signal-grid">
             <div class="daily-signal-card">
-              <h4 id="dailyEmotionTitle">오늘 최애의 기분</h4>
+              <h4 id="dailyEmotionTitle">오늘 최애의 무드</h4>
               <p id="dailyEmotionText"></p>
             </div>
             <div class="daily-signal-card">
-              <h4 id="dailyPeopleTitle">오늘 최애의 대인관계</h4>
+              <h4 id="dailyPeopleTitle">오늘 최애의 감정 흐름</h4>
               <p id="dailyPeopleText"></p>
             </div>
             <div class="daily-signal-card">
-              <h4 id="dailyFanTitle">오늘 나와 최애의 시그널</h4>
+              <h4 id="dailyFanTitle">오늘 팬과 최애의 싱크 포인트</h4>
               <p id="dailyFanText"></p>
             </div>
           </div>
@@ -1779,7 +1779,7 @@ const T = {
     lang:"ko",lbl:"한국어",
     heroTag:"✨ 팬덤 시그널 매치",heroL1:"나의",heroL2:"아이돌 시그널 매치",
     heroDesc:"나의 아이돌을 고르고, 네 팬심이 반응하는 멤버 시그널을 확인해보세요",
-    heroBtn1:"무료 시그널 매치 보기",heroBtn2:"관계 싱크",navCta:"시그널 매치",
+    heroBtn1:"오늘 최애 시그널 읽기",heroBtn2:"관계 싱크",navCta:"시그널 매치",
     proof1:"아이돌 궁합 조회",proof2:"틱톡 공유율",proof3:"개국",
     phoneLbl:"나의 Signal Match",phoneSoulLbl:"SIGNAL MATCH",
     phoneDesc:"당신의 팬심이 반응하는 bias pattern을 감지합니다",
@@ -1810,7 +1810,7 @@ const T = {
     lblMyInfo:"나의 정보",lblPartInfo:"상대방 정보",btnCompat:"싱크 체크",compatLoad:"✦ 궁합을 읽는 중…",
     lblIdolTitle:"나의 사주로 보는 시그널 매치 타입",
     lblIdolDesc:"나의 아이돌을 먼저 골라봐. 누가 나와 가장 맞는 시그널일까",
-    btnIdol:"무료 시그널 매치 보기",idolLoad:"✦ 별자리와 사주를 읽는 중…",
+    btnIdol:"오늘 최애 시그널 읽기",idolLoad:"✦ 별자리와 사주를 읽는 중…",
     shareBtn:"📲 공유하기",
     ftH:"내 최애가",ftSpan:"운명일 수도",ftP:"한국 운명 읽기와 점성술로 숨겨진 궁합을 발견하는 수백만 팬들과 함께하세요",ftBtn:"SIGNAL DETECT",
     tarotDeck:[
@@ -2571,9 +2571,9 @@ function dailySignalCopy(lang){
   const base = {
     ko:{
       kicker:'DAILY IDOL SIGNAL',
-      emotionTitle:'오늘 최애의 기분',
-      peopleTitle:'오늘 최애의 대인관계',
-      fanTitle:'오늘 나와 최애의 시그널',
+      emotionTitle:'오늘 최애의 무드',
+      peopleTitle:'오늘 최애의 감정 흐름',
+      fanTitle:'오늘 팬과 최애의 싱크 포인트',
       lockedTitle:'오늘 최애에게 더 시선이 가는 이유',
       unlockTitle:'DAILY SIGNAL+ 잠금 해제',
       unlockSub:'오늘의 최애 상태를 더 깊게 보기',
@@ -3823,5 +3823,12 @@ function _dlCanvas(canvas,name){const a=document.createElement('a');a.download=n
 async function shareSajuCard(){await _shareCanvas(document.getElementById('sajuShareCanvas'),'sajustro-signal.png');}
 async function shareIdolCard(){await _shareCanvas(document.getElementById('idolShareCanvas'),'sajustro-idol.png');}
 </script>
+
+<div style="margin-top:40px;padding:18px 14px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;line-height:1.8;color:rgba(255,255,255,.45)">
+<div>본 결과는 AI 기반 엔터테인먼트 콘텐츠이며 참고용으로 제공됩니다.</div>
+<div>This service provides AI-generated interpretations for entertainment purposes only.</div>
+<div style="margin-top:8px">디지털 콘텐츠 특성상 결과 생성 이후에는 환불이 제한될 수 있습니다. 단, 결제 오류 또는 시스템 장애 발생 시 고객센터를 통해 도움을 받을 수 있습니다.</div>
+</div>
+
 </body>
 </html>
