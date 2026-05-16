@@ -947,6 +947,38 @@ function calcCompatScore(sajuA, sajuB){
   return Math.round(Math.min(99, Math.max(40, 60 + complementScore + resonanceScore - conflictScore)));
 }
 
+
+function pickCompatLocal(pool, seed, salt=0){
+  let h=2166136261;
+  const key=String(seed)+'|'+salt;
+  for(let i=0;i<key.length;i++){h^=key.charCodeAt(i); h=Math.imul(h,16777619);}
+  return pool[(h>>>0)%pool.length];
+}
+function buildCompatLocalDetail({ sajuA, sajuB, lang, idolName }) {
+  const score = calcCompatScore(sajuA, sajuB);
+  const idol = String(idolName || '최애').trim() || '최애';
+  const seed = JSON.stringify([sajuA.pillars, sajuB.pillars, idol, score]);
+  if (lang !== 'Korean') {
+    return { score, detail: `First sync\nThere is a quiet emotional overlap between you and ${idol}. It feels less like a loud reaction and more like a scene you keep returning to.\n\nWhy your eyes go there\n${idol}'s energy catches the part of you that notices small shifts. That is why the match feels stronger after a second look.\n\nLocked detail preview\nThe deeper reading opens the exact attraction point, the slight mismatch, and the scene that stays with you.` };
+  }
+  const first = [
+    `나와 ${idol} 사이의 첫 싱크는 빠른 확신보다 조용히 다시 확인하게 되는 쪽에 가까워. 처음엔 가볍게 봐도, 묘하게 같은 포인트로 돌아오게 돼.`,
+    `나와 ${idol}의 결은 크게 터지는 반응보다 천천히 남는 잔상 쪽이야. 한 번 보고 끝나는 느낌보다 다시 보고 싶은 쪽으로 움직여.`,
+    `${idol}에게 끌리는 시작점은 과한 설렘보다 이상하게 신경 쓰이는 작은 온도차에 가까워. 그래서 처음보다 두 번째에 더 선명해져.`
+  ];
+  const second = [
+    `${idol}의 에너지는 내 안의 관찰하는 성향을 건드려. 화려한 순간보다 표정이 바뀌는 찰나에서 더 강하게 반응하는 매치야.`,
+    `내 쪽 감정은 바로 달려가기보다 조금 떨어져서 오래 보는 방식으로 움직여. 그래서 ${idol}의 작은 변화가 더 크게 확대돼서 들어와.`,
+    `${idol}의 분위기는 쉽게 설명되는 타입이 아니라서 더 오래 붙잡혀. 선명한 답보다 해석하고 싶은 여백이 이 매치의 핵심이야.`
+  ];
+  const third = [
+    `겉으로는 그냥 팬심처럼 보여도, 안쪽에는 끌리는 지점과 살짝 엇갈리는 지점이 같이 있어. 그 미묘한 차이가 계속 확인하고 싶게 만들어.`,
+    `상세 시그널에서는 왜 ${idol}에게 시선이 오래 가는지, 어느 순간에 감정이 더 크게 움직이는지까지 열린다. 무료 결과에서는 여기까지만 살짝 보여줘.`,
+    `더 깊게 보면 ${idol}의 어떤 결이 내 취향을 건드리는지, 그리고 왜 쉽게 끝나지 않는지까지 이어져. 지금 보이는 건 그 입구에 가까워.`
+  ];
+  return { score, detail: `첫인상 싱크\n${pickCompatLocal(first, seed, 1)}\n\n왜 자꾸 눈이 가는지\n${pickCompatLocal(second, seed, 2)}\n\n상세 관계 시그널\n${pickCompatLocal(third, seed, 3)}` };
+}
+
 // ── Compat analysis ──────────────────────────────────
 async function buildCompatDetail({ sajuA, sajuB, lang, idolName }) {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -1671,6 +1703,28 @@ export default async function handler(req, res){
 
       function chooseLine(pool, salt=0){ return pickSeeded(pool, salt); }
 
+      function idolCoreTrait(idol){
+        const tags = idol.tags || [];
+        if(tags.some(t=>['dance','performance','power','ace','skill'].includes(t))) return '무대 집중력과 퍼포먼스 에너지';
+        if(tags.some(t=>['cold','icy','distance','cool','mysterious','quiet'].includes(t))) return '쉽게 읽히지 않는 거리감';
+        if(tags.some(t=>['warm','sunshine','bright','cute','playful'].includes(t))) return '밝고 자연스럽게 긴장을 풀어주는 결';
+        if(tags.some(t=>['leader','protective','responsible','stable','reliable'].includes(t))) return '중심을 잡아주는 안정감';
+        if(tags.some(t=>['artist','creative','unique','free'].includes(t))) return '자기 세계가 선명한 무드';
+        if(tags.some(t=>['visual','classic','elegant','royal'].includes(t))) return '한 번 보면 잔상이 남는 비주얼 무드';
+        if(tags.some(t=>['vocal','emotional','sensitive'].includes(t))) return '감정선이 목소리와 표정에 남는 타입';
+        return '작은 장면까지 다시 보게 만드는 분위기';
+      }
+      function buildMatchReason(idol, idx){
+        const name = String(idol.name||'').replace(/\s*\([^)]*\)/g,'') || '이 아이돌';
+        const trait = idolCoreTrait(idol);
+        const openings = [
+          `${name}의 ${trait}이 내 반응 포인트와 맞물려서, 처음보다 다시 볼수록 더 강하게 남는 매치`,
+          `내가 오래 보는 포인트가 ${name}의 ${trait}에서 잡혀서, 장면보다 사람이 먼저 기억나는 매치`,
+          `${name}에게서 느껴지는 ${trait}이 내 취향의 빈칸을 건드려서, 가볍게 넘기기 어려운 매치`
+        ];
+        return openings[idx % openings.length];
+      }
+
       const theme = FANDOM_THEMES[selectedGroup] || FANDOM_THEMES.ALL;
       const userArchetypeTags = deriveUserArchetype(saju);
       const pool = selectedGroup && selectedGroup !== "ALL"
@@ -1758,22 +1812,21 @@ export default async function handler(req, res){
       const scenePackage = buildScenePackage(top, mainType);
       const variety = buildVarietyNarrative(top?.tags || [], pickSeeded);
 
+      const topReason = buildMatchReason(top, 0);
+      const secondReason = buildMatchReason(second, 1);
+      const thirdReason = buildMatchReason(third, 2);
       const detailLines = [
-        '❖ DAILY SIGNAL',
+        '❖ SIGNAL MATCH',
         '',
-        scenePackage.todayScene.title,
+        topReason + '.',
         '',
-        '❖ TODAY’S SCENE',
+        '❖ MATCH POINT',
         '',
-        scenePackage.todayScene.sub,
+        `${top.name}와 내가 매치된 이유는 겉으로 크게 터지는 장면보다, 이상하게 다시 보게 되는 반응 포인트가 맞기 때문이야.`,
         '',
         '❖ FAN ENERGY',
         '',
-        scenePackage.fanEnergy,
-        '',
-        '❖ SAVE POINT',
-        '',
-        variety.micro
+        scenePackage.fanEnergy
       ];
 
       const result = {
@@ -1783,18 +1836,19 @@ export default async function handler(req, res){
         fandomAccent: theme.accent,
         fandomColor: theme.color,
         selectedGroup,
-        shareLine,
+        shareLine: topReason,
         userArchetypeTags,
         idolMatches: [top, second, third].map(function(i, idx) {
+          const rs=[topReason, secondReason, thirdReason];
           return {
             name: i.name,
-            reason: i.fanPattern,
+            reason: rs[idx] || buildMatchReason(i, idx),
             score: Math.max(77, scoreBase - idx * 5)
           };
         }),
         detail: detailLines.join('\n'),
         syncLevel: scenePackage.syncLevel,
-        todayScene: scenePackage.todayScene,
+        todayScene: { title: topReason + '.', sub: `${top.name}와 내가 왜 맞는지 보여주는 SIGNAL MATCH 설명.` },
         fanEnergy: scenePackage.fanEnergy,
         biasProfile: scenePackage.biasProfile
       };
@@ -1811,7 +1865,7 @@ export default async function handler(req, res){
       const idolName = String(payload.idolName||"최애").slice(0,40);
       const compatKey = JSON.stringify([sajuA.pillars, sajuB.pillars, idolName, lang]);
       if (CACHE.has(compatKey)) return res.status(200).json(CACHE.get(compatKey));
-      const result = await buildCompatDetail({ sajuA, sajuB, lang, idolName });
+      const result = buildCompatLocalDetail({ sajuA, sajuB, lang, idolName });
       const titleMap = {
         Korean:`나와 ${idolName} 사이에 잡힌 감정 싱크`, English:"Your Bias Sync",
         Japanese:"推しとのシンク", Chinese:"我和本命的同步感", Spanish:"Mi sync con mi bias"
