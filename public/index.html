@@ -1086,11 +1086,17 @@ text-transform:uppercase;
 .result-card.result-revealed #shareCanvas{
   animation:sajustroCardReveal .7s cubic-bezier(.2,.9,.15,1.1),sajustroCardBreath 5.2s ease-in-out infinite .7s;
 }
+#shareCardWrap.flash-pop::before{animation:sajustroFlashAura .9s cubic-bezier(.18,.9,.18,1) forwards, sajustroAuraMove 9s ease-in-out infinite .9s alternate}
+#shareCardWrap.flash-pop::after{animation:sajustroFlashSweep .9s ease-out forwards, sajustroShimmer 4.8s ease-in-out infinite .9s}
+#shareCardWrap.flash-pop #shareCanvas{animation:sajustroCardBurst .9s cubic-bezier(.18,.95,.18,1.08) forwards, sajustroCardBreath 5.2s ease-in-out infinite .95s}
 .animated-card-note{margin-top:8px;font-size:11px;color:rgba(255,255,255,.36);text-align:center;letter-spacing:.08em}
 @keyframes sajustroAuraMove{0%{transform:translate3d(-8px,-6px,0) scale(1);opacity:.48}50%{transform:translate3d(7px,5px,0) scale(1.04);opacity:.72}100%{transform:translate3d(4px,-8px,0) scale(1.02);opacity:.58}}
 @keyframes sajustroShimmer{0%,100%{background-position:0 0,0 0,0 0,-80% 0;opacity:.28}45%{opacity:.62}70%{background-position:0 0,0 0,0 0,130% 0;opacity:.5}}
 @keyframes sajustroCardBreath{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.006)}}
 @keyframes sajustroCardReveal{0%{transform:translateY(12px) scale(.965);filter:blur(8px);opacity:0}100%{transform:translateY(0) scale(1);filter:blur(0);opacity:1}}
+@keyframes sajustroFlashAura{0%{opacity:0;filter:blur(6px);transform:scale(.72)}35%{opacity:1;filter:blur(18px);transform:scale(1.06)}100%{opacity:.62;filter:blur(22px);transform:scale(1)}}
+@keyframes sajustroFlashSweep{0%{opacity:0;background-position:0 0,0 0,0 0,-140% 0}20%{opacity:1}100%{opacity:.55;background-position:0 0,0 0,0 0,145% 0}}
+@keyframes sajustroCardBurst{0%{transform:scale(.82);filter:brightness(1.9) blur(10px);opacity:0}38%{transform:scale(1.04);filter:brightness(1.28) blur(0)}100%{transform:scale(1);filter:brightness(1);opacity:1}}
 
 .unified-preview-card{position:relative;min-height:420px;padding:34px 24px!important;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:radial-gradient(circle at 50% 0%,rgba(236,72,153,.32),rgba(9,0,16,.96) 58%,rgba(4,4,7,1));border-radius:28px;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.04),0 24px 70px rgba(168,85,247,.22)}
 .unified-preview-card::before{content:"";position:absolute;inset:14px;border-radius:24px;border:1px solid rgba(255,255,255,.16);pointer-events:none}
@@ -1120,96 +1126,137 @@ text-transform:uppercase;
 .tarot-grid.deck-fan{
   position:relative;
   display:block!important;
-  height:205px;
-  max-width:360px;
-  margin:10px auto 4px;
-  perspective:1200px;
+  height:262px;
+  max-width:420px;
+  margin:12px auto 8px;
+  perspective:1600px;
+  --tarot-accent:var(--fandom-color,#a855f7);
+  --tarot-rgb:var(--fandom-rgb,168,85,247);
 }
 .tarot-grid.deck-fan::before{
   content:'';
   position:absolute;
   left:50%;
-  top:56%;
-  width:210px;
-  height:92px;
+  top:62%;
+  width:260px;
+  height:120px;
   transform:translate(-50%,-50%);
   border-radius:999px;
-  background:radial-gradient(circle, rgba(168,85,247,.22), transparent 67%);
-  filter:blur(18px);
+  background:radial-gradient(circle, rgba(var(--tarot-rgb),.28), transparent 68%);
+  filter:blur(22px);
   pointer-events:none;
 }
 .tarot-grid.deck-fan .tarot-card{
   position:absolute!important;
   left:50%;
-  top:72px;
-  width:70px;
-  height:112px;
-  margin-left:-35px;
-  border-radius:15px;
-  transform-origin:50% 122%;
+  top:86px;
+  width:62px;
+  height:104px;
+  margin-left:-31px;
+  border-radius:16px;
+  transform-origin:50% 136%;
   translate:none!important;
-  transition:
-    transform .72s cubic-bezier(.2,.88,.18,1),
-    opacity .35s ease,
-    filter .35s ease,
-    box-shadow .35s ease;
-  animation:tarotFanIn .68s cubic-bezier(.2,.88,.18,1) both;
-  animation-delay:calc(var(--i) * 42ms);
+  transition:transform .8s cubic-bezier(.2,.88,.18,1), opacity .35s ease, filter .35s ease, box-shadow .35s ease;
+  animation:tarotFanIn .72s cubic-bezier(.2,.88,.18,1) both;
+  animation-delay:calc(var(--i) * 34ms);
 }
 .tarot-grid.deck-fan .tarot-card:hover{
-  box-shadow:0 16px 38px rgba(236,72,153,.22),0 0 30px rgba(168,85,247,.16);
-  filter:brightness(1.1);
+  box-shadow:0 20px 48px rgba(var(--tarot-rgb),.30),0 0 34px rgba(255,255,255,.10);
+  filter:brightness(1.08);
   z-index:30!important;
 }
 .tarot-grid.deck-fan .tarot-card:not(.flipped):hover{
-  transform:
-    translateX(calc(var(--x) * 1px))
-    rotate(calc(var(--rot) * 1deg))
-    translateY(calc((var(--lift) - 14) * 1px))
-    scale(1.055);
+  transform:translateX(calc(var(--x) * 1px)) rotate(calc(var(--rot) * 1deg)) translateY(calc((var(--lift) - 18) * 1px)) scale(1.08);
 }
 .tarot-grid.deck-fan .tarot-card.flipped{
-  z-index:60!important;
-  transform:translateX(0) rotateY(180deg) translateY(-20px) scale(1.18)!important;
-  box-shadow:0 26px 64px rgba(236,72,153,.28),0 0 44px rgba(168,85,247,.22);
+  z-index:80!important;
+  transform:translateX(0) rotateY(180deg) translateY(-28px) scale(1.22)!important;
+  box-shadow:0 28px 70px rgba(var(--tarot-rgb),.34),0 0 56px rgba(255,255,255,.14);
 }
-.tarot-grid.deck-fan .tarot-card.disabled{
-  opacity:.2;
-  filter:blur(1px);
+.tarot-grid.deck-fan .tarot-card.flipped::after{
+  content:'';
+  position:absolute;
+  inset:-20px;
+  border-radius:24px;
+  background:radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(var(--tarot-rgb),.45) 20%, rgba(var(--tarot-rgb),0) 62%);
+  filter:blur(12px);
+  opacity:0;
+  animation:tarotFlashBurst .8s ease-out forwards;
   pointer-events:none;
 }
+.tarot-grid.deck-fan .tarot-card.disabled{opacity:.18;filter:blur(1px);pointer-events:none}
+.tarot-grid.deck-fan .card-back,
+.tarot-grid.deck-fan .card-front{
+  overflow:hidden;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+}
 .tarot-grid.deck-fan .card-back{
-  background:
-    radial-gradient(circle at 28% 20%, rgba(255,255,255,.12), transparent 18%),
-    linear-gradient(155deg,#22103c,#0b0616 72%);
+  background:#160d2c url('assets/card-back.png') center/cover no-repeat;
   color:rgba(255,255,255,.72);
   font-size:18px;
+}
+.tarot-grid.deck-fan .card-back::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(var(--tarot-rgb),.10), rgba(0,0,0,.08));
 }
 .tarot-grid.deck-fan .card-back::after{
   content:'';
   position:absolute;
-  inset:9px;
-  border-radius:11px;
-  border:1px solid rgba(255,255,255,.10);
-  background:linear-gradient(135deg, transparent, rgba(255,255,255,.055), transparent);
+  inset:8px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(135deg, transparent, rgba(255,255,255,.05), transparent);
 }
-.tarot-grid.deck-fan .card-front .ctitle{
-  font-size:11px;
-  line-height:1.35;
+.tarot-grid.deck-fan .card-front{
+  position:relative;
+  background:#13091f;
+  color:#fff;
+  transform:rotateY(180deg);
+  flex-direction:column;
+  gap:4px;
+  justify-content:flex-end;
+  padding:8px;
 }
-.tarot-grid.deck-fan .card-front .cmini{
-  font-size:9px;
+.tarot-grid.deck-fan .card-front::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:url('assets/card-front.png') center/cover no-repeat;
+  filter:saturate(1.04) brightness(.98);
 }
-@keyframes tarotFanIn{
-  0%{opacity:0;transform:translateX(0) rotate(0deg) translateY(26px) scale(.84)}
-  100%{
-    opacity:1;
-    transform:translateX(calc(var(--x) * 1px)) rotate(calc(var(--rot) * 1deg)) translateY(calc(var(--lift) * 1px)) scale(1);
-  }
+.tarot-grid.deck-fan .card-front::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(8,4,16,.06) 0%, rgba(8,4,16,.14) 42%, rgba(8,4,16,.82) 100%), radial-gradient(circle at 50% 12%, rgba(var(--tarot-rgb),.28), transparent 32%);
 }
-
+.tarot-grid.deck-fan .card-front .card-front-copy{
+  position:relative;
+  z-index:2;
+  width:100%;
+  border-radius:10px;
+  padding:7px 6px 6px;
+  background:linear-gradient(180deg, rgba(14,10,24,.20), rgba(14,10,24,.74));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.tarot-grid.deck-fan .card-front .ctitle{font-size:10px;line-height:1.34;font-weight:900;letter-spacing:-.02em;word-break:keep-all}
+.tarot-grid.deck-fan .card-front .cmini{font-size:8px;color:rgba(255,255,255,.72);margin-top:2px;letter-spacing:.02em}
+.tarot-picked-card{margin-top:10px;padding:14px;border-radius:18px;border:1px solid rgba(var(--tarot-rgb),.24);background:radial-gradient(circle at 50% 0%, rgba(var(--tarot-rgb),.16), rgba(8,4,16,.96) 58%);box-shadow:0 18px 44px rgba(0,0,0,.24);text-align:center;animation:tarotRevealPanel .6s cubic-bezier(.22,.85,.18,1)}
+.tarot-picked-image{position:relative;width:210px;max-width:100%;margin:0 auto 14px;border-radius:20px;overflow:hidden;box-shadow:0 24px 70px rgba(var(--tarot-rgb),.28),0 0 0 1px rgba(255,255,255,.08)}
+.tarot-picked-image::before{content:'';display:block;padding-top:156%;}
+.tarot-picked-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.tarot-picked-image::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(8,4,16,.04), rgba(8,4,16,.15) 38%, rgba(8,4,16,.88) 100%), radial-gradient(circle at 50% 18%, rgba(var(--tarot-rgb),.26), transparent 30%)}
+.tarot-picked-badge{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:2;padding:6px 12px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.06em;color:#fff;background:rgba(var(--tarot-rgb),.22);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.18)}
+.tarot-picked-title{position:absolute;left:18px;right:18px;bottom:26px;z-index:2;font-size:28px;font-weight:950;line-height:1.12;letter-spacing:-.05em;color:#fff;text-shadow:0 8px 24px rgba(0,0,0,.35);word-break:keep-all}
+.tarot-picked-desc{font-size:14px;line-height:1.9;color:rgba(255,255,255,.78);word-break:keep-all}
+.tarot-picked-desc strong{display:block;margin-bottom:8px;color:#fff;font-size:16px}
+@keyframes tarotFanIn{0%{opacity:0;transform:translateX(0) rotate(0deg) translateY(30px) scale(.84)}100%{opacity:1;transform:translateX(calc(var(--x) * 1px)) rotate(calc(var(--rot) * 1deg)) translateY(calc(var(--lift) * 1px)) scale(1)}}
+@keyframes tarotFlashBurst{0%{opacity:0;transform:scale(.6)}30%{opacity:1}100%{opacity:0;transform:scale(1.2)}}
+@keyframes tarotRevealPanel{0%{opacity:0;transform:translateY(14px) scale(.97)}100%{opacity:1;transform:translateY(0) scale(1)}}
 #syncLevelBox,#streakBox,#signalArchiveBox,.sync-level-card,.streak-card,.archive-card{display:none!important}
-
+@media(max-width:520px){.tarot-grid.deck-fan{height:244px;max-width:100%}.tarot-grid.deck-fan .tarot-card{width:58px;height:98px;top:88px;margin-left:-29px}.tarot-picked-title{font-size:24px}}
 </style>
 
 
@@ -1640,12 +1687,12 @@ text-transform:uppercase;
             </div>
           </div>
         </div>
-        <button class="cta" id="btnCompat" onclick="runCompat()">최애와 나의 관계 보기</button>
-        <div id="compatLoad" class="loading">✦ 최애와 나의 관계를 읽는 중…</div>
+        <button class="cta" id="btnCompat" onclick="runCompat()">최애와 나의 케미싱크 보기</button>
+        <div id="compatLoad" class="loading">✦ 최애와 나의 케미싱크를 읽는 중…</div>
         <div id="compatErr" class="err-box"></div>
       </div>
       <div id="compatResult" class="result-card" style="display:none;margin-top:14px">
-        <div class="badge badge-compat">COMPATIBILITY</div>
+        <div class="badge badge-compat">CHEMISYNC</div>
         <div class="score-wrap">
           <div class="score-ring"><span class="score-num" id="compatScore">-</span></div>
           <div class="score-lbl">HARMONY SCORE</div>
@@ -1852,9 +1899,9 @@ const T = {
     phoneSajuLbl:"",phoneAstroLbl:"",phoneShareBtn:"SIGNAL MATCH",
     featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"내 취향과 잘 맞는 아이돌을 찾아주는 팬덤형 SIGNAL MATCH",
     feat1T:"아이돌 시그널 매치",feat1D:"오늘 유독 눈이 가는 장면과 최애 시그널을 확인",
-    feat2T:"최애와 나",feat2D:"나와 최애 사이에 남는 감정 싱크를 확인",
+    feat2T:"최애와 나",feat2D:"나와 최애 사이의 케미싱크를 확인",
     feat3T:"바이럴 공유 카드",feat3D:"팬계정 감성으로 바로 저장하고 공유하는 카드",
-    appTitle:"SIGNAL ROOM",appSub:"동양의 팬 시그널와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어",appSubSaju:"내가 어떤 아이돌과 잘 맞는지 확인해봐",appSubCompat:"최애와 나 사이에 남는 감정 싱크를 확인해봐",
+    appTitle:"SIGNAL ROOM",appSub:"동양의 팬 시그널와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어",appSubSaju:"내가 어떤 아이돌과 잘 맞는지 확인해봐",appSubCompat:"최애와 나 사이의 케미싱크를 확인해봐",
     tab0:"시그널 매치",tab1:"최애와 나",tab2:"오늘의 시그널",
     fcats:["전체 무드","감정 싱크","팬 에너지","활동 무드","회복 무드"],
     fcatKeys:["전체 무드","감정 싱크","팬 에너지","활동 무드","회복 무드"],
@@ -1873,7 +1920,7 @@ const T = {
     errDate:"생년월일을 먼저 선택해 주세요",errGen:"성별을 선택해 주세요",
     errLoc:"출생지를 입력해 주세요",errGeo:"출생지를 찾지 못했습니다",
     errApi:"분석에 실패했습니다",sel:"선택",aiLang:"Korean",
-    lblMyInfo:"나의 생년월일",lblPartInfo:"최애의 생년월일",btnCompat:"최애와 나의 관계 보기",compatLoad:"✦ 최애와 나의 관계를 읽는 중…",
+    lblMyInfo:"나의 생년월일",lblPartInfo:"최애의 생년월일",btnCompat:"최애와 나의 케미싱크 보기",compatLoad:"✦ 최애와 나의 케미싱크를 읽는 중…",
     lblIdolTitle:"나의 팬 에너지로 보는 시그널 매치",
     lblIdolDesc:"나의 아이돌을 먼저 골라봐. 누가 나와 가장 맞는 시그널일까",
     btnIdol:"오늘 최애 시그널 읽기",idolLoad:"✦ 오늘의 팬 시그널을 맞추는 중…",
@@ -2328,28 +2375,37 @@ function setFcat(i){
 // ══════════════════════════════════════════
 function buildTarot(){
   const t=T[curLang], grid=document.getElementById('tarotGrid');
+  if(!grid || !t) return;
   grid.classList.add('deck-fan');
   grid.innerHTML='';
-  const spread = [-108,-84,-60,-36,-12,12,36,60,84,108];
-  const rots = [-22,-17,-12,-7,-2,2,7,12,17,22];
-  const lifts = [24,13,5,0,-4,-4,0,5,13,24];
+  const deck=(t.tarotDeck&&t.tarotDeck.length?t.tarotDeck:[]);
+  const total=deck.length;
+  const span=Math.min(336, total > 16 ? 318 : 290);
+  const angleSpan=Math.min(54, 26 + total*1.1);
 
-  t.tarotDeck.forEach((card,idx)=>{
+  deck.forEach((card,idx)=>{
+    const ratio = total===1 ? 0.5 : idx/(total-1);
+    const x = -span/2 + span*ratio;
+    const rot = -angleSpan/2 + angleSpan*ratio;
+    const curve = Math.pow((ratio-0.5)/0.5,2);
+    const lift = Math.round(curve*28) - 10;
     const el=document.createElement('div');
     el.className='tarot-card';
     el.style.setProperty('--i',idx);
-    el.style.setProperty('--x',spread[idx]||0);
-    el.style.setProperty('--rot',rots[idx]||0);
-    el.style.setProperty('--lift',lifts[idx]||0);
+    el.style.setProperty('--x',x.toFixed(1));
+    el.style.setProperty('--rot',rot.toFixed(1));
+    el.style.setProperty('--lift',lift.toFixed(1));
     el.style.zIndex=idx+1;
     if(selTarot){
       if(selTarot._idx===idx)el.classList.add('flipped');
       else el.classList.add('disabled');
     }
-    el.innerHTML=`<div class="card-face card-back">✦</div>
+    el.innerHTML=`<div class="card-face card-back"></div>
       <div class="card-face card-front">
-        <div class="ctitle">${card.title}</div>
-        <div class="cmini">${t.tarotMini}</div>
+        <div class="card-front-copy">
+          <div class="ctitle">${card.title}</div>
+          <div class="cmini">${card.kicker || t.tarotMini}</div>
+        </div>
       </div>`;
     el.onclick=()=>pickTarot(idx);
     grid.appendChild(el);
@@ -2357,16 +2413,26 @@ function buildTarot(){
 }
 function pickTarot(idx){
   const t=T[curLang];
-  selTarot={...t.tarotDeck[idx],_idx:idx};
+  const deck=t?.tarotDeck||[];
+  selTarot={...deck[idx],_idx:idx};
   document.querySelectorAll('.tarot-card').forEach((c,i)=>{
     c.classList.toggle('flipped',i===idx);
     c.classList.toggle('disabled',i!==idx);
   });
   setTimeout(()=>{
     const r=document.getElementById('tarotResult');
-    r.innerHTML=t.tarotAfter(selTarot.title,selTarot.message);
+    const theme=getSelectedGroupTheme();
+    const desc=(selTarot.message||'').replace(/\n/g,'<br>');
+    r.innerHTML=`<div class="tarot-picked-card" style="--tarot-rgb:${hexToRgbString(theme.color)}">
+      <div class="tarot-picked-image">
+        <img src="assets/card-front.png" alt="${srEscape(selTarot.title)}">
+        <div class="tarot-picked-badge">방금 뽑은 카드</div>
+        <div class="tarot-picked-title">${srEscape(selTarot.title)}</div>
+      </div>
+      <div class="tarot-picked-desc"><strong>${srEscape(selTarot.title)}</strong>${desc}</div>
+    </div>`;
     r.classList.add('show');
-  },520);
+  },560);
 }
 
 // ══════════════════════════════════════════
@@ -2629,10 +2695,10 @@ function splitCompatSections(text){
   if(chunks.length>=2){
     return chunks.map(c=>{
       const lines=c.split('\n').map(x=>x.trim()).filter(Boolean);
-      return {title:lines[0]||'관계 시그널', body:lines.slice(1).join('\n')||lines[0]||''};
+      return {title:lines[0]||'케미싱크', body:lines.slice(1).join('\n')||lines[0]||''};
     });
   }
-  return [{title:'관계 시그널', body:raw}];
+  return [{title:'케미싱크', body:raw}];
 }
 function makeLockedRelationPreview(data){
   const idol=(ST.biasName||document.getElementById('biasNameInput')?.value||'최애').trim()||'최애';
@@ -2674,7 +2740,7 @@ function renderCompatDetail(data){
     html.push(`<div class="relation-section"><div class="relation-section-title">첫인상 싱크</div><div class="relation-section-body">나와 ${escapeHtml(idol)} 사이에는 바로 설명되는 끌림보다, 한 번 더 확인하게 만드는 장면감이 먼저 잡혀.</div></div>`);
   }
   const locked=makeLockedRelationPreview(data);
-  html.push(`<div class="relation-locked"><div class="locked-copy"><div class="relation-section-title">상세 관계 시그널</div><div class="relation-section-body">${escapeHtml(locked)}</div></div><div class="relation-lock-label"><div><div class="relation-lock-title">더 깊은 관계 풀이 잠금</div><div class="relation-lock-sub">끌리는 이유, 맞물리는 지점, 감정 싱크까지</div></div><div class="relation-lock-pill">SIGNAL+</div></div></div>`);
+  html.push(`<div class="relation-locked"><div class="locked-copy"><div class="relation-section-title">상세 케미싱크</div><div class="relation-section-body">${escapeHtml(locked)}</div></div><div class="relation-lock-label"><div><div class="relation-lock-title">더 깊은 관계 풀이 잠금</div><div class="relation-lock-sub">끌리는 이유, 맞물리는 지점, 케미 흐름까지</div></div><div class="relation-lock-pill">SIGNAL+</div></div></div>`);
   html.push('</div>');
   el.innerHTML=html.join('');
 }
@@ -2684,7 +2750,7 @@ function drawCompatCard(data){
   if(!wrap||!canvas) return;
   const idol=(ST.biasName||document.getElementById('biasNameInput')?.value||'최애').trim()||'최애';
   const score=String(data?.score??'-');
-  const title=data?.title||`나와 ${idol} 사이에 잡힌 관계 시그널`;
+  const title=data?.title||`나와 ${idol}의 케미싱크`;
   const dpr=window.devicePixelRatio||1, W=360, H=480;
   canvas.width=W*dpr; canvas.height=H*dpr; canvas.style.width=W+'px'; canvas.style.height=H+'px';
   const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
@@ -2693,7 +2759,7 @@ function drawCompatCard(data){
   ctx.strokeStyle='rgba(236,72,153,.22)'; ctx.lineWidth=1; ctx.beginPath(); ctx.roundRect(14,14,W-28,H-28,24); ctx.stroke();
   ctx.textAlign='center';
   ctx.font='800 10px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.52)'; ctx.fillText('SIGNAL ROOM',W/2,40);
-  ctx.font='900 28px Inter, sans-serif'; ctx.fillStyle='#fff'; ctx.fillText('최애와 나',W/2,94);
+  ctx.font='900 28px Inter, sans-serif'; ctx.fillStyle='#fff'; ctx.fillText('CHEMISYNC',W/2,94);
   ctx.font='800 16px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.84)'; wrapTxt(ctx,`나와 ${idol}`,W-70).slice(0,2).forEach((line,i)=>ctx.fillText(line,W/2,136+i*24));
   ctx.beginPath(); ctx.arc(W/2,220,48,0,Math.PI*2); ctx.fillStyle='rgba(168,85,247,.18)'; ctx.fill(); ctx.strokeStyle='rgba(236,72,153,.45)'; ctx.stroke();
   ctx.font='900 34px Inter, sans-serif'; ctx.fillStyle='#fff'; ctx.fillText(score,W/2,232);
@@ -2701,6 +2767,10 @@ function drawCompatCard(data){
   ctx.font='800 20px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.94)'; wrapTxt(ctx,title,W-64).slice(0,3).forEach((line,i)=>ctx.fillText(line,W/2,318+i*30));
   ctx.font='700 10px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.38)'; ctx.fillText('sajustro.com',W/2,H-28);
   wrap.style.display='block';
+  wrap.classList.remove('flash-pop');
+  void wrap.offsetWidth;
+  wrap.classList.add('flash-pop');
+  setTimeout(()=>wrap.classList.remove('flash-pop'), 1100);
   const btn=document.getElementById('compatShareBtn'); if(btn) btn.style.display='block';
 }
 async function shareCompatCard(){
@@ -2712,9 +2782,9 @@ async function shareCompatCard(){
     const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
     const file=new File([blob],'signal-room-relation-card.png',{type:'image/png'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){
-      await navigator.share({title:'SIGNAL ROOM',text:`나와 ${idol}의 관계 시그널\n${url}`,url,files:[file]}); return;
+      await navigator.share({title:'SIGNAL ROOM',text:`나와 ${idol}의 케미싱크\n${url}`,url,files:[file]}); return;
     }
-    if(navigator.share){await navigator.share({title:'SIGNAL ROOM',text:`나와 ${idol}의 관계 시그널\n${url}`,url}); return;}
+    if(navigator.share){await navigator.share({title:'SIGNAL ROOM',text:`나와 ${idol}의 케미싱크\n${url}`,url}); return;}
   }catch(e){}
   const a=document.createElement('a'); a.download='signal-room-relation-card.png'; a.href=canvas.toDataURL('image/png'); a.click();
 }
@@ -2765,8 +2835,8 @@ function normalizeCompatData(data){
   if(!Number.isFinite(score)) score=localCompatScore();
   score=Math.max(1,Math.min(99,Math.round(score)));
   const fallbackDetail=makeCompatFallbackDetail(score);
-  let title=data?.title || `나와 ${idol} 사이에 잡힌 관계 시그널`;
-  if(isBlankCompatText(title)) title=`나와 ${idol} 사이에 잡힌 관계 시그널`;
+  let title=data?.title || `나와 ${idol}의 케미싱크`;
+  if(isBlankCompatText(title)) title=`나와 ${idol}의 케미싱크`;
   let detail=data?.detail;
   if(isBlankCompatText(detail)) detail=fallbackDetail;
   return {score,title:String(title).trim(),detail:String(detail).trim()};
@@ -3252,6 +3322,7 @@ function drawCard(title, highlight, fandomTheme){
   ctx.scale(dpr,dpr);
 
   const fd = fandomTheme || {color:'#a855f7', grad:['#07000f','#19002e'], fandom:'SIGNAL'};
+  applyActiveFandomTheme();
   const fc = fd.color || '#a855f7';
   const r=parseInt(fc.slice(1,3),16)||168;
   const g=parseInt(fc.slice(3,5),16)||85;
@@ -3448,6 +3519,10 @@ function drawCard(title, highlight, fandomTheme){
   ctx.fillText('sajustro.com',W/2,H-26);
 
   wrap.style.display='block';
+  wrap.classList.remove('flash-pop');
+  void wrap.offsetWidth;
+  wrap.classList.add('flash-pop');
+  setTimeout(()=>wrap.classList.remove('flash-pop'), 1100);
 }
 function wrapTxt(ctx,text,max){
   if(!text)return[];
@@ -3547,6 +3622,76 @@ function getFandomTheme(idolName) {
   }
   return { fandom:"", color:"#a855f7", grad:["#0a0014","#160028"] };
 }
+
+function hexToRgbString(hex){
+  const m=String(hex||'#a855f7').replace('#','');
+  const full=m.length===3?m.split('').map(v=>v+v).join(''):m;
+  const r=parseInt(full.slice(0,2),16)||168;
+  const g=parseInt(full.slice(2,4),16)||85;
+  const b=parseInt(full.slice(4,6),16)||247;
+  return `${r},${g},${b}`;
+}
+function getSelectedGroupTheme(){
+  const group=document.getElementById('idolGroup')?.value || ST?.selectedGroup || '';
+  return FANDOM_MAP[group] || getFandomTheme(group||'') || { fandom:'SIGNAL', color:'#a855f7', grad:['#0a0014','#160028'] };
+}
+function applyActiveFandomTheme(){
+  const theme=getSelectedGroupTheme();
+  document.documentElement.style.setProperty('--fandom-color', theme.color || '#a855f7');
+  document.documentElement.style.setProperty('--fandom-rgb', hexToRgbString(theme.color || '#a855f7'));
+}
+const KO_TAROT_20=[
+  {title:'별의 문', kicker:'지금 끌리는 카드', message:'열리는 분위기가 보여. 서두르기보다, 들어오는 신호를 놓치지 않는 쪽이 좋아.'},
+  {title:'숨은 물결', kicker:'지금 끌리는 카드', message:'겉은 조용해 보여도 아래에서는 이미 흐름이 바뀌고 있어. 말보다 분위기를 먼저 읽어봐.'},
+  {title:'금실의 연결', kicker:'지금 끌리는 카드', message:'지금 이어지는 장면은 가볍지 않아. 붙잡기보다 자연스럽게 따라갈수록 선명해져.'},
+  {title:'달의 잔', kicker:'지금 끌리는 카드', message:'감정이 먼저 반응하는 날이야. 마음이 급해질수록 한 템포 늦추는 쪽이 더 안전해.'},
+  {title:'잠든 불씨', kicker:'지금 끌리는 카드', message:'끝난 것처럼 보여도 완전히 식은 건 아니야. 다시 살아날 여지는 분명히 남아 있어.'},
+  {title:'갈림의 바람', kicker:'지금 끌리는 카드', message:'둘 중 하나를 고르게 되는 흐름이 가까워. 지금은 선택보다 기준을 정리하는 게 먼저야.'},
+  {title:'푸른 거울', kicker:'지금 끌리는 카드', message:'바깥보다 안쪽이 더 많은 걸 말해주는 날이야. 지금 마음이 어디를 먼저 향하는지부터 봐.'},
+  {title:'쇠의 문장', kicker:'지금 끌리는 카드', message:'미뤄둔 걸 정리해야 흐름이 바뀌어. 흐린 채로 두면 같은 장면을 다시 만나게 돼.'},
+  {title:'새벽의 씨앗', kicker:'지금 끌리는 카드', message:'작아 보여도 그냥 지나치기엔 아까운 변화가 있어. 지금의 작은 움직임이 생각보다 크게 남아.'},
+  {title:'은빛 항로', kicker:'지금 끌리는 카드', message:'움직임이 많은 날이야. 방향만 분명하면 흐름이 붙고, 아니면 피로만 길게 남아.'},
+  {title:'빛의 계단', kicker:'지금 끌리는 카드', message:'한 번에 오르는 흐름은 아니야. 조금씩 확인할수록 답이 또렷해져.'},
+  {title:'비밀의 정원', kicker:'지금 끌리는 카드', message:'겉으로 다 보이지 않는 마음이 있어. 조용한 장면 안에 더 중요한 포인트가 숨어 있어.'},
+  {title:'새벽의 창', kicker:'지금 끌리는 카드', message:'시선이 바뀌는 순간이 열려 있어. 익숙한 결에서 벗어나면 생각보다 빨리 납득이 돼.'},
+  {title:'심장의 나침반', kicker:'지금 끌리는 카드', message:'남의 말보다 내 반응이 더 정확한 날이야. 마음이 먼저 가리키는 쪽을 무시하지 마.'},
+  {title:'유리의 파도', kicker:'지금 끌리는 카드', message:'섬세한 감정이 크게 번지는 흐름이야. 작은 한마디도 오래 남을 수 있어.'},
+  {title:'밤의 왕관', kicker:'지금 끌리는 카드', message:'눈에 띄는 장면보다 분위기를 잡는 존재감이 더 강하게 남아. 조용한 자신감이 포인트야.'},
+  {title:'균형의 실', kicker:'지금 끌리는 카드', message:'한쪽으로 쏠리기보다 맞물리는 균형이 중요해. 지금은 밀기보다 조율이 답이야.'},
+  {title:'기억의 열쇠', kicker:'지금 끌리는 카드', message:'예전의 감정이 오늘 장면과 다시 이어질 수 있어. 그냥 스쳐 지나갈 이유는 아니야.'},
+  {title:'유성의 약속', kicker:'지금 끌리는 카드', message:'짧아 보여도 강하게 꽂히는 장면이 있어. 지금 반응한 이유는 곧 더 분명해질 거야.'},
+  {title:'황혼의 다리', kicker:'지금 끌리는 카드', message:'끝과 시작이 겹치는 타이밍이야. 익숙함을 건너야 다음 장면이 열려.'}
+];
+const EN_TAROT_20=[
+  {title:'Gate of Stars', kicker:'Card that pulled you in', message:'Something is opening. Don’t rush it — just don’t miss the signal coming in.'},
+  {title:'Hidden Wave', kicker:'Card that pulled you in', message:'The surface looks calm, but the current underneath is already shifting. Read the mood first.'},
+  {title:'Golden Thread', kicker:'Card that pulled you in', message:'This connection isn’t light. The more naturally you follow it, the clearer it gets.'},
+  {title:"Moon's Chalice", kicker:'Card that pulled you in', message:'Emotions react first today. The stronger your heart rushes, the more you benefit from slowing down.'},
+  {title:'Sleeping Ember', kicker:'Card that pulled you in', message:'It looks quiet, but it has not gone cold. There is still a chance for this to rise again.'},
+  {title:'Wind at the Fork', kicker:'Card that pulled you in', message:'A choice is getting closer. Right now, clarifying your standard matters more than deciding fast.'},
+  {title:'Blue Mirror', kicker:'Card that pulled you in', message:'Inner reactions are more honest than outside noise today. Start by watching where your mind moves first.'},
+  {title:'Iron Seal', kicker:'Card that pulled you in', message:'What has been left unresolved needs shape. If you keep it vague, the same scene returns.'},
+  {title:'Dawn Seed', kicker:'Card that pulled you in', message:'A small change now can grow into something larger than expected. Don’t brush it off.'},
+  {title:'Silver Course', kicker:'Card that pulled you in', message:'Movement is active today. With direction, it flows. Without it, only fatigue lingers.'},
+  {title:'Steps of Light', kicker:'Card that pulled you in', message:'This isn’t a one-jump answer. It becomes clearer step by step.'},
+  {title:'Secret Garden', kicker:'Card that pulled you in', message:'Not everything important is visible at once. Quiet scenes are carrying the real point.'},
+  {title:'Window at Dawn', kicker:'Card that pulled you in', message:'A new angle is opening. Once your view shifts, what felt vague starts making sense.'},
+  {title:'Heart Compass', kicker:'Card that pulled you in', message:'Your own reaction is more accurate than outside commentary today. Don’t ignore what points first.'},
+  {title:'Glass Tide', kicker:'Card that pulled you in', message:'Sensitive emotion spreads wide today. Small words can stay with you longer than expected.'},
+  {title:'Crown of Night', kicker:'Card that pulled you in', message:'Presence matters more than noise. Quiet confidence is what leaves the mark.'},
+  {title:'Thread of Balance', kicker:'Card that pulled you in', message:'It works better by meeting in the middle than pushing one side harder. Tuning matters.'},
+  {title:'Key of Memory', kicker:'Card that pulled you in', message:'An old feeling may reconnect with today’s scene. It is not random that it came back now.'},
+  {title:'Meteor Promise', kicker:'Card that pulled you in', message:'A short scene can still hit hard. Why it landed this way will become clearer soon.'},
+  {title:'Bridge of Dusk', kicker:'Card that pulled you in', message:'An ending and a beginning overlap here. Crossing the familiar opens the next scene.'}
+];
+if(T.ko) T.ko.tarotDeck = KO_TAROT_20;
+if(T.en) T.en.tarotDeck = EN_TAROT_20;
+if(T.ja) T.ja.tarotDeck = KO_TAROT_20;
+document.addEventListener('DOMContentLoaded',()=>{
+  applyActiveFandomTheme();
+  const groupSel=document.getElementById('idolGroup');
+  if(groupSel) groupSel.addEventListener('change', ()=>{applyActiveFandomTheme(); try{buildTarot();}catch(e){}});
+});
 
 document.addEventListener('DOMContentLoaded',()=>{try{renderBiasSelect();}catch(e){}});
 
@@ -3881,6 +4026,10 @@ function drawDeepPreviewCard(){
   ctx.fillText('sajustro.com',W/2,H-34);
 
   wrap.style.display='block';
+  wrap.classList.remove('flash-pop');
+  void wrap.offsetWidth;
+  wrap.classList.add('flash-pop');
+  setTimeout(()=>wrap.classList.remove('flash-pop'), 1100);
 }
 
 </script>
@@ -4169,6 +4318,10 @@ function drawSajuCard(shareLine, title) {
   ctx.font='9px "Courier New"';ctx.fillStyle='rgba(255,255,255,.18)';
   ctx.fillText('sajustro.com',W/2,H-18);
   wrap.style.display='block';
+  wrap.classList.remove('flash-pop');
+  void wrap.offsetWidth;
+  wrap.classList.add('flash-pop');
+  setTimeout(()=>wrap.classList.remove('flash-pop'), 1100);
 }
 
 function drawIdolCard(title, highlight, fd) {
@@ -4211,6 +4364,10 @@ function drawIdolCard(title, highlight, fd) {
   ctx.font='9px "Courier New"';ctx.fillStyle='rgba(255,255,255,.18)';
   ctx.fillText('sajustro.com',W/2,H-18);
   wrap.style.display='block';
+  wrap.classList.remove('flash-pop');
+  void wrap.offsetWidth;
+  wrap.classList.add('flash-pop');
+  setTimeout(()=>wrap.classList.remove('flash-pop'), 1100);
 }
 
 async function _shareCanvas(canvas, filename) {
