@@ -925,14 +925,6 @@ async function buildCompatDetail({ sajuA, sajuB, lang, idolName }) {
   };
   const li = langInstructions[lang] || langInstructions.English;
 
-  const compatSections = {
-    Korean:  ["◉ FIELD DETECTED","◉ SYNC POINTS","◉ EMOTIONAL STATIC","◉ ATTRACTION SIGNAL","◉ FRICTION PATTERN","◉ THIS CONNECTION OFFERS","◉ COMBINED SIGNAL"],
-    English: ["✦ YOUR ENERGY TOGETHER","✦ WHERE YOU CLICK","✦ WATCH OUT FOR","✦ WHY YOU'RE DRAWN","✦ WHERE TENSION BUILDS","✦ WHAT THIS BOND OFFERS","✦ STRONGER TOGETHER"],
-    Japanese:["二人の気","合う部分","注意すべき部分","この縁を輝かせる方法"],
-    Chinese: ["两人的气场","契合之处","需要注意的部分","让这段缘分发光的方法"],
-    Spanish: ["La Energía Entre Ustedes","Donde Están Alineados","Donde Tener Cuidado","Cómo Hacer Brillar Este Vínculo"]
-  };
-  const sections = compatSections[lang] || compatSections.English;
 
   // Calculate simple harmony score based on element interactions
   const elemA = sajuA.elements; // [Wood,Fire,Earth,Metal,Water]
@@ -963,12 +955,14 @@ Day master: ${sajuB.dayMaster} | Strong: ${sajuB.strong.join(",")} | Weak: ${saj
 
 [FAN SYNC SCORE] ${score}/99
 
-Output exactly 4 sections, no extra text:
+Output exactly 3 sections, no extra text:
 1. 첫인상 싱크
 2. 왜 자꾸 눈이 가는지
 3. 나만 저장하고 싶은 장면
-4. 오늘의 관계 시그널
-Each section: title line + 2~3 sentences. No bullet points. Use "나" and "최애" naturally. Make it feel like a shareable fandom relationship card. Keep the fantasy immersive, but clearly avoid certainty or real-world claims.
+Each section format:
+제목
+2 short sentences.
+No bullet points. No fortune-telling words. No "운명", "예언", "확정", "반드시". Use "나" and the idol name naturally. Write like SIGNAL MATCH copy: short, scene-based, fandom immersive, screenshot-worthy. Focus on emotional relationship fantasy between fan and bias, but do not claim real-world certainty, contact, romance, or prediction.
 `.trim();
 
   const resp = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -1775,8 +1769,8 @@ export default async function handler(req, res){
       if (CACHE.has(compatKey)) return res.status(200).json(CACHE.get(compatKey));
       const result = await buildCompatDetail({ sajuA, sajuB, lang, idolName });
       const titleMap = {
-        Korean:`나와 ${idolName} 사이에 잡힌 감정 싱크`, English:"Your Saju Compatibility",
-        Japanese:"二人の四柱相性", Chinese:"两人的四柱缘分", Spanish:"Tu Compatibilidad Saju"
+        Korean:`나와 ${idolName} 사이에 잡힌 감정 싱크`, English:"Your Bias Sync",
+        Japanese:"推しとのシンク", Chinese:"我和本命的同步感", Spanish:"Mi sync con mi bias"
       };
       const response = { score: result.score, title: titleMap[lang]||titleMap.English, detail: result.detail };
       CACHE.set(compatKey, response);
