@@ -2171,10 +2171,27 @@ const FRIENDLY_API_ERROR='시그널 연결이 잠시 흔들리고 있어. 잠깐
 async function readApiJson(res){
   const text=await res.text();
   let data=null;
-  try{data=text?JSON.parse(text):{};}catch(e){throw new Error(FRIENDLY_API_ERROR);}
+  try{
+    data=text?JSON.parse(text):{};
+  }catch(e){
+    console.error('[SIGNAL ROOM] API returned non-JSON response', {status:res.status, body:text?.slice?.(0,1000)});
+    throw new Error(FRIENDLY_API_ERROR);
+  }
   if(res.status===429)throw new Error(data.error||'오늘 확인 가능한 시그널을 모두 사용했어. 다음 시그널은 내일 다시 열려.');
-  if(!res.ok||data.error)throw new Error(data.error||FRIENDLY_API_ERROR);
+  if(!res.ok||data.error){
+    console.error('[SIGNAL ROOM] API error response', {status:res.status, data});
+    throw new Error(data.userMessage||FRIENDLY_API_ERROR);
+  }
   return data;
+}
+function resetCompatResult(){
+  const box=document.getElementById('compatResult');
+  if(box) box.style.display='none';
+  setText('compatScore','-');
+  setText('compatTitle','');
+  const detail=document.getElementById('compatDetail'); if(detail) detail.innerHTML='';
+  const wrap=document.getElementById('compatShareCardWrap'); if(wrap) wrap.style.display='none';
+  const btn=document.getElementById('compatShareBtn'); if(btn) btn.style.display='none';
 }
 
 const IDOL_BIRTH_DB = {
@@ -2192,9 +2209,9 @@ const IDOL_BIRTH_DB = {
   "TXT":[["Yeonjun",1999,9,13,"male"],["Soobin",2000,12,5,"male"],["Beomgyu",2001,3,13,"male"],["Taehyun",2002,2,5,"male"],["Huening Kai",2002,8,14,"male"]],
   "ATEEZ":[["Hongjoong",1998,11,7,"male"],["Seonghwa",1998,4,3,"male"],["Yunho",1999,3,23,"male"],["Yeosang",1999,6,15,"male"],["San",1999,7,10,"male"],["Mingi",1999,8,9,"male"],["Wooyoung",1999,11,26,"male"],["Jongho",2000,10,12,"male"]],
   "RIIZE":[["Shotaro",2000,11,25,"male"],["Eunseok",2001,3,19,"male"],["Sungchan",2001,9,13,"male"],["Wonbin",2002,3,2,"male"],["Sohee",2003,11,21,"male"],["Anton",2004,3,21,"male"]],
-  "ZEROBASEONE":[["Sung Hanbin",2001,6,13,"male"],["Kim Jiwoong",1998,12,14,"male"],["Zhang Hao",2000,7,25,"male"],["Ricky",2004,5,20,"male"],["Kim Gyuvin",2004,8,30,"male"],["Han Yujin",2007,3,20,"male"]],
-  "BOYNEXTDOOR":[["Myung Jaehyun",2003,12,4,"male"],["Taesan",2004,8,10,"male"],["Leehan",2004,10,20,"male"],["Woonhak",2006,11,29,"male"]],
-  "TWS":[["Shinyu",2003,11,7,"male"],["Dohoon",2005,1,30,"male"],["Youngjae",2005,5,31,"male"],["Hanjin",2006,1,5,"male"]],
+  "ZEROBASEONE":[["Sung Hanbin",2001,6,13,"male"],["Kim Jiwoong",1998,12,14,"male"],["Zhang Hao",2000,7,25,"male"],["Seok Matthew",2002,5,28,"male"],["Kim Taerae",2002,7,14,"male"],["Ricky",2004,5,20,"male"],["Kim Gyuvin",2004,8,30,"male"],["Park Gunwook",2005,1,10,"male"],["Han Yujin",2007,3,20,"male"]],
+  "BOYNEXTDOOR":[["Sungho",2003,9,4,"male"],["Riwoo",2003,10,22,"male"],["Myung Jaehyun",2003,12,4,"male"],["Taesan",2004,8,10,"male"],["Leehan",2004,10,20,"male"],["Woonhak",2006,11,29,"male"]],
+  "TWS":[["Shinyu",2003,11,7,"male"],["Dohoon",2005,1,30,"male"],["Youngjae",2005,5,31,"male"],["Hanjin",2006,1,5,"male"],["Jihoon",2006,3,28,"male"],["Kyungmin",2007,10,2,"male"]],
   "ILLIT":[["Yunah",2004,1,15,"female"],["Minju",2004,5,11,"female"],["Moka",2004,10,8,"female"],["Wonhee",2007,6,26,"female"],["Iroha",2008,2,4,"female"]],
   "KISS OF LIFE":[["Julie",2000,3,29,"female"],["Natty",2002,5,30,"female"],["Belle",2004,3,20,"female"],["Haneul",2005,5,25,"female"]]
 };
@@ -2657,10 +2674,61 @@ async function shareCompatCard(){
   const a=document.createElement('a'); a.download='signal-room-relation-card.png'; a.href=canvas.toDataURL('image/png'); a.click();
 }
 
+
+function localCompatScore(){
+  const seed=[ST.a.year,ST.a.month,ST.a.day,ST.a.hour,ST.b.year,ST.b.month,ST.b.day,ST.b.hour,ST.biasName].join('|');
+  let h=2166136261;
+  for(let i=0;i<seed.length;i++){h^=seed.charCodeAt(i); h=Math.imul(h,16777619);}
+  return 72 + ((h>>>0) % 23);
+}
+function makeCompatFallbackDetail(score){
+  const idol=(ST.biasName||document.getElementById('biasNameInput')?.value||'최애').trim()||'최애';
+  const seed=[ST.a.year,ST.a.month,ST.a.day,ST.a.hour,ST.b.year,ST.b.month,ST.b.day,ST.b.hour,idol,score].join('|');
+  const s1=[
+    `처음부터 크게 터지는 쪽보다, 나와 ${idol} 사이엔 천천히 눈이 머무는 결이 먼저 잡혀.\n한 번 본 장면을 다시 확인하게 만드는 잔상이 있어.`,
+    `나와 ${idol}의 싱크는 빠른 확신보다 조용한 반복 쪽에 가까워.\n짧게 지나간 표정 하나가 이상하게 오래 남는 타입이야.`,
+    `${idol}에게 끌리는 포인트는 화려한 순간보다 힘을 살짝 뺀 장면에서 더 선명해져.\n그 틈에서 나만 알아본 것 같은 감정이 생겨.`
+  ];
+  const s2=[
+    `내 쪽 감정은 바로 달려가기보다 조금 떨어져서 더 오래 보는 방식으로 움직여.\n그래서 ${idol}의 작은 변화가 크게 확대돼서 들어와.`,
+    `${idol}의 에너지는 정면으로 밀고 들어오기보다 주변 공기를 바꾸는 쪽이야.\n나는 그 공기 안에서 자꾸 같은 포인트를 찾게 돼.`,
+    `서로 다른 온도가 겹치면서 묘하게 신경 쓰이는 장면이 생겨.\n깔끔하게 설명되지 않아서 더 오래 붙잡히는 싱크야.`
+  ];
+  const s3=[
+    `오늘 저장하고 싶은 장면은 큰 무대보다 카메라가 잠깐 머무는 순간에 가까워.\n웃음이 끝나기 직전, 표정이 풀리는 그 짧은 틈이 핵심이야.`,
+    `반복해서 보게 되는 포인트는 완벽한 포즈보다 예상 밖의 작은 흔들림이야.\n그 순간에 나와 ${idol} 사이의 감정선이 더 또렷해져.`,
+    `나만 캡처하고 싶은 장면은 정답처럼 보이는 컷이 아니야.\n잠깐 시선이 옆으로 빠지는 순간, 싱크가 더 강하게 남아.`
+  ];
+  return `첫인상 싱크\n${seededRelationPick(s1,seed,11)}\n\n왜 자꾸 눈이 가는지\n${seededRelationPick(s2,seed,12)}\n\n나만 저장하고 싶은 장면\n${seededRelationPick(s3,seed,13)}`;
+}
+function normalizeCompatData(data){
+  const idol=(ST.biasName||document.getElementById('biasNameInput')?.value||'최애').trim()||'최애';
+  const score=data?.score ?? localCompatScore();
+  return {
+    score,
+    title:data?.title || `나와 ${idol} 사이에 잡힌 감정 싱크`,
+    detail:(data?.detail && String(data.detail).trim()) ? data.detail : makeCompatFallbackDetail(score)
+  };
+}
+function renderCompatResult(data){
+  if(!data || data.score==null || !String(data.detail||'').trim()){
+    console.error('[SIGNAL ROOM] Invalid compatibility payload', data);
+    throw new Error(FRIENDLY_API_ERROR);
+  }
+  const box=document.getElementById('compatResult');
+  box.style.display='';
+  setText('compatScore',data.score??'-');
+  setText('compatTitle',data.title??'');
+  renderCompatDetail(data);
+  drawCompatCard(data);
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 async function runCompat(){
   const t=T[curLang];
   try{
     hideErr('compatErr');
+    resetCompatResult();
     if(!ST.a.year||!ST.a.month||!ST.a.day)throw new Error(t.errDate);
     if(!ST.b.year||!ST.b.month||!ST.b.day)throw new Error(t.errDate);
     showLoad('compatLoad',true);
@@ -2669,14 +2737,13 @@ async function runCompat(){
         partnerYear:ST.b.year,partnerMonth:ST.b.month,partnerDay:ST.b.day,partnerHour:ST.b.hour,
         partnerGender:ST.b.gender||'unknown',idolName:(ST.biasName||document.getElementById('biasNameInput')?.value||'최애'),mode:'compat',lang:t.aiLang,paid:false})});
     const data=await readApiJson(res);
-    const box=document.getElementById('compatResult');
-    box.style.display='';
-    setText('compatScore',data.score??'-');
-    setText('compatTitle',data.title??'');
-    renderCompatDetail(data);
-    drawCompatCard(data);
-    box.scrollIntoView({behavior:'smooth',block:'start'});
-  }catch(e){showErr('compatErr',e.message);}
+    hideErr('compatErr');
+    renderCompatResult(data);
+  }catch(e){
+    console.error('[SIGNAL ROOM] Compatibility request failed', e);
+    resetCompatResult();
+    showErr('compatErr', e?.message || FRIENDLY_API_ERROR);
+  }
   finally{showLoad('compatLoad',false);}
 }
 
