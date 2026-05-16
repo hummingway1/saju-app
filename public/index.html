@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SAJUSTRO · K-Fate Meets Astrology · Idol Compatibility</title>
-<meta name="description" content="Korean Saju + Western Astrology + Tarot. Fandom identity, bias pattern, and viral oracle share cards."/>
-<meta name="keywords" content="idol compatibility, kpop saju, korean astrology, four pillars, 사주, 아이돌 궁합, sajustro"/>
-<link rel="canonical" href="https://sajustro.vercel.app/"/>
+<title>SIGNAL ROOM · Daily Idol Signal & Fan Sync</title>
+<meta name="description" content="AI fandom emotional experience. Daily idol signal, fan sync, mood capture, and shareable scene cards."/>
+<meta name="keywords" content="idol signal, fandom sync, fan energy, mood capture, bias profile, signal room"/>
+<link rel="canonical" href="https://sajustro.com/"/>
 <meta name="robots" content="index, follow"/>
 <meta name="theme-color" content="#000000"/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://sajustro.vercel.app/"/>
-<meta property="og:title" content="SAJUSTRO · Find Your Idol Signal Type"/>
-<meta property="og:description" content="Korean Saju + Western Astrology + Tarot. Reveal your fandom signal and bias pattern."/>
-<meta property="og:image" content="https://sajustro.vercel.app/og-image.png"/>
-<meta property="og:site_name" content="SAJUSTRO"/>
+<meta property="og:url" content="https://sajustro.com/"/>
+<meta property="og:title" content="SIGNAL ROOM · Find Today’s Idol Signal"/>
+<meta property="og:description" content="Daily idol signal and fan sync experience for fandom immersion."/>
+<meta property="og:image" content="https://sajustro.com/og-image.png"/>
+<meta property="og:site_name" content="SIGNAL ROOM"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="SAJUSTRO · Find Your Idol Signal Type"/>
-<meta name="twitter:image" content="https://sajustro.vercel.app/og-image.png"/>
+<meta name="twitter:title" content="SIGNAL ROOM · Find Today’s Idol Signal"/>
+<meta name="twitter:image" content="https://sajustro.com/og-image.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
@@ -1358,6 +1358,14 @@ text-transform:uppercase;
 }
 </style>
 
+
+<style id="signal-room-fandom-upgrade-style">
+.fandom-panel{margin-top:14px;padding:15px;border-radius:18px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.025));box-shadow:0 18px 60px rgba(0,0,0,.24)}
+.fandom-kicker{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.45);font-weight:900;text-transform:uppercase;margin-bottom:8px}
+.sync-level-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.sync-level-name{font-size:28px;font-weight:950;letter-spacing:-.04em;background:linear-gradient(90deg,#f9a8d4,#c084fc,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}.sync-orbs{display:flex;gap:6px}.sync-orb{width:12px;height:12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.11)}.sync-orb.on{background:linear-gradient(135deg,#ec4899,#a855f7);box-shadow:0 0 18px rgba(236,72,153,.42)}
+.scene-line{font-size:20px;line-height:1.55;font-weight:900;letter-spacing:-.04em;word-break:keep-all;white-space:pre-line}.scene-sub{margin-top:9px;font-size:13px;line-height:1.75;color:rgba(255,255,255,.62);word-break:keep-all;white-space:pre-line}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.profile-item{padding:11px;border-radius:13px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.07)}.profile-label{font-size:10px;letter-spacing:1.6px;color:rgba(255,255,255,.38);font-weight:800;text-transform:uppercase}.profile-value{margin-top:5px;font-size:14px;font-weight:850;color:rgba(255,255,255,.9)}.streak-days{font-size:34px;font-weight:950;letter-spacing:-.05em}.streak-sub{font-size:12px;color:rgba(255,255,255,.55);line-height:1.65}.archive-list{display:grid;gap:7px}.archive-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;border-radius:12px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.07);font-size:12px}.archive-scene{color:rgba(255,255,255,.76);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.archive-level{font-weight:900;color:#f0abfc}.idol-matches .idol-score-lbl{font-size:9px!important}.result-card .headline{line-height:1.25;word-break:keep-all}.badge-idol{letter-spacing:2px}
+@media(max-width:520px){.profile-grid{grid-template-columns:1fr}.scene-line{font-size:18px}.sync-level-name{font-size:24px}}
+</style>
 </head>
 <body>
 <div class="bg1"></div>
@@ -1366,8 +1374,8 @@ text-transform:uppercase;
 <!-- NAV -->
 <nav>
   <div class="nav-logo">
-    <h1>SAJUSTRO</h1>
-    <p>K-FATE MEETS ASTROLOGY</p>
+    <h1>SIGNAL ROOM</h1>
+    <p>AI FANDOM SIGNAL</p>
   </div>
   <div class="nav-right">
     <div class="lang-wrap">
@@ -1419,13 +1427,13 @@ text-transform:uppercase;
           </div>
           <div class="phone-body">
             <div class="compat-card">
-              <div class="compat-lbl" id="phoneSoulLbl">Soul Compatibility</div>
+              <div class="compat-lbl" id="phoneSoulLbl">Sync Level</div>
               <div class="compat-pct">92%</div>
               <p class="compat-desc" id="phoneDesc">Your emotional energy reveals a deep compatibility with a specific idol archetype</p>
             </div>
             <div class="phone-grid">
-              <div class="phone-stat"><div class="phone-stat-lbl" id="phoneSajuLbl">Saju Energy</div><div class="phone-stat-val">Fire + Water</div></div>
-              <div class="phone-stat"><div class="phone-stat-lbl" id="phoneAstroLbl">Astro Sign</div><div class="phone-stat-val">Scorpio Moon</div></div>
+              <div class="phone-stat"><div class="phone-stat-lbl" id="phoneSajuLbl">Fan Energy</div><div class="phone-stat-val">Fire + Water</div></div>
+              <div class="phone-stat"><div class="phone-stat-lbl" id="phoneAstroLbl">Mood</div><div class="phone-stat-val">Scorpio Moon</div></div>
             </div>
             <button class="phone-share" id="phoneShareBtn">Share To TikTok ↗</button>
           </div>
@@ -1467,19 +1475,18 @@ text-transform:uppercase;
   <div class="app-inner">
     <div class="app-hdr">
       <h3 id="appTitle">SIGNAL DETECT</h3>
-      <p id="appSub">동양의 사주와 서양의 별자리가,
-결국 같은 사람을 가리키고 있어</p>
+      <p id="appSub">오늘 최애를 더 오래 바라보게 만드는 AI 팬덤 시그널</p>
     </div>
     <div class="mode-tabs">
       <button class="mtab active" id="mtab0" onclick="setMode('idol')">⭐ <span id="tab0Txt">시그널 매치</span></button>
-      <button class="mtab" id="mtab1" onclick="setMode('saju')">🔮 <span id="tab1Txt">오늘의 분위기</span></button>
-      <button class="mtab" id="mtab2" onclick="setMode('compat')">💫 <span id="tab2Txt">관계 싱크</span></button>
+      <button class="mtab" id="mtab1" onclick="setMode('compat')">💫 <span id="tab1Txt">연결 시그널</span></button>
+      <button class="mtab" id="mtab2" onclick="setMode('saju')">🔮 <span id="tab2Txt">오늘의 무드</span></button>
     </div>
 
     <!-- SAJU -->
     <div id="modeSaju" style="display:none">
       <div class="panel">
-        <div class="panel-title" id="lblTarot">오늘의 타로</div>
+        <div class="panel-title" id="lblTarot">오늘의 장면 카드</div>
         <div class="tarot-intro" id="lblTarotIntro">이상하게 눈이 가는 카드가 있을 거야</div>
         <div id="tarotGrid" class="tarot-grid"></div>
         <div id="tarotResult" class="tarot-result"></div>
@@ -1487,11 +1494,11 @@ text-transform:uppercase;
       <div class="panel">
         <div class="panel-title" id="lblInput">정밀 분석 입력</div>
         <div class="fcats" id="fcatsEl">
-          <button class="fcat active" onclick="setFcat(0)">🌟 <span id="fc0">종합운</span></button>
-          <button class="fcat" onclick="setFcat(1)">💕 <span id="fc1">연애운</span></button>
-          <button class="fcat" onclick="setFcat(2)">💰 <span id="fc2">재물운</span></button>
-          <button class="fcat" onclick="setFcat(3)">📈 <span id="fc3">사업운</span></button>
-          <button class="fcat" onclick="setFcat(4)">🌿 <span id="fc4">건강운</span></button>
+          <button class="fcat active" onclick="setFcat(0)">🌟 <span id="fc0">전체 무드</span></button>
+          <button class="fcat" onclick="setFcat(1)">💕 <span id="fc1">감정 싱크</span></button>
+          <button class="fcat" onclick="setFcat(2)">💫 <span id="fc2">팬 에너지</span></button>
+          <button class="fcat" onclick="setFcat(3)">📈 <span id="fc3">활동 무드</span></button>
+          <button class="fcat" onclick="setFcat(4)">🌿 <span id="fc4">회복 무드</span></button>
         </div>
 <div class="form-grid">
           <div class="field"><div class="flabel" id="lbYr">생년</div><div class="box" id="sYr" onclick="openSheet('sYr')">-</div></div>
@@ -1507,9 +1514,9 @@ text-transform:uppercase;
           </div>
           <div class="field full"><div class="flabel" id="lbQ">질문 (선택)</div><textarea id="qInput" placeholder="예: 올해 이직하는 게 맞을까요?"></textarea></div>
         </div>
-        <button class="cta" id="btnSaju" onclick="runSaju()">오늘의 분위기 보기</button>
+        <button class="cta" id="btnSaju" onclick="runSaju()">오늘의 무드 보기</button>
         <div id="sajuLoad" class="loading">✦ 기운을 읽는 중…</div>
-<div id="oracleAccess" class="oracle-access">ACCESSING YOUR FLOW..</div>
+<div id="oracleAccess" class="oracle-access">READING FAN SIGNAL..</div>
         <div id="sajuErr" class="err-box"></div>
       </div>
       <div id="sajuResult" class="result-card hidden">
@@ -1548,7 +1555,7 @@ text-transform:uppercase;
     <!-- COMPAT -->
     <div id="modeCompat" style="display:none">
       <div class="panel">
-        <div class="panel-title" id="lblMyInfo">나의 정보</div>
+        <div class="panel-title" id="lblMyInfo">나의 시그널</div>
         <div class="form-grid">
           <div class="field"><div class="flabel" id="lbAYr">생년</div><div class="box" id="aYr" onclick="openSheet('aYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbAMo">월</div><div class="box" id="aMo" onclick="openSheet('aMo')">-</div></div>
@@ -1563,7 +1570,7 @@ text-transform:uppercase;
         </div>
       </div>
       <div class="panel" style="margin-top:10px">
-        <div class="panel-title" id="lblPartInfo">상대방 정보</div>
+        <div class="panel-title" id="lblPartInfo">최애의 시그널</div>
         <div class="form-grid">
           <div class="field"><div class="flabel" id="lbBYr">생년</div><div class="box" id="bYr" onclick="openSheet('bYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbBMo">월</div><div class="box" id="bMo" onclick="openSheet('bMo')">-</div></div>
@@ -1577,7 +1584,7 @@ text-transform:uppercase;
           </div>
         </div>
         <button class="cta" id="btnCompat" onclick="runCompat()">SYNC CHECK</button>
-        <div id="compatLoad" class="loading">✦ 궁합을 읽는 중…</div>
+        <div id="compatLoad" class="loading">✦ 연결성을 읽는 중…</div>
         <div id="compatErr" class="err-box"></div>
       </div>
       <div id="compatResult" class="result-card" style="display:none;margin-top:14px">
@@ -1593,7 +1600,7 @@ text-transform:uppercase;
           <div class="premium-cta-kicker">🔒 SYNC+ LOCKED</div>
           <div class="premium-cta-title">이 관계가 왜 끌리고 어디서 엇갈리는지 더 깊게 볼 수 있어</div>
           <div class="premium-cta-text">
-            무료 궁합은 큰 결만 보여줘.  
+            무료 연결성은 큰 결만 보여줘.  
             SYNC+에서는 감정 온도차, 갈등 패턴, 잘 맞는 순간과 조심할 타이밍까지 더 자세히 풀어줘.
           </div>
           <div class="premium-cta-list">
@@ -1652,7 +1659,7 @@ text-transform:uppercase;
           </div>
 </div>
         <button class="cta" id="btnIdol" onclick="runIdol()">FANDOM SIGNAL SCAN</button>
-        <div id="idolLoad" class="loading">✦ 별자리와 사주를 읽는 중…</div>
+        <div id="idolLoad" class="loading">✦ 오늘의 팬 시그널을 맞추는 중…</div>
         <div id="idolErr" class="err-box"></div>
       </div>
       <div id="idolResult" class="result-card" style="display:none;margin-top:14px">
@@ -1662,8 +1669,13 @@ text-transform:uppercase;
         <h2 class="headline" id="idolTitle"></h2>
         <div id="idolDetail"></div>
         <div id="idolDetailText"></div>
-        <button class="cta" id="shareBtn" onclick="downloadCard()" style="display:none;margin-top:14px;background:var(--grad)">📲 이미지 저장</button>
-        <div id="motionCardNote" class="animated-card-note" style="display:none">카드는 화면에서 은은하게 움직여요 · TikTok은 화면녹화로 올리면 가장 자연스러워요</div>
+        <div id="syncLevelBox" class="fandom-panel sync-level-box"></div>
+        <div id="todaySceneBox" class="fandom-panel today-scene-box"></div>
+        <div id="biasProfileBox" class="fandom-panel bias-profile-box"></div>
+        <div id="streakBox" class="fandom-panel streak-box"></div>
+        <div id="signalArchiveBox" class="fandom-panel signal-archive-box"></div>
+        <button class="cta" id="shareBtn" onclick="downloadCard()" style="display:none;margin-top:14px;background:var(--grad)">📲 공유하기</button>
+        <div id="motionCardNote" class="animated-card-note" style="display:none">카드는 화면에서 은은하게 움직여요 · 공유하면 이미지와 sajustro.com 주소가 함께 전달돼요</div>
 
         <div id="signalPlusLock" class="signal-plus-lock">
           <div class="signal-plus-kicker">🔒 SIGNAL+ 잠금</div>
@@ -1757,11 +1769,11 @@ text-transform:uppercase;
 <div class="footer-cta">
   <div class="footer-cta-box">
     <h3 id="ftH">Your Bias Pattern Was <span id="ftSpan">Detected</span></h3>
-    <p id="ftP">Join millions of fans discovering hidden compatibility through Korean fate reading and astrology.</p>
+    <p id="ftP">Build your daily fan signal archive and save the scenes that keep replaying.</p>
     <button class="footer-cta-btn" id="ftBtn" onclick="goMode('idol')">Start Free Reading</button>
   </div>
 </div>
-<footer>SAJUSTRO · K-Fate Meets Astrology · sajustro.vercel.app</footer>
+<footer>SIGNAL ROOM · AI Fandom Emotional Experience · sajustro.com</footer>
 
 <!-- SHEET -->
 <div class="sheet-bd" id="sheetBd" onclick="closeSheet()"></div>
@@ -1779,40 +1791,40 @@ const T = {
     lang:"ko",lbl:"한국어",
     heroTag:"✨ 팬덤 시그널 매치",heroL1:"나의",heroL2:"아이돌 시그널 매치",
     heroDesc:"나의 아이돌을 고르고, 네 팬심이 반응하는 멤버 시그널을 확인해보세요",
-    heroBtn1:"오늘 최애 시그널 읽기",heroBtn2:"관계 싱크",navCta:"시그널 매치",
-    proof1:"아이돌 궁합 조회",proof2:"틱톡 공유율",proof3:"개국",
-    phoneLbl:"나의 Signal Match",phoneSoulLbl:"SIGNAL MATCH",
-    phoneDesc:"당신의 팬심이 반응하는 bias pattern을 감지합니다",
-    phoneSajuLbl:"사주 에너지",phoneAstroLbl:"별자리",phoneShareBtn:"틱톡에 공유 ↗",
-    featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"친구와 비교하고, 캡처하고, 다시 보고 싶게 만드는 팬덤용 시그널 테스트",
-    feat1T:"아이돌 시그널 매치",feat1D:"누가 이상하게 오래 기억에 남는 타입일까",
-    feat2T:"관계 싱크",feat2D:"왜 자꾸 같은 사람에게 끌리는 걸까",
-    feat3T:"바이럴 공유 카드",feat3D:"친구한테 바로 보내고 싶은 결과 카드",
-    appTitle:"SIGNAL DETECT",appSub:"동양의 사주와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어",appSubSaju:"사주로 지금 바뀌는 분위기을 읽어봄",appSubCompat:"두 사람 사이의 끌림과 어긋남을 확인함",
-    tab0:"시그널 매치",tab1:"오늘의 분위기",tab2:"관계 싱크",
-    fcats:["종합운","연애운","재물운","사업운","건강운"],
-    fcatKeys:["종합","연애운","재물운","사업운","건강운"],
-    lblTarot:"오늘의 타로",tarotIntro:"이상하게 눈이 가는 카드가 있을 거야",
+    heroBtn1:"오늘 최애 시그널 읽기",heroBtn2:"연결 시그널",navCta:"시그널 매치",
+    proof1:"아이돌 연결성 조회",proof2:"틱톡 공유율",proof3:"개국",
+    phoneLbl:"나의 Signal Match",phoneSoulLbl:"SYNC LEVEL",
+    phoneDesc:"오늘 저장하고 싶은 최애의 장면을 감지합니다",
+    phoneSajuLbl:"Fan Energy",phoneAstroLbl:"Mood",phoneShareBtn:"틱톡에 공유 ↗",
+    featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"오늘 최애의 장면, 팬 에너지, 싱크 레벨을 저장하고 공유하는 몰입형 경험",
+    feat1T:"아이돌 시그널 매치",feat1D:"오늘 유독 눈이 가는 장면과 최애 시그널을 확인",
+    feat2T:"연결 시그널",feat2D:"팬과 최애 사이에 남는 감정 싱크를 확인",
+    feat3T:"바이럴 공유 카드",feat3D:"팬계정 감성으로 바로 저장하고 공유하는 카드",
+    appTitle:"SIGNAL ROOM",appSub:"동양의 팬 시그널와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어",appSubSaju:"오늘 저장하고 싶은 장면을 읽어봄",appSubCompat:"최애와 나 사이에 남는 감정 싱크를 확인해봐",
+    tab0:"시그널 매치",tab1:"관계 싱크",tab2:"TODAY’S SCENE",
+    fcats:["전체 무드","감정 싱크","팬 에너지","활동 무드","회복 무드"],
+    fcatKeys:["전체 무드","감정 싱크","팬 에너지","활동 무드","회복 무드"],
+    lblTarot:"오늘의 장면 카드",tarotIntro:"이상하게 눈이 가는 카드가 있을 거야",
     tarotMini:"끌린다면 이유가 있어",
-    tarotAfter:(t,m)=>`<strong>${t}</strong><br>${m}<br><br>아래에서 운세를 열어보면 이 카드가 사주와 어떻게 겹쳐지는지 드러납니다.`,
+    tarotAfter:(t,m)=>`<strong>${t}</strong><br>${m}<br><br>아래에서 오늘의 장면을 열어보면 이 카드가 어떤 팬 시그널로 이어지는지 보여줍니다.`,
     lblInput:"정밀 분석 입력",
     lbYr:"생년",lbMo:"월",lbDy:"일",lbHr:"출생 시각",lbLoc:"출생지",lbGen:"성별",lbQ:"질문 (선택)",
     ph:"예: 서울, 부산",phQ:"예: 올해 이직하는 게 맞을까요?",
-    male:"남성",female:"여성",btnSaju:"운세 보기",
+    male:"남성",female:"여성",btnSaju:"오늘 장면 보기",
     sajuLoad:"✦ 기운을 읽는 중…",lblHooks:"더 깊은 분위기",
     unlockBtn:"SIGNAL+ 심층 분위기 — 곧 공개",
     freeMeta:"출생지를 입력하면 점성술 차트까지 더한 상세 분석이 열립니다",
-    fullMeta:"사주와 점성술 차트로 더 깊은 분위기을 읽었습니다",
+    fullMeta:"오늘의 팬 시그널을 더 깊게 읽었습니다",
     shYr:"생년 선택",shMo:"월 선택",shDy:"일 선택",shHr:"시각 선택",hrUnk:"모름",
     errDate:"생년월일을 먼저 선택해 주세요",errGen:"성별을 선택해 주세요",
     errLoc:"출생지를 입력해 주세요",errGeo:"출생지를 찾지 못했습니다",
     errApi:"분석에 실패했습니다",sel:"선택",aiLang:"Korean",
-    lblMyInfo:"나의 정보",lblPartInfo:"상대방 정보",btnCompat:"싱크 체크",compatLoad:"✦ 궁합을 읽는 중…",
-    lblIdolTitle:"나의 사주로 보는 시그널 매치 타입",
+    lblMyInfo:"나의 시그널",lblPartInfo:"최애의 시그널",btnCompat:"연결 시그널 보기",compatLoad:"✦ 연결성을 읽는 중…",
+    lblIdolTitle:"나의 팬 에너지로 보는 시그널 매치",
     lblIdolDesc:"나의 아이돌을 먼저 골라봐. 누가 나와 가장 맞는 시그널일까",
-    btnIdol:"오늘 최애 시그널 읽기",idolLoad:"✦ 별자리와 사주를 읽는 중…",
+    btnIdol:"오늘 최애 시그널 읽기",idolLoad:"✦ 오늘의 팬 시그널을 맞추는 중…",
     shareBtn:"📲 공유하기",
-    ftH:"내 최애가",ftSpan:"운명일 수도",ftP:"한국 운명 읽기와 점성술로 숨겨진 궁합을 발견하는 수백만 팬들과 함께하세요",ftBtn:"SIGNAL DETECT",
+    ftH:"오늘 장면이",ftSpan:"계속 남을 수도",ftP:"오늘 최애와 연결되는 장면을 저장하고, 매일 달라지는 팬 시그널을 확인하세요",ftBtn:"OPEN SIGNAL ROOM",
     tarotDeck:[
       {title:"별의 문",message:"조용했던 분위기이 서서히 열리기 시작합니다. 서두르지 않되, 들어오는 신호는 놓치지 않는 편이 좋습니다."},
       {title:"숨은 파도",message:"겉은 고요해 보여도 안쪽에는 움직임이 있습니다. 말보다 분위기를 먼저 읽는 것이 중요합니다."},
@@ -1832,9 +1844,9 @@ const T = {
     heroDesc:"Choose your favorite group and reveal the member signal your fandom energy reacts to",
     heroBtn1:"Free Signal Match",heroBtn2:"Check Compatibility",navCta:"Signal Match",
     proof1:"Idol Match Reads",proof2:"Shared to TikTok",proof3:"Countries",
-    phoneLbl:"Your Idol Match",phoneSoulLbl:"Soul Compatibility",
+    phoneLbl:"Your Idol Match",phoneSoulLbl:"Sync Level",
     phoneDesc:"Your emotional energy reveals a deep compatibility with a specific idol archetype",
-    phoneSajuLbl:"Saju Energy",phoneAstroLbl:"Astro Sign",phoneShareBtn:"Share To TikTok ↗",
+    phoneSajuLbl:"Fan Energy",phoneAstroLbl:"Mood",phoneShareBtn:"Share To TikTok ↗",
     featTitle:"Built For Fandom Culture",featDesc:"Designed for viral sharing, fan edits, ship wars, and late-night delulu energy",
     feat1T:"Idol Signal Match",feat1D:"Find which idol archetype matches your Saju and zodiac energy",
     feat2T:"Ship Compatibility",feat2D:"Compare yourself with any person and discover your ideal pairing",
@@ -1843,7 +1855,7 @@ const T = {
     tab0:"Signal Match",tab1:"Flow Scan",tab2:"Sync Check",
     fcats:["General","Love","Wealth","Career","Health"],
     fcatKeys:["general","love","wealth","career","health"],
-    lblTarot:"TODAY'S TAROT",tarotIntro:"Ten cards lie before you. Choose the one that calls to you now.",
+    lblTarot:"TODAY'S SCENE CARD",tarotIntro:"Choose the card that feels closest to today’s scene.",
     tarotMini:"If you're drawn, there's a reason",
     tarotAfter:(t,m)=>`<strong>${t}</strong><br>${m}<br><br>Open your reading below — this card will be woven into your Four Pillars chart.`,
     lblInput:"ENTER YOUR DETAILS",
@@ -1863,7 +1875,7 @@ const T = {
     lblIdolDesc:"Choose your favorite group first. Your fandom signal will be matched inside that group.",
     btnIdol:"FANDOM SIGNAL SCAN",idolLoad:"SYNCING FANDOM SIGNAL...",
     shareBtn:"📲 Share Card",
-    ftH:"Your Bias Might Be",ftSpan:"Your Destiny",ftP:"Join millions of fans discovering hidden compatibility through Korean fate reading and astrology",ftBtn:"Start Reading",
+    ftH:"Your Bias Might Be",ftSpan:"Your Destiny",ftP:"Join millions of fans discovering hidden compatibility through AI fandom signal experience",ftBtn:"Start Reading",
     tarotDeck:[
       {title:"Gate of Stars",message:"A quiet current is beginning to open. Don't rush — but don't miss the signals coming your way."},
       {title:"Hidden Wave",message:"Still on the surface, yet something stirs within. Read the atmosphere before you speak."},
@@ -1894,7 +1906,7 @@ const T = {
     tab0:"四柱鑑定",tab1:"相性を見る",tab2:"アイドル相性",
     fcats:["総合運","恋愛運","財運","仕事運","健康運"],
     fcatKeys:["総合","恋愛運","財運","仕事運","健康運"],
-    lblTarot:"今日のタロット",tarotIntro:"目の前に10枚のカードがあります。今最も引かれる1枚を選んでください。",
+    lblTarot:"今日のシーンカード",tarotIntro:"今日のシーンに近いカードを選んでください。",
     tarotMini:"引かれるなら理由があります",
     tarotAfter:(t,m)=>`<strong>${t}</strong><br>${m}<br><br>下の鑑定を開くと、このカードがあなたの四柱推命とどう重なるかが明かされます。`,
     lblInput:"詳細分析の入力",
@@ -1945,7 +1957,7 @@ const T = {
     tab0:"四柱运势",tab1:"缘分配对",tab2:"偶像匹配",
     fcats:["综合运","感情运","财运","事业运","健康运"],
     fcatKeys:["综合","感情运","财运","事业运","健康运"],
-    lblTarot:"今日塔罗",tarotIntro:"眼前摆着十张牌，选择现在最吸引你的那一张。",
+    lblTarot:"今日场景卡",tarotIntro:"选择最接近今天场景的卡片。",
     tarotMini:"若有所感，自有其因",
     tarotAfter:(t,m)=>`<strong>${t}</strong><br>${m}<br><br>现在打开下方的解读，这张牌将与你的四柱命盘相互呼应。`,
     lblInput:"精密分析输入",
@@ -1996,7 +2008,7 @@ const T = {
     tab0:"Lectura Saju",tab1:"Compatibilidad",tab2:"Match Idol",
     fcats:["General","Amor","Riqueza","Carrera","Salud"],
     fcatKeys:["general","love","wealth","career","health"],
-    lblTarot:"TAROT DE HOY",tarotIntro:"Hay diez cartas ante ti. Elige la que más te llame ahora.",
+    lblTarot:"ESCENA DE HOY",tarotIntro:"Elige la carta que se sienta más cercana a la escena de hoy.",
     tarotMini:"Si te atrae, hay una razón",
     tarotAfter:(t,m)=>`<strong>${t}</strong><br>${m}<br><br>Abre tu lectura — esta carta se entrelazará con tu carta natal.`,
     lblInput:"INGRESA TUS DATOS",
@@ -2144,11 +2156,11 @@ function setMode(mode){
   document.getElementById('modeCompat').style.display=mode==='compat'?'':'none';
   document.getElementById('modeIdol').style.display  =mode==='idol'  ?'':'none';
   document.getElementById('mtab0').classList.toggle('active',mode==='idol');
-  document.getElementById('mtab1').classList.toggle('active',mode==='saju');
-  document.getElementById('mtab2').classList.toggle('active',mode==='compat');
+  document.getElementById('mtab1').classList.toggle('active',mode==='compat');
+  document.getElementById('mtab2').classList.toggle('active',mode==='saju');
   const _t=(typeof T!=='undefined'&&T[typeof curLang!=='undefined'?curLang:'ko'])||{};
   const _subMap={
-    idol:_t.appSub||'동양의 사주와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어',
+    idol:_t.appSub||'동양의 팬 시그널와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어',
     saju:_t.appSubSaju||'이미 바뀌기 시작한 분위기이 있음',
     compat:_t.appSubCompat||'두 사람 사이엔 이미 잡힌 분위기이 있음'
   };
@@ -2520,20 +2532,22 @@ async function runIdol(){
       idolDetailEl.innerHTML='';
     }
 
-    // Narrative detail
+    // Narrative detail: short fandom-scene style only
     renderDetail(cleanVisibleCopy(data.detail||''),'idolDetailText');
+    renderFandomExperience(data);
 
-    // Share card with top idol name
+    // Share card with TODAY'S SCENE as the main save/share hook
     const topName=data.idolMatches?.[0]?.name||'';
     const groupName=document.getElementById('idolGroup')?.value||'';
-    const cardSub=topName?((data.fandomAccent||'SIGNAL MATCH')+' · '+topName):(data.shareLine||data.highlight||groupName+' SIGNAL');
+    const sceneTitle=(data.todayScene&&data.todayScene.title)||data.shareLine||data.title||'TODAY’S SCENE';
+    const cardSub=topName?((data.syncLevel||'ACTIVE')+' · '+topName):(data.fandomAccent||groupName+' SIGNAL');
     drawCard(
-      data.title||data.shareLine||'SIGNAL MATCH FOUND',
+      sceneTitle,
       cardSub,
       {
         color:data.fandomColor||'#a855f7',
         fandom:data.fandom||'FANDOM',
-        accent:data.fandomAccent||'SIGNAL MATCH',
+        accent:'TODAY’S SCENE',
         group:data.selectedGroup||groupName,
         selectedGroup:data.selectedGroup||groupName,
         grad:[data.fandomColor ? data.fandomColor+'33' : '#12002a', '#090010']
@@ -3035,7 +3049,7 @@ function drawCard(title, highlight, fandomTheme){
   ctx.font='700 10px Inter, sans-serif';
   ctx.fillStyle=`rgba(${r},${g},${b},.78)`;
   ctx.letterSpacing='4px';
-  ctx.fillText('SAJUSTRO',W/2,38);
+  ctx.fillText('SIGNAL ROOM',W/2,38);
   ctx.letterSpacing='0px';
 
   // Fandom pill
@@ -3107,7 +3121,7 @@ function drawCard(title, highlight, fandomTheme){
   // bottom mini URL
   ctx.font='600 10px Inter, sans-serif';
   ctx.fillStyle=`rgba(255,255,255,.38)`;
-  ctx.fillText('sajustro.vercel.app',W/2,H-26);
+  ctx.fillText('sajustro.com',W/2,H-26);
 
   wrap.style.display='block';
 }
@@ -3131,41 +3145,49 @@ function copyShareLine(el){
 
 async function downloadCard(){
   const canvas=document.getElementById('shareCanvas');
-  const t=T[curLang];
+  if(!canvas) return;
 
-  // Web Share API 지원 여부 확인 (모바일 우선)
-  if(navigator.share && navigator.canShare) {
-    try {
-      canvas.toBlob(async (blob)=>{
-        const file = new File([blob], 'sajustro-idol-match.png', {type:'image/png'});
-        const shareData = {
-          files: [file],
-          title: 'SAJUSTRO · Idol Match',
-          text: document.getElementById('idolTitle')?.textContent || 'My Idol Signal Match Result'
-        };
-        if(navigator.canShare(shareData)) {
-          await navigator.share(shareData);
-        } else {
-          // 파일 공유 안되면 텍스트만 공유
-          await navigator.share({
-            title: 'SAJUSTRO · Idol Match',
-            text: document.getElementById('idolTitle')?.textContent || 'My Idol Signal Match Result',
-            url: 'https://sajustro.vercel.app'
-          });
-        }
-      }, 'image/png');
+  const shareTitle = 'SIGNAL ROOM';
+  const shareText = '오늘 최애의 TODAY’S SCENE 확인하기';
+  const shareUrl = 'https://sajustro.com';
+
+  try{
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    const file = new File([blob], 'sajustro-signal-card.png', {type:'image/png'});
+
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({
+        title: shareTitle,
+        text: `${shareText}\n${shareUrl}`,
+        url: shareUrl,
+        files: [file]
+      });
       return;
-    } catch(e) {
-      if(e.name === 'AbortError') return; // 유저가 취소
-      // 실패하면 PNG 다운로드로 폴백
     }
+
+    if(navigator.share){
+      await navigator.share({
+        title: shareTitle,
+        text: `${shareText}\n${shareUrl}`,
+        url: shareUrl
+      });
+      return;
+    }
+  }catch(e){
+    console.warn('Share failed, falling back to download', e);
   }
 
-  // 데스크탑 or Web Share 미지원 → PNG 다운로드
   const a=document.createElement('a');
-  a.download='sajustro-idol-match.png';
+  a.download='sajustro-signal-card.png';
   a.href=canvas.toDataURL('image/png');
   a.click();
+
+  try{
+    await navigator.clipboard.writeText('https://sajustro.com');
+    alert('이미지를 저장했어. 주소도 복사됐어: sajustro.com');
+  }catch(e){
+    alert('이미지를 저장했어. 공유할 때 sajustro.com 주소도 같이 보내줘');
+  }
 }
 
 // ══════════════════════════════════════════
@@ -3216,7 +3238,7 @@ function updateProofNumbers() {
   const today = new Date();
   const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
 
-  // 아이돌 궁합 조회: 1.8M ~ 2.8M 사이에서 매일 변동
+  // 아이돌 연결성 조회: 1.8M ~ 2.8M 사이에서 매일 변동
   const reads = (1.8 + seededRandom(seed * 1) * 1.0).toFixed(1) + 'M+';
 
   // 틱톡 공유율: 84% ~ 93% 사이에서 매일 변동
@@ -3530,7 +3552,7 @@ function drawDeepPreviewCard(){
 
   ctx.fillStyle='rgba(255,255,255,.32)';
   ctx.font='600 10px Inter, sans-serif';
-  ctx.fillText('sajustro.vercel.app',W/2,H-34);
+  ctx.fillText('sajustro.com',W/2,H-34);
 
   wrap.style.display='block';
 }
@@ -3720,8 +3742,87 @@ function copyShareLine(el){
   });
 }
 
+
 // ════════════════════════════════════════════════
-//  SHARE CARDS — 사주 / 아이돌
+//  SIGNAL ROOM FANDOM UX — Sync / Scene / Archive / Streak
+// ════════════════════════════════════════════════
+function srEscape(v){return String(v??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function srToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function srShortDate(date){const p=(date||srToday()).split('-');return p.length===3?`${p[1]}.${p[2]}`:date;}
+function srHash(str){let h=2166136261;for(let i=0;i<String(str).length;i++){h^=String(str).charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function srPick(arr, seed, salt=0){if(!arr||!arr.length)return'';return arr[((seed + salt*2654435761)>>>0)%arr.length];}
+function buildFallbackFandomData(data){
+  const top=data?.idolMatches?.[0]?.name||'최애';
+  const seed=srHash([top,data?.selectedGroup,data?.title,srToday()].join('|'));
+  const scenes=[
+    '무대 전체보다\n엔딩 직전 잠깐 풀리는 표정이 더 오래 남는 쪽.',
+    '오늘은 큰 제스처보다\n카메라가 지나간 뒤의 잔상이 더 강한 쪽.',
+    '팬들이 반복 저장할 포인트는\n예상한 파트보다 시선이 살짝 흐트러지는 순간.',
+    '오늘 유독 눈이 가는 건\n화려한 컷보다 조용히 숨 고르는 장면.',
+    '짧게 지나가는 반응 하나가\n타임라인에서 다시 불릴 가능성이 큼.'
+  ];
+  const fanEnergy=[
+    '가까워진다기보다, 이상하게 계속 확인하게 되는 흐름.',
+    '팬심이 크게 터지기보다 조용히 오래 남는 타입.',
+    '한 번 보고 넘기기보다 저장한 뒤 다시 보는 쪽에 가까움.',
+    '말로 설명하기 전 이미 손이 캡처로 가는 흐름.'
+  ];
+  const levels=['OPEN','ACTIVE','LOCKED','INTENSE'];
+  const tones=['Midnight Glow','Soft Static','Quiet Intensity','Afterstage Blue','Velvet Pulse'];
+  const moods=['Ending Scene','Quiet Focus','Soft Tension','Camera-off Mood','Replay Moment'];
+  const focus=['Eyes','Pause','Smile Fade','Side Glance','Ending Glance'];
+  return {
+    syncLevel:data?.syncLevel||srPick(levels,seed,1),
+    todayScene:data?.todayScene||{title:srPick(scenes,seed,2), sub:srPick(fanEnergy,seed,3)},
+    fanEnergy:data?.fanEnergy||srPick(fanEnergy,seed,4),
+    biasProfile:data?.biasProfile||{auraTone:srPick(tones,seed,5), stageMood:srPick(moods,seed,6), fanEnergy:srPick(['Slow Burn','Save Energy','Soft Pull','Replay Mood'],seed,7), focusSignal:srPick(focus,seed,8)}
+  };
+}
+function renderFandomExperience(data){
+  const built=buildFallbackFandomData(data||{});
+  const level=built.syncLevel||'ACTIVE';
+  const order=['LOW','OPEN','ACTIVE','LOCKED','INTENSE'];
+  const active=Math.max(1,order.indexOf(level)+1);
+  const sync=document.getElementById('syncLevelBox');
+  if(sync){sync.innerHTML=`<div class="fandom-kicker">SYNC LEVEL</div><div class="sync-level-row"><div class="sync-level-name">${srEscape(level)}</div><div class="sync-orbs">${order.map((_,i)=>`<span class="sync-orb ${i<active?'on':''}"></span>`).join('')}</div></div><div class="scene-sub">퍼센트가 아니라 오늘 팬심이 반응하는 강도.</div>`;}
+  const scene=document.getElementById('todaySceneBox');
+  if(scene){scene.innerHTML=`<div class="fandom-kicker">TODAY’S SCENE</div><div class="scene-line">${srEscape(built.todayScene.title||'')}</div><div class="scene-sub">${srEscape(built.todayScene.sub||built.fanEnergy||'')}</div>`;}
+  const profile=document.getElementById('biasProfileBox');
+  if(profile){const bp=built.biasProfile||{};profile.innerHTML=`<div class="fandom-kicker">BIAS PROFILE</div><div class="profile-grid"><div class="profile-item"><div class="profile-label">Aura Tone</div><div class="profile-value">${srEscape(bp.auraTone)}</div></div><div class="profile-item"><div class="profile-label">Stage Mood</div><div class="profile-value">${srEscape(bp.stageMood)}</div></div><div class="profile-item"><div class="profile-label">Fan Energy</div><div class="profile-value">${srEscape(bp.fanEnergy)}</div></div><div class="profile-item"><div class="profile-label">Focus Signal</div><div class="profile-value">${srEscape(bp.focusSignal)}</div></div></div>`;}
+  updateSignalStreak();
+  saveSignalArchive(data,built);
+  renderSignalArchive();
+}
+function updateSignalStreak(){
+  const today=srToday();
+  const box=document.getElementById('streakBox');
+  let obj={last:null,count:0};
+  try{obj=JSON.parse(localStorage.getItem('signal_room_streak')||'{}')||obj;}catch(e){}
+  if(obj.last!==today){
+    const y=new Date(Date.now()-86400000);const yesterday=`${y.getFullYear()}-${String(y.getMonth()+1).padStart(2,'0')}-${String(y.getDate()).padStart(2,'0')}`;
+    obj.count=(obj.last===yesterday)?(Number(obj.count||0)+1):1;
+    obj.last=today;
+    localStorage.setItem('signal_room_streak',JSON.stringify(obj));
+  }
+  if(box){box.innerHTML=`<div class="fandom-kicker">SIGNAL STREAK</div><div class="streak-days">${Number(obj.count||1)} DAYS</div><div class="streak-sub">매일 다른 최애 장면을 확인하는 중. 출석 보상보다, 팬심 기록에 가까움.</div>`;}
+}
+function saveSignalArchive(data,built){
+  const top=data?.idolMatches?.[0]?.name||data?.selectedGroup||'FANDOM';
+  const item={date:srToday(),idol:top,level:built.syncLevel||'ACTIVE',scene:(built.todayScene?.title||data?.title||'TODAY’S SCENE').replace(/\n/g,' ')};
+  let arr=[];try{arr=JSON.parse(localStorage.getItem('signal_room_archive')||'[]')||[];}catch(e){}
+  arr=arr.filter(x=>!(x.date===item.date&&x.idol===item.idol));
+  arr.unshift(item);
+  localStorage.setItem('signal_room_archive',JSON.stringify(arr.slice(0,14)));
+}
+function renderSignalArchive(){
+  const box=document.getElementById('signalArchiveBox'); if(!box)return;
+  let arr=[];try{arr=JSON.parse(localStorage.getItem('signal_room_archive')||'[]')||[];}catch(e){}
+  if(!arr.length){box.innerHTML='';return;}
+  box.innerHTML=`<div class="fandom-kicker">SIGNAL ARCHIVE</div><div class="archive-list">${arr.slice(0,5).map(x=>`<div class="archive-item"><span class="archive-scene">${srShortDate(x.date)} · ${srEscape(x.idol)} · ${srEscape(x.scene)}</span><span class="archive-level">${srEscape(x.level)}</span></div>`).join('')}</div>`;
+}
+
+// ════════════════════════════════════════════════
+//  SHARE CARDS — 팬 시그널 / 아이돌
 // ════════════════════════════════════════════════
 function _pxStars(ctx, W, H, seed, color) {
   const r=parseInt((color||'#a855f7').slice(1,3),16)||168;
@@ -3766,7 +3867,7 @@ function drawSajuCard(shareLine, title) {
   _pxStars(ctx,W,H,(shareLine||'').length*31,'#a855f7');
   ctx.textAlign='center';
   ctx.font='bold 9px "Courier New"';ctx.fillStyle='rgba(168,85,247,.55)';ctx.letterSpacing='3px';
-  ctx.fillText('SAJUSTRO',W/2,28);ctx.letterSpacing='0px';
+  ctx.fillText('SIGNAL ROOM',W/2,28);ctx.letterSpacing='0px';
   ctx.font='bold 8px "Courier New"';ctx.fillStyle='rgba(236,72,153,.45)';ctx.letterSpacing='2px';
   ctx.fillText('◉ SIGNAL DETECTED',W/2,46);ctx.letterSpacing='0px';
   _pxDiv(ctx,W,57,'rgba(168,85,247,.2)');
@@ -3778,7 +3879,7 @@ function drawSajuCard(shareLine, title) {
   ctx.font='bold 8px "Courier New"';ctx.fillStyle='rgba(168,85,247,.4)';ctx.letterSpacing='2px';
   ctx.fillText('SIGNAL DETECTED',W/2,H-36);ctx.letterSpacing='0px';
   ctx.font='9px "Courier New"';ctx.fillStyle='rgba(255,255,255,.18)';
-  ctx.fillText('sajustro.vercel.app',W/2,H-18);
+  ctx.fillText('sajustro.com',W/2,H-18);
   wrap.style.display='block';
 }
 
@@ -3803,7 +3904,7 @@ function drawIdolCard(title, highlight, fd) {
   _pxStars(ctx,W,H,(title||'').length*37,fd.color);
   ctx.textAlign='center';
   ctx.font='bold 9px "Courier New"';ctx.fillStyle=`rgba(${r},${gg},${b},.6)`;ctx.letterSpacing='3px';
-  ctx.fillText('SAJUSTRO',W/2,28);ctx.letterSpacing='0px';
+  ctx.fillText('SIGNAL ROOM',W/2,28);ctx.letterSpacing='0px';
   if(fd.fandom){ctx.font='bold 8px "Courier New"';ctx.fillStyle=`rgba(${r},${gg},${b},.45)`;ctx.letterSpacing='2px';ctx.fillText(fd.fandom+' SIGNAL',W/2,46);ctx.letterSpacing='0px';}
   _pxDiv(ctx,W,58,`rgba(${r},${gg},${b},.25)`);
   ctx.font='bold 17px Inter,sans-serif';ctx.fillStyle='#fff';
@@ -3820,7 +3921,7 @@ function drawIdolCard(title, highlight, fd) {
   ctx.font='bold 8px "Courier New"';ctx.fillStyle=`rgba(${r},${gg},${b},.4)`;ctx.letterSpacing='2px';
   ctx.fillText(fd.fandom?fd.fandom+' RESONANCE':'SIGNAL DETECTED',W/2,H-36);ctx.letterSpacing='0px';
   ctx.font='9px "Courier New"';ctx.fillStyle='rgba(255,255,255,.18)';
-  ctx.fillText('sajustro.vercel.app',W/2,H-18);
+  ctx.fillText('sajustro.com',W/2,H-18);
   wrap.style.display='block';
 }
 
@@ -3829,7 +3930,7 @@ async function _shareCanvas(canvas, filename) {
     canvas.toBlob(async blob=>{
       const file=new File([blob],filename,{type:'image/png'});
       if(navigator.canShare({files:[file]})){
-        try{await navigator.share({files:[file],title:'SAJUSTRO'});return;}catch(e){if(e.name==='AbortError')return;}
+        try{await navigator.share({files:[file],title:'SIGNAL ROOM'});return;}catch(e){if(e.name==='AbortError')return;}
       }
       _dlCanvas(canvas,filename);
     },'image/png');
