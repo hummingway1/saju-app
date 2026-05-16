@@ -2615,10 +2615,12 @@ async function runSajuFull(){
 // ══════════════════════════════════════════
 
 function seededRelationPick(arr, seed, salt=0){
+  if(!Array.isArray(arr) || !arr.length) return '';
   let h=2166136261;
-  const key=String(seed)+'|'+salt;
+  const key=String(seed||'')+'|'+String(salt||0);
   for(let i=0;i<key.length;i++){h^=key.charCodeAt(i); h=Math.imul(h,16777619);}
-  return arr[(h>>>0)%arr.length];
+  const picked=arr[(h>>>0)%arr.length];
+  return (picked==null) ? '' : String(picked);
 }
 function splitCompatSections(text){
   const raw=String(text||'').replace(/\r/g,'').trim();
@@ -2649,6 +2651,14 @@ function makeLockedRelationPreview(data){
   ];
   return `${seededRelationPick(first,seed,1)}
 ${seededRelationPick(second,seed,2)}`;
+}
+function escapeHtml(value){
+  return String(value==null?'':value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
 }
 function renderCompatDetail(data){
   const el=document.getElementById('compatDetail');
@@ -2743,26 +2753,42 @@ ${seededRelationPick(s2,seed,12)}
 관계가 맞물리는 지점
 ${seededRelationPick(s3,seed,13)}`;
 }
+function isBlankCompatText(v){
+  const t=String(v==null?'':v).trim();
+  if(!t) return true;
+  const low=t.toLowerCase();
+  return low==='undefined' || low==='null' || low==='nan' || /(^|\n|\s)undefined($|\n|\s)/i.test(t);
+}
 function normalizeCompatData(data){
   const idol=(ST.biasName||document.getElementById('biasNameInput')?.value||'최애').trim()||'최애';
-  const score=data?.score ?? localCompatScore();
-  return {
-    score,
-    title:data?.title || `나와 ${idol} 사이에 잡힌 관계 시그널`,
-    detail:(data?.detail && String(data.detail).trim()) ? data.detail : makeCompatFallbackDetail(score)
-  };
+  let score=Number(data?.score);
+  if(!Number.isFinite(score)) score=localCompatScore();
+  score=Math.max(1,Math.min(99,Math.round(score)));
+  const fallbackDetail=makeCompatFallbackDetail(score);
+  let title=data?.title || `나와 ${idol} 사이에 잡힌 관계 시그널`;
+  if(isBlankCompatText(title)) title=`나와 ${idol} 사이에 잡힌 관계 시그널`;
+  let detail=data?.detail;
+  if(isBlankCompatText(detail)) detail=fallbackDetail;
+  return {score,title:String(title).trim(),detail:String(detail).trim()};
 }
-function renderCompatResult(data){
-  if(!data || data.score==null || !String(data.detail||'').trim()){
-    console.error('[SIGNAL ROOM] Invalid compatibility payload', data);
-    throw new Error(FRIENDLY_API_ERROR);
+function renderCompatResult(payload){
+  const data=normalizeCompatData(payload);
+  if(data.score==null || isBlankCompatText(data.detail)){
+    console.error('[SIGNAL ROOM] Invalid compatibility payload after normalization', data);
+    throw new Error('관계 결과를 만들 수 없어. 입력값을 다시 확인해줘.');
   }
   const box=document.getElementById('compatResult');
+  if(!box) throw new Error('결과 영역을 찾을 수 없어.');
   box.style.display='';
-  setText('compatScore',data.score??'-');
-  setText('compatTitle',data.title??'');
+  setText('compatScore',data.score);
+  setText('compatTitle',data.title);
   renderCompatDetail(data);
-  drawCompatCard(data);
+  try{
+    drawCompatCard(data);
+  }catch(cardErr){
+    // 공유 카드 생성 실패가 관계 결과 표시까지 막지 않도록 분리
+    console.error('[SIGNAL ROOM] Compat share card render failed', cardErr);
+  }
   box.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -2778,7 +2804,10 @@ async function runCompat(){
     // 무료 '최애와 나'는 서버/API를 호출하지 않습니다.
     // 생년월일 + 최애 이름을 seed로 삼아 브라우저에서 즉시 계산합니다.
     const score=localCompatScore();
-    const data=normalizeCompatData({score});
+    const data=normalizeCompatData({
+      score,
+      detail:makeCompatFallbackDetail(score)
+    });
     hideErr('compatErr');
     renderCompatResult(data);
   }catch(e){
