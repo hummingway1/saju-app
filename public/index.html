@@ -1844,7 +1844,7 @@ const T = {
     lblIdolDesc:"나의 아이돌을 먼저 골라봐. 누가 나와 가장 맞는 시그널일까",
     btnIdol:"오늘 최애 시그널 읽기",idolLoad:"✦ 오늘의 팬 시그널을 맞추는 중…",
     shareBtn:"📲 공유하기",
-    ftH:"오늘 장면이",ftSpan:"계속 남을 수도",ftP:"오늘 최애와 연결되는 장면을 저장하고, 매일 달라지는 팬 시그널을 확인하세요",ftBtn:"OPEN SIGNAL ROOM",
+    ftH:"SIGNAL MATCH를",ftSpan:"다시 확인해봐",ftP:"내가 어떤 아이돌에게 오래 반응하는지, 오늘의 매치 포인트를 확인하세요",ftBtn:"OPEN SIGNAL ROOM",
     tarotDeck:[
       {title:"별의 문",message:"조용했던 분위기이 서서히 열리기 시작합니다. 서두르지 않되, 들어오는 신호는 놓치지 않는 편이 좋습니다."},
       {title:"숨은 파도",message:"겉은 고요해 보여도 안쪽에는 움직임이 있습니다. 말보다 분위기를 먼저 읽는 것이 중요합니다."},
@@ -2792,7 +2792,7 @@ async function runIdol(){
     // Share card with 오늘의 시그널 as the main save/share hook
     const topName=data.idolMatches?.[0]?.name||'';
     const groupName=document.getElementById('idolGroup')?.value||'';
-    const sceneTitle=(data.todayScene&&data.todayScene.title)||data.shareLine||data.title||'오늘의 시그널';
+    const sceneTitle=data.shareLine||data.title||(data.todayScene&&data.todayScene.title)||'SIGNAL MATCH';
     const cardSub=topName?((data.syncLevel||'ACTIVE')+' · '+topName):(data.fandomAccent||groupName+' SIGNAL');
     drawCard(
       sceneTitle,
@@ -2800,7 +2800,7 @@ async function runIdol(){
       {
         color:data.fandomColor||'#a855f7',
         fandom:data.fandom||'FANDOM',
-        accent:'오늘의 시그널',
+        accent:'SIGNAL MATCH',
         group:data.selectedGroup||groupName,
         selectedGroup:data.selectedGroup||groupName,
         grad:[data.fandomColor ? data.fandomColor+'33' : '#12002a', '#090010']
@@ -4010,11 +4010,11 @@ function buildFallbackFandomData(data){
   const top=data?.idolMatches?.[0]?.name||'최애';
   const seed=srHash([top,data?.selectedGroup,data?.title,srToday()].join('|'));
   const scenes=[
-    '무대 전체보다\n엔딩 직전 잠깐 풀리는 표정이 더 오래 남는 쪽.',
-    '오늘은 큰 제스처보다\n카메라가 지나간 뒤의 잔상이 더 강한 쪽.',
-    '팬들이 반복 저장할 포인트는\n예상한 파트보다 시선이 살짝 흐트러지는 순간.',
-    '오늘 유독 눈이 가는 건\n화려한 컷보다 조용히 숨 고르는 장면.',
-    '짧게 지나가는 반응 하나가\n타임라인에서 다시 불릴 가능성이 큼.'
+    `${top}에게 끌리는 이유는 처음부터 크게 터지는 장면보다 다시 보게 되는 작은 결에 있어.`,
+    `${top}와 매치된 포인트는 화려함보다 오래 남는 분위기 쪽에 가까워.`,
+    `${top}의 에너지가 내 취향의 빈칸을 건드려서, 한 번 보고 넘기기 어려운 매치야.`,
+    `${top}에게서 잡히는 거리감과 온도가 내 반응 포인트와 맞물려 있어.`,
+    `${top}를 다시 보게 되는 이유는 장면보다 사람이 먼저 기억나는 쪽이라서야.`
   ];
   const fanEnergy=[
     '가까워진다기보다, 이상하게 계속 확인하게 되는 흐름.',
@@ -4041,7 +4041,7 @@ function renderFandomExperience(data){
   const sync=document.getElementById('syncLevelBox');
   if(sync){sync.innerHTML=`<div class="fandom-kicker">SYNC LEVEL</div><div class="sync-level-row"><div class="sync-level-name">${srEscape(level)}</div><div class="sync-orbs">${order.map((_,i)=>`<span class="sync-orb ${i<active?'on':''}"></span>`).join('')}</div></div><div class="scene-sub">퍼센트가 아니라 오늘 팬심이 반응하는 강도.</div>`;}
   const scene=document.getElementById('todaySceneBox');
-  if(scene){scene.innerHTML=`<div class="fandom-kicker">오늘의 시그널</div><div class="scene-line">${srEscape(built.todayScene.title||'')}</div><div class="scene-sub">${srEscape(built.todayScene.sub||built.fanEnergy||'')}</div>`;}
+  if(scene){scene.innerHTML=`<div class="fandom-kicker">SIGNAL MATCH</div><div class="scene-line">${srEscape(built.todayScene.title||'')}</div><div class="scene-sub">${srEscape(built.todayScene.sub||built.fanEnergy||'')}</div>`;}
   const profile=document.getElementById('biasProfileBox');
   if(profile){const bp=built.biasProfile||{};profile.innerHTML=`<div class="fandom-kicker">BIAS PROFILE</div><div class="profile-grid"><div class="profile-item"><div class="profile-label">Aura Tone</div><div class="profile-value">${srEscape(bp.auraTone)}</div></div><div class="profile-item"><div class="profile-label">Stage Mood</div><div class="profile-value">${srEscape(bp.stageMood)}</div></div><div class="profile-item"><div class="profile-label">Fan Energy</div><div class="profile-value">${srEscape(bp.fanEnergy)}</div></div><div class="profile-item"><div class="profile-label">Focus Signal</div><div class="profile-value">${srEscape(bp.focusSignal)}</div></div></div>`;}
   updateSignalStreak();
@@ -4063,7 +4063,7 @@ function updateSignalStreak(){
 }
 function saveSignalArchive(data,built){
   const top=data?.idolMatches?.[0]?.name||data?.selectedGroup||'FANDOM';
-  const item={date:srToday(),idol:top,level:built.syncLevel||'ACTIVE',scene:(built.todayScene?.title||data?.title||'오늘의 시그널').replace(/\n/g,' ')};
+  const item={date:srToday(),idol:top,level:built.syncLevel||'ACTIVE',scene:(data?.shareLine||built.todayScene?.title||data?.title||'SIGNAL MATCH').replace(/\n/g,' ')};
   let arr=[];try{arr=JSON.parse(localStorage.getItem('signal_room_archive')||'[]')||[];}catch(e){}
   arr=arr.filter(x=>!(x.date===item.date&&x.idol===item.idol));
   arr.unshift(item);
