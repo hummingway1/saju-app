@@ -911,10 +911,49 @@ CRITICAL RULES:
 }
 
 
+
+function seededTextPick(arr, seed, salt=0){
+  let h=2166136261;
+  const key=String(seed)+'|'+salt;
+  for(let i=0;i<key.length;i++){h^=key.charCodeAt(i); h=Math.imul(h,16777619);}
+  return arr[(h>>>0)%arr.length];
+}
+function buildLocalCompatCopy({score, idolName, sajuA, sajuB}){
+  const idol=idolName||'최애';
+  const seed=JSON.stringify([sajuA?.pillars,sajuB?.pillars,idol,score]);
+  const first=[
+    `처음부터 크게 터지는 쪽보다, 나와 ${idol} 사이엔 천천히 눈이 머무는 결이 먼저 잡혀.\n한 번 본 장면을 다시 확인하게 만드는 잔상이 있어.`,
+    `나와 ${idol}의 싱크는 빠른 확신보다 조용한 반복 쪽에 가까워.\n짧게 지나간 표정 하나가 이상하게 오래 남는 타입이야.`,
+    `${idol}에게 끌리는 포인트는 화려한 순간보다 힘을 살짝 뺀 장면에서 더 선명해져.\n그 틈에서 나만 알아본 것 같은 감정이 생겨.`
+  ];
+  const second=[
+    `내 쪽 감정은 바로 달려가기보다 조금 떨어져서 더 오래 보는 방식으로 움직여.\n그래서 ${idol}의 작은 변화가 크게 확대돼서 들어와.`,
+    `${idol}의 에너지는 정면으로 밀고 들어오기보다 주변 공기를 바꾸는 쪽이야.\n나는 그 공기 안에서 자꾸 같은 포인트를 찾게 돼.`,
+    `서로 다른 온도가 겹치면서 묘하게 신경 쓰이는 장면이 생겨.\n깔끔하게 설명되지 않아서 더 오래 붙잡히는 싱크야.`
+  ];
+  const third=[
+    `오늘 저장하고 싶은 장면은 큰 무대보다 카메라가 잠깐 머무는 순간에 가까워.\n웃음이 끝나기 직전, 표정이 풀리는 그 짧은 틈이 핵심이야.`,
+    `반복해서 보게 되는 포인트는 완벽한 포즈보다 예상 밖의 작은 흔들림이야.\n그 순간에 나와 ${idol} 사이의 감정선이 더 또렷해져.`,
+    `나만 캡처하고 싶은 장면은 정답처럼 보이는 컷이 아니야.\n잠깐 시선이 옆으로 빠지는 순간, 싱크가 더 강하게 남아.`
+  ];
+  return `첫인상 싱크\n${seededTextPick(first,seed,1)}\n\n왜 자꾸 눈이 가는지\n${seededTextPick(second,seed,2)}\n\n나만 저장하고 싶은 장면\n${seededTextPick(third,seed,3)}`;
+}
+function calcCompatScore(sajuA, sajuB){
+  const elemA = sajuA.elements;
+  const elemB = sajuB.elements;
+  const complementScore = (elemA[0]*elemB[1] + elemA[1]*elemB[2] + elemA[3]*elemB[4] + elemA[4]*elemB[0]) * 2;
+  const resonanceScore = elemA.reduce((acc, v, i) => acc + Math.min(v, elemB[i]), 0) * 3;
+  const conflictScore = (elemA[0]*elemB[3] + elemA[1]*elemB[4] + elemA[2]*elemB[0]) * 2;
+  return Math.round(Math.min(99, Math.max(40, 60 + complementScore + resonanceScore - conflictScore)));
+}
+
 // ── Compat analysis ──────────────────────────────────
 async function buildCompatDetail({ sajuA, sajuB, lang, idolName }) {
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new Error("Missing OPENAI_API_KEY");
+  if (!apiKey) {
+    console.error('[compat] Missing OPENAI_API_KEY');
+    throw new Error('OPENAI_API_KEY is not configured');
+  }
 
   const langInstructions = {
     Korean:  { lang:"한국어", style:"말투는 친근하고 상상력을 자극하게. 음슴체 금지. 너무 진중한 시그널앱처럼 쓰지 말고, 바다, 자석, 파동, 온도차 같은 짧은 비유를 1~2개 섞기. ~해, ~같아, ~봐야 해 같은 자연스러운 말투 사용." },
@@ -926,17 +965,7 @@ async function buildCompatDetail({ sajuA, sajuB, lang, idolName }) {
   const li = langInstructions[lang] || langInstructions.English;
 
 
-  // Calculate simple harmony score based on element interactions
-  const elemA = sajuA.elements; // [Wood,Fire,Earth,Metal,Water]
-  const elemB = sajuB.elements;
-  // Complementary pairs: Wood+Fire, Fire+Earth, Metal+Water, Water+Wood
-  const complementScore = (elemA[0]*elemB[1] + elemA[1]*elemB[2] + elemA[3]*elemB[4] + elemA[4]*elemB[0]) * 2;
-  // Same element resonance
-  const resonanceScore = elemA.reduce((acc, v, i) => acc + Math.min(v, elemB[i]), 0) * 3;
-  // Conflict pairs: Wood+Metal, Fire+Water, Earth+Wood (clash)
-  const conflictScore = (elemA[0]*elemB[3] + elemA[1]*elemB[4] + elemA[2]*elemB[0]) * 2;
-  const rawScore = Math.min(99, Math.max(40, 60 + complementScore + resonanceScore - conflictScore));
-  const score = Math.round(rawScore);
+  const score = calcCompatScore(sajuA, sajuB);
 
   const prompt = `
 You are creating an AI fandom relationship reading between the user and their favorite idol.
@@ -976,10 +1005,25 @@ No bullet points. No fortune-telling words. No "운명", "예언", "확정", "�
       ]
     })
   });
-  const data = await resp.json();
-  if (!resp.ok) throw new Error(data?.error?.message || "OpenAI call failed");
+  const rawText = await resp.text();
+  let data = null;
+  try {
+    data = rawText ? JSON.parse(rawText) : {};
+  } catch (e) {
+    console.error('[compat] OpenAI returned non-JSON', rawText.slice(0, 1000));
+    throw new Error('OpenAI response parse failed');
+  }
+  if (!resp.ok) {
+    console.error('[compat] OpenAI call failed', { status: resp.status, error: data?.error });
+    throw new Error(data?.error?.message || 'OpenAI call failed');
+  }
 
-  return { score, detail: data.choices?.[0]?.message?.content || "" };
+  const detail = data.choices?.[0]?.message?.content;
+  if (!detail || !String(detail).trim()) {
+    console.error('[compat] Empty OpenAI compatibility content', data);
+    throw new Error('OpenAI returned empty compatibility content');
+  }
+  return { score, detail };
 }
 
 
@@ -1816,7 +1860,11 @@ export default async function handler(req, res){
     CACHE.set(key, response);
     return res.status(200).json(response);
   }catch(e){
-    return res.status(500).json({error:e.message||"Unknown error"});
+    console.error('[api/analyze] failed', { mode: req?.body?.mode, message: e?.message, stack: e?.stack });
+    return res.status(500).json({
+      error: e.message || "Unknown error",
+      userMessage: "시그널 연결이 잠시 흔들리고 있어. 잠깐 후 다시 시도해줘."
+    });
   }
 }
 
