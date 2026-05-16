@@ -1479,8 +1479,8 @@ text-transform:uppercase;
     </div>
     <div class="mode-tabs">
       <button class="mtab active" id="mtab0" onclick="setMode('idol')">⭐ <span id="tab0Txt">시그널 매치</span></button>
-      <button class="mtab" id="mtab1" onclick="setMode('compat')">💫 <span id="tab1Txt">연결 시그널</span></button>
-      <button class="mtab" id="mtab2" onclick="setMode('saju')">🔮 <span id="tab2Txt">오늘의 무드</span></button>
+      <button class="mtab" id="mtab1" onclick="setMode('compat')">💫 <span id="tab1Txt">최애와 나</span></button>
+      <button class="mtab" id="mtab2" onclick="setMode('saju')">🔮 <span id="tab2Txt">오늘의 시그널</span></button>
     </div>
 
     <!-- SAJU -->
@@ -1501,7 +1501,7 @@ text-transform:uppercase;
           <button class="fcat" onclick="setFcat(4)">🌿 <span id="fc4">회복 무드</span></button>
         </div>
 <div class="form-grid">
-          <div class="field"><div class="flabel" id="lbYr">생년</div><div class="box" id="sYr" onclick="openSheet('sYr')">-</div></div>
+          <div class="field"><div class="flabel" id="lbYr">태어난 해</div><div class="box" id="sYr" onclick="openSheet('sYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbMo">월</div><div class="box" id="sMo" onclick="openSheet('sMo')">-</div></div>
           <div class="field"><div class="flabel" id="lbDy">일</div><div class="box" id="sDy" onclick="openSheet('sDy')">-</div></div>
           <div class="field"><div class="flabel" id="lbHr">출생 시각</div><div class="box" id="sHr" onclick="openSheet('sHr')">-</div></div>
@@ -1555,9 +1555,9 @@ text-transform:uppercase;
     <!-- COMPAT -->
     <div id="modeCompat" style="display:none">
       <div class="panel">
-        <div class="panel-title" id="lblMyInfo">나의 시그널</div>
+        <div class="panel-title" id="lblMyInfo">나의 생년월일</div>
         <div class="form-grid">
-          <div class="field"><div class="flabel" id="lbAYr">생년</div><div class="box" id="aYr" onclick="openSheet('aYr')">-</div></div>
+          <div class="field"><div class="flabel" id="lbAYr">태어난 해</div><div class="box" id="aYr" onclick="openSheet('aYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbAMo">월</div><div class="box" id="aMo" onclick="openSheet('aMo')">-</div></div>
           <div class="field"><div class="flabel" id="lbADy">일</div><div class="box" id="aDy" onclick="openSheet('aDy')">-</div></div>
           <div class="field"><div class="flabel" id="lbAHr">시각</div><div class="box" id="aHr" onclick="openSheet('aHr')">-</div></div>
@@ -1570,9 +1570,30 @@ text-transform:uppercase;
         </div>
       </div>
       <div class="panel" style="margin-top:10px">
-        <div class="panel-title" id="lblPartInfo">최애의 시그널</div>
+        <div class="panel-title" id="lblPartInfo">최애의 생년월일</div>
         <div class="form-grid">
-          <div class="field"><div class="flabel" id="lbBYr">생년</div><div class="box" id="bYr" onclick="openSheet('bYr')">-</div></div>
+          <div class="field full"><div class="flabel" id="lbBiasName">최애 이름</div>
+            <select class="box" id="biasNameSelect" onchange="handleBiasSelect()" style="width:100%;appearance:none;color:#fff;background:rgba(255,255,255,.04);font-family:inherit;background-color:#151019!important;color:#fff!important;">
+              <option value="">직접 입력</option>
+              <option value="정국|1997|9|1|male">정국</option>
+              <option value="뷔|1995|12|30|male">뷔</option>
+              <option value="지민|1995|10|13|male">지민</option>
+              <option value="제니|1996|1|16|female">제니</option>
+              <option value="로제|1997|2|11|female">로제</option>
+              <option value="카리나|2000|4|11|female">카리나</option>
+              <option value="장원영|2004|8|31|female">장원영</option>
+              <option value="안유진|2003|9|1|female">안유진</option>
+              <option value="사쿠라|1998|3|19|female">사쿠라</option>
+              <option value="해린|2006|5|15|female">해린</option>
+              <option value="민지|2004|5|7|female">민지</option>
+              <option value="원빈|2002|3|2|male">원빈</option>
+              <option value="성찬|2001|9|13|male">성찬</option>
+              <option value="필릭스|2000|9|15|male">필릭스</option>
+              <option value="현진|2000|3|20|male">현진</option>
+            </select>
+          </div>
+          <div class="field full"><div class="flabel" id="lbBiasCustom">직접 입력 이름</div><input id="biasNameInput" placeholder="예: 민규, 태연, 해찬" oninput="saveBiasName()"/></div>
+          <div class="field"><div class="flabel" id="lbBYr">태어난 해</div><div class="box" id="bYr" onclick="openSheet('bYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbBMo">월</div><div class="box" id="bMo" onclick="openSheet('bMo')">-</div></div>
           <div class="field"><div class="flabel" id="lbBDy">일</div><div class="box" id="bDy" onclick="openSheet('bDy')">-</div></div>
           <div class="field"><div class="flabel" id="lbBHr">시각</div><div class="box" id="bHr" onclick="openSheet('bHr')">-</div></div>
@@ -1583,8 +1604,8 @@ text-transform:uppercase;
             </div>
           </div>
         </div>
-        <button class="cta" id="btnCompat" onclick="runCompat()">SYNC CHECK</button>
-        <div id="compatLoad" class="loading">✦ 연결성을 읽는 중…</div>
+        <button class="cta" id="btnCompat" onclick="runCompat()">최애와 나의 관계 보기</button>
+        <div id="compatLoad" class="loading">✦ 최애와 나의 관계를 읽는 중…</div>
         <div id="compatErr" class="err-box"></div>
       </div>
       <div id="compatResult" class="result-card" style="display:none;margin-top:14px">
@@ -1595,6 +1616,8 @@ text-transform:uppercase;
         </div>
         <h2 class="headline" id="compatTitle"></h2>
         <div id="compatDetail"></div>
+        <div id="compatShareCardWrap" style="display:none;margin-top:14px"><canvas id="compatShareCanvas" style="width:100%;border-radius:16px;display:block"></canvas></div>
+        <button class="cta" id="compatShareBtn" onclick="shareCompatCard()" style="display:none;margin-top:14px;background:var(--grad)">📲 관계 카드 공유하기</button>
 
         <div id="compatPremiumCta" class="premium-cta-box" style="display:none">
           <div class="premium-cta-kicker">🔒 SYNC+ LOCKED</div>
@@ -1647,7 +1670,7 @@ text-transform:uppercase;
         </div>
 
 <div class="form-grid">
-          <div class="field"><div class="flabel" id="lbIYr">생년</div><div class="box" id="iYr" onclick="openSheet('iYr')">-</div></div>
+          <div class="field"><div class="flabel" id="lbIYr">태어난 해</div><div class="box" id="iYr" onclick="openSheet('iYr')">-</div></div>
           <div class="field"><div class="flabel" id="lbIMo">월</div><div class="box" id="iMo" onclick="openSheet('iMo')">-</div></div>
           <div class="field"><div class="flabel" id="lbIDy">일</div><div class="box" id="iDy" onclick="openSheet('iDy')">-</div></div>
           <div class="field"><div class="flabel" id="lbIHr">시각</div><div class="box" id="iHr" onclick="openSheet('iHr')">-</div></div>
@@ -1719,7 +1742,7 @@ text-transform:uppercase;
             <div class="daily-birth-title">오늘의 최애 시그널 미리보기</div>
             <div class="daily-birth-sub">최애의 생년월일을 토대로 최애의 오늘을 함께하기</div>
             <div class="form-grid compact-birth daily-birth-grid">
-              <div class="field"><div class="flabel">생년</div><div class="box" id="cYr" onclick="openSheet('cYr')">선택</div></div>
+              <div class="field"><div class="flabel">태어난 해</div><div class="box" id="cYr" onclick="openSheet('cYr')">선택</div></div>
               <div class="field"><div class="flabel">월</div><div class="box" id="cMo" onclick="openSheet('cMo')">선택</div></div>
               <div class="field"><div class="flabel">일</div><div class="box" id="cDy" onclick="openSheet('cDy')">선택</div></div>
               <div class="field"><div class="flabel">시각</div><div class="box" id="cHr" onclick="openSheet('cHr')">모름</div></div>
@@ -1791,35 +1814,35 @@ const T = {
     lang:"ko",lbl:"한국어",
     heroTag:"✨ 팬덤 시그널 매치",heroL1:"나의",heroL2:"아이돌 시그널 매치",
     heroDesc:"나의 아이돌을 고르고, 네 팬심이 반응하는 멤버 시그널을 확인해보세요",
-    heroBtn1:"오늘 최애 시그널 읽기",heroBtn2:"연결 시그널",navCta:"시그널 매치",
+    heroBtn1:"오늘 최애 시그널 읽기",heroBtn2:"최애와 나",navCta:"시그널 매치",
     proof1:"아이돌 연결성 조회",proof2:"틱톡 공유율",proof3:"개국",
     phoneLbl:"나의 Signal Match",phoneSoulLbl:"SYNC LEVEL",
     phoneDesc:"오늘 저장하고 싶은 최애의 장면을 감지합니다",
     phoneSajuLbl:"Fan Energy",phoneAstroLbl:"Mood",phoneShareBtn:"틱톡에 공유 ↗",
     featTitle:"팬덤 문화를 위해 만들었어요",featDesc:"오늘 최애의 장면, 팬 에너지, 싱크 레벨을 저장하고 공유하는 몰입형 경험",
     feat1T:"아이돌 시그널 매치",feat1D:"오늘 유독 눈이 가는 장면과 최애 시그널을 확인",
-    feat2T:"연결 시그널",feat2D:"팬과 최애 사이에 남는 감정 싱크를 확인",
+    feat2T:"최애와 나",feat2D:"나와 최애 사이에 남는 감정 싱크를 확인",
     feat3T:"바이럴 공유 카드",feat3D:"팬계정 감성으로 바로 저장하고 공유하는 카드",
     appTitle:"SIGNAL ROOM",appSub:"동양의 팬 시그널와 서양의 별자리가,\n결국 같은 사람을 가리키고 있어",appSubSaju:"오늘 저장하고 싶은 장면을 읽어봄",appSubCompat:"최애와 나 사이에 남는 감정 싱크를 확인해봐",
-    tab0:"시그널 매치",tab1:"관계 싱크",tab2:"TODAY’S SCENE",
+    tab0:"시그널 매치",tab1:"최애와 나",tab2:"오늘의 시그널",
     fcats:["전체 무드","감정 싱크","팬 에너지","활동 무드","회복 무드"],
     fcatKeys:["전체 무드","감정 싱크","팬 에너지","활동 무드","회복 무드"],
     lblTarot:"오늘의 장면 카드",tarotIntro:"이상하게 눈이 가는 카드가 있을 거야",
     tarotMini:"끌린다면 이유가 있어",
     tarotAfter:(t,m)=>`<strong>${t}</strong><br>${m}<br><br>아래에서 오늘의 장면을 열어보면 이 카드가 어떤 팬 시그널로 이어지는지 보여줍니다.`,
     lblInput:"정밀 분석 입력",
-    lbYr:"생년",lbMo:"월",lbDy:"일",lbHr:"출생 시각",lbLoc:"출생지",lbGen:"성별",lbQ:"질문 (선택)",
+    lbYr:"태어난 해",lbMo:"월",lbDy:"일",lbHr:"출생 시각",lbLoc:"출생지",lbGen:"성별",lbQ:"질문 (선택)",
     ph:"예: 서울, 부산",phQ:"예: 올해 이직하는 게 맞을까요?",
     male:"남성",female:"여성",btnSaju:"오늘 장면 보기",
     sajuLoad:"✦ 기운을 읽는 중…",lblHooks:"더 깊은 분위기",
     unlockBtn:"SIGNAL+ 심층 분위기 — 곧 공개",
     freeMeta:"출생지를 입력하면 점성술 차트까지 더한 상세 분석이 열립니다",
     fullMeta:"오늘의 팬 시그널을 더 깊게 읽었습니다",
-    shYr:"생년 선택",shMo:"월 선택",shDy:"일 선택",shHr:"시각 선택",hrUnk:"모름",
+    shYr:"태어난 해 선택",shMo:"월 선택",shDy:"일 선택",shHr:"시각 선택",hrUnk:"모름",
     errDate:"생년월일을 먼저 선택해 주세요",errGen:"성별을 선택해 주세요",
     errLoc:"출생지를 입력해 주세요",errGeo:"출생지를 찾지 못했습니다",
     errApi:"분석에 실패했습니다",sel:"선택",aiLang:"Korean",
-    lblMyInfo:"나의 시그널",lblPartInfo:"최애의 시그널",btnCompat:"연결 시그널 보기",compatLoad:"✦ 연결성을 읽는 중…",
+    lblMyInfo:"나의 생년월일",lblPartInfo:"최애의 생년월일",btnCompat:"최애와 나의 관계 보기",compatLoad:"✦ 최애와 나의 관계를 읽는 중…",
     lblIdolTitle:"나의 팬 에너지로 보는 시그널 매치",
     lblIdolDesc:"나의 아이돌을 먼저 골라봐. 누가 나와 가장 맞는 시그널일까",
     btnIdol:"오늘 최애 시그널 읽기",idolLoad:"✦ 오늘의 팬 시그널을 맞추는 중…",
@@ -1855,7 +1878,7 @@ const T = {
     tab0:"Signal Match",tab1:"Flow Scan",tab2:"Sync Check",
     fcats:["General","Love","Wealth","Career","Health"],
     fcatKeys:["general","love","wealth","career","health"],
-    lblTarot:"TODAY'S SCENE CARD",tarotIntro:"Choose the card that feels closest to today’s scene.",
+    lblTarot:"오늘의 시그널 CARD",tarotIntro:"Choose the card that feels closest to today’s scene.",
     tarotMini:"If you're drawn, there's a reason",
     tarotAfter:(t,m)=>`<strong>${t}</strong><br>${m}<br><br>Open your reading below — this card will be woven into your Four Pillars chart.`,
     lblInput:"ENTER YOUR DETAILS",
@@ -2049,10 +2072,11 @@ const T = {
 // ══════════════════════════════════════════
 const ST = {
   s:{year:null,month:null,day:null,hour:null,gender:null},  // saju
-  a:{year:null,month:null,day:null,hour:null,gender:null},  // compat A
-  b:{year:null,month:null,day:null,hour:null,gender:null},  // compat B
+  a:{year:null,month:null,day:null,hour:null,gender:null},  // user
+  b:{year:null,month:null,day:null,hour:null,gender:null},  // bias/idol
   i:{year:null,month:null,day:null,hour:null,gender:null},  // user for idol match
-  c:{year:null,month:null,day:null,hour:null}               // custom idol birth
+  c:{year:null,month:null,day:null,hour:null},              // custom idol birth
+  biasName:''
 };
 let curLang = localStorage.getItem('sj_lang')||'ko';
 let curMode = 'saju';
@@ -2062,7 +2086,7 @@ let lastLoc = null;
 let lastIdolDataForDaily = null;
 
 const saved = localStorage.getItem('sj_state');
-if(saved){try{Object.assign(ST.s,JSON.parse(saved));}catch(e){}}
+if(saved){try{const parsed=JSON.parse(saved); if(parsed.s||parsed.a||parsed.b) Object.assign(ST,parsed); else Object.assign(ST.s,parsed);}catch(e){}}
 
 // ══════════════════════════════════════════
 //  LANG
@@ -2145,6 +2169,30 @@ function setLang(lang){
 }
 
 function setText(id,txt){const el=document.getElementById(id);if(el)el.textContent=txt;}
+const FRIENDLY_API_ERROR='시그널 연결이 잠시 흔들리고 있어. 잠깐 후 다시 시도해줘.';
+async function readApiJson(res){
+  const text=await res.text();
+  let data=null;
+  try{data=text?JSON.parse(text):{};}catch(e){throw new Error(FRIENDLY_API_ERROR);}
+  if(res.status===429)throw new Error(data.error||'오늘 확인 가능한 시그널을 모두 사용했어. 다음 시그널은 내일 다시 열려.');
+  if(!res.ok||data.error)throw new Error(data.error||FRIENDLY_API_ERROR);
+  return data;
+}
+function saveBiasName(){
+  const input=document.getElementById('biasNameInput');
+  ST.biasName=(input?.value||'').trim();
+  persist();
+}
+function handleBiasSelect(){
+  const sel=document.getElementById('biasNameSelect');
+  const input=document.getElementById('biasNameInput');
+  const v=sel?.value||'';
+  if(!v){ if(input){input.disabled=false; input.focus();} saveBiasName(); return; }
+  const [name,y,m,d,g]=v.split('|');
+  if(input){input.value=name; input.disabled=false;}
+  ST.biasName=name;
+  if(y&&m&&d){ST.b.year=+y;ST.b.month=+m;ST.b.day=+d;ST.b.gender=g||ST.b.gender;syncBoxes();updateChips();persist();}
+}
 function setAttr(id,attr,val){const el=document.getElementById(id);if(el)el[attr]=val;}
 
 // ══════════════════════════════════════════
@@ -2242,6 +2290,7 @@ function renderAll(){
     setText(prefix+'Hr', st.hour??t.hrUnk);
   };
   renderForm('s',ST.s); renderForm('a',ST.a); renderForm('b',ST.b); renderForm('i',ST.i); renderForm('c',ST.c);
+  const bin=document.getElementById('biasNameInput'); if(bin && ST.biasName && !bin.value) bin.value=ST.biasName;
   ['s','a','b','i'].forEach(p=>{
     const male=p+'Male', fem=p+'Fem', g=ST[p].gender;
     const em=document.getElementById(male), ef=document.getElementById(fem);
@@ -2250,8 +2299,10 @@ function renderAll(){
   });
 }
 
-function setGender(prefix,g){ST[prefix].gender=g;renderAll();}
-function persist(){localStorage.setItem('sj_state',JSON.stringify(ST.s));}
+function setGender(prefix,g){ST[prefix].gender=g;renderAll();persist();}
+function persist(){localStorage.setItem('sj_state',JSON.stringify(ST));}
+function syncBoxes(){renderAll();}
+function updateChips(){renderAll();}
 
 // ══════════════════════════════════════════
 //  SHEET
@@ -2289,7 +2340,7 @@ function openSheet(boxId){
         const d=new Date(st.year||2000,st.month||1,0).getDate();
         if(st.day>d)st.day=d;
       }
-      if(prefix==='s')persist();
+      persist();
       renderAll(); closeSheet();
     };
     sl.appendChild(div);
@@ -2403,9 +2454,7 @@ async function runSaju(){
     }
 
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 분위기은 모두 소진돼\n다음 신호는 내일 다시 열림.');
-    if(!res.ok||data.error)throw new Error(data.error||t.errApi);
+    const data=await readApiJson(res);
 
     clearInterval(oracleInterval);
     oracleEl.classList.remove('show');
@@ -2455,9 +2504,7 @@ async function runSajuFull(){
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({...ST.s,minute:0,question:document.getElementById('qInput').value.trim(),
         location:lastLoc,paid:false,tarot:selTarot,lang:t.aiLang,fortuneCat:t.fcatKeys[fcatIdx]})});
-    const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 분위기은 모두 소진돼\n다음 신호는 내일 다시 열림.');
-    if(!res.ok||data.error)throw new Error(data.error||t.errApi);
+    const data=await readApiJson(res);
     setText('sajuMeta',t.fullMeta);
     document.getElementById('unlockBtn').style.display='none';
     renderDetail(data.detail||'','sajuDetail');
@@ -2478,15 +2525,14 @@ async function runCompat(){
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({year:ST.a.year,month:ST.a.month,day:ST.a.day,hour:ST.a.hour,gender:ST.a.gender||'unknown',
         partnerYear:ST.b.year,partnerMonth:ST.b.month,partnerDay:ST.b.day,partnerHour:ST.b.hour,
-        partnerGender:ST.b.gender||'unknown',mode:'compat',lang:t.aiLang,paid:false})});
-    const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 분위기은 모두 소진돼\n다음 신호는 내일 다시 열림.');
-    if(!res.ok||data.error)throw new Error(data.error||t.errApi);
+        partnerGender:ST.b.gender||'unknown',idolName:(ST.biasName||document.getElementById('biasNameInput')?.value||'최애'),mode:'compat',lang:t.aiLang,paid:false})});
+    const data=await readApiJson(res);
     const box=document.getElementById('compatResult');
     box.style.display='';
     setText('compatScore',data.score??'-');
     setText('compatTitle',data.title??'');
     renderDetail(data.detail??'','compatDetail');
+    drawCompatCard(data);
     box.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){showErr('compatErr',e.message);}
   finally{showLoad('compatLoad',false);}
@@ -2501,9 +2547,7 @@ async function runIdol(){
     hideErr('idolErr'); validate('i'); showLoad('idolLoad',true);
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({...ST.i,paid:false,mode:'idol',selectedGroup:document.getElementById('idolGroup')?.value||'BTS',lang:t.aiLang,question:'bias pattern fandom signal analysis'})});
-    const data=await res.json();
-    if(res.status===429)throw new Error(data.error||'오늘 감지 가능한 분위기은 모두 소진돼\n다음 신호는 내일 다시 열림.');
-    if(!res.ok||data.error)throw new Error(data.error||t.errApi);
+    const data=await readApiJson(res);
     const box=document.getElementById('idolResult');
     box.style.display='';
     document.querySelector('#idolResult .badge-idol').textContent = data.badge||'SIGNAL MATCH FOUND';
@@ -2536,10 +2580,10 @@ async function runIdol(){
     renderDetail(cleanVisibleCopy(data.detail||''),'idolDetailText');
     renderFandomExperience(data);
 
-    // Share card with TODAY'S SCENE as the main save/share hook
+    // Share card with 오늘의 시그널 as the main save/share hook
     const topName=data.idolMatches?.[0]?.name||'';
     const groupName=document.getElementById('idolGroup')?.value||'';
-    const sceneTitle=(data.todayScene&&data.todayScene.title)||data.shareLine||data.title||'TODAY’S SCENE';
+    const sceneTitle=(data.todayScene&&data.todayScene.title)||data.shareLine||data.title||'오늘의 시그널';
     const cardSub=topName?((data.syncLevel||'ACTIVE')+' · '+topName):(data.fandomAccent||groupName+' SIGNAL');
     drawCard(
       sceneTitle,
@@ -2547,7 +2591,7 @@ async function runIdol(){
       {
         color:data.fandomColor||'#a855f7',
         fandom:data.fandom||'FANDOM',
-        accent:'TODAY’S SCENE',
+        accent:'오늘의 시그널',
         group:data.selectedGroup||groupName,
         selectedGroup:data.selectedGroup||groupName,
         grad:[data.fandomColor ? data.fandomColor+'33' : '#12002a', '#090010']
@@ -3148,7 +3192,7 @@ async function downloadCard(){
   if(!canvas) return;
 
   const shareTitle = 'SIGNAL ROOM';
-  const shareText = '오늘 최애의 TODAY’S SCENE 확인하기';
+  const shareText = '오늘 최애의 시그널 확인하기';
   const shareUrl = 'https://sajustro.com';
 
   try{
@@ -3786,7 +3830,7 @@ function renderFandomExperience(data){
   const sync=document.getElementById('syncLevelBox');
   if(sync){sync.innerHTML=`<div class="fandom-kicker">SYNC LEVEL</div><div class="sync-level-row"><div class="sync-level-name">${srEscape(level)}</div><div class="sync-orbs">${order.map((_,i)=>`<span class="sync-orb ${i<active?'on':''}"></span>`).join('')}</div></div><div class="scene-sub">퍼센트가 아니라 오늘 팬심이 반응하는 강도.</div>`;}
   const scene=document.getElementById('todaySceneBox');
-  if(scene){scene.innerHTML=`<div class="fandom-kicker">TODAY’S SCENE</div><div class="scene-line">${srEscape(built.todayScene.title||'')}</div><div class="scene-sub">${srEscape(built.todayScene.sub||built.fanEnergy||'')}</div>`;}
+  if(scene){scene.innerHTML=`<div class="fandom-kicker">오늘의 시그널</div><div class="scene-line">${srEscape(built.todayScene.title||'')}</div><div class="scene-sub">${srEscape(built.todayScene.sub||built.fanEnergy||'')}</div>`;}
   const profile=document.getElementById('biasProfileBox');
   if(profile){const bp=built.biasProfile||{};profile.innerHTML=`<div class="fandom-kicker">BIAS PROFILE</div><div class="profile-grid"><div class="profile-item"><div class="profile-label">Aura Tone</div><div class="profile-value">${srEscape(bp.auraTone)}</div></div><div class="profile-item"><div class="profile-label">Stage Mood</div><div class="profile-value">${srEscape(bp.stageMood)}</div></div><div class="profile-item"><div class="profile-label">Fan Energy</div><div class="profile-value">${srEscape(bp.fanEnergy)}</div></div><div class="profile-item"><div class="profile-label">Focus Signal</div><div class="profile-value">${srEscape(bp.focusSignal)}</div></div></div>`;}
   updateSignalStreak();
@@ -3808,7 +3852,7 @@ function updateSignalStreak(){
 }
 function saveSignalArchive(data,built){
   const top=data?.idolMatches?.[0]?.name||data?.selectedGroup||'FANDOM';
-  const item={date:srToday(),idol:top,level:built.syncLevel||'ACTIVE',scene:(built.todayScene?.title||data?.title||'TODAY’S SCENE').replace(/\n/g,' ')};
+  const item={date:srToday(),idol:top,level:built.syncLevel||'ACTIVE',scene:(built.todayScene?.title||data?.title||'오늘의 시그널').replace(/\n/g,' ')};
   let arr=[];try{arr=JSON.parse(localStorage.getItem('signal_room_archive')||'[]')||[];}catch(e){}
   arr=arr.filter(x=>!(x.date===item.date&&x.idol===item.idol));
   arr.unshift(item);
