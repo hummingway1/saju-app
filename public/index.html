@@ -1364,6 +1364,18 @@ text-transform:uppercase;
 .fandom-kicker{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.45);font-weight:900;text-transform:uppercase;margin-bottom:8px}
 .sync-level-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.sync-level-name{font-size:28px;font-weight:950;letter-spacing:-.04em;background:linear-gradient(90deg,#f9a8d4,#c084fc,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}.sync-orbs{display:flex;gap:6px}.sync-orb{width:12px;height:12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.11)}.sync-orb.on{background:linear-gradient(135deg,#ec4899,#a855f7);box-shadow:0 0 18px rgba(236,72,153,.42)}
 .scene-line{font-size:20px;line-height:1.55;font-weight:900;letter-spacing:-.04em;word-break:keep-all;white-space:pre-line}.scene-sub{margin-top:9px;font-size:13px;line-height:1.75;color:rgba(255,255,255,.62);word-break:keep-all;white-space:pre-line}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.profile-item{padding:11px;border-radius:13px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.07)}.profile-label{font-size:10px;letter-spacing:1.6px;color:rgba(255,255,255,.38);font-weight:800;text-transform:uppercase}.profile-value{margin-top:5px;font-size:14px;font-weight:850;color:rgba(255,255,255,.9)}.streak-days{font-size:34px;font-weight:950;letter-spacing:-.05em}.streak-sub{font-size:12px;color:rgba(255,255,255,.55);line-height:1.65}.archive-list{display:grid;gap:7px}.archive-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;border-radius:12px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.07);font-size:12px}.archive-scene{color:rgba(255,255,255,.76);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.archive-level{font-weight:900;color:#f0abfc}.idol-matches .idol-score-lbl{font-size:9px!important}.result-card .headline{line-height:1.25;word-break:keep-all}.badge-idol{letter-spacing:2px}
+
+.relation-sections{display:grid;gap:12px;margin-top:14px}
+.relation-section{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);border-radius:18px;padding:14px 15px}
+.relation-section-title{font-size:11px;letter-spacing:2px;color:#f0abfc;font-weight:900;margin-bottom:8px;text-transform:uppercase}
+.relation-section-body{font-size:14px;line-height:1.78;color:rgba(255,255,255,.82);word-break:keep-all;white-space:pre-line}
+.relation-locked{position:relative;overflow:hidden;border:1px solid rgba(168,85,247,.25);background:linear-gradient(135deg,rgba(168,85,247,.13),rgba(236,72,153,.07));border-radius:20px;padding:16px;margin-top:12px}
+.relation-locked .locked-copy{filter:blur(3.5px);opacity:.58;user-select:none;max-height:112px;overflow:hidden}
+.relation-locked:after{content:'';position:absolute;left:0;right:0;bottom:0;height:70%;background:linear-gradient(to bottom,rgba(8,5,12,0),rgba(8,5,12,.96) 70%)}
+.relation-lock-label{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.relation-lock-title{font-size:13px;font-weight:900;color:#fff}
+.relation-lock-sub{font-size:11px;color:rgba(255,255,255,.58);margin-top:3px}
+.relation-lock-pill{font-size:11px;font-weight:900;color:#f0abfc;border:1px solid rgba(240,171,252,.32);padding:7px 10px;border-radius:999px;background:rgba(0,0,0,.22);white-space:nowrap}
 @media(max-width:520px){.profile-grid{grid-template-columns:1fr}.scene-line{font-size:18px}.sync-level-name{font-size:24px}}
 </style>
 </head>
@@ -1574,22 +1586,7 @@ text-transform:uppercase;
         <div class="form-grid">
           <div class="field full"><div class="flabel" id="lbBiasName">최애 이름</div>
             <select class="box" id="biasNameSelect" onchange="handleBiasSelect()" style="width:100%;appearance:none;color:#fff;background:rgba(255,255,255,.04);font-family:inherit;background-color:#151019!important;color:#fff!important;">
-              <option value="">직접 입력</option>
-              <option value="정국|1997|9|1|male">정국</option>
-              <option value="뷔|1995|12|30|male">뷔</option>
-              <option value="지민|1995|10|13|male">지민</option>
-              <option value="제니|1996|1|16|female">제니</option>
-              <option value="로제|1997|2|11|female">로제</option>
-              <option value="카리나|2000|4|11|female">카리나</option>
-              <option value="장원영|2004|8|31|female">장원영</option>
-              <option value="안유진|2003|9|1|female">안유진</option>
-              <option value="사쿠라|1998|3|19|female">사쿠라</option>
-              <option value="해린|2006|5|15|female">해린</option>
-              <option value="민지|2004|5|7|female">민지</option>
-              <option value="원빈|2002|3|2|male">원빈</option>
-              <option value="성찬|2001|9|13|male">성찬</option>
-              <option value="필릭스|2000|9|15|male">필릭스</option>
-              <option value="현진|2000|3|20|male">현진</option>
+              <option value="">아이돌 목록 불러오는 중…</option>
             </select>
           </div>
           <div class="field full"><div class="flabel" id="lbBiasCustom">직접 입력 이름</div><input id="biasNameInput" placeholder="예: 민규, 태연, 해찬" oninput="saveBiasName()"/></div>
@@ -2165,6 +2162,7 @@ function setLang(lang){
   setText('ftSpan',t.ftSpan); setText('ftP',t.ftP); setText('ftBtn',t.ftBtn);
 
   buildTarot();
+  renderBiasSelect();
   renderAll();
 }
 
@@ -2178,6 +2176,48 @@ async function readApiJson(res){
   if(!res.ok||data.error)throw new Error(data.error||FRIENDLY_API_ERROR);
   return data;
 }
+
+const IDOL_BIRTH_DB = {
+  "BTS":[["RM",1994,9,12,"male"],["Jin",1992,12,4,"male"],["Suga",1993,3,9,"male"],["J-Hope",1994,2,18,"male"],["Jimin",1995,10,13,"male"],["V",1995,12,30,"male"],["Jungkook",1997,9,1,"male"]],
+  "BLACKPINK":[["Jisoo",1995,1,3,"female"],["Jennie",1996,1,16,"female"],["Rosé",1997,2,11,"female"],["Lisa",1997,3,27,"female"]],
+  "aespa":[["Karina",2000,4,11,"female"],["Giselle",2000,10,30,"female"],["Winter",2001,1,1,"female"],["Ningning",2002,10,23,"female"]],
+  "NewJeans":[["Minji",2004,5,7,"female"],["Hanni",2004,10,6,"female"],["Danielle",2005,4,11,"female"],["Haerin",2006,5,15,"female"],["Hyein",2008,4,21,"female"]],
+  "IVE":[["Yujin",2003,9,1,"female"],["Gaeul",2002,9,24,"female"],["Rei",2004,2,3,"female"],["Wonyoung",2004,8,31,"female"],["Liz",2004,11,21,"female"],["Leeseo",2007,2,21,"female"]],
+  "LE SSERAFIM":[["Sakura",1998,3,19,"female"],["Chaewon",2000,8,1,"female"],["Yunjin",2001,10,8,"female"],["Kazuha",2003,8,9,"female"],["Eunchae",2006,11,10,"female"]],
+  "TWICE":[["Nayeon",1995,9,22,"female"],["Jeongyeon",1996,11,1,"female"],["Momo",1996,11,9,"female"],["Sana",1996,12,29,"female"],["Jihyo",1997,2,1,"female"],["Mina",1997,3,24,"female"],["Dahyun",1998,5,28,"female"],["Chaeyoung",1999,4,23,"female"],["Tzuyu",1999,6,14,"female"]],
+  "NCT":[["Taeyong",1995,7,1,"male"],["Taeil",1994,6,14,"male"],["Johnny",1995,2,9,"male"],["Yuta",1995,10,26,"male"],["Kun",1996,1,1,"male"],["Doyoung",1996,2,1,"male"],["Ten",1996,2,27,"male"],["Jaehyun",1997,2,14,"male"],["Winwin",1997,10,28,"male"],["Jungwoo",1998,2,19,"male"],["Mark",1999,8,2,"male"],["Xiaojun",1999,8,8,"male"],["Hendery",1999,9,28,"male"],["Renjun",2000,3,23,"male"],["Jeno",2000,4,23,"male"],["Haechan",2000,6,6,"male"],["Jaemin",2000,8,13,"male"],["Yangyang",2000,10,10,"male"],["Chenle",2001,11,22,"male"],["Jisung",2002,2,5,"male"]],
+  "Stray Kids":[["Bang Chan",1997,10,3,"male"],["Lee Know",1998,10,25,"male"],["Changbin",1999,8,11,"male"],["Hyunjin",2000,3,20,"male"],["Han",2000,9,14,"male"],["Felix",2000,9,15,"male"],["Seungmin",2000,9,22,"male"],["I.N",2001,2,8,"male"]],
+  "SEVENTEEN":[["S.Coups",1995,8,8,"male"],["Jeonghan",1995,10,4,"male"],["Joshua",1995,12,30,"male"],["Jun",1996,6,10,"male"],["Hoshi",1996,6,15,"male"],["Wonwoo",1996,7,17,"male"],["Woozi",1996,11,22,"male"],["DK",1997,2,18,"male"],["Mingyu",1997,4,6,"male"],["The8",1997,11,7,"male"],["Seungkwan",1998,1,16,"male"],["Vernon",1998,2,18,"male"],["Dino",1999,2,11,"male"]],
+  "ENHYPEN":[["Jungwon",2004,2,9,"male"],["Heeseung",2001,10,15,"male"],["Jay",2002,4,20,"male"],["Jake",2002,11,15,"male"],["Sunghoon",2002,12,8,"male"],["Sunoo",2003,6,24,"male"],["Ni-ki",2005,12,9,"male"]],
+  "TXT":[["Yeonjun",1999,9,13,"male"],["Soobin",2000,12,5,"male"],["Beomgyu",2001,3,13,"male"],["Taehyun",2002,2,5,"male"],["Huening Kai",2002,8,14,"male"]],
+  "ATEEZ":[["Hongjoong",1998,11,7,"male"],["Seonghwa",1998,4,3,"male"],["Yunho",1999,3,23,"male"],["Yeosang",1999,6,15,"male"],["San",1999,7,10,"male"],["Mingi",1999,8,9,"male"],["Wooyoung",1999,11,26,"male"],["Jongho",2000,10,12,"male"]],
+  "RIIZE":[["Shotaro",2000,11,25,"male"],["Eunseok",2001,3,19,"male"],["Sungchan",2001,9,13,"male"],["Wonbin",2002,3,2,"male"],["Sohee",2003,11,21,"male"],["Anton",2004,3,21,"male"]],
+  "ZEROBASEONE":[["Sung Hanbin",2001,6,13,"male"],["Kim Jiwoong",1998,12,14,"male"],["Zhang Hao",2000,7,25,"male"],["Ricky",2004,5,20,"male"],["Kim Gyuvin",2004,8,30,"male"],["Han Yujin",2007,3,20,"male"]],
+  "BOYNEXTDOOR":[["Myung Jaehyun",2003,12,4,"male"],["Taesan",2004,8,10,"male"],["Leehan",2004,10,20,"male"],["Woonhak",2006,11,29,"male"]],
+  "TWS":[["Shinyu",2003,11,7,"male"],["Dohoon",2005,1,30,"male"],["Youngjae",2005,5,31,"male"],["Hanjin",2006,1,5,"male"]],
+  "ILLIT":[["Yunah",2004,1,15,"female"],["Minju",2004,5,11,"female"],["Moka",2004,10,8,"female"],["Wonhee",2007,6,26,"female"],["Iroha",2008,2,4,"female"]],
+  "KISS OF LIFE":[["Julie",2000,3,29,"female"],["Natty",2002,5,30,"female"],["Belle",2004,3,20,"female"],["Haneul",2005,5,25,"female"]]
+};
+function renderBiasSelect(){
+  const sel=document.getElementById('biasNameSelect');
+  if(!sel) return;
+  const previous=sel.value;
+  sel.innerHTML='<option value="">직접 입력</option>';
+  const groups=[...Object.keys(IDOL_BIRTH_DB)];
+  groups.forEach(group=>{
+    const og=document.createElement('optgroup');
+    og.label=group;
+    IDOL_BIRTH_DB[group].forEach(([name,y,m,d,g])=>{
+      const op=document.createElement('option');
+      op.value=`${name}|${y}|${m}|${d}|${g}`;
+      op.textContent=`${name} (${group})`;
+      og.appendChild(op);
+    });
+    sel.appendChild(og);
+  });
+  if(previous) sel.value=previous;
+}
+
 function saveBiasName(){
   const input=document.getElementById('biasNameInput');
   ST.biasName=(input?.value||'').trim();
@@ -2364,7 +2404,14 @@ async function geocode(){
   if(!Array.isArray(d)||!d.length)throw new Error(t.errGeo);
   return{query:q,lat:Number(d[0].lat),lon:Number(d[0].lon)};
 }
-function showErr(id,msg){const b=document.getElementById(id);if(b){b.textContent=msg;b.style.display='block';}}
+function friendlyError(msg){
+  const raw=String(msg||'');
+  if(/not defined|Unexpected token|JSON|SyntaxError|ReferenceError|TypeError|server|API|OpenAI|fetch|Failed|undefined/i.test(raw)){
+    return FRIENDLY_API_ERROR;
+  }
+  return raw || FRIENDLY_API_ERROR;
+}
+function showErr(id,msg){const b=document.getElementById(id);if(b){b.textContent=friendlyError(msg);b.style.display='block';}}
 function hideErr(id){const b=document.getElementById(id);if(b){b.textContent='';b.style.display='none';}}
 function showLoad(id,on){const l=document.getElementById(id);if(l)l.style.display=on?'block':'none';}
 function validate(prefix){
@@ -2515,6 +2562,101 @@ async function runSajuFull(){
 // ══════════════════════════════════════════
 //  COMPAT API
 // ══════════════════════════════════════════
+
+function seededRelationPick(arr, seed, salt=0){
+  let h=2166136261;
+  const key=String(seed)+'|'+salt;
+  for(let i=0;i<key.length;i++){h^=key.charCodeAt(i); h=Math.imul(h,16777619);}
+  return arr[(h>>>0)%arr.length];
+}
+function splitCompatSections(text){
+  const raw=String(text||'').replace(/\r/g,'').trim();
+  if(!raw) return [];
+  const chunks=raw.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);
+  if(chunks.length>=2){
+    return chunks.map(c=>{
+      const lines=c.split('\n').map(x=>x.trim()).filter(Boolean);
+      return {title:lines[0]||'관계 시그널', body:lines.slice(1).join('\n')||lines[0]||''};
+    });
+  }
+  return [{title:'관계 시그널', body:raw}];
+}
+function makeLockedRelationPreview(data){
+  const idol=(ST.biasName||document.getElementById('biasNameInput')?.value||'최애').trim()||'최애';
+  const seed=[ST.a.year,ST.a.month,ST.a.day,ST.a.hour,ST.b.year,ST.b.month,ST.b.day,ST.b.hour,idol,data?.score].join('|');
+  const first=[
+    `${idol}에게 먼저 눈이 가는 순간은 큰 장면보다 아주 짧은 표정 쪽에 가까워.`,
+    `너는 ${idol}의 밝은 컷보다 잠깐 멈춘 장면에서 더 오래 머물 수 있어.`,
+    `${idol}와 너 사이의 싱크는 빠르게 가까워지는 쪽보다 천천히 반복 저장되는 쪽이야.`,
+    `처음엔 가볍게 확인했는데, 이상하게 같은 장면으로 다시 돌아오는 결이 보여.`
+  ];
+  const second=[
+    '자세히 보면 끌리는 포인트와 살짝 엇갈리는 지점이 같은 곳에서 시작돼.',
+    '이 관계감은 달콤하게만 흐르지 않고, 중간에 묘한 온도차를 남겨.',
+    '그래서 더 깊은 해석에서는 왜 계속 신경 쓰이는지 쪽이 핵심이 돼.',
+    '무료 결과에선 여기까지만 열려 있고, 다음 장면부터는 감정선이 더 선명해져.'
+  ];
+  return `${seededRelationPick(first,seed,1)}\n${seededRelationPick(second,seed,2)}`;
+}
+function renderCompatDetail(data){
+  const el=document.getElementById('compatDetail');
+  if(!el) return;
+  const sections=splitCompatSections(data?.detail||'');
+  const visible=sections.slice(0,3);
+  const html=['<div class="relation-sections">'];
+  visible.forEach(sec=>{
+    html.push(`<div class="relation-section"><div class="relation-section-title">${escapeHtml(sec.title)}</div><div class="relation-section-body">${escapeHtml(cleanVisibleCopy(sec.body||''))}</div></div>`);
+  });
+  if(!visible.length){
+    const idol=(ST.biasName||document.getElementById('biasNameInput')?.value||'최애').trim()||'최애';
+    html.push(`<div class="relation-section"><div class="relation-section-title">첫인상 싱크</div><div class="relation-section-body">나와 ${escapeHtml(idol)} 사이에는 바로 설명되는 끌림보다, 한 번 더 확인하게 만드는 장면감이 먼저 잡혀.</div></div>`);
+  }
+  const locked=makeLockedRelationPreview(data);
+  html.push(`<div class="relation-locked"><div class="locked-copy"><div class="relation-section-title">상세 관계 시그널</div><div class="relation-section-body">${escapeHtml(locked)}</div></div><div class="relation-lock-label"><div><div class="relation-lock-title">더 깊은 관계 풀이 잠금</div><div class="relation-lock-sub">끌리는 이유, 엇갈리는 지점, 저장하고 싶은 장면까지</div></div><div class="relation-lock-pill">SIGNAL+</div></div></div>`);
+  html.push('</div>');
+  el.innerHTML=html.join('');
+}
+function drawCompatCard(data){
+  const wrap=document.getElementById('compatShareCardWrap');
+  const canvas=document.getElementById('compatShareCanvas');
+  if(!wrap||!canvas) return;
+  const idol=(ST.biasName||document.getElementById('biasNameInput')?.value||'최애').trim()||'최애';
+  const score=String(data?.score??'-');
+  const title=data?.title||`나와 ${idol} 사이에 잡힌 감정 싱크`;
+  const dpr=window.devicePixelRatio||1, W=360, H=480;
+  canvas.width=W*dpr; canvas.height=H*dpr; canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
+  const grad=ctx.createLinearGradient(0,0,W,H); grad.addColorStop(0,'#08030f'); grad.addColorStop(.55,'#1a071f'); grad.addColorStop(1,'#08030f'); ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+  const glow=ctx.createRadialGradient(W*.5,H*.34,0,W*.5,H*.34,220); glow.addColorStop(0,'rgba(236,72,153,.30)'); glow.addColorStop(.48,'rgba(168,85,247,.12)'); glow.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(236,72,153,.22)'; ctx.lineWidth=1; ctx.beginPath(); ctx.roundRect(14,14,W-28,H-28,24); ctx.stroke();
+  ctx.textAlign='center';
+  ctx.font='800 10px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.52)'; ctx.fillText('SIGNAL ROOM',W/2,40);
+  ctx.font='900 28px Inter, sans-serif'; ctx.fillStyle='#fff'; ctx.fillText('최애와 나',W/2,94);
+  ctx.font='800 16px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.84)'; wrapTxt(ctx,`나와 ${idol}`,W-70).slice(0,2).forEach((line,i)=>ctx.fillText(line,W/2,136+i*24));
+  ctx.beginPath(); ctx.arc(W/2,220,48,0,Math.PI*2); ctx.fillStyle='rgba(168,85,247,.18)'; ctx.fill(); ctx.strokeStyle='rgba(236,72,153,.45)'; ctx.stroke();
+  ctx.font='900 34px Inter, sans-serif'; ctx.fillStyle='#fff'; ctx.fillText(score,W/2,232);
+  ctx.font='800 9px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.44)'; ctx.fillText('HARMONY SCORE',W/2,260);
+  ctx.font='800 20px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.94)'; wrapTxt(ctx,title,W-64).slice(0,3).forEach((line,i)=>ctx.fillText(line,W/2,318+i*30));
+  ctx.font='700 10px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.38)'; ctx.fillText('sajustro.com',W/2,H-28);
+  wrap.style.display='block';
+  const btn=document.getElementById('compatShareBtn'); if(btn) btn.style.display='block';
+}
+async function shareCompatCard(){
+  const canvas=document.getElementById('compatShareCanvas');
+  if(!canvas) return;
+  const url='https://sajustro.com';
+  const idol=(ST.biasName||document.getElementById('biasNameInput')?.value||'최애').trim()||'최애';
+  try{
+    const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
+    const file=new File([blob],'signal-room-relation-card.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({title:'SIGNAL ROOM',text:`나와 ${idol}의 관계 시그널\n${url}`,url,files:[file]}); return;
+    }
+    if(navigator.share){await navigator.share({title:'SIGNAL ROOM',text:`나와 ${idol}의 관계 시그널\n${url}`,url}); return;}
+  }catch(e){}
+  const a=document.createElement('a'); a.download='signal-room-relation-card.png'; a.href=canvas.toDataURL('image/png'); a.click();
+}
+
 async function runCompat(){
   const t=T[curLang];
   try{
@@ -2531,7 +2673,7 @@ async function runCompat(){
     box.style.display='';
     setText('compatScore',data.score??'-');
     setText('compatTitle',data.title??'');
-    renderDetail(data.detail??'','compatDetail');
+    renderCompatDetail(data);
     drawCompatCard(data);
     box.scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){showErr('compatErr',e.message);}
@@ -3267,6 +3409,8 @@ function getFandomTheme(idolName) {
   }
   return { fandom:"", color:"#a855f7", grad:["#0a0014","#160028"] };
 }
+
+document.addEventListener('DOMContentLoaded',()=>{try{renderBiasSelect();}catch(e){}});
 
 // ══════════════════════════════════════════
 //  INIT
