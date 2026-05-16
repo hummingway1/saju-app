@@ -2495,7 +2495,7 @@ async function runIdol(){
     const box=document.getElementById('idolResult');
     box.style.display='';
     document.querySelector('#idolResult .badge-idol').textContent = data.badge||'SIGNAL MATCH FOUND';
-    setText('idolTitle',data.title||'');
+    setText('idolTitle',cleanVisibleCopy(data.title||''));
     setText('idolFandomMeta', data.fandom ? `${data.fandomAccent||'SIGNAL'} · ${data.fandom}` : '');
 
     // Idol match rank cards
@@ -2508,7 +2508,7 @@ async function runIdol(){
             <div class="idol-rank ${i===0?'top':''}">${ranks[i]||'#'+(i+1)}</div>
             <div class="idol-info">
               <div class="idol-name">${m.name||''}</div>
-              <div class="idol-reason">${m.reason||''}</div>
+              <div class="idol-reason">${cleanVisibleCopy(m.reason||'')}</div>
             </div>
             <div class="idol-score-wrap">
               <div class="idol-score">${m.score||'-'}</div>
@@ -2521,7 +2521,7 @@ async function runIdol(){
     }
 
     // Narrative detail
-    renderDetail(data.detail||'','idolDetailText');
+    renderDetail(cleanVisibleCopy(data.detail||''),'idolDetailText');
 
     // Share card with top idol name
     const topName=data.idolMatches?.[0]?.name||'';
@@ -3268,88 +3268,92 @@ function buildSignalPlusTeaser(data){
   const top = data?.idolMatches?.[0]?.name || "this person";
   const group = data?.selectedGroup || "FANDOM";
   const lang = (typeof curLang !== 'undefined') ? curLang : 'ko';
+  const seed = dailyHash(`${top}|${group}|${data?.title||''}|${todayKey()}`);
 
-  if(lang === 'zh'){
-    return {
-      title: `${top}隐藏的魅力，从这里开始才会更清楚。`,
-      preview:
-`表面上看只是你的取向，
-但让粉丝一直放不下的点，其实更像是一种很私人的想象。
+  const pick=(arr,s=0)=>arr[Math.abs(seed+s)%arr.length];
 
-“如果站在他/她身边的人是我呢？”
-“恋爱时会露出什么样的表情？”
+  const koTitles=[
+    `${top}에게 오래 시선이 가는 이유는 여기서부터 달라져`,
+    `${top}의 무드는 겉으로 보이는 것보다 조금 더 복잡해`,
+    `${top}을 다시 보게 되는 포인트는 따로 있어`,
+    `${top}에게 반응하게 되는 순간은 늘 같은 방식이 아니야`
+  ];
+  const koPreview=[
+`단순히 취향 하나로 끝나는 결과는 아니야.
 
-这种让人忍不住代入的点是存在的。
+오늘 잡힌 신호는 “왜 이 사람을 다시 보게 되는지”에 가까워.
+${group} 안에서 ${top}이 눈에 남는 지점은 외모 하나가 아니라,
+말이 멈추는 순간, 시선이 바뀌는 타이밍, 팬들이 해석하고 싶어지는 공기감 쪽에 가까워.
 
-在 ${group} 里，这个人让人反复想起的理由，
-比起外貌，更接近距离感、时机和氛围。`
-    };
-  }
-  if(lang === 'ja'){
-    return {
-      title: `${top}の隠れた魅力は、ここからもっと深く見えてきます。`,
-      preview:
-`ただの好みに見えても、
-ファンが長く惹かれるポイントはもっと私的な想像に近いです。
+SIGNAL+에서는 오늘 기준으로
+어떤 장면이 더 오래 저장될지,
+어떤 반응이 팬들 사이에서 커질지,
+그리고 너와 이 시그널이 어디서 맞물리는지까지 더 깊게 보여줘.`,
+`이번 결과는 “좋아한다”보다 “자꾸 확인하게 된다”에 가까워.
 
-「もし隣にいたらどうだろう？」
-「恋愛したらどんな表情を見せるんだろう？」
+${top}이 ${group} 안에서 남기는 인상은 한 가지로 고정되지 않아.
+밝은 장면보다 조용한 리액션,
+큰 제스처보다 짧게 지나가는 눈빛,
+설명하기 어려운 결이 더 오래 남을 수 있어.
 
-そう考えさせるポイントがあります。
+SIGNAL+에서는 오늘의 무드,
+팬들이 반응할 포인트,
+그리고 네가 유독 신경 쓰게 되는 이유를 따로 풀어줘.`,
+`겉으로는 그냥 멤버 매치처럼 보여도,
+실제로는 네가 어떤 순간에 반응하는지 읽는 쪽에 가까워.
 
-${group}の中でこの人が長く記憶に残る理由は、
-見た目より距離感、言葉よりタイミング、表情より雰囲気に近いです。`
-    };
-  }
-  if(lang === 'en'){
-    return {
-      title: `${top}'s hidden charm starts getting deeper here.`,
-      preview:
-`It may look like simple taste at first,
-but the reason fans keep coming back feels much more personal.
+${top}에게 끌리는 이유가 늘 같은 문장으로 끝나면 재미없잖아.
+오늘은 어떤 표정이 남는지,
+어떤 공기감이 계속 생각나는지,
+어떤 팬 반응이 커질지까지 봐야 진짜 몰입이 생겨.
 
-“What if I was the one standing next to them?”
-“What kind of expression would they show in love?”
+SIGNAL+에서 그 부분부터 열린다.`
+  ];
 
-That kind of imagination is exactly where the pull begins.
-
-Inside ${group}, the reason this person stays in your mind
-is less about looks and more about distance, timing, and atmosphere.`
-    };
-  }
-  if(lang === 'es'){
-    return {
-      title: `El encanto oculto de ${top} empieza a sentirse más profundo aquí.`,
-      preview:
-`Puede parecer solo una preferencia,
-pero el punto que hace que los fans se queden suele sentirse mucho más personal.
-
-“¿Cómo sería estar a su lado?”
-“¿Qué expresión mostraría si se enamorara?”
-
-Esa imaginación es parte de la atracción.
-
-Dentro de ${group}, la razón por la que esta persona se queda en tu mente
-tiene más que ver con distancia, timing y atmósfera que solo con apariencia.`
-    };
+  if(lang === 'ko'){
+    return {title:pick(koTitles), preview:pick(koPreview,7)};
   }
 
-  return {
-    title: `${top}의 숨겨진 매력은 여기서부터 더 깊게 보여.`,
-    preview:
-`겉으로는 그냥 취향처럼 보여도,
-사실 팬들이 오래 붙잡는 지점은 훨씬 더 사적인 느끼는 편에 가까워.
+  const map={
+    en:{
+      title:`${top}'s signal gets more specific from here`,
+      preview:`This is not just about a type you like.
 
-“내가 옆에 있으면 어떨까?”
-“연애하면 어떤 표정을 보여줄까?”
+The real pull is in the small moments fans keep replaying:
+a pause, a shift in eye contact, a reaction that feels a little different today.
 
-이런 상상을 하게 만드는 포인트가 따로 있어.
+SIGNAL+ goes deeper into what may stand out today, what fans may notice, and where your own signal connects with ${top}.`
+    },
+    zh:{
+      title:`${top} 的信号，从这里开始会更具体`,
+      preview:`这不只是简单的取向结果。
 
-${group} 안에서 이 사람이 유독 오래 생각나는 이유는,
-잘생김보다 거리감, 말보다 타이밍, 표정보다 분위기 쪽에 더 가까워.`
+真正让人反复看的，是那些很小的瞬间：
+停顿、眼神变化、今天显得有点不一样的反应。
+
+SIGNAL+ 会继续看今天更容易留下来的画面、粉丝会注意到的点，以及你和 ${top} 的信号在哪里对上。`
+    },
+    ja:{
+      title:`${top}のシグナルはここからもっと具体的に見えてくる`,
+      preview:`これはただの好み診断ではありません。
+
+何度も見返したくなるのは、
+一瞬の間、視線の変化、今日だけ少し違って見える反応のほうです。
+
+SIGNAL+では、今日残りやすい場面、ファンが気づきやすいポイント、あなたと${top}のシグナルがどこで重なるのかをさらに深く見ます。`
+    },
+    es:{
+      title:`La señal de ${top} se vuelve más concreta desde aquí`,
+      preview:`No se trata solo de un tipo que te gusta.
+
+Lo que se queda suele estar en momentos pequeños:
+una pausa, un cambio de mirada, una reacción que hoy se siente distinta.
+
+SIGNAL+ profundiza en qué escena puede quedarse hoy, qué notarán los fans y dónde conecta tu señal con ${top}.`
+    }
   };
+  return map[lang] || map.en;
 }
-
 
 function renderUnlockTeaseLabels(){
   const grid = document.querySelector('#signalPlusLock .unlock-tease-grid');
@@ -3435,14 +3439,26 @@ function renderUnlockTeaseLabels(){
   if(previewBtn) previewBtn.textContent = cfg.preview;
 }
 
+
+function cleanVisibleCopy(text){
+  if(!text) return text;
+  return String(text)
+    .replaceAll('겉으로는 그냥 취향처럼 보여도, 사실 팬들이 오래 붙잡는 지점은 훨씬 더 사적인 느끼는 편에 가까워.','단순히 취향 하나로 끝나는 결과는 아니야.')
+    .replaceAll('잘생김보다 거리감, 말보다 타이밍, 표정보다 분위기 쪽에 더 가까워.','외모 하나보다 시선, 순간, 공기감이 더 오래 남는 쪽에 가까워.')
+    .replaceAll('끌리는 편','자꾸 확인하게 되는 타입')
+    .replaceAll('반응하는 편','눈에 들어오는 타입')
+    .replaceAll('느끼는 편','느껴지는 타입')
+    .replaceAll('타입에','타입에게');
+}
+
 function renderSignalPlusLock(data){
   const box = document.getElementById('signalPlusLock');
   if(!box) return;
   const teaser = buildSignalPlusTeaser(data);
   const title = document.getElementById('signalPlusTitle');
   const preview = document.getElementById('signalPlusPreview');
-  if(title) title.textContent = teaser.title;
-  if(preview) preview.textContent = teaser.preview;
+  if(title) title.textContent = cleanVisibleCopy(teaser.title);
+  if(preview) preview.textContent = cleanVisibleCopy(teaser.preview);
   renderUnlockTeaseLabels();
   box.style.display = 'block';
 }
