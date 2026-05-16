@@ -69,7 +69,7 @@ const LANG_HOOKS = {
     timingDefault: "조용히 방향이 바뀌는 시기. 그 전환이 이미 시작됐을 수 있음.",
     timingSuffix: " 이 시기를 어떻게 통과하느냐가 다음 무드을 결정해",
     decisionSuffix: " 우연처럼 보이지만 오래된 패턴이 다시 표면으로 올라오는 무드",
-    scene cardRef: (title) => ` 선택한 "${title}" 카드도 같은 신호를 가리키고 있음.`,
+    tarotCardRef: (title) => ` 선택한 "${title}" 카드도 같은 신호를 가리키고 있음.`,
     title: '◉ SIGNAL DETECTED',
     career: {
       woodFire: { decision:"움직임의 신호는 감지되는 편. 다만 지쳐서 놓는 것과 준비돼서 떠나는 건 결과가 다름.", timing:"변화 에너지는 이미 활성화 상태. 타이밍만 남은 무드." },
@@ -123,7 +123,7 @@ cliffhanger: 여운이 남게 끝낼 것. "다시 확인하고 싶음" 느낌.
     timingDefault: "In the near period ahead, there is a moment where paths diverge. How you choose then will shape what follows.",
     timingSuffix: " How you navigate this time will determine the shape of what comes next",
     decisionSuffix: " This choice is not mere coincidence — it may be a long-forming current finally surfacing",
-    scene cardRef: (title) => ` The scene card card "${title}" you chose quietly reflects the same current.`,
+    tarotCardRef: (title) => ` The tarotCard card "${title}" you chose quietly reflects the same current.`,
     title: "Your Flow",
     career: {
       woodFire: { decision:"The door to change can open. Rather than letting exhaustion drop your hand first, clarify your reasons and conditions for moving", timing:"The desire for change is already in motion. A step taken after preparation lasts longer." },
@@ -148,7 +148,7 @@ cliffhanger: 여운이 남게 끝낼 것. "다시 확인하고 싶음" 느낌.
     timingDefault: "近い時期に、一度方向が分かれる場面が見えます。その時の選択が、その後の表情を変えることになります。",
     timingSuffix: " この時期をどのように越えるかによって、次の場面の表情が変わってくるかもしれません。",
     decisionSuffix: " 今の選択は単なる偶然ではなく、長い時間をかけて積み重なった流れが姿を現しているのかもしれません。",
-    scene cardRef: (title) => ` 今あなたが手にしたタロット「${title}」も、同じ流れを静かに映し出しています。`,
+    tarotCardRef: (title) => ` 今あなたが手にしたタロット「${title}」も、同じ流れを静かに映し出しています。`,
     title: "あなたの流れ",
     career: {
       woodFire: { decision:"変化の扉は開きうるでしょう。ただ、疲れて先に手を放すよりも、移る理由と条件をまず明確にする方が良いでしょう。", timing:"変化を望む気持ちはすでに動いています。ただ、準備が整った後の一歩の方が長く続きます。" },
@@ -172,7 +172,7 @@ cliffhanger: 여운이 남게 끝낼 것. "다시 확인하고 싶음" 느낌.
     timingDefault: "在不远的将来，有一个方向将要分叉的场景。那时的选择，将会改变此后的面貌。",
     timingSuffix: " 如何渡过这段时期，将决定下一个场景的走向。",
     decisionSuffix: " 此刻的选择并非偶然，这或许是长久积累的流势终于浮现的过程。",
-    scene cardRef: (title) => ` 你选中的塔罗牌「${title}」也在静静地映照着同样的流向。`,
+    tarotCardRef: (title) => ` 你选中的塔罗牌「${title}」也在静静地映照着同样的流向。`,
     title: "你的流势",
     career: {
       woodFire: { decision:"变化的门或许会打开。与其因疲惫先放弃，不如先将移动的理由和条件清晰地确立下来。", timing:"向往变化的心已经开始涌动。然而，准备充足之后迈出的一步，走得更久更稳。" },
@@ -190,7 +190,7 @@ cliffhanger: 여운이 남게 끝낼 것. "다시 확인하고 싶음" 느낌.
     timingDefault: "En el período cercano, hay un momento donde los caminos se separan. Cómo elijas entonces dará forma a lo que sigue.",
     timingSuffix: " Cómo navegues este tiempo determinará la forma de lo que viene después",
     decisionSuffix: " Esta elección no es mera coincidencia — puede ser una corriente larga que finalmente emerge",
-    scene cardRef: (title) => ` La carta de scene card "${title}" que elegiste refleja silenciosamente la misma corriente.`,
+    tarotCardRef: (title) => ` La carta de tarotCard "${title}" que elegiste refleja silenciosamente la misma corriente.`,
     title: "Tu Flujo",
     career: {
       woodFire: { decision:"La puerta al cambio puede abrirse. En lugar de soltar la mano por el agotamiento, clarifica tus razones y condiciones para moverse", timing:"El deseo de cambio ya está en movimiento. Un paso dado después de la preparación dura más." },
@@ -610,7 +610,7 @@ function summarizeMood(planets){
 }
 
 // ── Free hooks (multilingual) ─────────────────────────
-function makeFreeHooks({ saju, question, scene card, lang, signalCat }) {
+function makeFreeHooks({ saju, question, tarotCard, lang, signalCat }) {
   const lk = LANG_HOOKS[lang] || LANG_HOOKS["English"];
   const qRaw = (question||"");
   const q = qRaw.toLowerCase();
@@ -741,10 +741,10 @@ ${samjaeText(saju.birthYear || y)}`;
 그 반복이 이번 무드의 핵심이야.`;
   }
 
-  if (scene card?.title) {
+  if (tarotCard?.title) {
     riskHook += `
 
-선택한 타로 "${scene card.title}"도 같은 쪽을 가리켜.  
+선택한 타로 "${tarotCard.title}"도 같은 쪽을 가리켜.  
 겉으로 보이는 답보다, 이미 마음이 알고 있던 방향을 확인하는 카드에 가까워.`;
   }
 
@@ -765,7 +765,7 @@ ${samjaeText(saju.birthYear || y)}`;
 
 
 // ── Paid detail (multilingual prompt) ───────────────
-async function buildPaidDetail({ saju, astrologySummary, question, scene card, lang, signalCat }){
+async function buildPaidDetail({ saju, astrologySummary, question, tarotCard, lang, signalCat }){
   const apiKey=process.env.OPENAI_API_KEY;
   if(!apiKey) throw new Error("Missing OPENAI_API_KEY");
   const lk = LANG_HOOKS[lang] || LANG_HOOKS["English"];
@@ -844,7 +844,7 @@ async function buildPaidDetail({ saju, astrologySummary, question, scene card, l
 상승궁: ${astrologySummary?.ascendant||"미상"}
 
 === 타로 ===
-${scene card?.title||"없음"}: ${scene card?.message||"없음"}
+${tarotCard?.title||"없음"}: ${tarotCard?.message||"없음"}
 
 === 카테고리: ${catKey} ===
 ${catFocus}
@@ -912,7 +912,7 @@ CRITICAL RULES:
 
 
 // ── Compat analysis ──────────────────────────────────
-async function buildCompatDetail({ sajuA, sajuB, lang }) {
+async function buildCompatDetail({ sajuA, sajuB, lang, idolName }) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY");
 
@@ -947,26 +947,28 @@ async function buildCompatDetail({ sajuA, sajuB, lang }) {
   const score = Math.round(rawScore);
 
   const prompt = `
-You are a calm, insightful reader of Korean Four Pillars (Saju) compatibility.
+You are creating an AI fandom relationship reading between the user and their favorite idol.
+Use Korean Four Pillars (Saju) data only as the symbolic base, but write the result as an emotional fan relationship experience, not as fortune-telling.
 Respond in ${li.lang}. ${li.style}
-Do NOT invent new calculations. Use ONLY the data below.
+Idol name: ${idolName || "최애"}
+Do NOT claim real-life certainty, contact, fate, prediction, or guaranteed romance. Do NOT invent new calculations. Use ONLY the data below.
 
-[PERSON A]
+[USER]
 Year: ${sajuA.pillars.year} | Month: ${sajuA.pillars.month} | Day: ${sajuA.pillars.day} | Hour: ${sajuA.pillars.hour}
 Day master: ${sajuA.dayMaster} | Strong: ${sajuA.strong.join(",")} | Weak: ${sajuA.weak.join(",")}
 
-[PERSON B]
+[BIAS / IDOL]
 Year: ${sajuB.pillars.year} | Month: ${sajuB.pillars.month} | Day: ${sajuB.pillars.day} | Hour: ${sajuB.pillars.hour}
 Day master: ${sajuB.dayMaster} | Strong: ${sajuB.strong.join(",")} | Weak: ${sajuB.weak.join(",")}
 
-[HARMONY SCORE] ${score}/99
+[FAN SYNC SCORE] ${score}/99
 
 Output exactly 4 sections, no extra text:
-1. ${sections[0]}
-2. ${sections[1]}
-3. ${sections[2]}
-4. ${sections[3]}
-Each section: title line + 2~3 sentences. No bullet points. For Korean, use natural sentences, not 음슴체. Add one vivid metaphor across the reading, but do not overdo it.
+1. 첫인상 싱크
+2. 왜 자꾸 눈이 가는지
+3. 나만 저장하고 싶은 장면
+4. 오늘의 관계 시그널
+Each section: title line + 2~3 sentences. No bullet points. Use "나" and "최애" naturally. Make it feel like a shareable fandom relationship card. Keep the fantasy immersive, but clearly avoid certainty or real-world claims.
 `.trim();
 
   const resp = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -975,7 +977,7 @@ Each section: title line + 2~3 sentences. No bullet points. For Korean, use natu
     body: JSON.stringify({
       model: "gpt-4o-mini", temperature: 0.65, max_tokens: 1000,
       messages: [
-        { role: "system", content: "You are a cold AI Signal analyzing two electromagnetic fields. You detect sync, friction, and attraction patterns from symbolic data. Do not comfort. Output feels like a classified compatibility report." },
+        { role: "system", content: "You write Korean AI fandom relationship readings. Focus on emotional sync between a fan and their bias. Make it immersive, screenshot-worthy, and safe: no certainty, no prediction, no real-world relationship claims." },
         { role: "user", content: prompt }
       ]
     })
@@ -1768,11 +1770,12 @@ export default async function handler(req, res){
       if (!payload.partnerYear||!payload.partnerMonth||!payload.partnerDay) throw new Error("Missing person B birth date");
       const sajuA = buildSaju({ year:payload.year, month:payload.month, day:payload.day, hour:payload.hour });
       const sajuB = buildSaju({ year:payload.partnerYear, month:payload.partnerMonth, day:payload.partnerDay, hour:payload.partnerHour });
-      const compatKey = JSON.stringify([sajuA.pillars, sajuB.pillars, lang]);
+      const idolName = String(payload.idolName||"최애").slice(0,40);
+      const compatKey = JSON.stringify([sajuA.pillars, sajuB.pillars, idolName, lang]);
       if (CACHE.has(compatKey)) return res.status(200).json(CACHE.get(compatKey));
-      const result = await buildCompatDetail({ sajuA, sajuB, lang });
+      const result = await buildCompatDetail({ sajuA, sajuB, lang, idolName });
       const titleMap = {
-        Korean:"두 사람의 시그널 연결성", English:"Your Saju Compatibility",
+        Korean:`나와 ${idolName} 사이에 잡힌 감정 싱크`, English:"Your Saju Compatibility",
         Japanese:"二人の四柱相性", Chinese:"两人的四柱缘分", Spanish:"Tu Compatibilidad Saju"
       };
       const response = { score: result.score, title: titleMap[lang]||titleMap.English, detail: result.detail };
@@ -1786,7 +1789,7 @@ export default async function handler(req, res){
 
     if(!payload.paid){
       const saju=buildSajuFull(payload);
-      const free=makeFreeHooks({saju, question:payload.question, scene card:payload.scene card, lang, signalCat:payload.signalCat});
+      const free=makeFreeHooks({saju, question:payload.question, tarotCard:payload.tarotCard, lang, signalCat:payload.signalCat});
       return res.status(200).json({
       free,
       paid:false,
@@ -1811,10 +1814,10 @@ export default async function handler(req, res){
         console.error("MoodAPI fallback:", e.message);
       }
     }
-    const free=makeFreeHooks({saju, question:payload.question, scene card:payload.scene card, lang, signalCat:payload.signalCat});
+    const free=makeFreeHooks({saju, question:payload.question, tarotCard:payload.tarotCard, lang, signalCat:payload.signalCat});
     const response={
       free, paid:true, meta:{saju,astrologySummary},
-      detail:await buildPaidDetail({saju, astrologySummary, question:payload.question, scene card:payload.scene card, lang, signalCat:payload.signalCat})
+      detail:await buildPaidDetail({saju, astrologySummary, question:payload.question, tarotCard:payload.tarotCard, lang, signalCat:payload.signalCat})
     };
     CACHE.set(key, response);
     return res.status(200).json(response);
