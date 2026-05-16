@@ -959,24 +959,38 @@ function buildCompatLocalDetail({ sajuA, sajuB, lang, idolName }) {
   const idol = String(idolName || '최애').trim() || '최애';
   const seed = JSON.stringify([sajuA.pillars, sajuB.pillars, idol, score]);
   if (lang !== 'Korean') {
-    return { score, detail: `First sync\nThere is a quiet emotional overlap between you and ${idol}. It feels less like a loud reaction and more like a scene you keep returning to.\n\nWhy your eyes go there\n${idol}'s energy catches the part of you that notices small shifts. That is why the match feels stronger after a second look.\n\nLocked detail preview\nThe deeper reading opens the exact attraction point, the slight mismatch, and the scene that stays with you.` };
+    return { score, detail: `First response
+Your taste notices ${idol} before logic does. The pull feels clearer the more you look.
+
+Why your eyes go there
+The reason starts to make sense through attitude, mood, and small details.
+
+Where it connects
+This is less about a loud reaction and more about a natural overlap.` };
   }
   const first = [
-    `나와 ${idol} 사이의 첫 싱크는 큰 확신보다 묘하게 시선이 가는 결에서 시작돼. 내 취향이 반응하는 지점과 ${idol}의 이미지가 자연스럽게 겹쳐져.`,
-    `나와 ${idol}의 매치는 강하게 밀어붙이는 느낌보다 편하게 빠져드는 쪽에 가까워. 보면 볼수록 어떤 포인트가 내 기준에 정확히 걸리는 타입이야.`,
-    `${idol}에게 끌리는 시작점은 단순한 외형보다 분위기와 태도의 조합에 가까워. 내 안의 반응 포인트가 ${idol}의 결을 만나면서 싱크가 생겨.`
+    `성향이 먼저 와닿는 느낌이야. ${idol}의 분위기가 네가 편하게 끌리는 기준과 자연스럽게 겹쳐.`,
+    `처음부터 강하게 확정되는 쪽은 아니야. 대신 ${idol}를 볼수록 네 취향이 어느 지점에서 반응하는지 선명해져.`,
+    `${idol}에게 눈이 가는 이유는 단순한 외형보다 태도와 결의 조합에 가까워. 그래서 처음보다 두 번째가 더 납득돼.`
   ];
   const second = [
-    `${idol}의 에너지는 내 안의 관찰하는 성향을 건드려. 화려한 순간보다 표정, 말투, 무대 태도 같은 작은 단서에서 더 잘 맞아.`,
-    `내 쪽 감정은 바로 확정하기보다 조금씩 기준을 맞춰가는 방식으로 움직여. 그래서 ${idol}의 이미지가 단순한 호감보다 더 선명하게 들어와.`,
-    `${idol}의 분위기는 쉽게 한 단어로 끝나는 타입이 아니라서 더 궁금해져. 내가 반응하는 포인트가 그 여백 안에서 자주 잡혀.`
+    `${idol}의 에너지는 내 안의 관찰하는 성향을 건드려. 크게 설명하지 않아도 왜 끌리는지 감이 잡히는 쪽이야.`,
+    `내 반응 포인트는 빠른 자극보다 자연스럽게 스며드는 이미지에 가까워. ${idol}의 결이 그 기준에 잘 맞아.`,
+    `처음엔 그냥 괜찮다 싶어도, 볼수록 왜 눈이 가는지 납득이 돼. 내 취향이 먼저 알아보는 타입이야.`
   ];
   const third = [
-    `겉으로는 그냥 팬심처럼 보여도, 안쪽에는 끌리는 지점과 살짝 엇갈리는 지점이 같이 있어. 그 차이가 오히려 둘 사이의 상상을 더 선명하게 만들어.`,
-    `상세 시그널에서는 왜 ${idol}에게 끌리는지, 어떤 성향이 내 반응 포인트와 맞물리는지까지 열린다. 무료 결과에서는 가장 강한 접점만 먼저 보여줘.`,
-    `더 깊게 보면 ${idol}의 어떤 결이 내 취향을 건드리는지, 그리고 어떤 장면에서 싱크가 가장 강해지는지까지 이어져. 지금 보이는 건 그 입구에 가까워.`
+    `둘 사이의 관계감은 한쪽이 압도하는 구조보다, 서로 다른 성향이 맞물리며 균형을 잡는 쪽에 가까워.`,
+    `내가 반응하는 부분과 ${idol}이 가진 이미지가 같은 방향으로 겹쳐. 그래서 결과가 억지스럽지 않고 자연스럽게 이어져.`,
+    `이 조합은 설명보다 감각이 먼저 오는 편이야. 보고 나면 왜 이 이름이 올라왔는지 조금씩 납득되는 구조야.`
   ];
-  return { score, detail: `첫인상 싱크\n${pickCompatLocal(first, seed, 1)}\n\n왜 자꾸 눈이 가는지\n${pickCompatLocal(second, seed, 2)}\n\n상세 관계 시그널\n${pickCompatLocal(third, seed, 3)}` };
+  return { score, detail: `첫 반응
+${pickCompatLocal(first, seed, 1)}
+
+왜 눈이 가는지
+${pickCompatLocal(second, seed, 2)}
+
+관계가 맞물리는 지점
+${pickCompatLocal(third, seed, 3)}` };
 }
 
 // ── Compat analysis ──────────────────────────────────
@@ -1106,7 +1120,7 @@ const RESULT_I18N = {
     fandomPattern: "❖ YOUR FANDOM PATTERN",
     redFlag: "❖ RED FLAG",
     signalEnergy: "❖ SIGNAL ENERGY",
-    match: "MATCH",
+    match: "POINT",
     shareDefault: "부정해도 결국 이런 장면에서 멈추게 돼",
     titleDefault: "가까운 장면보다 멀리서 잡힌 순간에 더 반응하는 타입",
     line1: "처음엔 차갑게 느껴지는데, 결국 가장 오래 생각나는 스타일",
@@ -1645,9 +1659,9 @@ export default async function handler(req, res){
         const name = String(idol.name||'').replace(/\s*\([^)]*\)/g,'') || '이 아이돌';
         const trait = idolCoreTrait(idol);
         const openings = [
-          `${name}의 ${trait}이 내 반응 포인트와 맞물려서, 볼수록 왜 끌리는지 선명해지는 매치`,
-          `내 취향의 핵심이 ${name}의 ${trait}에서 잡혀서, 이미지보다 성향이 먼저 와닿는 매치`,
-          `${name}에게서 느껴지는 ${trait}이 내 취향의 빈칸을 건드려서, 왜 눈이 가는지 설명되는 매치`
+          `${name}의 ${trait}이 내 반응 포인트와 겹쳐서, 볼수록 왜 끌리는지 선명해져`,
+          `내 취향의 핵심이 ${name}의 ${trait}에서 잡혀서, 이미지보다 성향이 먼저 와닿아`,
+          `${name}의 ${trait}에서 내 취향의 빈칸이 잡혀서, 왜 눈이 가는지 납득이 돼`
         ];
         return openings[idx % openings.length];
       }
@@ -1673,51 +1687,51 @@ export default async function handler(req, res){
       function buildScenePackage(top, mainType){
         const scenePools = {
           cold: [
-            '무대 전체보다\n엔딩 직전 잠깐 풀리는 표정이 더 오래 남는 쪽.',
-            '팬들이 반복 저장할 포인트는\n표정이 거의 안 바뀌는 컷 사이에 있음.',
+            '무대 전체보다\n내 취향이 먼저 반응하는 지점이 잡히는 쪽.',
+            '왜 눈이 가는지\n조용한 컷 안에서 더 납득되는 쪽.',
             '오늘은 가까운 리액션보다\n조용히 시선을 거두는 장면이 더 강함.'
           ],
           mysterious: [
             '오늘 유독 눈이 가는 건\n설명하기 어려운 정적이 생기는 순간.',
             '팬들이 다시 볼 장면은\n말보다 공백이 먼저 남는 컷.',
-            '가까워지는 장면보다\n살짝 멀어지는 타이밍이 더 오래 남음.'
+            '가까워지는 장면보다\n살짝 거리를 두는 순간에 더 끌리는 쪽.'
           ],
           sunshine: [
-            '웃는 장면보다\n웃음이 풀리기 직전의 표정이 더 오래 남는 쪽.',
+            '웃는 장면보다\n자연스럽게 긴장이 풀리는 순간에 먼저 반응하는 쪽.',
             '오늘은 밝은 에너지 안에서\n잠깐 집중하는 순간이 저장 포인트.',
             '팬들이 멈추는 구간은\n텐션이 올라가기 전 짧은 숨 고르기.'
           ],
           leader: [
             '오늘은 센터에 서는 장면보다\n옆을 챙기는 짧은 순간이 더 남음.',
-            '팬들이 반복 저장할 포인트는\n말없이 중심을 잡는 컷.',
+            '말없이 중심을 잡는 컷에서\n왜 끌리는지 납득되는 쪽.',
             '큰 액션보다\n주변 공기를 정리하는 타이밍이 더 강함.'
           ],
           artist: [
-            '오늘은 퍼포먼스보다\n자기 세계로 잠깐 들어가는 장면이 오래 남음.',
+            '퍼포먼스보다\n자기 세계가 보이는 순간에 성향이 먼저 와닿는 쪽.',
             '팬들이 다시 보는 건\n기술보다 감정선이 새는 순간.',
-            '무대가 끝난 뒤에도\n표정 끝에 남은 결이 더 오래 감김.'
+            '무대가 끝난 뒤보다\n그 사람의 결이 보이는 순간에 더 끌리는 쪽.'
           ],
           cute: [
-            '귀여운 장면보다\n귀여운 척하지 않는 순간이 더 오래 남음.',
-            '팬들이 저장할 포인트는\n장난 뒤에 살짝 풀리는 표정.',
+            '귀여운 장면보다\n꾸미지 않은 반응에서 성향이 먼저 와닿는 쪽.',
+            '장난 뒤에 살짝 풀리는 표정에서\n왜 눈이 가는지 납득되는 쪽.',
             '오늘은 밝은 리액션보다\n무심코 나온 작은 반응이 더 강함.'
           ],
           ace: [
-            '오늘은 잘하는 장면보다\n끝나고 숨을 고르는 컷이 더 오래 남음.',
-            '팬들이 반복할 포인트는\n완성도보다 집중이 풀리는 찰나.',
+            '잘하는 장면보다\n집중이 풀리는 순간에 사람 자체가 더 선명해지는 쪽.',
+            '완성도보다\n집중이 풀리는 찰나에서 더 와닿는 쪽.',
             '무대 위 실력보다\n그 직후의 여운이 더 크게 남는 날.'
           ],
           default: [
-            '오늘은 무대 전체보다\n짧게 지나간 표정 하나가 더 오래 남는 쪽.',
-            '팬들이 반복 저장할 장면은\n예상한 파트보다 작은 반응 쪽.',
+            '무대 전체보다\n짧게 지나간 표정에서 왜 끌리는지 납득되는 쪽.',
+            '예상한 파트보다\n작은 반응에서 성향이 먼저 와닿는 쪽.',
             '오늘 유독 눈이 가는 순간은\n크게 보여준 컷보다 조용히 남는 컷.'
           ]
         };
         const fanEnergyPool = [
           '가까워진다기보다, 이상하게 계속 확인하게 되는 흐름.',
-          '한 번 보고 넘기기보다 저장한 뒤 다시 보는 쪽에 가까움.',
-          '팬심이 크게 터지기보다 조용히 오래 남는 타입.',
-          '말로 설명하기 전 이미 손이 캡처로 가는 흐름.'
+          '처음보다 다시 볼수록 왜 끌리는지 선명해지는 쪽.',
+          '팬심이 크게 터지기보다 조용히 납득되는 타입.',
+          '말로 풀기 전에 성향이 먼저 와닿는 흐름.'
         ];
         const levels = ['OPEN','ACTIVE','LOCKED','INTENSE'];
         const tone = ['Midnight Glow','Soft Static','Quiet Intensity','Afterstage Blue','Velvet Pulse'];
@@ -1747,11 +1761,11 @@ export default async function handler(req, res){
         '',
         topReason + '.',
         '',
-        '❖ MATCH POINT',
+        '❖ 끌리는 이유',
         '',
-        `${top.name}와 내가 매치된 이유는 겉으로 크게 터지는 장면보다, 이상하게 다시 보게 되는 반응 포인트가 맞기 때문이야.`,
+        `${top.name}에게 먼저 반응하는 이유는 겉으로 크게 보이는 장면보다, 내 취향이 걸리는 결이 분명하기 때문이야.`,
         '',
-        '❖ FAN ENERGY',
+        '❖ 팬심 포인트',
         '',
         scenePackage.fanEnergy
       ];
@@ -1775,7 +1789,7 @@ export default async function handler(req, res){
         }),
         detail: detailLines.join('\n'),
         syncLevel: scenePackage.syncLevel,
-        todayScene: { title: topReason + '.', sub: `${top.name}와 내가 왜 맞는지 보여주는 SIGNAL MATCH 설명.` },
+        todayScene: { title: topReason + '.', sub: `${top.name}에게 왜 눈이 가는지 납득되는 포인트.` },
         fanEnergy: scenePackage.fanEnergy,
         biasProfile: scenePackage.biasProfile
       };
@@ -1794,7 +1808,7 @@ export default async function handler(req, res){
       if (CACHE.has(compatKey)) return res.status(200).json(CACHE.get(compatKey));
       const result = buildCompatLocalDetail({ sajuA, sajuB, lang, idolName });
       const titleMap = {
-        Korean:`나와 ${idolName} 사이에 잡힌 감정 싱크`, English:"Your Bias Sync",
+        Korean:`나와 ${idolName} 사이에 잡힌 관계 시그널`, English:"Your Bias Sync",
         Japanese:"推しとのシンク", Chinese:"我和本命的同步感", Spanish:"Mi sync con mi bias"
       };
       const response = { score: result.score, title: titleMap[lang]||titleMap.English, detail: result.detail };
