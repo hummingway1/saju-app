@@ -1309,39 +1309,39 @@ export default async function handler(req, res){
 
       const IDOL_ARCHETYPE_DB = [
         // BTS
-        {name:"RM (BTS)", group:"BTS", tags:["intellectual","leader","calm","deep","responsible"], fanPattern:"말보다 무드로 중심을 잡아주는 사람에게 끌리는 편"},
-        {name:"Jin (BTS)", group:"BTS", tags:["warm","humor","classic","stable","gentle"], fanPattern:"편하게 웃기다가 갑자기 설레게 하는 사람에게 끌리는 편"},
-        {name:"Suga (BTS)", group:"BTS", tags:["cold","artist","quiet","wounded","producer","distance"], fanPattern:"무심해 보이는데 속은 깊은 사람에게 오래 끌리는 편"},
-        {name:"J-Hope (BTS)", group:"BTS", tags:["sunshine","energy","dance","bright","discipline"], fanPattern:"밝은데 무대 위에서 달라지는 사람에게 반응하는 편"},
-        {name:"Jimin (BTS)", group:"BTS", tags:["emotional","sensual","soft","performer","delicate"], fanPattern:"부드러운 얼굴로 묘한 무드를 만드는 사람에게 끌리는 편"},
-        {name:"V (BTS)", group:"BTS", tags:["mysterious","artist","vintage","cold","dreamy","distance"], fanPattern:""},
-        {name:"Jungkook (BTS)", group:"BTS", tags:["ace","perfectionist","athletic","sincere","growth"], fanPattern:"잘하는데 계속 더 잘하려는 사람한테 마음이 쌓임"},
+        {name:"RM (BTS)", group:"BTS", tags:["intellectual","leader","calm","deep","responsible"], fanPattern:"말을 많이 하지 않아도 중심이 잡혀 보여서 계속 확인하게 되는 타입"},
+        {name:"Jin (BTS)", group:"BTS", tags:["warm","humor","classic","stable","gentle"], fanPattern:"장난스럽게 풀어놓다가 어느 순간 분위기를 바꿔버리는 사람"},
+        {name:"Suga (BTS)", group:"BTS", tags:["cold","artist","quiet","wounded","producer","distance"], fanPattern:"무심한 듯 보여도 오래 보면 감정선이 깊게 느껴지는 타입"},
+        {name:"J-Hope (BTS)", group:"BTS", tags:["sunshine","energy","dance","bright","discipline"], fanPattern:"평소의 밝은 결이 무대 위에서 전혀 다른 집중력으로 바뀌는 사람"},
+        {name:"Jimin (BTS)", group:"BTS", tags:["emotional","sensual","soft","performer","delicate"], fanPattern:"부드러운 인상 뒤에 묘한 긴장감을 남기는 사람"},
+        {name:"V (BTS)", group:"BTS", tags:["mysterious","artist","vintage","cold","dreamy","distance"], fanPattern:"낯설고 몽환적인 결이 있어서 자꾸 다시 확인하게 되는 사람"},
+        {name:"Jungkook (BTS)", group:"BTS", tags:["ace","perfectionist","athletic","sincere","growth"], fanPattern:"이미 충분히 잘하는데도 계속 더 보여주려는 태도에 마음이 쌓이는 타입"},
 
         // BLACKPINK
-        {name:"Jisoo (BLACKPINK)", group:"BLACKPINK", tags:["classic","elegant","warm","stable","visual"], fanPattern:"화려한데 흔들리지 않는 사람에게 안정감을 느끼는 편"},
-        {name:"Jennie (BLACKPINK)", group:"BLACKPINK", tags:["itgirl","cold","independent","luxury","queen"], fanPattern:"다가가기 어려운 무드에 더 끌리는 편"},
-        {name:"Rosé (BLACKPINK)", group:"BLACKPINK", tags:["artist","emotional","free","fragile","nostalgia"], fanPattern:"쓸쓸한 감성 가진 아티스트형에 오래 끌리는 편"},
-        {name:"Lisa (BLACKPINK)", group:"BLACKPINK", tags:["performance","global","confidence","dance","power"], fanPattern:"무대 장악력에 바로 납득하는 편"},
+        {name:"Jisoo (BLACKPINK)", group:"BLACKPINK", tags:["classic","elegant","warm","stable","visual"], fanPattern:"화려한 장면 속에서도 중심이 흐트러지지 않는 사람"},
+        {name:"Jennie (BLACKPINK)", group:"BLACKPINK", tags:["itgirl","cold","independent","luxury","queen"], fanPattern:"가까워 보이지 않아서 오히려 더 해석하고 싶어지는 타입"},
+        {name:"Rosé (BLACKPINK)", group:"BLACKPINK", tags:["artist","emotional","free","fragile","nostalgia"], fanPattern:"목소리나 표정 끝에 남는 쓸쓸한 결이 계속 생각나는 사람"},
+        {name:"Lisa (BLACKPINK)", group:"BLACKPINK", tags:["performance","global","confidence","dance","power"], fanPattern:"등장하는 순간 공기를 바꾸는 힘이 확실한 사람"},
 
         // aespa
-        {name:"Karina (aespa)", group:"aespa", tags:["cold","leader","ai","power","perfect","magnetic"], fanPattern:"비현실적으로 완벽한 냉미녀 사람에게 "},
-        {name:"Winter (aespa)", group:"aespa", tags:["icy","mystery","cat","minimal","sharp","quiet"], fanPattern:"무표정인데 자꾸 신경쓰이는 사람에게 끌리는 편"},
-        {name:"Giselle (aespa)", group:"aespa", tags:["cool","hip","individual","urban","free"], fanPattern:"남들이랑 결이 다른 쿨한 사람에게 반응하는 편"},
-        {name:"Ningning (aespa)", group:"aespa", tags:["vocal","bold","bright","talent","glam"], fanPattern:"실력과 자신감이 같이 터지는 사람에게 "},
+        {name:"Karina (aespa)", group:"aespa", tags:["cold","leader","ai","power","perfect","magnetic"], fanPattern:"비현실적으로 완벽한 인상인데도 차갑게만 보이지 않는 사람"},
+        {name:"Winter (aespa)", group:"aespa", tags:["icy","mystery","cat","minimal","sharp","quiet"], fanPattern:"표정 변화가 크지 않은데도 이상하게 더 보게 되는 사람"},
+        {name:"Giselle (aespa)", group:"aespa", tags:["cool","hip","individual","urban","free"], fanPattern:"남들과 다른 템포로 움직여서 더 눈에 들어오는 사람"},
+        {name:"Ningning (aespa)", group:"aespa", tags:["vocal","bold","bright","talent","glam"], fanPattern:"실력과 자신감이 동시에 터질 때 장면을 압도하는 사람"},
 
         // NewJeans
-        {name:"Minji (NewJeans)", group:"NewJeans", tags:["natural","clean","leader","calm","classic"], fanPattern:"꾸민 느끼는 편 없이 담백한 첫사랑상에 "},
-        {name:"Hanni (NewJeans)", group:"NewJeans", tags:["cute","active","warm","playful","spark"], fanPattern:"가볍게 웃는데 무드를 확 바꾸는 사람에게 반응하는 편"},
-        {name:"Danielle (NewJeans)", group:"NewJeans", tags:["sunshine","pure","emotional","soft","dreamy"], fanPattern:"맑고 따뜻한 에너지에 마음이 바로 풀림"},
-        {name:"Haerin (NewJeans)", group:"NewJeans", tags:["cat","mysterious","quiet","icy","distance"], fanPattern:"가까워질 듯 말 듯한 고양이상에 계속 끌리는 편"},
-        {name:"Hyein (NewJeans)", group:"NewJeans", tags:["youngest","chic","mysterious","cool","unique"], fanPattern:"어린데 묘하게 쿨한 무드에 반응하는 편"},
+        {name:"Minji (NewJeans)", group:"NewJeans", tags:["natural","clean","leader","calm","classic"], fanPattern:"꾸미지 않은 담백함이 오히려 더 선명하게 남는 사람"},
+        {name:"Hanni (NewJeans)", group:"NewJeans", tags:["cute","active","warm","playful","spark"], fanPattern:"가볍게 웃는 순간 장면 전체가 부드러워지는 사람"},
+        {name:"Danielle (NewJeans)", group:"NewJeans", tags:["sunshine","pure","emotional","soft","dreamy"], fanPattern:"맑은 텐션 하나로 보는 사람의 경계를 풀어버리는 타입"},
+        {name:"Haerin (NewJeans)", group:"NewJeans", tags:["cat","mysterious","quiet","icy","distance"], fanPattern:"가까워지는 듯하다가도 살짝 멀어지는 결 때문에 더 궁금해지는 사람"},
+        {name:"Hyein (NewJeans)", group:"NewJeans", tags:["youngest","chic","mysterious","cool","unique"], fanPattern:"어린 이미지와 다르게 차분한 쿨함이 남는 사람"},
 
         // IVE
-        {name:"Yujin (IVE)", group:"IVE", tags:["leader","bright","confident","responsible","energy"], fanPattern:"건강하고 자신감 넘치는 리더형에 바로 반응하는 편"},
-        {name:"Gaeul (IVE)", group:"IVE", tags:["calm","urban","elegant","quiet","mature"], fanPattern:"차분하고 도시적인 무드가 오래 남는 타입"},
-        {name:"Rei (IVE)", group:"IVE", tags:["cute","unique","soft","artsy","playful"], fanPattern:"귀여운데 자기 세계 확실한 사람한테 "},
-        {name:"Wonyoung (IVE)", group:"IVE", tags:["princess","visual","perfect","royal","itgirl"], fanPattern:"비현실적인 공주 에너지에 자연스럽게 납득하는 편"},
-        {name:"Liz (IVE)", group:"IVE", tags:["vocal","friendly","bright","soft","warm"], fanPattern:"편하게 웃게 만드는 보컬형에게 마음이 풀리는 편"},
+        {name:"Yujin (IVE)", group:"IVE", tags:["leader","bright","confident","responsible","energy"], fanPattern:"밝은 자신감과 책임감이 같이 느껴져서 신뢰가 먼저 생기는 사람"},
+        {name:"Gaeul (IVE)", group:"IVE", tags:["calm","urban","elegant","quiet","mature"], fanPattern:"차분한 도시적 결이 쉽게 잊히지 않는 타입"},
+        {name:"Rei (IVE)", group:"IVE", tags:["cute","unique","soft","artsy","playful"], fanPattern:"귀여운 분위기 안에 자기 세계가 또렷하게 있는 사람"},
+        {name:"Wonyoung (IVE)", group:"IVE", tags:["princess","visual","perfect","royal","itgirl"], fanPattern:"비현실적인 존재감이 과하지 않게 설득되는 사람"},
+        {name:"Liz (IVE)", group:"IVE", tags:["vocal","friendly","bright","soft","warm"], fanPattern:"목소리와 웃는 얼굴이 같이 떠올라 마음이 풀리는 사람"},
         {name:"Leeseo (IVE)", group:"IVE", tags:["youngest","fresh","bold","cute","spark"], fanPattern:"신선하고 당찬 막내 에너지에 반응하는 편"},
 
         // LE SSERAFIM
@@ -1477,13 +1477,13 @@ export default async function handler(req, res){
       const TITLE_LINES = {
         cold: [
           "차가울수록 더 궁금해지는 타입 ",
-          "무표정인데 자꾸 생각나는 사람에게 ",
+          "무표정인데 자꾸 생각나는 사람 ",
           "쉽게 다가오지 않는 사람에게 오래 끌리는 타입"
         ],
         mysterious: [
           "무드 하나로 계속 신경 쓰이게 하는 사람에게 ",
           "설명하기 어려운 묘한 무드에 계속 반응하는 타입",
-          "가까워질 듯 안 잡히는 사람에게 오래 끌리는 편"
+          "가까워질 듯 쉽게 읽히지 않는 사람"
         ],
         sunshine: [
           "밝다가도 무대 위에서 확 바뀌는 사람에게 ",
