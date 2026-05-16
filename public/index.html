@@ -4043,7 +4043,7 @@ function renderFandomExperience(data){
   const scene=document.getElementById('todaySceneBox');
   if(scene){scene.innerHTML=`<div class="fandom-kicker">SIGNAL MATCH</div><div class="scene-line">${srEscape(built.todayScene.title||'')}</div><div class="scene-sub">${srEscape(built.todayScene.sub||built.fanEnergy||'')}</div>`;}
   const profile=document.getElementById('biasProfileBox');
-  if(profile){const bp=built.biasProfile||{};profile.innerHTML=`<div class="fandom-kicker">BIAS PROFILE</div><div class="profile-grid"><div class="profile-item"><div class="profile-label">Aura Tone</div><div class="profile-value">${srEscape(bp.auraTone)}</div></div><div class="profile-item"><div class="profile-label">Stage Mood</div><div class="profile-value">${srEscape(bp.stageMood)}</div></div><div class="profile-item"><div class="profile-label">Fan Energy</div><div class="profile-value">${srEscape(bp.fanEnergy)}</div></div><div class="profile-item"><div class="profile-label">Focus Signal</div><div class="profile-value">${srEscape(bp.focusSignal)}</div></div></div>`;}
+  if(profile){profile.style.display='none';}
   updateSignalStreak();
   saveSignalArchive(data,built);
   renderSignalArchive();
@@ -4073,7 +4073,7 @@ function renderSignalArchive(){
   const box=document.getElementById('signalArchiveBox'); if(!box)return;
   let arr=[];try{arr=JSON.parse(localStorage.getItem('signal_room_archive')||'[]')||[];}catch(e){}
   if(!arr.length){box.innerHTML='';return;}
-  box.innerHTML=`<div class="fandom-kicker">SIGNAL ARCHIVE</div><div class="archive-list">${arr.slice(0,5).map(x=>`<div class="archive-item"><span class="archive-scene">${srShortDate(x.date)} · ${srEscape(x.idol)} · ${srEscape(x.scene)}</span><span class="archive-level">${srEscape(x.level)}</span></div>`).join('')}</div>`;
+  box.style.display='none';
 }
 
 // ════════════════════════════════════════════════
