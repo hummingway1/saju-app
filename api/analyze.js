@@ -1808,7 +1808,7 @@ export default async function handler(req, res){
       if (CACHE.has(compatKey)) return res.status(200).json(CACHE.get(compatKey));
       const result = buildCompatLocalDetail({ sajuA, sajuB, lang, idolName });
       const titleMap = {
-        Korean:`나와 ${idolName} 사이에 잡힌 관계 시그널`, English:"Your Bias Sync",
+        Korean:`나와 ${idolName} 사이에 잡힌 케미싱크`, English:"Your Bias Sync",
         Japanese:"推しとのシンク", Chinese:"我和本命的同步感", Spanish:"Mi sync con mi bias"
       };
       const response = { score: result.score, title: titleMap[lang]||titleMap.English, detail: result.detail };
