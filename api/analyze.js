@@ -18,7 +18,7 @@ const SHARE_LINES = [
 // ── Rate Limiter ─────────────────────────────────────
 // 같은 IP에서 하루 10회 초과 시 차단
 const RATE_LIMIT = new Map();
-const RATE_MAX = 3;
+const RATE_MAX = 100;
 const RATE_WINDOW = 24 * 60 * 60 * 1000; // 24시간
 
 function getClientIP(req) {
@@ -936,7 +936,7 @@ function buildLocalCompatCopy({score, idolName, sajuA, sajuB}){
     `반복해서 보게 되는 포인트는 완벽한 포즈보다 예상 밖의 작은 흔들림이야.\n그 순간에 나와 ${idol} 사이의 감정선이 더 또렷해져.`,
     `나만 캡처하고 싶은 장면은 정답처럼 보이는 컷이 아니야.\n잠깐 시선이 옆으로 빠지는 순간, 싱크가 더 강하게 남아.`
   ];
-  return `첫인상 싱크\n${seededTextPick(first,seed,1)}\n\n왜 자꾸 눈이 가는지\n${seededTextPick(second,seed,2)}\n\n나만 저장하고 싶은 장면\n${seededTextPick(third,seed,3)}`;
+  return `첫인상 싱크\n${seededTextPick(first,seed,1)}\n\n왜 자꾸 눈이 가는지\n${seededTextPick(second,seed,2)}\n\n관계가 맞물리는 지점\n${seededTextPick(third,seed,3)}`;
 }
 function calcCompatScore(sajuA, sajuB){
   const elemA = sajuA.elements;
@@ -962,100 +962,27 @@ function buildCompatLocalDetail({ sajuA, sajuB, lang, idolName }) {
     return { score, detail: `First sync\nThere is a quiet emotional overlap between you and ${idol}. It feels less like a loud reaction and more like a scene you keep returning to.\n\nWhy your eyes go there\n${idol}'s energy catches the part of you that notices small shifts. That is why the match feels stronger after a second look.\n\nLocked detail preview\nThe deeper reading opens the exact attraction point, the slight mismatch, and the scene that stays with you.` };
   }
   const first = [
-    `나와 ${idol} 사이의 첫 싱크는 빠른 확신보다 조용히 다시 확인하게 되는 쪽에 가까워. 처음엔 가볍게 봐도, 묘하게 같은 포인트로 돌아오게 돼.`,
-    `나와 ${idol}의 결은 크게 터지는 반응보다 천천히 남는 잔상 쪽이야. 한 번 보고 끝나는 느낌보다 다시 보고 싶은 쪽으로 움직여.`,
-    `${idol}에게 끌리는 시작점은 과한 설렘보다 이상하게 신경 쓰이는 작은 온도차에 가까워. 그래서 처음보다 두 번째에 더 선명해져.`
+    `나와 ${idol} 사이의 첫 싱크는 큰 확신보다 묘하게 시선이 가는 결에서 시작돼. 내 취향이 반응하는 지점과 ${idol}의 이미지가 자연스럽게 겹쳐져.`,
+    `나와 ${idol}의 매치는 강하게 밀어붙이는 느낌보다 편하게 빠져드는 쪽에 가까워. 보면 볼수록 어떤 포인트가 내 기준에 정확히 걸리는 타입이야.`,
+    `${idol}에게 끌리는 시작점은 단순한 외형보다 분위기와 태도의 조합에 가까워. 내 안의 반응 포인트가 ${idol}의 결을 만나면서 싱크가 생겨.`
   ];
   const second = [
-    `${idol}의 에너지는 내 안의 관찰하는 성향을 건드려. 화려한 순간보다 표정이 바뀌는 찰나에서 더 강하게 반응하는 매치야.`,
-    `내 쪽 감정은 바로 달려가기보다 조금 떨어져서 오래 보는 방식으로 움직여. 그래서 ${idol}의 작은 변화가 더 크게 확대돼서 들어와.`,
-    `${idol}의 분위기는 쉽게 설명되는 타입이 아니라서 더 오래 붙잡혀. 선명한 답보다 해석하고 싶은 여백이 이 매치의 핵심이야.`
+    `${idol}의 에너지는 내 안의 관찰하는 성향을 건드려. 화려한 순간보다 표정, 말투, 무대 태도 같은 작은 단서에서 더 잘 맞아.`,
+    `내 쪽 감정은 바로 확정하기보다 조금씩 기준을 맞춰가는 방식으로 움직여. 그래서 ${idol}의 이미지가 단순한 호감보다 더 선명하게 들어와.`,
+    `${idol}의 분위기는 쉽게 한 단어로 끝나는 타입이 아니라서 더 궁금해져. 내가 반응하는 포인트가 그 여백 안에서 자주 잡혀.`
   ];
   const third = [
-    `겉으로는 그냥 팬심처럼 보여도, 안쪽에는 끌리는 지점과 살짝 엇갈리는 지점이 같이 있어. 그 미묘한 차이가 계속 확인하고 싶게 만들어.`,
-    `상세 시그널에서는 왜 ${idol}에게 시선이 오래 가는지, 어느 순간에 감정이 더 크게 움직이는지까지 열린다. 무료 결과에서는 여기까지만 살짝 보여줘.`,
-    `더 깊게 보면 ${idol}의 어떤 결이 내 취향을 건드리는지, 그리고 왜 쉽게 끝나지 않는지까지 이어져. 지금 보이는 건 그 입구에 가까워.`
+    `겉으로는 그냥 팬심처럼 보여도, 안쪽에는 끌리는 지점과 살짝 엇갈리는 지점이 같이 있어. 그 차이가 오히려 둘 사이의 상상을 더 선명하게 만들어.`,
+    `상세 시그널에서는 왜 ${idol}에게 끌리는지, 어떤 성향이 내 반응 포인트와 맞물리는지까지 열린다. 무료 결과에서는 가장 강한 접점만 먼저 보여줘.`,
+    `더 깊게 보면 ${idol}의 어떤 결이 내 취향을 건드리는지, 그리고 어떤 장면에서 싱크가 가장 강해지는지까지 이어져. 지금 보이는 건 그 입구에 가까워.`
   ];
   return { score, detail: `첫인상 싱크\n${pickCompatLocal(first, seed, 1)}\n\n왜 자꾸 눈이 가는지\n${pickCompatLocal(second, seed, 2)}\n\n상세 관계 시그널\n${pickCompatLocal(third, seed, 3)}` };
 }
 
 // ── Compat analysis ──────────────────────────────────
 async function buildCompatDetail({ sajuA, sajuB, lang, idolName }) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    console.error('[compat] Missing OPENAI_API_KEY');
-    throw new Error('OPENAI_API_KEY is not configured');
-  }
-
-  const langInstructions = {
-    Korean:  { lang:"한국어", style:"말투는 친근하고 상상력을 자극하게. 음슴체 금지. 너무 진중한 시그널앱처럼 쓰지 말고, 바다, 자석, 파동, 온도차 같은 짧은 비유를 1~2개 섞기. ~해, ~같아, ~봐야 해 같은 자연스러운 말투 사용." },
-    English: { lang:"English", style:"Calm, gently mystical tone. Use 'may', 'appears', 'seems'." },
-    Japanese:{ lang:"日本語", style:"穏やかで神秘的な口調。「〜かもしれません」「〜見えます」を使用。" },
-    Chinese: { lang:"中文", style:"温和、略带神秘感的语气。使用'可能'、'或许'、'看起来'。" },
-    Spanish: { lang:"Español", style:"Tono sereno y levemente místico. Usa 'puede', 'parece', 'aparece'." }
-  };
-  const li = langInstructions[lang] || langInstructions.English;
-
-
-  const score = calcCompatScore(sajuA, sajuB);
-
-  const prompt = `
-You are creating an AI fandom relationship reading between the user and their favorite idol.
-Use Korean Four Pillars (Saju) data only as the symbolic base, but write the result as an emotional fan relationship experience, not as fortune-telling.
-Respond in ${li.lang}. ${li.style}
-Idol name: ${idolName || "최애"}
-Do NOT claim real-life certainty, contact, fate, prediction, or guaranteed romance. Do NOT invent new calculations. Use ONLY the data below.
-
-[USER]
-Year: ${sajuA.pillars.year} | Month: ${sajuA.pillars.month} | Day: ${sajuA.pillars.day} | Hour: ${sajuA.pillars.hour}
-Day master: ${sajuA.dayMaster} | Strong: ${sajuA.strong.join(",")} | Weak: ${sajuA.weak.join(",")}
-
-[BIAS / IDOL]
-Year: ${sajuB.pillars.year} | Month: ${sajuB.pillars.month} | Day: ${sajuB.pillars.day} | Hour: ${sajuB.pillars.hour}
-Day master: ${sajuB.dayMaster} | Strong: ${sajuB.strong.join(",")} | Weak: ${sajuB.weak.join(",")}
-
-[FAN SYNC SCORE] ${score}/99
-
-Output exactly 3 sections, no extra text:
-1. 첫인상 싱크
-2. 왜 자꾸 눈이 가는지
-3. 나만 저장하고 싶은 장면
-Each section format:
-제목
-2 short sentences.
-No bullet points. No fortune-telling words. No "운명", "예언", "확정", "반드시". Use "나" and the idol name naturally. Write like SIGNAL MATCH copy: short, scene-based, fandom immersive, screenshot-worthy. Focus on emotional relationship fantasy between fan and bias, but do not claim real-world certainty, contact, romance, or prediction.
-`.trim();
-
-  const resp = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "gpt-4o-mini", temperature: 0.65, max_tokens: 1000,
-      messages: [
-        { role: "system", content: "You write Korean AI fandom relationship readings. Focus on emotional sync between a fan and their bias. Make it immersive, screenshot-worthy, and safe: no certainty, no prediction, no real-world relationship claims." },
-        { role: "user", content: prompt }
-      ]
-    })
-  });
-  const rawText = await resp.text();
-  let data = null;
-  try {
-    data = rawText ? JSON.parse(rawText) : {};
-  } catch (e) {
-    console.error('[compat] OpenAI returned non-JSON', rawText.slice(0, 1000));
-    throw new Error('OpenAI response parse failed');
-  }
-  if (!resp.ok) {
-    console.error('[compat] OpenAI call failed', { status: resp.status, error: data?.error });
-    throw new Error(data?.error?.message || 'OpenAI call failed');
-  }
-
-  const detail = data.choices?.[0]?.message?.content;
-  if (!detail || !String(detail).trim()) {
-    console.error('[compat] Empty OpenAI compatibility content', data);
-    throw new Error('OpenAI returned empty compatibility content');
-  }
-  return { score, detail };
+  // Free relation view is fully local. No ChatGPT/OpenAI API call, no token cost.
+  return buildCompatLocalDetail({ sajuA, sajuB, lang, idolName });
 }
 
 
@@ -1418,18 +1345,18 @@ export default async function handler(req, res){
 
         // LE SSERAFIM
         {name:"Sakura (LE SSERAFIM)", group:"LE SSERAFIM", tags:["veteran","elegant","resilient","history","quiet"], fanPattern:"서사가 긴 사람한테 더 깊게 빠지는 편"},
-        {name:"Chaewon (LE SSERAFIM)", group:"LE SSERAFIM", tags:["leader","strong","cute","sharp","dual"], fanPattern:"귀여운데 강단 있는 반전 사람에게 "},
+        {name:"Chaewon (LE SSERAFIM)", group:"LE SSERAFIM", tags:["leader","strong","cute","sharp","dual"], fanPattern:"귀여운데 강단 있는 반전 매력에 반응하는 편"},
         {name:"Yunjin (LE SSERAFIM)", group:"LE SSERAFIM", tags:["artist","vocal","free","honest","bold"], fanPattern:"솔직하고 자유로운 아티스트형에 감정이 움직임"},
-        {name:"Kazuha (LE SSERAFIM)", group:"LE SSERAFIM", tags:["elegant","ballet","calm","noble","visual"], fanPattern:"고요한데 고급스러운 무드에 "},
+        {name:"Kazuha (LE SSERAFIM)", group:"LE SSERAFIM", tags:["elegant","ballet","calm","noble","visual"], fanPattern:"고요하고 고급스러운 무드에 끌리는 편"},
         {name:"Eunchae (LE SSERAFIM)", group:"LE SSERAFIM", tags:["youngest","bright","playful","fresh","cute"], fanPattern:"장난스럽고 맑은 막내 에너지에 마음이 풀림"},
 
         // TWICE
         {name:"Nayeon (TWICE)", group:"TWICE", tags:["bright","center","cute","confident","spark"], fanPattern:"밝고 확실한 센터 에너지에 바로 반응하는 편"},
         {name:"Jeongyeon (TWICE)", group:"TWICE", tags:["cool","honest","stable","protective","fresh"], fanPattern:"시원하고 솔직한 사람에게 편안함을 느끼는 편"},
-        {name:"Momo (TWICE)", group:"TWICE", tags:["dance","performance","power","cute","discipline"], fanPattern:"무대에서 증명하는 사람에게 "},
+        {name:"Momo (TWICE)", group:"TWICE", tags:["dance","performance","power","cute","discipline"], fanPattern:"무대 위 집중력과 실력에 바로 반응하는 편"},
         {name:"Sana (TWICE)", group:"TWICE", tags:["lovely","charm","soft","flirty","warm"], fanPattern:"사람 녹이는 애교형에 결국 반응하는 편"},
         {name:"Jihyo (TWICE)", group:"TWICE", tags:["leader","vocal","strong","reliable","passion"], fanPattern:"강하고 믿음직한 사람에게 기대고 싶어지는 편"},
-        {name:"Mina (TWICE)", group:"TWICE", tags:["elegant","quiet","swan","soft","introvert"], fanPattern:"조용하고 우아한 타입의 작은 표정에 "},
+        {name:"Mina (TWICE)", group:"TWICE", tags:["elegant","quiet","swan","soft","introvert"], fanPattern:"조용하고 우아한 분위기에 마음이 움직이는 편"},
         {name:"Dahyun (TWICE)", group:"TWICE", tags:["funny","unique","bright","humor","quirky"], fanPattern:"엉뚱하고 밝은 사람한테 긴장이 풀림"},
         {name:"Chaeyoung (TWICE)", group:"TWICE", tags:["artist","independent","unique","creative","free"], fanPattern:"자기 세계 강한 예술가형에 끌림"},
         {name:"Tzuyu (TWICE)", group:"TWICE", tags:["visual","calm","classic","pure","quiet"], fanPattern:"말없이 선명한 무드에 반응하는 편"},
@@ -1437,7 +1364,7 @@ export default async function handler(req, res){
         // NCT
         {name:"Taeyong (NCT)", group:"NCT", tags:["leader","performance","intense","artist","vulnerable"], fanPattern:"강렬한데 예민한 무대형에 끌리는 편"},
         {name:"Doyoung (NCT)", group:"NCT", tags:["vocal","sensitive","intellectual","emotional","clean"], fanPattern:"예민하고 섬세한 보컬형에 오래 머무름"},
-        {name:"Jaehyun (NCT)", group:"NCT", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 "},
+        {name:"Jaehyun (NCT)", group:"NCT", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 안정감을 느끼는 편"},
         {name:"Mark (NCT)", group:"NCT", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"성실하게 계속 성장하는 타입한테 정이 쌓임"},
         {name:"Haechan (NCT)", group:"NCT", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난스러운데 묘하게 의존하게 되는 타입"},
         {name:"Jeno (NCT)", group:"NCT", tags:["quiet","strong","visual","calm","physical"], fanPattern:"조용한 힘과 든든함에 반응하는 편"},
@@ -1446,31 +1373,31 @@ export default async function handler(req, res){
 
         // Stray Kids
         {name:"Bang Chan (Stray Kids)", group:"Stray Kids", tags:["leader","producer","protective","warm","safe"], fanPattern:"기댈 수 있는 리더형에게 안정감을 느끼는 편"},
-        {name:"Lee Know (Stray Kids)", group:"Stray Kids", tags:["cat","cold","dance","weird","quiet","sharp"], fanPattern:"차갑고 이상한데 자꾸 신경쓰이는 사람에게 "},
+        {name:"Lee Know (Stray Kids)", group:"Stray Kids", tags:["cat","cold","dance","weird","quiet","sharp"], fanPattern:"차갑고 독특한 분위기에 계속 눈이 가는 편"},
         {name:"Changbin (Stray Kids)", group:"Stray Kids", tags:["power","rap","intense","funny","soft"], fanPattern:"강한데 속은 말랑한 반전 사람에게 반응하는 편"},
         {name:"Hyunjin (Stray Kids)", group:"Stray Kids", tags:["artist","visual","dramatic","sensual","performance"], fanPattern:"드라마틱한 예술가 무드에 깊게 빠짐"},
         {name:"Han (Stray Kids)", group:"Stray Kids", tags:["genius","rapper","anxious","humor","sensitive"], fanPattern:"웃기는데 예민한 천재형에게 흔들림"},
-        {name:"Felix (Stray Kids)", group:"Stray Kids", tags:["sunshine","deepvoice","angel","soft","bright"], fanPattern:"밝은 얼굴과 낮은 목소리 반전에 "},
+        {name:"Felix (Stray Kids)", group:"Stray Kids", tags:["sunshine","deepvoice","angel","soft","bright"], fanPattern:"밝은 얼굴과 낮은 목소리의 반전에 끌리는 편"},
         {name:"Seungmin (Stray Kids)", group:"Stray Kids", tags:["vocal","clean","sincere","calm","stable"], fanPattern:"담백하고 꾸준한 사람에게게 오래 마음이 감"},
         {name:"I.N (Stray Kids)", group:"Stray Kids", tags:["youngest","cute","growth","sharp","fresh"], fanPattern:"귀여운데 점점 선명해지는 성장형에 끌림"},
 
         // SEVENTEEN
         {name:"S.Coups (SEVENTEEN)", group:"SEVENTEEN", tags:["leader","protective","strong","responsible","anchor"], fanPattern:"강하게 지켜주는 리더형에 깊게 끌림"},
-        {name:"Jeonghan (SEVENTEEN)", group:"SEVENTEEN", tags:["angel","strategic","soft","mischief","clever"], fanPattern:"부드러운데 속을 알 수 없는 사람에게 "},
+        {name:"Jeonghan (SEVENTEEN)", group:"SEVENTEEN", tags:["angel","strategic","soft","mischief","clever"], fanPattern:"부드럽지만 속을 알 수 없는 매력에 끌리는 편"},
         {name:"Joshua (SEVENTEEN)", group:"SEVENTEEN", tags:["gentleman","soft","warm","classic","calm"], fanPattern:"조용하고 다정한 신사형에 안정감을 느끼는 편"},
         {name:"Jun (SEVENTEEN)", group:"SEVENTEEN", tags:["visual","mysterious","elegant","cat","quiet"], fanPattern:"멀리 있는 듯한 비주얼형에 오래 끌림"},
         {name:"Hoshi (SEVENTEEN)", group:"SEVENTEEN", tags:["performance","energy","passion","chaos","dance"], fanPattern:"감정이 폭발하는 퍼포머형에 반응하는 편"},
-        {name:"Wonwoo (SEVENTEEN)", group:"SEVENTEEN", tags:["quiet","intellectual","deepvoice","calm","distance"], fanPattern:"말수 적고 지적인 거리감에 "},
+        {name:"Wonwoo (SEVENTEEN)", group:"SEVENTEEN", tags:["quiet","intellectual","deepvoice","calm","distance"], fanPattern:"말수 적고 지적인 거리감에 끌리는 편"},
         {name:"Woozi (SEVENTEEN)", group:"SEVENTEEN", tags:["producer","genius","strong","work","artist"], fanPattern:"작지만 단단한 천재형에게 존경이 섞임"},
         {name:"DK (SEVENTEEN)", group:"SEVENTEEN", tags:["bright","vocal","sunshine","funny","warm"], fanPattern:"밝은 목소리와 솔직한 감정에 마음이 열림"},
-        {name:"Mingyu (SEVENTEEN)", group:"SEVENTEEN", tags:["visual","tall","friendly","warm","domestic"], fanPattern:"크고 따뜻한 생활형 매력에 "},
+        {name:"Mingyu (SEVENTEEN)", group:"SEVENTEEN", tags:["visual","tall","friendly","warm","domestic"], fanPattern:"크고 따뜻한 생활형 매력에 안정감을 느끼는 편"},
         {name:"The8 (SEVENTEEN)", group:"SEVENTEEN", tags:["artist","philosophical","elegant","unique","style"], fanPattern:"자기 세계 확실한 예술가형에 끌림"},
         {name:"Seungkwan (SEVENTEEN)", group:"SEVENTEEN", tags:["vocal","variety","emotional","funny","warm"], fanPattern:"웃기지만 감정 깊은 사람에게게 정이 쌓임"},
         {name:"Vernon (SEVENTEEN)", group:"SEVENTEEN", tags:["cool","hip","unique","calm","free"], fanPattern:"과하게 꾸미지 않는 쿨함에 반응하는 편"},
         {name:"Dino (SEVENTEEN)", group:"SEVENTEEN", tags:["youngest","dance","growth","hardworking","ambition"], fanPattern:"성실하게 올라오는 막내 서사에 끌림"},
 
         // TXT
-        {name:"Yeonjun (TXT)", group:"TXT", tags:["ace","performance","fox","fashion","confident"], fanPattern:"무대 위 확신 있는 여우상에 "},
+        {name:"Yeonjun (TXT)", group:"TXT", tags:["ace","performance","fox","fashion","confident"], fanPattern:"무대 위 확신 있는 여우상 매력에 반응하는 편"},
         {name:"Soobin (TXT)", group:"TXT", tags:["leader","soft","calm","introvert","gentle"], fanPattern:"큰데 순한 안정감에 끌림"},
         {name:"Beomgyu (TXT)", group:"TXT", tags:["playful","chaos","pretty","sensitive","humor"], fanPattern:"장난스러움 뒤의 예민함을 알아보는 타입"},
         {name:"Taehyun (TXT)", group:"TXT", tags:["vocal","sharp","rational","strong","clear"], fanPattern:"또렷하고 냉정한 에너지에 신뢰를 느끼는 편"},
@@ -1478,19 +1405,19 @@ export default async function handler(req, res){
 
         // ENHYPEN
         {name:"Jungwon (ENHYPEN)", group:"ENHYPEN", tags:["leader","cat","calm","responsible","clean"], fanPattern:"어린데 단단한 리더 에너지에 반응하는 편"},
-        {name:"Heeseung (ENHYPEN)", group:"ENHYPEN", tags:["ace","vocal","mature","romantic","skill"], fanPattern:"실력으로 설득하는 에이스형에 "},
+        {name:"Heeseung (ENHYPEN)", group:"ENHYPEN", tags:["ace","vocal","mature","romantic","skill"], fanPattern:"실력으로 설득하는 에이스형에 신뢰를 느끼는 편"},
         {name:"Jay (ENHYPEN)", group:"ENHYPEN", tags:["global","cool","honest","fashion","passionate"], fanPattern:"솔직하고 세련된 열정에 반응하는 편"},
         {name:"Jake (ENHYPEN)", group:"ENHYPEN", tags:["warm","dog","global","sweet","friendly"], fanPattern:"따뜻하고 친근한 에너지에 마음이 풀림"},
-        {name:"Sunghoon (ENHYPEN)", group:"ENHYPEN", tags:["ice","visual","calm","elegant","distance"], fanPattern:"차갑고 완벽한 왕자형 거리감에 "},
+        {name:"Sunghoon (ENHYPEN)", group:"ENHYPEN", tags:["ice","visual","calm","elegant","distance"], fanPattern:"차갑고 완벽한 왕자형 거리감에 끌리는 편"},
         {name:"Sunoo (ENHYPEN)", group:"ENHYPEN", tags:["bright","cute","expressive","sunshine","charm"], fanPattern:"표정 풍부하고 사랑스러운 사람에게 반응하는 편"},
         {name:"Ni-ki (ENHYPEN)", group:"ENHYPEN", tags:["dance","youngest","cold","growth","sharp"], fanPattern:"차갑고 빠르게 성장하는 퍼포머형에 끌림"},
 
         // ATEEZ
         {name:"Hongjoong (ATEEZ)", group:"ATEEZ", tags:["leader","producer","charisma","artist","rebel"], fanPattern:"작지만 강한 반항적 리더 에너지에 끌림"},
-        {name:"Seonghwa (ATEEZ)", group:"ATEEZ", tags:["elegant","visual","soft","perfect","calm"], fanPattern:"고요하고 완벽한 다정함에 "},
+        {name:"Seonghwa (ATEEZ)", group:"ATEEZ", tags:["elegant","visual","soft","perfect","calm"], fanPattern:"고요하고 완벽한 다정함에 마음이 움직이는 편"},
         {name:"Yunho (ATEEZ)", group:"ATEEZ", tags:["bright","tall","dance","warm","energy"], fanPattern:"크고 밝은 에너지에 마음이 안정됨"},
         {name:"Yeosang (ATEEZ)", group:"ATEEZ", tags:["mysterious","visual","quiet","unique","delicate"], fanPattern:"말수 적고 비현실적인 사람에게 오래 끌림"},
-        {name:"San (ATEEZ)", group:"ATEEZ", tags:["performance","intense","emotional","sensual","power"], fanPattern:"감정이 무대에서 터지는 사람에게 "},
+        {name:"San (ATEEZ)", group:"ATEEZ", tags:["performance","intense","emotional","sensual","power"], fanPattern:"무대에서 감정이 터지는 에너지에 반응하는 편"},
         {name:"Mingi (ATEEZ)", group:"ATEEZ", tags:["rap","tall","funny","power","soft"], fanPattern:"크고 강한데 속은 부드러운 반전에 끌림"},
         {name:"Wooyoung (ATEEZ)", group:"ATEEZ", tags:["playful","flirty","dance","social","charm"], fanPattern:"장난스럽게 사람 흔드는 사람에게 반응하는 편"},
         {name:"Jongho (ATEEZ)", group:"ATEEZ", tags:["vocal","strong","stable","serious","power"], fanPattern:"흔들리지 않는 실력과 안정감에 끌림"},
@@ -1503,21 +1430,21 @@ export default async function handler(req, res){
         {name:"Sohee (RIIZE)", group:"RIIZE", tags:["cute","vocal","fresh","bright","quirky"], fanPattern:"귀엽고 신선한 목소리에 마음이 풀리는 편"},
         {name:"Anton (RIIZE)", group:"RIIZE", tags:["soft","global","youngest","dreamy","gentle"], fanPattern:"조용하고 부드러운 막내형 무드에 끌리는 편"},
         {name:"Taeyong (NCT 127)", group:"NCT 127", tags:["leader","performance","intense","artist","vulnerable"], fanPattern:"강렬한데 예민한 무대형에 끌리는 편"},
-        {name:"Jaehyun (NCT 127)", group:"NCT 127", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 "},
+        {name:"Jaehyun (NCT 127)", group:"NCT 127", tags:["classic","visual","gentleman","calm","romantic"], fanPattern:"차분한 클래식 설렘에 안정감을 느끼는 편"},
         {name:"Doyoung (NCT 127)", group:"NCT 127", tags:["vocal","sensitive","intellectual","emotional","clean"], fanPattern:"예민하고 섬세한 보컬형에 오래 머무름"},
         {name:"Mark (NCT 127)", group:"NCT 127", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"성실하게 계속 성장하는 타입한테 정이 쌓임"},
         {name:"Haechan (NCT 127)", group:"NCT 127", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난스러운데 묘하게 의존하게 되는 타입"},
         {name:"Mark (NCT DREAM)", group:"NCT DREAM", tags:["ace","sincere","rapper","growth","hardworking"], fanPattern:"잘하는데 허술한 반전까지 있는 사람에게 끌리는 편"},
         {name:"Renjun (NCT DREAM)", group:"NCT DREAM", tags:["sensitive","artist","vocal","clean","emotional"], fanPattern:"예민하고 맑은 감정선에 오래 끌림"},
         {name:"Jeno (NCT DREAM)", group:"NCT DREAM", tags:["quiet","strong","visual","calm","physical"], fanPattern:"조용한 힘과 든든함에 반응하는 편"},
-        {name:"Haechan (NCT DREAM)", group:"NCT DREAM", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난치는데 결국 무드 가져가는 사람에게 "},
+        {name:"Haechan (NCT DREAM)", group:"NCT DREAM", tags:["sunshine","playful","vocal","mischief","bright"], fanPattern:"장난스럽지만 결국 분위기를 가져가는 매력에 끌리는 편"},
         {name:"Jaemin (NCT DREAM)", group:"NCT DREAM", tags:["sweet","visual","soft","romantic","dreamy"], fanPattern:"달콤한데 거리감 있는 사람에게 흔들림"},
         {name:"Chenle (NCT DREAM)", group:"NCT DREAM", tags:["bright","free","vocal","global","playful"], fanPattern:"자유롭고 밝은 에너지에 기분이 풀림"},
-        {name:"Jisung (NCT DREAM)", group:"NCT DREAM", tags:["youngest","dance","growth","shy","soft"], fanPattern:"수줍은데 무대에서 바뀌는 성장형에 "},
+        {name:"Jisung (NCT DREAM)", group:"NCT DREAM", tags:["youngest","dance","growth","shy","soft"], fanPattern:"수줍지만 무대에서 달라지는 성장형에 끌리는 편"},
         {name:"Kun (WayV)", group:"WayV", tags:["leader","calm","responsible","vocal","stable"], fanPattern:"차분하게 중심 잡아주는 사람에게 안정감을 느끼는 편"},
         {name:"Ten (WayV)", group:"WayV", tags:["artist","dance","unique","fluid","free"], fanPattern:"정해지지 않는 예술가형에 끌림"},
         {name:"Winwin (WayV)", group:"WayV", tags:["quiet","elegant","visual","mysterious","soft"], fanPattern:"조용하고 우아한 무드에 오래 끌리는 편"},
-        {name:"Xiaojun (WayV)", group:"WayV", tags:["vocal","dramatic","emotional","visual","artist"], fanPattern:"감정선 진한 보컬형에 "},
+        {name:"Xiaojun (WayV)", group:"WayV", tags:["vocal","dramatic","emotional","visual","artist"], fanPattern:"감정선 진한 보컬형에 마음이 움직이는 편"},
         {name:"Hendery (WayV)", group:"WayV", tags:["funny","unique","bright","chaos","visual"], fanPattern:"엉뚱한데 비주얼까지 되는 사람에게 반응하는 편"},
         {name:"Yangyang (WayV)", group:"WayV", tags:["rapper","youngest","cool","playful","global"], fanPattern:"쿨하고 장난스러운 막내 에너지에 끌림"},
 
@@ -1563,7 +1490,7 @@ export default async function handler(req, res){
           "햇살 같은데 무대 위에서 결이 달라지는 사람에게 끌림"
         ],
         leader: [
-          "중심이 잡힌 리더형 장면에 오래 반응하는 타입",
+          "중심이 잡힌 리더형 성향에 반응하는 타입",
           "강한데 다정한 사람에게 오래 끌리는 편",
           "책임감 있는 사람의 작은 반응에 팬심이 천천히 쌓이는 타입"
         ],
@@ -1718,9 +1645,9 @@ export default async function handler(req, res){
         const name = String(idol.name||'').replace(/\s*\([^)]*\)/g,'') || '이 아이돌';
         const trait = idolCoreTrait(idol);
         const openings = [
-          `${name}의 ${trait}이 내 반응 포인트와 맞물려서, 처음보다 다시 볼수록 더 강하게 남는 매치`,
-          `내가 오래 보는 포인트가 ${name}의 ${trait}에서 잡혀서, 장면보다 사람이 먼저 기억나는 매치`,
-          `${name}에게서 느껴지는 ${trait}이 내 취향의 빈칸을 건드려서, 가볍게 넘기기 어려운 매치`
+          `${name}의 ${trait}이 내 반응 포인트와 맞물려서, 볼수록 왜 끌리는지 선명해지는 매치`,
+          `내 취향의 핵심이 ${name}의 ${trait}에서 잡혀서, 이미지보다 성향이 먼저 와닿는 매치`,
+          `${name}에게서 느껴지는 ${trait}이 내 취향의 빈칸을 건드려서, 왜 눈이 가는지 설명되는 매치`
         ];
         return openings[idx % openings.length];
       }
